@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\dmdonvi;
 use App\dmdonvibaocao;
+use App\dmkhoipb;
+use App\dmphanloaicongtac;
+use App\dmphanloaict;
 use App\tonghop_tinh;
 use App\tonghopluong_huyen;
 use App\tonghopluong_tinh;
@@ -101,12 +104,18 @@ class tonghopluong_tinhController extends Controller
                 }
 
             }
+            $a_linhvuchd=array_column(dmkhoipb::all()->toarray(),'tenkhoipb','makhoipb');
+            $model_tenct = dmphanloaict::wherein('mact', getPLCTDuToan())->get();
+            $model_nhomct = dmphanloaicongtac::wherein('macongtac', array_unique(array_column($model_tenct->toarray(), 'macongtac')))->get();
             //dd($model);
             $inputs['furl_huyen'] = '/chuc_nang/tong_hop_luong/huyen/';
             $inputs['furl'] = '/chuc_nang/tong_hop_luong/tinh/';
             return view('functions.tonghopluong.tinh.index_new')               
                 ->with('inputs', $inputs)              
                 ->with('model', $model)
+                ->with('a_linhvuchd', $a_linhvuchd)
+                ->with('model_tenct', $model_tenct)
+                ->with('model_nhomct', $model_nhomct)
                 ->with('a_trangthai', $a_trangthai)
                 ->with('pageTitle', 'Danh sách tổng hợp lương toàn địa bàn');
         } else

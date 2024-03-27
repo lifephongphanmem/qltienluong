@@ -4,6 +4,7 @@ use App\Http\Controllers\bangluong_thuyetminhController;
 use App\Http\Controllers\bangluongController;
 use App\Http\Controllers\dutoanluong_khoiController;
 use App\Http\Controllers\tonghopluong_huyenController;
+use App\Http\Controllers\tonghopluong_tinhController;
 use App\Http\Controllers\tonghopnguon_huyenController;
 use Illuminate\Support\Facades\Route;
 
@@ -286,7 +287,8 @@ Route::group(['prefix' => 'chuc_nang'], function () {
         });
 
         Route::group(['prefix' => 'tinh'], function () {
-            Route::get('index', 'tonghopluong_tinhController@index');
+            // Route::get('index', 'tonghopluong_tinhController@index');
+            Route::get('index', [tonghopluong_tinhController::class,'index']);
 
             //chưa làm
             Route::get('tonghop', 'tonghopluong_huyenController@tonghop');

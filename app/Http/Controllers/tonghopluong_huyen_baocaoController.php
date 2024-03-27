@@ -24,7 +24,7 @@ class tonghopluong_huyen_baocaoController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
-
+            // dd($inputs);
             $inputs['donvitinh'] = $inputs['donvitinh'] ?? 1;
             //lấy mã đơn vị quản lý trong trường hợp gọi từ "Báo cáo tổng hợp" giao diện Tỉnh
             if (!isset($inputs['macqcq'])) {
