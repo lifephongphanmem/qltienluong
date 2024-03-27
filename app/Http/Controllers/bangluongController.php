@@ -1224,7 +1224,7 @@ class bangluongController extends Controller
                             $sotien = round(($sotien * $m_cb[$key][$mapc]) / 100, session('admin')->lamtron);
                             $heso=round(($sotien/$inputs['luongcoban']),session('admin')->lamtron);
                             $a_pc[$k]['sotien']=$sotien;
-                            $m_cb[$key][$mapc]=$sotien;
+                            $m_cb[$key][$mapc]=$heso;
                             // dd($m_cb[$k][$mapc]);
 
                             // $heso = round(($heso * $m_cb[$key][$mapc]) / 100, session('admin')->lamtron);
