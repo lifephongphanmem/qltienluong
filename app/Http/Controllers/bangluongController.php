@@ -17,6 +17,8 @@ use App\dmnguonkinhphi;
 use App\dmphanloaicongtac;
 use App\dmphanloaicongtac_baohiem;
 use App\dmphanloaict;
+use App\nhomphanloaict;
+use App\nhomphanloaict_phanloaict;
 use App\dmphongban;
 use App\dmphucap;
 use App\dmphucap_donvi;
@@ -5554,11 +5556,23 @@ class bangluongController extends Controller
             if ($m_truylinh_trc != null) {
                 $model_truylinh_trc = (new data())->getBangluong_ct($m_truylinh_trc->thang, $m_truylinh_trc->mabl);
             }
-
-
             $model = $this->getBangLuong($inputs);
-            $model_congtac = dmphanloaict::select('mact', 'tenct', 'macongtac')
+
+            $m_nhomcongtac=nhomphanloaict::orderBy('stt','asc')->get();
+// dd($m_nhomcongtac);
+            $model_congtac=new Collection();
+            if(count($m_nhomcongtac) > 0){
+                foreach($m_nhomcongtac as $ct){
+                    $phanloai=nhomphanloaict_phanloaict::where('manhom',$ct->manhom)->get();
+                    $ct->phanloai=array_column($phanloai->toarray(),'maphanloaict');
+                    $ct->isnhomct=1;
+                    $model_congtac->push($ct);
+                }
+            }else{
+                $model_congtac = dmphanloaict::select('mact', 'tenct', 'macongtac')
                 ->wherein('mact', a_unique(array_column($model->toarray(), 'mact')))->get();
+            }
+
                 // dd($model_congtac);
             // $hscb=hosocanbo::all();
             $m_hs = hosocanbo::wherein('macanbo', array_column($model->toarray(), 'macanbo'))->get();
@@ -5782,7 +5796,11 @@ class bangluongController extends Controller
 
             $m_dv = dmdonvi::where('madv', $m_bl->madv)->first();
             $m_thuyetminh=bangthuyetminh::where('madv',$m_dv->madv)->where('thang',$m_bl->thang)->where('nam',$m_bl->nam)->first();
-            $thuyetminh_ct=bangthuyetminh_chitiet::where('mathuyetminh',$m_thuyetminh->mathuyetminh)->orderby('tanggiam', 'desc')->get();
+            $thuyetminh_ct=new Collection();
+            if(isset($m_thuyetminh)){
+                $thuyetminh_ct=bangthuyetminh_chitiet::where('mathuyetminh',$m_thuyetminh->mathuyetminh)->orderby('tanggiam', 'desc')->get();
+            }
+          
             // dd($thuyetminh_ct);
             $view=isset($inputs['Madb'])?'reports.bangluong.donvi.mau09kh_vn':'reports.bangluong.donvi.mau09kh';
             // return view('reports.bangluong.donvi.mau09kh')

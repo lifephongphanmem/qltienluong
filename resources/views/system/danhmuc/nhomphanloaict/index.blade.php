@@ -12,6 +12,7 @@
     <link rel="stylesheet" type="text/css"
         href="{{ url('assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ url('assets/global/plugins/select2/select2.css') }}" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 @stop
 
 @section('custom-script')
@@ -38,10 +39,10 @@
                         <b>NHÓM PHÂN LOẠI CÔNG TÁC</b>
                     </div>
                     {{-- @if (can('dmchucvu', 'create')) --}}
-                        <div class="actions">
-                            <button type="button" id="_btnaddPB" class="btn btn-default btn-xs" onclick="addCV()"><i
-                                    class="fa fa-plus"></i>&nbsp;Thêm mới</button>
-                        </div>
+                    <div class="actions">
+                        <button type="button" id="_btnaddPB" class="btn btn-default btn-xs" onclick="addCV()"><i
+                                class="fa fa-plus"></i>&nbsp;Thêm mới</button>
+                    </div>
                     {{-- @endif --}}
                 </div>
                 <div class="portlet-body form-horizontal">
@@ -64,29 +65,27 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {{-- @if (isset($model))
+                            @if (isset($model))
                                 @foreach ($model as $key => $value)
                                     <tr>
-                                        <td class="text-center">{{ $value->sapxep }}</td>
-                                        <td>{{ $value->tencv }}</td>
-                                        <td>{{ $value->tenvt }}</td>
+                                        <td class="text-center">{{ $value->stt }}</td>
+                                        <td>{{ $value->tennhom }}</td>
                                         <td>{{ $value->phanloai }}</td>
-                                        <td>{{ $a_plct[$value->mact] ?? '' }}</td>
                                         <td>
-                                            @if (can('dmchucvu', 'edit'))
-                                                <button type="button" onclick="editCV('{{ $value->macvcq }}')"
+                                            {{-- @if (can('dmchucvu', 'edit')) --}}
+                                                <button type="button" onclick="editCV('{{ $value->manhom }}')"
                                                     class="btn btn-default btn-xs mbs">
                                                     <i class="fa fa-edit"></i>&nbsp; Sửa</button>
-                                            @endif
-                                            @if (can('dmchucvu', 'delete'))
-                                                <button type="button" onclick="cfDel('{{ $furl . 'del/' . $value->id }}')"
+                                            {{-- @endif --}}
+                                            {{-- @if (can('dmchucvu', 'delete')) --}}
+                                                <button type="button" onclick="cfDel('{{ $furl . '/del/' . $value->id }}')"
                                                     class="btn btn-danger btn-xs mbs" data-target="#delete-modal-confirm"
                                                     data-toggle="modal">
                                                     <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
-                                            @endif
+                                            {{-- @endif --}}
                                         </td>
                                     </tr>
-                                @endforeach --}}
+                                @endforeach
                             @endif
                         </tbody>
                     </table>
@@ -96,101 +95,128 @@
     </div>
 
     <!--Modal thông tin chức vụ -->
-    <div id="chucvu-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header modal-header-primary">
-                    <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
-                    <h4 id="modal-header-primary-label" class="modal-title">Thông tin chức vụ</h4>
-                </div>
+    <form action="/danh_muc/nhomphanloaict/store" method="POST" enctype="multipart/form-data">
+        @csrf
+        <div id="phanloai-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header modal-header-primary">
+                        <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+                        <h4 id="modal-header-primary-label" class="modal-title">Thông tin nhóm phân loại</h4>
+                    </div>
+                    <input type="hidden" name='edit' id='edit'>
+                    <div class="modal-body">
+                        <div class="form-horizontal">
+                            <div class="row">
 
-                <div class="modal-body">
-                    <div class="form-horizontal">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <label class="control-label">Phân loại đơn vị</label>
-                                {!! Form::select('maphanloai', $model_pl, $mapl, ['id' => 'maphanloai', 'class' => 'form-control', 'readonly']) !!}
+                                <div class="col-md-12">
+                                    <label class="form-control-label">Tên nhóm<span class="require">*</span></label>
+                                    {!! Form::text('tennhom', null, ['id' => 'tennhom', 'class' => 'form-control', 'required' => 'required']) !!}
+                                </div>
+
+                                <div class="col-md-12">
+                                    <label class="control-label">Phân loại công tác</label>
+                                    <select class="form-control select2me" name="mact[]" id="mact" multiple=true>
+                                        @foreach ($model_nhomct as $kieuct)
+                                            <optgroup label="{{ $kieuct->tencongtac }}">
+                                                <?php $mode_ct = $model_tenct->where('macongtac', $kieuct->macongtac); ?>
+                                                @foreach ($mode_ct as $ct)
+                                                    <option value="{{ $ct->mact }}">{{ $ct->tenct }}</option>
+                                                @endforeach
+                                            </optgroup>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <label class="control-label">Sắp xếp</label>
+                                    {!! Form::text('stt', $stt, ['id' => 'stt', 'class' => 'form-control']) !!}
+                                </div>
                             </div>
-
-                            <div class="col-md-12">
-                                <label class="form-control-label">Tên chức vụ<span class="require">*</span></label>
-                                {!! Form::text('tencv', null, ['id' => 'tencv', 'class' => 'form-control', 'required' => 'required']) !!}
-                            </div>
-
-                            <div class="col-md-12">
-                                <label class="form-control-label">Tên chức vụ viết tắt</label>
-                                {!! Form::text('tenvt', null, ['id' => 'tenvt', 'class' => 'form-control']) !!}
-                            </div>
-
-                            <div class="col-md-12">
-                                <label class="control-label">Phân loại cán bộ</label>
-                                {!! Form::select('ttdv', getPhanLoaiNhanVien(), null, ['id' => 'ttdv', 'class' => 'form-control']) !!}
-                            </div>
-
-                            <div class="col-md-12">
-                                <label class="control-label">Tên phân loại công tác</label>
-                                {!! Form::select('mact', setArrayAll($a_plct,'Không chọn'), null, ['id' => 'mact', 'class' => 'form-control']) !!}
-                            </div>
-
-                            <div class="col-md-12">
-                                <label class="control-label">Tên phân loại công tác</label>
-                                {!! Form::text('sapxep', null, ['id' => 'sapxep', 'class' => 'form-control']) !!}
-                            </div>
-
-                            <input type="hidden" id="macvcq" name="macvcq" />
-                            <input type="hidden" id="id_cv" name="id_cv" />
                         </div>
                     </div>
-                </div>
 
-                <div class="modal-footer">
-                    <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
-                    <button type="submit" id="submit" name="submit" value="submit" class="btn btn-primary"
-                        onclick="cfCV()">Đồng ý</button>
+                    <div class="modal-footer">
+                        <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+                        <button type="submit" id="submit" name="submit" class="btn btn-primary">Đồng ý</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </form>
+    <form action="/danh_muc/nhomphanloaict/update" method="POST" enctype="multipart/form-data">
+        @csrf
+        <div id="phanloai-modal-update" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header modal-header-primary">
+                        <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+                        <h4 id="modal-header-primary-label" class="modal-title">Thông tin nhóm phân loại</h4>
+                    </div>
+                    <input type="hidden" name='edit' id='edit'>
+                    <input type="hidden" name='manhom' id='manhom_edit'>
+                    <div class="modal-body">
+                        <div class="form-horizontal">
+                            <div class="row">
+
+                                <div class="col-md-12">
+                                    <label class="form-control-label">Tên nhóm<span class="require">*</span></label>
+                                    {!! Form::text('tennhom', null, ['id' => 'tennhom_edit', 'class' => 'form-control', 'required' => 'required']) !!}
+                                </div>
+
+                                <div class="col-md-12">
+                                    <label class="control-label">Phân loại công tác</label>
+                                    <select class="form-control select2me" name="mact[]" id="mact_edit" multiple=true>
+                                        @foreach ($model_nhomct as $kieuct)
+                                            <optgroup label="{{ $kieuct->tencongtac }}">
+                                                <?php $mode_ct = $model_tenct->where('macongtac', $kieuct->macongtac); ?>
+                                                @foreach ($mode_ct as $ct)
+                                                    <option value="{{ $ct->mact }}">{{ $ct->tenct }}</option>
+                                                @endforeach
+                                            </optgroup>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <label class="control-label">Sắp xếp</label>
+                                    {!! Form::text('stt', null, ['id' => 'stt_edit', 'class' => 'form-control']) !!}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+                        <button type="submit" id="submit" name="submit" class="btn btn-primary">Đồng ý</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
 
     <script>
-        $(function() {
-            $('#mapl').change(function() {
-                window.location.href = '{{ $furl }}' + 'index?maso=' + $('#mapl').val();
-            });
-        })
-
         function addCV() {
-            //var date=new Date();
-            $('#tencv').val('');
-            $('#tenvt').val('');
-            $('#ghichu').val('');
-            $('#sapxep').attr('value','99');
-            $('#macvcq').val('');
-            $('#ttdv').val(0).trigger('change');
-            $('#id_cv').val(0);
-            $('#chucvu-modal').modal('show');
+            $('#phanloai-modal').modal('show');
         }
 
-        function editCV(macvcq) {
+        function editCV(manhom) {
+            $('#phanloai-modal-update').modal('show');
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             $.ajax({
-                url: '{{ $furl }}' + 'get',
+                url: '{{ $furl }}' + '/edit',
                 type: 'GET',
                 data: {
                     _token: CSRF_TOKEN,
-                    macvcq: macvcq
+                    manhom: manhom
                 },
                 dataType: 'JSON',
                 success: function(data) {
-                    $('#tencv').val(data.tencv);
-                    $('#tenvt').val(data.tenvt);
-                    $('#ghichu').val(data.ghichu);
-                    $('#sapxep').val(data.sapxep);
-                    $('#maphanloai').val(data.maphanloai);
-                    $('#ttdv').val(data.ttdv).trigger('change');
-                    $('#mact').val(data.mact).trigger('change');
-                    //$('#ttdv').prop('checked', data.ttdv == 1 ? true : false);
-                    $('#macvcq').val(macvcq);
+                    console.log(data);
+                    $('#tennhom_edit').val(data.tennhom);
+                    $('#stt_edit').val(data.stt);
+                    $('#manhom_edit').val(data.manhom);
+                    $('#mact_edit').val(data.phanloai).trigger('change');
                 },
                 error: function(message) {
                     toastr.error(message, 'Lỗi!');
@@ -200,76 +226,67 @@
             $('#chucvu-modal').modal('show');
         }
 
-        function cfCV() {
-            var valid = true;
-            var message = '';
-            var macvcq = $('#macvcq').val();
-            var tencv = $('#tencv').val();
-            var ghichu = $('#ghichu').val();
-            var sapxep = $('#sapxep').val();
-            var id = $('#id_cv').val();
-            var ttdv = $('#ttdv').val();
+        // function cfCV(manhom) {
+        //     var valid = true;
+        //     var message = '';
+        //     var tennhom = $('#tennhom').val();
+        //     var mact = $('#mact').val();
+        //     var sapxep = $('#stt').val();
+        //     var edit = $('#edit').val();
 
-            if (tencv == '') {
-                valid = false;
-                message += 'Tên chức vụ không được bỏ trống \n';
-            }
-            if (valid) {
-                var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-                if (macvcq == '') { //Thêm mới
-                    $.ajax({
-                        url: '{{ $furl }}' + 'add',
-                        type: 'GET',
-                        data: {
-                            _token: CSRF_TOKEN,
-                            maphanloai: $('#mapl').val(),
-                            tencv: tencv,
-                            tenvt: $('#tenvt').val(),
-                            ttdv: ttdv,
-                            mact: $('#mact').val(),
-                            ghichu: ghichu,
-                            sapxep: sapxep
-                        },
-                        dataType: 'JSON',
-                        success: function(data) {
-                            if (data.status == 'success') {
-                                location.reload();
-                            }
-                        },
-                        error: function(message) {
-                            toastr.error(message);
-                        }
-                    });
-                } else { //Cập nhật
-                    $.ajax({
-                        url: '{{ $furl }}' + 'update',
-                        type: 'GET',
-                        data: {
-                            _token: CSRF_TOKEN,
-                            macvcq: macvcq,
-                            tenvt: $('#tenvt').val(),
-                            tencv: tencv,
-                            ttdv: ttdv,
-                            mact: $('#mact').val(),
-                            ghichu: ghichu,
-                            sapxep: sapxep
-                        },
-                        dataType: 'JSON',
-                        success: function(data) {
-                            if (data.status == 'success') {
-                                location.reload();
-                            }
-                        },
-                        error: function(message) {
-                            toastr.error(message, 'Lỗi!!');
-                        }
-                    });
-                }
-                $('#phongban-modal').modal('hide');
-            } else {
-                toastr.error(message, 'Lỗi!.');
-            }
-        }
+        //     if (tennhom == '') {
+        //         valid = false;
+        //         message += 'Tên nhóm không được bỏ trống \n';
+        //     }
+        //     if (valid) {
+        //         var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+        //         if (edit == '') { //Thêm mới
+        //             $.ajax({
+        //                 url: '{{ $furl }}' + '/store',
+        //                 type: 'POST',
+        //                 data: {
+        //                     _token: CSRF_TOKEN,
+        //                     tennhom: tennhom,
+        //                     mact: mact,
+        //                     stt: sapxep
+        //                 },
+        //                 dataType: 'JSON',
+        //                 success: function(data) {
+        //                     console.log(data);
+        //                     if (data.status == 'success') {
+        //                         location.reload();
+        //                     }
+        //                 },
+        //                 error: function(message) {
+        //                     toastr.error(message);
+        //                 }
+        //             });
+        //         } else { //Cập nhật
+        //             $.ajax({
+        //                 url: '{{ $furl }}' + '/update',
+        //                 type: 'POST',
+        //                 data: {
+        //                     _token: CSRF_TOKEN,
+        //                     tennhom: tennhom,
+        //                     mact: mact,
+        //                     stt: sapxep
+        //                 },
+        //                 dataType: 'JSON',
+        //                 success: function(data) {
+        //                     if (data.status == 'success') {
+        //                         location.reload();
+        //                     }
+        //                 },
+        //                 error: function(message) {
+        //                     toastr.error(message, 'Lỗi!!');
+        //                 }
+        //             });
+        //         }
+        //         $('#phongban-modal').modal('hide');
+        //     } else {
+        //         toastr.error(message, 'Lỗi!.');
+        //     }
+        // }
     </script>
 
     @include('includes.modal.delete')
