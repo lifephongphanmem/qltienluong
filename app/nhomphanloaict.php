@@ -10,6 +10,7 @@ class nhomphanloaict extends Model
     protected $fillable = [
         'id',
         'manhom',
-        'tennhom'
+        'tennhom',
+        'stt'
     ];
 }

@@ -90,15 +90,16 @@
                 <th rowspan="2">Tiền thưởng</th>
                 <th rowspan="2">Tiền</br>phụ cấp</br>và</br>trợ cấp</br>khác</th>
                 <th rowspan="2">Tiền khoán</br>(Khoán công tác
-                    phí</br>tháng</br>{{ $thongtin['thang'] == '01' ? 12 : $thongtin['thang']-1 }}/{{ $thongtin['thang'] == '01' ? str_pad($thongtin['nam'] - 1, 4, '0', STR_PAD_LEFT) : $thongtin['nam'] }})
+                    phí</br>tháng</br>{{ $thongtin['thang'] == '01' ? 12 : $thongtin['thang'] - 1 }}/{{ $thongtin['thang'] == '01' ? str_pad($thongtin['nam'] - 1, 4, '0', STR_PAD_LEFT) : $thongtin['nam'] }})
                 </th>
                 <th rowspan="2">Tiền</br>học bổng</th>
             </tr>
             <tr>
                 {{-- <th>Lương tháng</br>{{ $thongtin['thang'] . '/' . $thongtin['nam'] }}</th> --}}
                 <th>Lương và phụ cấp lương</th>
-                <th>Truy lĩnh</br>lương từ ngày </br>01/ {{$thongtin['thang'] == '01' ? 12 : $thongtin['thang']-1 }} đến
-                    <br>{{ lastdateofmonth($thongtin['thang'] == '01' ? 12 : $thongtin['thang']-1, $thongtin['thang'] == '01' ? str_pad($thongtin['nam'] - 1, 4, '0', STR_PAD_LEFT) : $thongtin['nam']) }}</th>
+                <th>Truy lĩnh</br>lương từ ngày </br>01/ {{ $thongtin['thang'] == '01' ? 12 : $thongtin['thang'] - 1 }} đến
+                    <br>{{ lastdateofmonth($thongtin['thang'] == '01' ? 12 : $thongtin['thang'] - 1, $thongtin['thang'] == '01' ? str_pad($thongtin['nam'] - 1, 4, '0', STR_PAD_LEFT) : $thongtin['nam']) }}
+                </th>
             </tr>
             <?php $i = 1; ?>
             <tr style="text-align: center; font-weight: bold">
@@ -135,13 +136,16 @@
         </tr>
         <?php $i = 1; ?>
         @foreach ($model_congtac as $congtac)
-            <?php $model_luong = $model->where('mact', $congtac->mact); ?>
+            <?php
+            // dd($congtac->phanloai);
+            $model_luong = isset($congtac->isnhomct) ? $model->wherein('mact', $congtac->phanloai) : $model->where('mact', $congtac->mact); ?>
 
             @if (count($model_luong) > 0)
                 <?php $stt = 1; ?>
                 <tr style="font-weight: bold;">
                     <td>{{ convert2Roman($i++) }}</td>
-                    <td style="text-align: left;" colspan="3">{{ $congtac->tenct }}</td>
+                    <td style="text-align: left;" colspan="3">
+                        {{ isset($congtac->isnhomct) ? $congtac->tennhom : $congtac->tenct }}</td>
                     <td class="text-right">{{ dinhdangso($model_luong->sum('tongso')) }}</td>
                     <td class="text-right">{{ dinhdangso($model_luong->sum('luong')) }}</td>
                     <td class="text-right">{{ dinhdangso($model_luong->sum('truylinh')) }}</td>
@@ -184,23 +188,66 @@
         {{ Dbl2Str($model->sum('tongso')) }}</p>
     <p id= 'data_body3' style="text-align: left; font-weight:bold; font-size: 12px;">II. Phần thuyết minh thay đổi so với
         tháng trước:</p>
-    <table id='data_body4' class="money" cellspacing="0" cellpadding="0"
-        style="margin: 20px auto; border-collapse: collapse;font:normal 10px Times, serif; width: 40%; margin-left:100px;">
+    @if (count($thuyetminh_ct) > 0)
+        <table id='data_body4' class="money" cellspacing="0" cellpadding="0"
+            style="margin: 20px auto; border-collapse: collapse;font:normal 10px Times, serif; width: 40%; margin-left:100px;">
 
-        <?php $i = 1; ?>
-        @if ($message != '')
-            <tr>
-                <td colspan="5">{{ $message }}</td>
-            </tr>
-        @else
-            @foreach ($thuyetminh_ct as $key => $val)
+            <?php $i = 1; ?>
+            @if ($message != '')
                 <tr>
-                    <td style="text-align: left">{{  $val->noidung }}</td>
-                    <td>{{dinhdangso($val->sotien) }} đồng</td>
+                    <td colspan="5">{{ $message }}</td>
                 </tr>
-            @endforeach
-        @endif
-    </table>
+            @else
+                @foreach ($thuyetminh_ct as $key => $val)
+                    <tr>
+                        <td style="text-align: left">{{ $val->noidung }}</td>
+                        <td>{{ dinhdangso($val->sotien) }} đồng</td>
+                    </tr>
+                @endforeach
+            @endif
+        </table>
+    @else
+        <table id='data_body4' class="money" cellspacing="0" cellpadding="0" border="1"
+            style="margin: 20px auto; border-collapse: collapse;font:normal 10px Times, serif; width: 40%; margin-left:100px;">
+            <thead>
+                <tr>
+                    <th style="width: 1%;">S</br>T</br>T</th>
+                    <th style="width: 10%;">Họ và tên</th>
+                    <th style="width: 5%;">Chức danh</th>
+                    <th style="width: 5%;">Số tiền thay đổi</th>
+                    <th style="width: 10%;">Ghi chú</th>
+                </tr>
+            </thead>
+            <?php $i = 1; ?>
+            @if ($message != '')
+                <tr>
+                    <td colspan="5">{{ $message }}</td>
+                </tr>
+            @else
+                @foreach ($model_thaydoi as $key => $val)
+                    <tr>
+                        <td>{{ ++$key }}</td>
+                        <td>{{ $val->tencanbo }}</td>
+                        <td class="text-center">{{ $val->tencv }}</td>
+                        <td class="text-right">{{ dinhdangso($val->luongthaydoi) }}</td>
+                        <td>
+                            {{ isset($val->ghichu_luong) ? $val->ghichu_luong : '' }}
+                            {{ isset($val->ghichu) ? $val->ghichu : '' }}
+                        </td>
+                    </tr>
+                @endforeach
+                <tr style="font-weight: bold">
+                    <td></td>
+                    <td>Cộng</td>
+                    <td></td>
+                    <td class="text-right">{{ dinhdangso($model_thaydoi->sum('luongthaydoi')) }}</td>
+                    <td></td>
+                    </td>
+                </tr>
+            @endif
+        </table>
+    @endif
+
     <table id="data_footer" class="header" width="96%" border="0" cellspacing="0" cellpadding="8"
         style="margin:20px auto; text-align: center;">
         <tr>

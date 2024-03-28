@@ -71,32 +71,31 @@
         style="margin: 20px auto; border-collapse: collapse;font:normal {{$thongtin['cochu']}}px Times, serif;">
         <thead>
             <tr style="padding-left: 2px;padding-right: 2px">
-                <th style="width: 1%;" rowspan="2">S</br>T</br>T</th>
-                <th style="width: 10%;" rowspan="2">Họ và tên</th>
+                <th style="width: 1%;" rowspan="3">S</br>T</br>T</th>
+                <th style="width: 10%;" rowspan="3">Họ và tên</th>
                 <th style="width: 15%;" colspan="2">Tài khoản ngân hàng</th>
-                <th style="width: 15%;" rowspan="2">Tổng số</th>
-                <th style="width: 50%;" colspan="7">Trong đó</th>
-                <th style="width: 10%;" rowspan="2">Ghi chú</th>
+                <th style="width: 50%;" colspan="9">Trong đó</th>
+                <th style="width: 10%;" rowspan="3">Ghi chú</th>
             </tr>
             <tr>
-                <th>Số tài khoản</br>người hưởng</th>
-                <th>Tên ngân hàng</th>
-
-                <th >Lương</br>và phụ cấp</br>theo lương</th>
-                <th >Tiền công</br>lao động</br>thường xuyên</br>theo hợp đồng</br>tháng
+                <th rowspan="2">Số tài khoản</br>người hưởng</th>
+                <th rowspan="2">Tên ngân hàng</th>
+                <th rowspan="2">Tổng số</th>
+                <th colspan="2">Lương và phụ cấp theo lương</th>
+                <th rowspan="2">Tiền công</br>lao động</br>thường xuyên</br>theo hợp đồng</br>tháng
                     {{ $thongtin['thang'] . '/' . $thongtin['nam'] }}</th>
-                <th >Tiền thu nhập</br>tăng thêm</th>
-                <th >Tiền thưởng</th>
-                <th >Tiền</br>phụ cấp</br>và</br>trợ cấp</br>khác</th>
-                <th >Tiền khoán</br>công tác
+                <th rowspan="2">Tiền thu nhập</br>tăng thêm</th>
+                <th rowspan="2">Tiền thưởng</th>
+                <th rowspan="2">Tiền</br>phụ cấp</br>và</br>trợ cấp</br>khác</th>
+                <th rowspan="2">Tiền khoán</br>công tác
                     phí</br>tháng</br>{{ $thongtin['thang'] == '01' ? 12 : $thongtin['thang'] }}/{{ $thongtin['thang'] == '01' ? str_pad($thongtin['nam'] - 1, 4, '0', STR_PAD_LEFT) : $thongtin['nam'] }}
                 </th>
-                <th >Tiền</br>học bổng</th>
+                <th rowspan="2">Tiền</br>học bổng</th>
             </tr>
-            {{-- <tr>
+            <tr>
                 <th>Lương tháng</br>{{ $thongtin['thang'] . '/' . $thongtin['nam'] }}</th>
                 <th>Truy lĩnh</br>lương tháng</br>{{ $thongtin['thang'] . '/' . $thongtin['nam'] }}</th>
-            </tr> --}}
+            </tr>
             <?php $i = 1; ?>
             <tr style="text-align: center; font-weight: bold">
                 <td>{{ $i++ }}</td>
@@ -104,7 +103,7 @@
                 <td>{{ $i++ }}</td>
                 <td></td>
                 <td>{{ $i++ }}</td>
-                <td>{{ $i++ }}</td>
+                <td colspan="2">{{ $i++ }}</td>
                 <td>{{ $i++ }}</td>
                 <td>{{ $i++ }}</td>
                 <td>{{ $i++ }}</td>
@@ -121,7 +120,7 @@
             <td></td>
             <td class="text-right">{{ dinhdangso($model->sum('tongso')) }}</td>
             <td class="text-right">{{ dinhdangso($model->sum('luong')) }}</td>
-            {{-- <td class="text-right">{{ dinhdangso($model->sum('truylinh')) }}</td> --}}
+            <td class="text-right">{{ dinhdangso($model->sum('truylinh')) }}</td>
             <td class="text-right">{{ dinhdangso($model->sum('hopdong')) }}</td>
             <td class="text-right">{{ dinhdangso($model->sum('tangthem')) }}</td>
             <td class="text-right">{{ dinhdangso($model->sum('tienthuong')) }}</td>
@@ -132,19 +131,16 @@
         </tr>
         <?php $i = 1; ?>
         @foreach ($model_congtac as $congtac)
-            {{-- <?php $model_luong = $model->where('mact', $congtac->mact); ?> --}}
-            <?php 
-            $model_luong = isset($congtac->isnhomct)?$model->wherein('mact', $congtac->phanloai):$model->where('mact', $congtac->mact); ?>
+            <?php $model_luong = $model->where('mact', $congtac->mact); ?>
 
             @if (count($model_luong) > 0)
                 <?php $stt = 1; ?>
                 <tr style="font-weight: bold;">
                     <td>{{ convert2Roman($i++) }}</td>
-                    {{-- <td style="text-align: left;" colspan="3">{{ $congtac->tenct }}</td> --}}
-                    <td style="text-align: left;" colspan="3">{{ isset($congtac->isnhomct)?$congtac->tennhom:$congtac->tenct }}</td>
+                    <td style="text-align: left;" colspan="3">{{ $congtac->tenct }}</td>
                     <td class="text-right">{{ dinhdangso($model_luong->sum('tongso')) }}</td>
                     <td class="text-right">{{ dinhdangso($model_luong->sum('luong')) }}</td>
-                    {{-- <td class="text-right">{{ dinhdangso($model_luong->sum('truylinh')) }}</td> --}}
+                    <td class="text-right">{{ dinhdangso($model_luong->sum('truylinh')) }}</td>
                     <td class="text-right">{{ dinhdangso($model_luong->sum('hopdong')) }}</td>
                     <td class="text-right">{{ dinhdangso($model_luong->sum('tangthem')) }}</td>
                     <td class="text-right">{{ dinhdangso($model_luong->sum('tienthuong')) }}</td>
@@ -164,7 +160,7 @@
 
                         <td class="text-right">{{ dinhdangso($ct->tongso) }}</td>
                         <td class="text-right">{{ dinhdangso($ct->luong) }}</td>
-                        {{-- <td class="text-right">{{ dinhdangso($ct->truylinh) }}</td> --}}
+                        <td class="text-right">{{ dinhdangso($ct->truylinh) }}</td>
                         <td class="text-right">{{ dinhdangso($ct->hopdong) }}</td>
                         <td class="text-right">{{ dinhdangso($ct->tangthem) }}</td>
                         <td class="text-right">{{ dinhdangso($ct->tienthuong) }}</td>

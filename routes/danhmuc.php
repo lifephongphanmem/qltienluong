@@ -173,5 +173,8 @@ Route::group(['prefix' => 'danh_muc'], function () {
     Route::prefix('nhomphanloaict')->group(function(){
         Route::get('index',[nhomphanloaictController::class,'index']);
         Route::post('store',[nhomphanloaictController::class,'store']);
+        Route::post('update',[nhomphanloaictController::class,'update']);
+        Route::get('edit',[nhomphanloaictController::class,'edit']);
+        Route::get('del/{id}',[nhomphanloaictController::class,'destroy']);
     });
 });
