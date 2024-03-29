@@ -140,7 +140,7 @@
             // dd($congtac->phanloai);
             $model_luong = isset($congtac->isnhomct) ? $model->wherein('mact', $congtac->phanloai) : $model->where('mact', $congtac->mact); ?>
 
-            @if (count($model_luong) > 0)
+            {{-- @if (count($model_luong) > 0) --}}
                 <?php $stt = 1; ?>
                 <tr style="font-weight: bold;">
                     <td>{{ convert2Roman($i++) }}</td>
@@ -181,7 +181,7 @@
                         </tr>
                     @endif
                 @endforeach
-            @endif
+            {{-- @endif --}}
         @endforeach
     </table>
     <p id='data_body2' style="text-align: left;font-size: 12px;font-weight:bold;">Tổng số tiền bằng chữ:
