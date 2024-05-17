@@ -602,6 +602,7 @@ class bangluongController extends Controller
                                     if ($cthuc != '')
                                         $heso += $cb->$cthuc;
                                 }
+                                // dd($heso);
                                 $cb->$mapc = round($heso * $cb->$mapc / 100, session('admin')->lamtron);
                             }
 
@@ -1026,7 +1027,7 @@ class bangluongController extends Controller
         //ds cán bộ
         //$m_cb = hosocanbo::select($a_th)->where('madv', $inputs['madv'])->wherenotin('macanbo',$a_cbn)->get()->keyBy('macanbo')->toArray();
         $m_cb = hosocanbo::select($a_th)->where('madv', $inputs['madv'])->wherenotin('macanbo', $a_cbn)->get();
-        // dd($m_cb);
+        // dd($m_cb->where('mact','1506673422'));
         $m_bh_cb = array();
         foreach ($m_cb as $key => $item) {
             $m_bh_cb[$item->macanbo] = $item->only(['bhxh', 'bhyt', 'bhtn', 'kpcd', 'bhxh_dv', 'bhyt_dv', 'bhtn_dv', 'kpcd_dv']);
@@ -1047,7 +1048,7 @@ class bangluongController extends Controller
         }
 
         $m_cb = $m_cb->keyBy('macanbo')->toArray();
-        // dd($m_cb);
+
         $a_phanloai = dmphanloaicongtac_baohiem::where('madv', session('admin')->madv)->get()->keyBy('mact')->toArray();
         $a_nhomct = array_column(dmphanloaict::all()->toarray(), 'macongtac', 'mact');
         // dd($a_phanloai);
@@ -1074,8 +1075,8 @@ class bangluongController extends Controller
         $a_data_canbo = array();
         //$a_data_phucap = array();
         //$a_pc_coth = array('pcudn', 'pctnn', 'pctaicu');
-        // dd($m_cb);
         foreach ($m_cb as $key => $val) {
+
             $a_lv = explode(',', $m_cb[$key]['lvhd']);
             if (in_array($inputs['linhvuchoatdong'], $a_lv) || $m_cb[$key]['lvhd'] == null || $m_cb[$key]['lvhd'] == '') {
                 $m_cb[$key]['lvhd'] = $inputs['linhvuchoatdong'];
@@ -1086,13 +1087,18 @@ class bangluongController extends Controller
             //trường hợp cán bộ tập sự, thử việc nộp bảo hiểm theo số lương thực nhận
             // (chỉ cần tính các phụ cấp theo hệ số và số tiền; hệ số theo % sẽ đc tính lại theo phụ cấp gốc)
             if ($m_cb[$key]['theodoi'] == 6 || $m_cb[$key]['mact'] == '1506673422') {
-                foreach ($a_tapsu as $pc) {
+                foreach ($a_tapsu as $pc) { 
+                    if($a_pc[$pc]['phanloai'] == '2')
+                    {
+                        continue;
+                    }                 
                     if ($m_cb[$key][$pc] > 0 && $m_cb[$key][$pc] < 50) {
                         $m_cb[$key][$pc] = round($m_cb[$key][$pc] * $m_cb[$key]['pthuong'] / 100, session('admin')->lamtron);
                     }
                 }
+                            // dd($m_cb[$key]);
             }
-
+            // dd($m_cb[$key]);
 
             //$m_cb[$key]['vuotkhung'] = isset($m_cb[$key]['vuotkhung']) ? round($val['heso'] * $val['vuotkhung'] / 100, session('admin')->lamtron) : 0;
             $m_cb[$key]['mabl'] = $inputs['mabl'];
@@ -1178,6 +1184,7 @@ class bangluongController extends Controller
             // dd($m_cb[$key]);
             //Tính phụ cấp
             foreach ($a_pc as $k => $v) {
+
                 $mapc = $v['mapc'];
                 $m_cb[$key]['st_' . $mapc] = $a_pc[$k]['ttbh_dv'] =  $a_pc[$k]['ttbh'] = $a_pc[$k]['sotien'] = 0;
                 $a_pc[$k]['stbhxh'] = $a_pc[$k]['stbhyt'] = $a_pc[$k]['stkpcd'] = $a_pc[$k]['stbhtn'] = 0;
@@ -1217,22 +1224,25 @@ class bangluongController extends Controller
                             $sotien = 0;
                             $heso = 0;
                             //Lấy số tiền để tính
+                            // dd($m_cb[$key]);
+
                             foreach (explode(',', $a_pc[$k]['congthuc']) as $ct) {
                                 if ($ct != '')
                                     // $sotien += $m_cb[$key]['st_' . $ct];
                                     $heso += $m_cb[$key][$ct];
                             }
-                            // dd($m_cb[$key][$mapc]);
+
+                            // dd( $a_pc[$k]['congthuc']);
                             // $sotien = round(($sotien * $m_cb[$key][$mapc]) / 100, session('admin')->lamtron);
                             // $heso=round(($sotien/$inputs['luongcoban']),session('admin')->lamtron);
                             // $a_pc[$k]['sotien']=$sotien;
                             // $m_cb[$key][$mapc]= $heso;
                             // dd($m_cb[$k][$mapc]);
-
                             $heso = round(($heso * $m_cb[$key][$mapc]) / 100, session('admin')->lamtron);
                             $a_pc[$k]['sotien'] = round($heso * $inputs['luongcoban'], session('admin')->lamtron);
                             $m_cb[$key][$mapc] = $heso;
-                            // dd( $heso);
+
+                            // dd( $m_cb[$key][$mapc]);
                             //do tính hệ số đã làm tròn => (hệ số * lương cơ bản) != (số tiền) => nhân lại để đúng số tiền
                             // $a_pc[$k]['sotien'] = round($m_cb[$key][$mapc] * $inputs['luongcoban']);
                             break;
