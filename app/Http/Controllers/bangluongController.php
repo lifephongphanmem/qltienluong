@@ -4986,7 +4986,7 @@ class bangluongController extends Controller
             }
              * */
             $model_tm = dmtieumuc_default::all();
-            //dd($model_tm);
+            // dd($model_tm);
 
             $a_pb = getPhongBan();
             $thongtin = array(
@@ -5019,9 +5019,10 @@ class bangluongController extends Controller
             $a_phca = $a_pc;
             $a_bh = a_getelement_equal($a_pc, array('baohiem' => 1));
             $a_nhomct = array_column($model_congtac->toarray(), 'macongtac', 'mact');
-            //dd($a_bh);
+            // dd($a_bh);
             $a_pc_tm = new Collection();
             //dd($a_pc);
+            // dd($model);
             foreach ($model as $ct) {
                 $ct->macongtac = isset($a_nhomct[$ct->mact]) ? $a_nhomct[$ct->mact] : '';
                 //chưa tính trường hợp nghỉ ts
@@ -5081,7 +5082,7 @@ class bangluongController extends Controller
                     //$a_pc_tm[] = $a_phca[$k];
                 }
             }
-            //dd($a_pc_tm);
+            // dd($a_pc_tm);
 
             foreach ($model_tm as $tm) {
                 $tm->heso = 0;
@@ -5103,7 +5104,13 @@ class bangluongController extends Controller
                     foreach (explode(',', $tm->mapc) as $maso) {
                         if ($maso != '') {
                             $tm->sotien += $m_tinhtoan->sum($maso);
+                            
                         }
+                    }
+                    if($tm->mapc != 'stkpcd_dv'){
+                        $tm->ttbh=$tm->sotien;
+                    }else{
+                        $tm->stkpcd=$tm->sotien;
                     }
                     continue;
                 }
@@ -5140,16 +5147,20 @@ class bangluongController extends Controller
                     }
                 }
             }
-            //dd($model_tm);
-            $model_tm = $model_tm->where('sotien', '>', 0);
 
-            $a_muc = $model_tm->map(function ($data) {
-                return collect($data->toArray())
-                    ->only(['muc'])
-                    ->all();
-            });
-            $a_muc = a_unique($a_muc);
-            //dd($model_tm);
+            $model_tm = $model_tm->where('sotien', '>', 0);
+            //Bỏ: Xây dựng theo mẫu mới
+            // $a_muc = $model_tm->map(function ($data) {
+            //     return collect($data->toArray())
+            //         ->only(['muc'])
+            //         ->all();
+            // });
+            // $a_muc = a_unique($a_muc);
+            $a_muc=array_unique(array_column($model_tm->toarray(),'muc'));
+// dd($a_muc);
+            // dd($model_tm->wherein('muc',['6100','6300']));
+            // dd($model_tm);
+            // dd($inputs);
             return view('reports.bangluong.donvi.maumtm')
                 //->with('model', $model->sortBy('stt'))
                 ->with('model_tm', $model_tm)
