@@ -71,7 +71,7 @@ class dmtieumuc_defaultController extends Controller
 
             $model = dmtieumuc_default::where('tieumuc',$inputs['tieumuc'])->first();
 
-            if(count($model) > 0){//update
+            if(isset($model)){//update
                 $model->update($inputs);
             }else{//add
                 dmtieumuc_default::create($inputs);
