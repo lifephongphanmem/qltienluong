@@ -4,27 +4,29 @@
 
     <table id="data_header" class="header" width="96%" border="0" cellspacing="0" cellpadding="8"
         style="margin:0 auto 25px; text-align: center;">
-        <!--tr>
+        <tr>
                 <td style="text-align: left;width: 60%">
                     <b>{{ $m_dv->tendvcq }}</b>
                 </td>
 
                 <td style="text-align: center; font-weight: bold">
-
+                    CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM
                 </td>
-            </tr-->
+            </tr>
 
         <tr>
-            <td style="text-align: left;width: 60%">
-                <b>Đơn vị: {{ $m_dv['tendv'] }}</b>
+            <td style="text-align: left;width: 60%;text-transform:uppercase">
+                {{-- <b>Đơn vị: {{ $m_dv['tendv'] }}</b> --}}
+                <b>{{ $m_dv['tendv'] }}</b>
             </td>
             <td style="text-align: center; font-style: italic">
-
+                <b>Độc lập - Tự do - Hạnh phúc</b>
             </td>
         </tr>
         <tr>
             <td style="text-align: left;width: 60%">
-                <b>Mã đơn vị SDNS: {{ $m_dv->maqhns }}</b>
+                {{-- <b>Mã đơn vị SDNS: {{ $m_dv->maqhns }}</b> --}}
+                <b>Mã ĐV có QH với NS: {{ $m_dv->maqhns }}</b>
             </td>
 
             <td style="text-align: center; font-style: italic">
