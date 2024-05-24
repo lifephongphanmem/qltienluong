@@ -5146,6 +5146,7 @@ class bangluongController extends Controller
                         $tm->ttbh_dv += $m_tinhtoan_pc->sum('ttbh_dv');
                     }
                 }
+                $tm->chuyenkhoan=$tm->sotien - $tm->ttbh;
             }
 
             $model_tm = $model_tm->where('sotien', '>', 0);

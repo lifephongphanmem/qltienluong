@@ -80,7 +80,7 @@
                         <td>{{ dinhdangso($ct->ttbh) }}</td>
                         <td>{{ dinhdangso($ct->stkpcd) }}</td>
                         {{-- <td>{{dinhdangso($ct->sotien - $ct->ttbh - $ct->giaml)}}</td> --}}
-                        <td></td>
+                        <td>{{ dinhdangso($ct->chuyenkhoan) }}</td>
                     </tr>
                 @endforeach
                 <tr style="font-weight: bold;">
@@ -94,7 +94,7 @@
                     <td class="money">{{ dinhdangso($tieumuc->sum('ttbh')) }}</td>
                     <td class="money">{{ dinhdangso($tieumuc->sum('stkpcd')) }}</td>
                     {{-- <td class="money">{{dinhdangso($tieumuc->sum('sotien') - $tieumuc->sum('giaml') - $tieumuc->sum('ttbh'))}}</td> --}}
-                    <td class="money"></td>
+                    <td class="money">{{ dinhdangso($tieumuc->sum('chuyenkhoan')) }}</td>
                 </tr>
                 <?php $tieumuc_bh = $model_tm->where('muc','6300'); ?>
                 @foreach ($tieumuc_bh as $ct)
@@ -110,12 +110,12 @@
                     <td>{{ dinhdangso($ct->ttbh) }}</td>
                     <td>{{ dinhdangso($ct->stkpcd) }}</td>
                     {{-- <td>{{dinhdangso($ct->sotien - $ct->ttbh - $ct->giaml)}}</td> --}}
-                    <td></td>
+                    <td>{{ dinhdangso($ct->chuyenkhoan) }}</td>
                 </tr>
             @endforeach
 
         <tr style="font-weight: bold; text-align: center;">
-            <td colspan="2">Tổng cộng</td>
+            <td colspan="2">TỔNG CỘNG</td>
             <!--td>{{ dinhdangsothapphan($model_tm->sum('heso'), 5) }}</td-->
             <td class="money">{{ dinhdangso($model_tm->sum('sotien') - $model_tm->sum('giaml')) }}</td>
             <td class="money">{{ dinhdangso($model_tm->sum('stbhxh')) }}</td>
@@ -125,7 +125,7 @@
             <td class="money">{{ dinhdangso($model_tm->sum('ttbh')) }}</td>
             <td class="money">{{ dinhdangso($model_tm->sum('stkpcd')) }}</td>
             {{-- <td class="money">{{dinhdangso($model_tm->sum('sotien') - $model_tm->sum('ttbh') - $model_tm->sum('giaml'))}}</td> --}}
-            <td class="money"></td>
+            <td class="money">{{ dinhdangso($model_tm->sum('chuyenkhoan')) }}</td>
         </tr>
     </table>
     <p id="data_body4" style="font-weight: bold">II/ Thuyết minh tiền lương tháng này so với tháng trước</p>
