@@ -118,11 +118,11 @@
                     <th></th>
                 @endif
                 {{-- <th>{{ $model_tm->where('mapc', 'pck')->first()->tieumuc }}</th> --}}
-                <th>{{ $model_tm->where('mapc', 'heso')->where('noidung', 'Lương theo ngạch, bậc')->first()->tieumuc??'' }}</th>
-                <th>{{ $model_tm->where('mapc', 'heso')->where('noidung', 'Lương theo ngạch, bậc')->first()->tieumuc??'' }}</th>
-                <th>{{ $model_tm->where('mapc', 'heso')->where('noidung', 'Tiền công trả cho vị trí lao động thường xuyên theo hợp đồng')->first()->tieumuc??'' }}
+                <th>{{ $model_tm->where('mapc', 'heso')->where('noidung', 'Lương theo ngạch, bậc')->first()->tieumuc??'6001' }}</th>
+                <th>{{ $model_tm->where('mapc', 'heso')->where('noidung', 'Lương theo ngạch, bậc')->first()->tieumuc??'6001' }}</th>
+                <th>{{ $model_tm->where('mapc', 'heso')->where('noidung', 'Tiền công trả cho vị trí lao động thường xuyên theo hợp đồng')->first()->tieumuc??'6051' }}
                 </th>
-                <th>{{ $model_tm->where('mapc', 'heso')->where('noidung', 'Tiền công trả cho vị trí lao động thường xuyên theo hợp đồng')->first()->tieumuc??'' }}
+                <th>{{ $model_tm->where('mapc', 'heso')->where('noidung', 'Tiền công trả cho vị trí lao động thường xuyên theo hợp đồng')->first()->tieumuc??'6051' }}
                 </th>
                 @if(!empty($a_tieumuc))
                 @foreach ($a_phucap as $key => $val)
@@ -144,10 +144,10 @@
                 <th></th>
                 @endif
                 {{-- <th>{{ $model_tm->where('mapc', 'pck')->first()->tieumuc }}</th> --}}
-                <th>{{ $model_tm->where('mapc', 'stbhxh_dv')->first()->tieumuc??'' }}</th>
-                <th>{{ $model_tm->where('mapc', 'stbhyt_dv')->first()->tieumuc??'' }}</th>
-                <th>{{ $model_tm->where('mapc', 'stbhtn_dv')->first()->tieumuc??'' }}</th>
-                <th>{{ $model_tm->where('mapc', 'stkpcd_dv')->first()->tieumuc??'' }}</th>
+                <th>{{ $model_tm->where('mapc', 'stbhxh_dv')->first()->tieumuc??'6301' }}</th>
+                <th>{{ $model_tm->where('mapc', 'stbhyt_dv')->first()->tieumuc??'6302' }}</th>
+                <th>{{ $model_tm->where('mapc', 'stbhtn_dv')->first()->tieumuc??'6304' }}</th>
+                <th>{{ $model_tm->where('mapc', 'stkpcd_dv')->first()->tieumuc??'6303' }}</th>
             </tr>
 
         </thead>
@@ -473,11 +473,11 @@
         </tr>
         <tr>
             <td colspan="{{ $col ==0?6:$col + 5 }}"></td>
-            <th>{{ $model_tm->where('mapc', 'heso')->where('noidung', 'Lương theo ngạch, bậc')->first()->tieumuc }}</th>
-            <th>{{ $model_tm->where('mapc', 'heso')->where('noidung', 'Lương theo ngạch, bậc')->first()->tieumuc }}</th>
-            <th>{{ $model_tm->where('mapc', 'heso')->where('noidung', 'Tiền công trả cho vị trí lao động thường xuyên theo hợp đồng')->first()->tieumuc }}
+            <th>{{ $model_tm->where('mapc', 'heso')->where('noidung', 'Lương theo ngạch, bậc')->first()->tieumuc??'6001' }}</th>
+            <th>{{ $model_tm->where('mapc', 'heso')->where('noidung', 'Lương theo ngạch, bậc')->first()->tieumuc??'6001' }}</th>
+            <th>{{ $model_tm->where('mapc', 'heso')->where('noidung', 'Tiền công trả cho vị trí lao động thường xuyên theo hợp đồng')->first()->tieumuc??'6051' }}
             </th>
-            <th>{{ $model_tm->where('mapc', 'heso')->where('noidung', 'Tiền công trả cho vị trí lao động thường xuyên theo hợp đồng')->first()->tieumuc }}
+            <th>{{ $model_tm->where('mapc', 'heso')->where('noidung', 'Tiền công trả cho vị trí lao động thường xuyên theo hợp đồng')->first()->tieumuc??'6051' }}
             </th>
             @if ($col == 0)
                 <th></th>
@@ -500,10 +500,10 @@
             @endif
 
             {{-- <th>{{ $model_tm->where('mapc', 'pck')->first()->tieumuc }}</th> --}}
-            <th>{{ $model_tm->where('mapc', 'stbhxh_dv')->first()->tieumuc }}</th>
-            <th>{{ $model_tm->where('mapc', 'stbhyt_dv')->first()->tieumuc }}</th>
-            <th>{{ $model_tm->where('mapc', 'stbhtn_dv')->first()->tieumuc }}</th>
-            <th>{{ $model_tm->where('mapc', 'stkpcd_dv')->first()->tieumuc }}</th>
+            <th>{{ $model_tm->where('mapc', 'stbhxh_dv')->first()->tieumuc??'6301' }}</th>
+            <th>{{ $model_tm->where('mapc', 'stbhyt_dv')->first()->tieumuc??'6302' }}</th>
+            <th>{{ $model_tm->where('mapc', 'stbhtn_dv')->first()->tieumuc??'6304' }}</th>
+            <th>{{ $model_tm->where('mapc', 'stkpcd_dv')->first()->tieumuc??'6303' }}</th>
             <td></td>
             <td></td>
             <td></td>
