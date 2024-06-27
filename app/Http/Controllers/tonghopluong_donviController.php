@@ -195,6 +195,7 @@ class tonghopluong_donviController extends Controller
             $a_plct = array('1536402868','1536459380','1535613221', '1506673695');
             $a_plcongtac = array('BIENCHE','KHONGCT','HOPDONG');
             */
+            // dd($inputs);
             for ($i = 0; $i < count($a_ct); $i++) {
                 if (!in_array($a_ct[$i]['mact'], $a_plct)) {
                     continue;
@@ -215,8 +216,11 @@ class tonghopluong_donviController extends Controller
                     //sau đó gán vào phần giảm trừ
                     foreach ($a_pc as $mapc) {
                         $mapc_st = 'st_' . $mapc;
-                        $tonghs += $a_ct[$i][$mapc];
+                        if($a_ct[$i][$mapc] < 1000){
+                            $tonghs += $a_ct[$i][$mapc];
+                        }
                         if ($a_ct[$i][$mapc] > 0 && $a_ct[$i][$mapc_st] == 0) {
+
                             if ($a_ct[$i][$mapc] < 1000) {
                                 $a_ct[$i][$mapc_st] = round($a_ct[$i][$mapc] * $a_ct[$i]['luongcoban']);
                             } else {
@@ -252,7 +256,7 @@ class tonghopluong_donviController extends Controller
                 $a_ct[$i]['tonghop'] = $a_ct[$i]['congtac'];
                 $a_data[] = $a_ct[$i];
             }
-            //dd($a_data);
+            // dd($a_data);
             //Lấy dữ liệu để lập
             $model_data = a_split($a_data, array('congtac', 'mact', 'linhvuchoatdong', 'manguonkp', 'macongtac'));
             $model_data = a_unique($model_data);
@@ -794,7 +798,7 @@ class tonghopluong_donviController extends Controller
                 }
             }
             //dd($model->toarray());
-            // dd($model);
+            // dd($model->take(3));
             foreach (getColTongHop() as $ct) {
                 if ($model->sum($ct) > 0) {
                     $a_phucap[$ct] = isset($m_pc[$ct]) ? $m_pc[$ct] : '';
