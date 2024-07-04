@@ -237,6 +237,8 @@
             </div>
         </div>
         <input type="hidden" id="masodv" name="masodv" value="" />
+        <input type="hidden" name="sohieu" value="{{$inputs['sohieu']}}" />
+        
         <div class="modal-footer">
             <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
             <button type="submit" data-dismiss="modal" class="btn btn-success" onclick="ClickBCqd19()">Đồng
@@ -297,6 +299,7 @@
             </div>
         </div>
         <input type="hidden" id="masodv" name="masodv" value="" />
+        <input type="hidden" name="sohieu" value="{{$inputs['sohieu']}}" />
         <div class="modal-footer">
             <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
             <button type="submit" data-dismiss="modal" class="btn btn-success" onclick="ClickBCtt107()">Đồng
