@@ -131,6 +131,11 @@
                             </div>
 
                             <div class="col-md-12">
+                                <label class="form-control-label">Nghị định trước khi nâng lương</label>
+                                {!! Form::text('cancundtruoc', null, ['id' => 'cancundtruoc', 'class' => 'form-control']) !!}
+                            </div>
+
+                            <div class="col-md-12">
                                 <label class="form-control-label">Thời gian áp dụng</label>
                                 <input type="date" name="ngayapdung" id="ngayapdung" class="form-control" />
                             </div>
@@ -155,10 +160,21 @@
 
                         <div class="row">
                             <div class="col-md-12">
-                                <label class="control-label">Áp dụng mẫu báo cáo</label>
-                                {!!Form::select('masobaocao', getBaoCaoNhuCauKP(), null, array('id' => 'masobaocao','class' => 'form-control select2me'))!!}
+                                <label class="control-label">Ghi chú</label>
+                                {!! Form::text('ghichu', null, ['id' => 'ghichu', 'class' => 'form-control']) !!}
                             </div>
                         </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label class="control-label">Áp dụng mẫu báo cáo</label>
+                                {!! Form::select('masobaocao', getBaoCaoNhuCauKP(), null, [
+                                    'id' => 'masobaocao',
+                                    'class' => 'form-control select2me',
+                                ]) !!}
+                            </div>
+                        </div>
+
                         <input type="hidden" id="id_tt" name="id_tt" />
                     </div>
                 </div>
@@ -201,6 +217,8 @@
                     $('#muccu').val(data.muccu);
                     $('#mucapdung').val(data.mucapdung);
                     $('#chenhlech').val(data.chenhlech);
+                    $('#ghichu').val(data.ghichu);
+                    $('#cancundtruoc').val(data.cancundtruoc),
                     $('#masobaocao').val(data.masobaocao).trigger('change');
                     //$('#ttdv').val(data.ttdv).trigger('change');
                     $('#id_tt').val(id);
@@ -241,6 +259,8 @@
                         muccu: $('#muccu').val(),
                         mucapdung: $('#mucapdung').val(),
                         chenhlech: $('#chenhlech').val(),
+                        ghichu: $('#ghichu').val(),
+                        cancundtruoc: $('#cancundtruoc').val(),
                         masobaocao: $('#masobaocao').val(),
                         id: id
                     },

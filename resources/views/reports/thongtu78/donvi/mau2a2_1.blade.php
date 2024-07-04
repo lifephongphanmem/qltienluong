@@ -21,12 +21,13 @@
             </td>
         </tr>
     </table>
-    <p id="data_body" style="text-align: center; font-weight: bold; font-size: 20px;">BÁO CÁO NHU CẦU KINH PHÍ THỰC HIỆN
-        NGHỊ ĐỊNH SỐ 24/2023/NĐ-CP NĂM 2023</p>
-    {{-- <p id="data_body1" style="text-align: center; font-style: italic">(Ban hành kèm theo Thông tư số 46/2019/TT-BTC ngày 23
-        tháng 7 năm 2019 của Bộ Tài chính)</p> --}}
-        <p id="data_body1" style="text-align: center; font-style: italic">(Ban hành kèm theo Thông tư số 50/2023/TT-BTC ngày 17
-            tháng 7 năm 2023 của Bộ trưởng Bộ Tài chính)</p>
+    <p id="data_body" style="text-align: center; font-weight: bold; font-size: 20px;text-transform: uppercase">
+        BÁO CÁO NHU CẦU KINH PHÍ THỰC HIỆN {{$m_thongtu->tenttqd}}
+    </p>
+    <p id="data_body1" style="text-align: center; font-style: italic">
+        {{$m_thongtu->ghichu}}
+        {{-- (Ban hành kèm theo Thông tư số 50/2023/TT-BTC ngày 17 tháng 7 năm 2023 của Bộ trưởng Bộ Tài chính) --}}
+    </p>
     <p id="data_body2" style="text-align: right; font-style: italic">Đơn vị: Đồng</p>
     <table id="data_body3" cellspacing="0" cellpadding="0" border="1"
         style="margin: 20px auto; font-size: 10px; border-collapse: collapse;">
@@ -34,15 +35,15 @@
             <th style="width: 1%;" rowspan="3">STT</th>
             <th rowspan="3" style="width:5%">NỘI DUNG</th>
             <th style="width: 2%;" rowspan="3">
-                BIÊN</br>CHẾ</br>ĐƯỢC</br>CẤP</br>CÓ</br>THẨM</br>QUYỀN</br>GIAO</br>HOẶC</br>PHÊ</br>DUYỆT</br>NĂM</br>2023
+                BIÊN</br>CHẾ</br>ĐƯỢC</br>CẤP</br>CÓ</br>THẨM</br>QUYỀN</br>GIAO</br>HOẶC</br>PHÊ</br>DUYỆT</br>NĂM</br>{{$m_thongtu->namdt}}
             </th>
 
             <th style="width: 2%;" rowspan="3">
-                TỔNG</br>SỐ</br>ĐỐI</br>TƯỢNG</br>HƯỞNG</br>LƯƠNG</br>CÓ</br>MẶT</br>ĐẾN</br>01/07/2023
+                TỔNG</br>SỐ</br>ĐỐI</br>TƯỢNG</br>HƯỞNG</br>LƯƠNG</br>CÓ</br>MẶT</br>ĐẾN</br>01/07/{{$m_thongtu->namdt}}
             </th>
 
-            <th style="width: 6%;" colspan="{{ $col != 0 ? 4 + $col : 5 }}"> QUỸ TIỀN LƯƠNG, PHỤ CẤP VÀ CÁC KHOẢN ĐÓNG GÓP
-                THÁNG 07/2023 THEO NGHỊ ĐỊNH SỐ 38/2019/NĐ-CP
+            <th style="width: 6%; text-transform: uppercase;" colspan="{{ $col != 0 ? 4 + $col : 5 }}"> QUỸ TIỀN LƯƠNG, PHỤ CẤP VÀ CÁC KHOẢN ĐÓNG GÓP
+                THÁNG 07/{{$m_thongtu->namdt -1 }} {{$m_thongtu->cancundtruoc}}
             </th>
         </tr>
         <tr style="">

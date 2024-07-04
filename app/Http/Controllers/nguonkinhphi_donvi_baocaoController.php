@@ -985,7 +985,7 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                 $view = 'reports.thongtu78.donvi.mau2a_1';
             } else {
                 $view = 'reports.thongtu78.donvi.mau2a_2';
-            }
+            }           
             return view($view)
                 // return view('reports.thongtu78.donvi.mau2a2')
                 ->with('furl', '/tong_hop_bao_cao/')
@@ -995,6 +995,7 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                 ->with('ar_IV', $ar_IV)
                 ->with('a_Tong', $a_Tong)
                 ->with('m_dv', $m_donvi)
+                ->with('m_thongtu', $m_thongtu)
                 ->with('inputs', $inputs)
                 //->with('a_phucap', $a_phucap)
                 ->with('a_phucap', getPhuCap2a_78())
@@ -1614,6 +1615,7 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                 ->with('ar_IV', $ar_IV)
                 ->with('a_Tong', $a_Tong)
                 ->with('m_dv', $m_donvi)
+                ->with('m_thongtu', $m_thongtu)
                 ->with('inputs', $inputs)
                 ->with('a_phucap', $a_phucap)
                 ->with('a_phucap_st', $a_phucap_st)

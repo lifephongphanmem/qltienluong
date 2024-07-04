@@ -36,7 +36,7 @@ class dmthongtuquyetdinhController extends Controller
             );
             die(json_encode($result));
         }
-        $inputs = $request->all();
+        $inputs = $request->all();        
         $inputs['namdt'] = date('Y', strtotime($inputs['ngayapdung'])) ?? date('Y');        
         $inputs['muccu'] = chkDbl($inputs['muccu']);
         $inputs['mucapdung'] = chkDbl($inputs['mucapdung']);

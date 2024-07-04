@@ -544,7 +544,6 @@ class tonghopnguon_huyenController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
-
             //lấy mã đơn vị quản lý trong trường hợp gọi từ "Báo cáo tổng hợp" giao diện Tỉnh
             if (!isset($inputs['macqcq'])) {
                 $inputs['macqcq'] = dmdonvibaocao::where('madvbc', $inputs['madvbc'])->first()->madvcq;
@@ -1021,6 +1020,7 @@ class tonghopnguon_huyenController extends Controller
             // dd($ar_II);
 
             $m_dv = dmdonvi::where('madv', $inputs['macqcq'])->first();
+            $m_thongtu = dmthongtuquyetdinh::where('sohieu', $inputs['sohieu'])->first();
             return view('reports.thongtu78.huyen.mautonghop')
                 ->with('furl', '/tong_hop_bao_cao/')
                 ->with('ar_I', $ar_I)
@@ -1033,6 +1033,7 @@ class tonghopnguon_huyenController extends Controller
                 ->with('dulieu_pIV', $dulieu_pIV)
                 ->with('a_Tong', $a_Tong)
                 ->with('m_dv', $m_dv)
+                ->with('m_thongtu', $m_thongtu)
                 ->with('inputs', $inputs)
                 //->with('a_phucap', $a_phucap)
                 ->with('a_phucap', getPhuCap2a_78())
@@ -2005,6 +2006,7 @@ class tonghopnguon_huyenController extends Controller
                 ->with('m_dv', $m_dv)
                 ->with('m_dv', $m_dv)
                 ->with('m_banhanh', $m_banhanh)
+                ->with('m_thongtu', $m_thongtu)
                 //->with('a_phucap', $a_phucap)
                 ->with('a_phucap', getPhuCap2a_78())
                 //->with('a_phucap_st', $a_phucap_st)
@@ -2625,6 +2627,7 @@ class tonghopnguon_huyenController extends Controller
                 ->with('inputs', $inputs)
                 ->with('a_phucap', $a_phucap)
                 ->with('m_banhanh', $m_banhanh)
+                ->with('m_thongtu', $m_thongtu)
                 ->with('a_phucap_st', $a_phucap_st)
                 ->with('col', $col)
                 ->with('pageTitle', 'Báo cáo nhu cầu kinh phí');
@@ -3343,6 +3346,7 @@ class tonghopnguon_huyenController extends Controller
                 ->with('a_phucap', $a_phucap)
                 ->with('a_phucap_st', $a_phucap_st)
                 ->with('m_banhanh', $m_banhanh)
+                ->with('m_thongtu', $m_thongtu)
                 ->with('a_nhomgd', array_keys($a_giaoduc))
                 ->with('m_nhomgiaoduc', $m_nhomgiaoduc->sortby('maqhns'))
                 ->with('col', $col)

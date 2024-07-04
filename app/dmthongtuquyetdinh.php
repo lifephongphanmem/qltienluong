@@ -12,6 +12,7 @@ class dmthongtuquyetdinh extends Model
         'sohieu',
         'tenttqd',
         'cancu',
+        'cancundtruoc',//Nghị định trước khi áp dụng
         'namdt',
         'donvibanhanh',
         'ngayapdung',

@@ -21,12 +21,13 @@
             </td>
         </tr>
     </table>
-    <p id="data_body" style="text-align: center; font-weight: bold; font-size: 20px;">BÁO CÁO NHU CẦU KINH PHÍ THỰC HIỆN
-        NGHỊ ĐỊNH SỐ 24/2023/NĐ-CP NĂM 2023</p>
-    {{-- <p id="data_body1" style="text-align: center; font-style: italic">(Ban hành kèm theo Thông tư số 46/2019/TT-BTC ngày 23
-        tháng 7 năm 2019 của Bộ Tài chính)</p> --}}
-        <p id="data_body1" style="text-align: center; font-style: italic">(Ban hành kèm theo Thông tư số 50/2023/TT-BTC ngày 17
-            tháng 7 năm 2023 của Bộ trưởng Bộ Tài chính)</p>
+    <p id="data_body" style="text-align: center; font-weight: bold; font-size: 20px;text-transform: uppercase">
+        BÁO CÁO NHU CẦU KINH PHÍ THỰC HIỆN {{$m_thongtu->tenttqd}}
+    </p>
+    <p id="data_body1" style="text-align: center; font-style: italic">
+        {{$m_thongtu->ghichu}}
+        {{-- (Ban hành kèm theo Thông tư số 50/2023/TT-BTC ngày 17 tháng 7 năm 2023 của Bộ trưởng Bộ Tài chính) --}}
+    </p>
     <p id="data_body2" style="text-align: right; font-style: italic">Đơn vị: Đồng</p>
     <table id="data_body3" cellspacing="0" cellpadding="0" border="1"
         style="margin: 20px auto; font-size: 10px; border-collapse: collapse;">
@@ -34,13 +35,12 @@
             <th style="width: 2%;" rowspan="3">STT</th>
             <th rowspan="3" style="width:8%">NỘI DUNG</th>
 
-            <th style="width: 6%;" colspan="14"> QUỸ TIỀN LƯƠNG, PHỤ CẤP VÀ CÁC KHOẢN ĐÓNG GÓP
-                THÁNG 07/2023 THEO NGHỊ ĐỊNH SỐ 24/2023/NĐ-CP
+            <th style="width: 6%;text-transform: uppercase" colspan="14"> QUỸ TIỀN LƯƠNG, PHỤ CẤP VÀ CÁC KHOẢN ĐÓNG GÓP
+                THÁNG 07/{{$m_thongtu->namdt}} {{$m_thongtu->tenttqd}}
             </th>
             <th style="width: 2%;" rowspan="3">
                 CHÊNH</br>LỆCH</br>QUỸ</br>LƯƠNG</br>PHỤ</br>CẤP</br>TĂNG</br>THÊM</br>01</br>THÁNG</th>
-            <th style="width: 6%;" rowspan="3">NHU CẦU</br>KINH PHÍ THỰC HIỆN NGHỊ
-                ĐỊNH SỐ 24/2023/NĐ-CP NĂM 2023</th>
+            <th style="width: 6%;text-transform: uppercase" rowspan="3">NHU CẦU</br>KINH PHÍ THỰC HIỆN {{$m_thongtu->tenttqd}}</th>
 
         </tr>
         <tr style="">
@@ -187,7 +187,7 @@
         </tr>
         <tr style="font-style: italic">
             <td style="text-align: center;" width="50%"></td>
-            <td style="text-align: center;" width="50%">((Ký tên, đóng dấu))</td>
+            <td style="text-align: center;" width="50%">(Ký tên, đóng dấu)</td>
         </tr>
         <tr>
             <td><br><br><br></td>
