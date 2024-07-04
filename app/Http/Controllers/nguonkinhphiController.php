@@ -155,6 +155,10 @@ class nguonkinhphiController extends Controller
                     $cb->lvhd = null;
                     continue;
                 }
+                if($cb->heso == 0 && $cb->luonghd != 0)
+                {
+                   continue;
+                }
                 $cb->macongtac = $a_congtac[$cb->mact];
                 $cb->masodv = $masodv;
                 //trong bảng danh mục là % vượt khung => sang bảng lương chuyển thành hệ số
@@ -377,7 +381,7 @@ class nguonkinhphiController extends Controller
                     unset($m_nh[$key]);
                 }
             }
-
+            // dd($m_nb);
             foreach ($m_nb as $key => $val) {
                 if (isset($inputs['thaisan'])) {
                     //kiểm tra xem tháng đó có nâng lương có nghỉ ts ko nếu có tháng nâng lương thành tháng ngay sau ngày nghỉ
@@ -419,6 +423,7 @@ class nguonkinhphiController extends Controller
                     unset($m_nb[$key]);
                 }
             }
+
             // dd($m_tnn);
             foreach ($m_tnn as $key => $val) {
                 if (isset($inputs['thaisan'])) {
@@ -504,7 +509,6 @@ class nguonkinhphiController extends Controller
             $a_data = array();
             $a_data_nl = array();
             $a_danghihuu = array();
-
             for ($i = 0; $i < count($a_thang); $i++) {
                 $a_nh = a_getelement($m_nh, array('thang_ns' => $a_thang[$i]['thang']));
                 if (count($a_nh) > 0) { //
@@ -521,7 +525,12 @@ class nguonkinhphiController extends Controller
                 $a_nb = a_getelement($m_nb, array('thang_nb' => $a_thang[$i]['thang']));
 
                 if (count($a_nb) > 0) {
+
+
                     foreach ($a_nb as $key => $val) {
+                        if($key == '1511710686_1536310046'){
+                            dd($a_luu);
+                        }
                         if (!in_array($key, $a_danghihuu)) {
                             if ($a_thang[$i]['thang'] != '07') { //nâng lương vào tháng 07 => ko tính chênh lệch nâng lương
                                 $a_data_nl[] = $this->getHeSoPc_Sub($a_pc, $a_nb[$key], $a_luu[$key], 'NGACHBAC', $a_thang[$i]['thang'], $a_thang[$i]['nam']);
@@ -529,7 +538,9 @@ class nguonkinhphiController extends Controller
                             $m_cb[$key] = $a_nb[$key];
                         }
                     }
+                    
                 }
+                // dd($a_nb);
                 $a_tnn = a_getelement($m_tnn, array('thang_tnn' => $a_thang[$i]['thang']));
                 if (count($a_tnn) > 0) {
                     foreach ($a_tnn as $key => $val) {
