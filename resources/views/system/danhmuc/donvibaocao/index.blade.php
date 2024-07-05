@@ -66,7 +66,7 @@
                                         <td class="text-center">{{$key+1}}</td>
                                         <td>{{$value->tendvbc}}</td>
                                         <td>{{$value->tendv}}</td>
-                                        <td></td>
+                                        <td>{{$value->kybaotri == 0?'Chưa ký bảo trì': 'Đã ký bảo trì'}}</td>
                                         <td>
                                             <a href="{{url('/danh_muc/khu_vuc/chi_tiet?ma_so='.$value->madvbc.'&phan_loai=SD')}}" class="btn btn-default btn-xs mbs">
                                                 <i class="fa fa-list-alt"></i>&nbsp; Danh sách đơn vị</a>
@@ -173,6 +173,7 @@
                     $('#tendvbc').val(data.tendvbc);
                     $('#level').val(data.level);
                     $('#ghichu').val(data.ghichu);
+                    $('#kybaotri').val(data.kybaotri);
                 },
                 error: function(message){
                     toastr.error(message,'Lỗi!');
@@ -189,6 +190,7 @@
             var madvbc=$('#madvbc').val();
             var tendvbc=$('#tendvbc').val();
             var ghichu=$('#ghichu').val();
+            var kybaotri=$('#kybaotri').val();
 
             if(tendvbc ==''){
                 valid=false;
@@ -205,7 +207,8 @@
                             _token: CSRF_TOKEN,
                             tendvbc: tendvbc,
                             level: $('#level').val(),
-                            ghichu: ghichu
+                            ghichu: ghichu,
+                            kybaotri: kybaotri,
                         },
                         dataType: 'JSON',
                         success: function (data) {
@@ -226,10 +229,12 @@
                             tendvbc: tendvbc,
                             level: $('#level').val(),
                             ghichu: ghichu,
-                            madvbc: madvbc
+                            madvbc: madvbc,
+                            kybaotri: kybaotri
                         },
                         dataType: 'JSON',
                         success: function (data) {
+                            console.log(data)
                             if (data.status == 'success') {
                                 location.reload();
                             }

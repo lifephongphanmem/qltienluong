@@ -330,9 +330,7 @@ class nguonkinhphi_donvi_baocaoController extends Controller
             //dd($m_nguonkp);
             //Tính toán số liệu phần I
             $ar_I = getHCSN();
-            // $dulieu_pI = $m_chitiet->where('nhomnhucau', 'BIENCHE');
-            //Chỉ lấy biên chế
-            $dulieu_pI = $m_chitiet->where('mact', '1506672780');
+            $dulieu_pI = $m_chitiet->where('nhomnhucau', 'BIENCHE');
             // dd($dulieu_pI);
             //Vòng cấp độ 3
             foreach ($ar_I as $key => $chitiet) {
@@ -1057,8 +1055,7 @@ class nguonkinhphi_donvi_baocaoController extends Controller
 
             //Tính toán số liệu phần I
             $ar_I = getHCSN();
-            // $dulieu_pI = $m_chitiet->where('nhomnhucau', 'BIENCHE');
-            $dulieu_pI = $m_chitiet->where('mact', '1506672780');
+            $dulieu_pI = $m_chitiet->where('nhomnhucau', 'BIENCHE');
             //Vòng cấp độ 3
             foreach ($ar_I as $key => $chitiet) {
                 if ($chitiet['phanloai'] == '0') {

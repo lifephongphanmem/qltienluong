@@ -64,6 +64,7 @@
                             <tr>
                                 <th class="text-center" style="width: 5%">STT</th>
                                 <th class="text-center">Năm ngân</br>sách</th>
+                                <th class="text-center">Số biên chế</br>được giao</th>
                                 <th class="text-center">Lĩnh vực hoạt động</th>
                                 <th class="text-center">Nhu cầu</br>kinh phí</th>
                                 <th class="text-center">Đơn vị nhận dữ liệu</th>
@@ -77,6 +78,7 @@
                                 <tr class="{{ getTextStatus($value->trangthai) }}">
                                     <td class="text-center">{{ $key + 1 }}</td>
                                     <td class="text-center">{{ $value->namns }}</td>
+                                    <td class="text-center">{{ $value->sobiencheduocgiao }}</td>
                                     <td>{{ $value->linhvuc }}</td>
                                     <td class="text-right">{{ number_format($value->nhucau) }}</td>
                                     <td>{{ getTenDV($value->macqcq) }}</td>
@@ -199,12 +201,12 @@
                             <label for="nghihuu">Tính dự toán cho cán bộ nghỉ hưu</label>
                         </div>
                     </div>
-                    <div class="row">
+                    {{-- <div class="row">
                         <div class="col-md-offset-3 col-md-9" style="padding-top: 15px">
                             <input type="checkbox" id="tapsu" name="tapsu" />
                             <label for="tapsu">Tính lương cho cán bộ tập sự theo mức hưởng</label>
                         </div>
-                    </div>
+                    </div> --}}
                     <div class="row">
                         <div class="col-md-offset-3 col-md-9" style="padding-top: 15px">
                             <input type="checkbox" checked id="thaisan" name="thaisan" />
