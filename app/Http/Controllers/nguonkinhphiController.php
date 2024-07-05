@@ -50,7 +50,7 @@ class nguonkinhphiController extends Controller
                 $phucap = $model_phucap->where('masodv', $ct->masodv);
                 $ct->nhucau = $phucap->sum('ttl') + $phucap->sum('ttbh_dv');
             }
-            //dd($model);
+            // dd($model);
             // $model_bl = bangluong::where('madv', session('admin')->madv)->where('phanloai', 'BANGLUONG')->orderby('nam')->orderby('thang')->get();
             $model_tt_df = dmthongtuquyetdinh::orderby('ngayapdung', 'desc')->first();
             $model_nhomct = dmphanloaicongtac::select('macongtac', 'tencongtac')->get();

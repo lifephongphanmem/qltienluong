@@ -30,7 +30,7 @@ class dmdonvibaocaoController extends Controller
             foreach ($model as $donvi) {
                 $donvi->tendv = getTenDV($donvi->madvcq);
             }
-            $kybaotri=['DAKY'=>"Đã ký bảo trì",'CHUAKY'=>'Chưa ký bảo trì'];
+            $kybaotri=['0'=>'Chưa ký bảo trì','1'=>"Đã ký bảo trì"];
             return view('system.danhmuc.donvibaocao.index')
                 ->with('model', $model)
                 ->with('kybaotri', $kybaotri)
@@ -78,10 +78,11 @@ class dmdonvibaocaoController extends Controller
         }
 
         $inputs = $request->all();
+
         $inputs['tendvbc']=removespace($inputs['tendvbc']);
         $model = dmdonvibaocao::where('madvbc',$inputs['madvbc'])->first();
         $model->update($inputs);
-
+        $result['inputs']=$inputs;
         $result['message'] = "Cập nhật thành công.";
         $result['status'] = 'success';
         die(json_encode($result));

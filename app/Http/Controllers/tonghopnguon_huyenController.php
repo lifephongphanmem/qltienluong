@@ -40,6 +40,7 @@ class tonghopnguon_huyenController extends Controller
     {
         if (Session::has('admin')) {
             $madv = session('admin')->madv;
+            $donvibaocao= dmdonvibaocao::where('madvbc',session('admin')->madvbc)->first();
             //$model_nguon = nguonkinhphi::where('macqcq', $madv)->where('trangthai','DAGUI')->get();
             $model_nguon_tinh = nguonkinhphi_tinh::where('madv', $madv)->get();
             $model_nguon = nguonkinhphi::wherein('madv', function ($query) use ($madv) {
@@ -53,7 +54,12 @@ class tonghopnguon_huyenController extends Controller
                 ->get();
             // dd($model_nguon_huyen);
             //$model_nguon_khoi = nguonkinhphi_khoi::where('madv', $madv)->get();
-            $model = dmthongtuquyetdinh::all();
+            if($donvibaocao->kybaotri == 1){
+                $model = dmthongtuquyetdinh::all();
+            }else{
+                $model=dmthongtuquyetdinh::where('sohieu','!=','732024nd_cp')->get();
+            }
+
             $a_trangthai = getStatus();
             //Lấy dữ liệu các đơn vị cấp dưới đã gửi lên
             // $model_donvi = dmdonvi::select('madv', 'tendv')

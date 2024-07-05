@@ -472,7 +472,13 @@ function getNhomCongTac($val_null = true)
 
 function getThongTuQD($val_null = true)
 {
-    $model = array_column(App\dmthongtuquyetdinh::all()->toArray(), 'tenttqd', 'sohieu');
+    $donvibaocao=App\dmdonvibaocao::where('madvbc',session('admin')->madvbc)->first();
+    if($donvibaocao->kybaotri == 1){
+        $model = array_column(App\dmthongtuquyetdinh::all()->toArray(), 'tenttqd', 'sohieu');
+    }else{
+        $model = array_column(App\dmthongtuquyetdinh::where('sohieu','!=','732024nd_cp')->get()->toArray(), 'tenttqd', 'sohieu');
+    }
+
     if ($val_null) {
         $a_kq = array('' => '--Chọn thông tư quyết định--');
         return array_merge($a_kq, $model);

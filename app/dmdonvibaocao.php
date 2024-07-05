@@ -16,5 +16,6 @@ class dmdonvibaocao extends Model
         'level',
         'baocao',
         'sapxep',
+        'kybaotri'
     ];
 }
