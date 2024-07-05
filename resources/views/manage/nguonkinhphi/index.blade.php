@@ -199,7 +199,12 @@
                             <label for="nghihuu">Tính dự toán cho cán bộ nghỉ hưu</label>
                         </div>
                     </div>
-
+                    <div class="row">
+                        <div class="col-md-offset-3 col-md-9" style="padding-top: 15px">
+                            <input type="checkbox" id="tapsu" name="tapsu" />
+                            <label for="tapsu">Tính lương cho cán bộ tập sự theo mức hưởng</label>
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col-md-offset-3 col-md-9" style="padding-top: 15px">
                             <input type="checkbox" checked id="thaisan" name="thaisan" />

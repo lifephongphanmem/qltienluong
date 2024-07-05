@@ -39,6 +39,7 @@ class nguonkinhphiController extends Controller
         if (Session::has('admin')) {
             $inputs = $request->all();
             $inputs['furl'] = '/nguon_kinh_phi/';
+
             $a_thongtuqd = array_column(dmthongtuquyetdinh::orderby('ngayapdung')->get()->toarray(), 'tenttqd', 'sohieu');
             $inputs['sohieu'] = $inputs['sohieu'] ?? array_key_last($a_thongtuqd);
             $model = nguonkinhphi::where('madv', session('admin')->madv)->where('sohieu', $inputs['sohieu'])->orderby('namns')->get();
@@ -161,6 +162,7 @@ class nguonkinhphiController extends Controller
                 }
                 if($cb->heso == 0 && $cb->luonghd != 0)
                 {
+                   $model->forget($key);
                    continue;
                 }
                 $cb->macongtac = $a_congtac[$cb->mact];
@@ -327,7 +329,6 @@ class nguonkinhphiController extends Controller
             //lấy danh sách cán bộ chưa nâng lương từ tháng 01-06 => tự nâng lương
 
             $m_cb = $model->keyBy('macanbo')->toarray();
-
             //làm tùy chọn tính nghỉ hưu
             $m_hh = $model->where('ngayvao', '>=', $model_thongtu->ngayapdung)->where('ngayvao', '<=', $inputs['namdt'] . '-12-31')->keyBy('macanbo')->toarray();
 
@@ -532,9 +533,6 @@ class nguonkinhphiController extends Controller
 
 
                     foreach ($a_nb as $key => $val) {
-                        if($key == '1511710686_1536310046'){
-                            dd($a_luu);
-                        }
                         if (!in_array($key, $a_danghihuu)) {
                             if ($a_thang[$i]['thang'] != '07') { //nâng lương vào tháng 07 => ko tính chênh lệch nâng lương
                                 $a_data_nl[] = $this->getHeSoPc_Sub($a_pc, $a_nb[$key], $a_luu[$key], 'NGACHBAC', $a_thang[$i]['thang'], $a_thang[$i]['nam']);
@@ -701,8 +699,9 @@ class nguonkinhphiController extends Controller
             //chia nhỏ thành các mảng nhỏ 100 phần tử để insert
             $a_data = unset_key($a_data, $a_col);
             //dd($a_data[101]);
-            // dd($a_data);
-            foreach (array_chunk($a_data, 1)  as $data) {
+            // dd($a_data[46]);
+            // dd($a_data[651 ]);
+            foreach (array_chunk($a_data, 20)  as $data) {
                 nguonkinhphi_bangluong::insert($data);
             }
             $m_data = unset_key($m_data, array('luonghs', 'nopbh'));
