@@ -150,6 +150,10 @@ class nguonkinhphiController extends Controller
             $model = (new dataController())->getCanBo($model, $model_thongtu->ngayapdung, isset($inputs['nangluong']), $model_thongtu->ngayapdung);
             // dd($model);
             foreach ($model as $key => $cb) {
+            //    if($cb->msngbac == '')
+            //    {
+            //     $cb->msngbac='0';
+            //    }
                 //xét thời hạn hợp đồng của cán bộ: nếu "ngayvao" > $model_thongtu->ngayapdung => gán lĩnh vực hoạt động = null để lọc theo lĩnh vực bỏ qua cán bộ
                 if (getDayVn($cb->ngayvao) != '' && $cb->ngayvao <= $model_thongtu->ngayapdung) {
                     $cb->lvhd = null;
@@ -697,7 +701,8 @@ class nguonkinhphiController extends Controller
             //chia nhỏ thành các mảng nhỏ 100 phần tử để insert
             $a_data = unset_key($a_data, $a_col);
             //dd($a_data[101]);
-            foreach (array_chunk($a_data, 20)  as $data) {
+            // dd($a_data);
+            foreach (array_chunk($a_data, 1)  as $data) {
                 nguonkinhphi_bangluong::insert($data);
             }
             $m_data = unset_key($m_data, array('luonghs', 'nopbh'));
