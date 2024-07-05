@@ -30,8 +30,10 @@ class dmdonvibaocaoController extends Controller
             foreach ($model as $donvi) {
                 $donvi->tendv = getTenDV($donvi->madvcq);
             }
+            $kybaotri=['DAKY'=>"Đã ký bảo trì",'CHUAKY'=>'Chưa ký bảo trì'];
             return view('system.danhmuc.donvibaocao.index')
                 ->with('model', $model)
+                ->with('kybaotri', $kybaotri)
                 ->with('level', $inputs['level'])
                 ->with('furl', '/danh_muc/khu_vuc/')
                 ->with('pageTitle', 'Danh mục khu vực, địa bàn quản lý');
