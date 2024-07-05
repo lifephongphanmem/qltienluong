@@ -151,10 +151,6 @@ class nguonkinhphiController extends Controller
             $model = (new dataController())->getCanBo($model, $model_thongtu->ngayapdung, isset($inputs['nangluong']), $model_thongtu->ngayapdung);
             // dd($model);
             foreach ($model as $key => $cb) {
-            //    if($cb->msngbac == '')
-            //    {
-            //     $cb->msngbac='0';
-            //    }
                 //xét thời hạn hợp đồng của cán bộ: nếu "ngayvao" > $model_thongtu->ngayapdung => gán lĩnh vực hoạt động = null để lọc theo lĩnh vực bỏ qua cán bộ
                 if (getDayVn($cb->ngayvao) != '' && $cb->ngayvao <= $model_thongtu->ngayapdung) {
                     $cb->lvhd = null;

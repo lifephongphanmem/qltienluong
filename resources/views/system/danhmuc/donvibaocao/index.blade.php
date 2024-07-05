@@ -55,6 +55,7 @@
                                 <th class="text-center" style="width: 10%">STT</th>
                                 <th class="text-center">Tên khu vực, địa bàn</th>
                                 <th class="text-center">Đơn vị tổng hợp số liệu</th>
+                                <th class="text-center">Trạng thái ký bảo trì</th>
                                 <th class="text-center">Thao tác</th>
                             </tr>
                         </thead>
@@ -65,6 +66,7 @@
                                         <td class="text-center">{{$key+1}}</td>
                                         <td>{{$value->tendvbc}}</td>
                                         <td>{{$value->tendv}}</td>
+                                        <td></td>
                                         <td>
                                             <a href="{{url('/danh_muc/khu_vuc/chi_tiet?ma_so='.$value->madvbc.'&phan_loai=SD')}}" class="btn btn-default btn-xs mbs">
                                                 <i class="fa fa-list-alt"></i>&nbsp; Danh sách đơn vị</a>
@@ -104,6 +106,9 @@
 
                     <label class="form-control-label">Cấp độ quản lý</label>
                     {!! Form::select('level',getNhomDonVi(),$level,array('id' => 'level', 'class' => 'form-control','readonly'))!!}
+
+                    <label class="form-control-label">Ký hợp đồng bảo trì</label>
+                    {!! Form::select('kybaotri',$kybaotri,null,array('id' => 'kybaotri', 'class' => 'form-control'))!!}
 
                     <label class="form-control-label">Ghi chú</label>
                     {!!Form::textarea('ghichu', null, array('id' => 'ghichu','class' => 'form-control','rows'=>'3'))!!}

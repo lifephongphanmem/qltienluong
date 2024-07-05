@@ -330,7 +330,10 @@ class nguonkinhphi_donvi_baocaoController extends Controller
             //dd($m_nguonkp);
             //Tính toán số liệu phần I
             $ar_I = getHCSN();
-            $dulieu_pI = $m_chitiet->where('nhomnhucau', 'BIENCHE');
+            // $dulieu_pI = $m_chitiet->where('nhomnhucau', 'BIENCHE');
+            //Chỉ lấy biên chế
+            $dulieu_pI = $m_chitiet->where('mact', '1506672780');
+            // dd($dulieu_pI);
             //Vòng cấp độ 3
             foreach ($ar_I as $key => $chitiet) {
                 if ($chitiet['phanloai'] == '0') {
@@ -408,7 +411,7 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                      $ar_I[$key]['chenhlech06thang'] = $ar_I[$key]['chenhlech01thang'] * 6;
                 }
             }
-
+            // dd($ar_I);
             //Vòng cấp độ 2
             foreach ($ar_I as $key => $chitiet) {
                 if ($chitiet['capdo'] == '2') {
@@ -1054,7 +1057,8 @@ class nguonkinhphi_donvi_baocaoController extends Controller
 
             //Tính toán số liệu phần I
             $ar_I = getHCSN();
-            $dulieu_pI = $m_chitiet->where('nhomnhucau', 'BIENCHE');
+            // $dulieu_pI = $m_chitiet->where('nhomnhucau', 'BIENCHE');
+            $dulieu_pI = $m_chitiet->where('mact', '1506672780');
             //Vòng cấp độ 3
             foreach ($ar_I as $key => $chitiet) {
                 if ($chitiet['phanloai'] == '0') {
