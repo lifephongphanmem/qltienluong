@@ -148,7 +148,7 @@
             <td>{{ dinhdangso($a_Tong['chenhlech01thang']) }}</td>
             <td>{{ dinhdangso($a_Tong['chenhlech06thang']) }}</td>
         </tr>
-        <?php $dulieu_pI = $m_chitiet->where('nhomnhucau', 'BIENCHE'); ?>
+        <?php $dulieu_pI = $m_chitiet->where('nhomnhucau', 'BIENCHE')->where('mact', '1506672780'); ?>
         @foreach ($ar_I as $dulieu)
             <tr style="font-weight: bold;text-align: center">
                 <td style="text-align: center;{{ $dulieu['style'] }}">{{ $dulieu['tt'] }}</td>
@@ -185,6 +185,7 @@
                 @foreach ($a_dv as $madv => $tendv)
                     <?php
                     $m_donvi = $model->where('madv', $madv);
+                    
                     ?>
                     <tr style="text-align: center">
                         <td style="text-align: right">{{ $idv++ }}</td>

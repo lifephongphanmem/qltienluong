@@ -64,7 +64,7 @@
                             <tr>
                                 <th class="text-center" style="width: 5%">STT</th>
                                 <th class="text-center">Năm ngân</br>sách</th>
-                                <th class="text-center">Số biên chế</br>được giao</th>
+                                {{-- <th class="text-center">Số biên chế</br>được giao</th> --}}
                                 <th class="text-center">Lĩnh vực hoạt động</th>
                                 <th class="text-center">Nhu cầu</br>kinh phí</th>
                                 <th class="text-center">Đơn vị nhận dữ liệu</th>
@@ -78,7 +78,7 @@
                                 <tr class="{{ getTextStatus($value->trangthai) }}">
                                     <td class="text-center">{{ $key + 1 }}</td>
                                     <td class="text-center">{{ $value->namns }}</td>
-                                    <td class="text-center">{{ $value->sobiencheduocgiao }}</td>
+                                    {{-- <td class="text-center">{{ $value->sobiencheduocgiao }}</td> --}}
                                     <td>{{ $value->linhvuc }}</td>
                                     <td class="text-right">{{ number_format($value->nhucau) }}</td>
                                     <td>{{ getTenDV($value->macqcq) }}</td>
