@@ -93,7 +93,7 @@ class tonghopnguon_huyenController extends Controller
                 //     ->get();
                 // $a_donvicapduoi = array_unique(array_merge(array_column($model_dmdv->toarray(), 'madv'), $a_donvicapduoi));
                 // $model_donvitamdung = dmdonvi::where('trangthai', 'TD')->wherein('madv', $a_donvicapduoi)->get();
-                $model_donvi = dmdonvi::select('madv', 'tendv', 'maphanloai', 'ngaydung', 'trangthai')->where('macqcq', $madv)->get();
+                $model_donvi = dmdonvi::select('madv', 'tendv', 'maphanloai', 'ngaydung', 'trangthai')->where('macqcq', $madv)->where('madv','<>',$madv)->get();
                 foreach ($model_donvi as $key => $ct) {
                     $nguon = $model_nguon->where('sohieu', $dv->sohieu)->where('madv', $ct->madv)->first();
                     if ($ct->trangthai == 'TD') { //xét cho những đơn vị đã tạm dừng mà đã gửi dữ liệu
