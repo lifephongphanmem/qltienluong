@@ -109,10 +109,11 @@ class xemdulieu_nguonController extends Controller
         if (Session::has('admin')) {
             $inputs = $request->all();
             $madv = session('admin')->madv;
+
             $nam = dmthongtuquyetdinh::where('sohieu', $inputs['sohieu'])->first()->namdt;
             //$ngay = date("Y-m-t", strtotime($inputs['nam'].'-'.$inputs['thang'].'-01'));
             $a_trangthai = array('ALL' => '--Chọn trạng thái dữ liệu--', 'CHOGUI' => 'Chưa gửi dữ liệu', 'DAGUI' => 'Đã gửi dữ liệu');
-            $model_donvi = dmdonvi::select('madv', 'tendv', 'maphanloai', 'phanloaitaikhoan')
+            $model_donvi = dmdonvi::select('madv', 'tendv', 'maphanloai', 'phanloaitaikhoan','ngaydung','trangthai')
                 ->where('macqcq', $madv)->where('madv', '<>', $madv)
                 ->wherenotin('madv', function ($query) use ($madv, $nam) {
                     $query->select('madv')->from('dmdonvi')
@@ -121,6 +122,7 @@ class xemdulieu_nguonController extends Controller
                         ->get();
                 })
                 ->get();
+                // dd($model_donvi->where('madv','1534123582'));
             $model_phanloai = dmphanloaidonvi::wherein('maphanloai', array_column($model_donvi->toarray(), 'maphanloai'))->get();
             $model_phanloai = array_column($model_phanloai->toarray(), 'tenphanloai', 'maphanloai');
             foreach ($model_phanloai as $key => $key)
@@ -162,7 +164,7 @@ class xemdulieu_nguonController extends Controller
                 // $model_donvitamdung = dmdonvi::where('trangthai', 'TD')->wherein('madv', $a_donvicapduoi)->get();
                 // $m_donvi = array_diff($a_donvicapduoi, array_column($model_donvitamdung->toarray(), 'madv'));
                 // $model_donvi = dmdonvi::select('madv', 'tendv', 'maphanloai')->wherein('madv', getDonviHuyen($nam,$madv)['m_donvi'])->get();
-                $model_donvi = dmdonvi::select('madv', 'tendv', 'maphanloai','ngaydung','trangthai')->where('macqcq', $madv)->get();
+                // $model_donvi = dmdonvi::select('madv', 'tendv', 'maphanloai','ngaydung','trangthai')->where('macqcq', $madv)->get();
 
                 $model_nguon = nguonkinhphi::where('trangthai', 'DAGUI')
                     ->where('macqcq', $madv)
