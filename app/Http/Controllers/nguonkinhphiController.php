@@ -716,8 +716,9 @@ class nguonkinhphiController extends Controller
         if (Session::has('admin')) {
             $inputs = $request->all();
             $model = nguonkinhphi::where('masodv', $inputs['maso'])->first();
-
+            // dd(getThongTuQD(false));
             $m_thongtu = dmthongtuquyetdinh::where('sohieu', $model->sohieu)->first();
+            // dd($m_thongtu);
             //dd($model);
             if ($model != null) {
                 $model->nhucaukp = $model->luongphucap + $model->daibieuhdnd + $model->canbokct
