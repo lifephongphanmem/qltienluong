@@ -108,7 +108,9 @@
                     @case('TT78_2022')
                         @include('manage.nguonkinhphi.TT78.index')
                     @break
-
+                    @case('ND73_2024')
+                        @include('manage.nguonkinhphi.ND73.index')
+                    @break
                     @default
                         @include('manage.nguonkinhphi.includes.index')
                 @endswitch
