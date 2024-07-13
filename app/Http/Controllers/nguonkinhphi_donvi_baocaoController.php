@@ -197,7 +197,7 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                 'nguoilap' => session('admin')->name,
                 'namns' => $model_thongtin->namns
             );
-
+            // dd($model);
             return view('reports.nguonkinhphi.donvi.tonghopnhucau')
                 ->with('thongtin', $thongtin)
                 ->with('model', $model)
@@ -333,7 +333,7 @@ class nguonkinhphi_donvi_baocaoController extends Controller
             //Mẫu chỉ lấy phân loại công tác: biên chế(mact: 1506672780) 05072024
             // $dulieu_pI = $m_chitiet->where('nhomnhucau', 'BIENCHE');
             $dulieu_pI = $m_chitiet->where('nhomnhucau', 'BIENCHE')->where('mact', '1506672780');
-            // dd($dulieu_pI);
+            // dd($m_chitiet);
             //Vòng cấp độ 3
             foreach ($ar_I as $key => $chitiet) {
                 if ($chitiet['phanloai'] == '0') {
