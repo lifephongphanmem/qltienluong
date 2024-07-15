@@ -160,10 +160,10 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <button type="button" onclick="insolieu('{{ $furl . 'bangluonghopdong' }}', '1506673585')"
+                            <button type="button" onclick="insolieu('{{ $furl . 'bangluonghopdong' }}', '1689729806')"
                                 style="border-width: 0px" class="btn btn-default btn-xs mbs"
                                 data-target="#modal-insolieu" data-toggle="modal">
-                                <i class="fa fa-print"></i>&nbsp; In bảng lương hợp đồng 68 </button>
+                                <i class="fa fa-print"></i>&nbsp; In bảng lương hợp đồng 111 </button>
                         </div>
                     </div>
                 </div>
@@ -205,7 +205,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <button type="button" onclick="insolieu('{{ $furl . 'tonghophopdong' }}','1506673585')"
+                            <button type="button" onclick="insolieu('{{ $furl . 'tonghophopdong' }}','1689729806')"
                                 style="border-width: 0px" class="btn btn-default btn-xs mbs"
                                 data-target="#modal-insolieu" data-toggle="modal">
                                 <i class="fa fa-print"></i>&nbsp; Tổng hợp hợp đồng bổ sung quỹ lương</button>
