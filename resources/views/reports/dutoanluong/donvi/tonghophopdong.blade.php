@@ -22,7 +22,7 @@
 
         <tr>
             <td colspan="2" style="text-align: center; font-weight: bold; font-size: 20px; text-transform: uppercase">
-                BẢNG TỔNG HỢP NHÂN VIÊN HỢP ĐỒNG THEO NĐ 68 ĐĂNG KÝ BỔ SUNG QUỸ LƯƠNG
+                BẢNG TỔNG HỢP NHÂN VIÊN HỢP ĐỒNG THEO NĐ 111 ĐĂNG KÝ BỔ SUNG QUỸ LƯƠNG
             </td>
         </tr>
 

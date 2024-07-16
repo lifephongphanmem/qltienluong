@@ -433,7 +433,9 @@ class dutoanluongController extends Controller
 
                 //quy đổi bảo hiểm thành số tiền theo mức lương cơ bản mới
                 //tính riêng cho HD 68 do quy đổi hệ số hay bi làm tròn
-                if ($chitiet->mact == '1506673585') {
+                // if ($chitiet->mact == '1506673585') {
+                //Đổi sang hđ 111
+                    if ($chitiet->mact == '1689729806') {
                     $chitiet->stbhxh_dv = round($chitiet->stbhxh_dv *  $chenhlech, 0);
                     $chitiet->stbhyt_dv = round($chitiet->stbhyt_dv  *  $chenhlech, 0);
                     $chitiet->stbhtn_dv = round($chitiet->stbhtn_dv  *  $chenhlech, 0);
