@@ -239,6 +239,7 @@ function getPhanLoaiXa($val_null = true)
     return $model;
 }
 
+
 function getCapDonVi()
 {
     return array(
@@ -1391,6 +1392,11 @@ function getSoLuongCanBoDinhMuc($nghidinh, $phanloaixa)
             'PL1' => 23,
             'PL2' => 21,
             'PL3' => 19,
+        ],        
+        'ND33/2024' => [
+            'XL1' => 14,
+            'XL2' => 12,
+            'XL3' => 10,
         ]
     ];
     return $a_kq[$nghidinh][$phanloaixa] ?? 0;
@@ -1405,6 +1411,11 @@ function getMucKhoanPhuCapXa($nghidinh, $phanloaixa)
             'XL3' => 11.4,
         ],
         'ND33/2023' => [
+            'XL1' => 21,
+            'XL2' => 18,
+            'XL3' => 15,
+        ],
+        'ND33/2024' => [
             'XL1' => 21,
             'XL2' => 18,
             'XL3' => 15,
