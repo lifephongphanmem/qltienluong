@@ -22,7 +22,7 @@
 
         <tr>
             <td colspan="2" style="text-align: center; font-weight: bold; font-size: 20px; text-transform: uppercase">
-                BÁO CÁO NHÂN VIÊN HỢP ĐỒNG THEO NGHỊ ĐỊNH 68 CỦA ĐƠN VỊ CÓ MẶT ĐẾN THÁNG 07 NĂM {{ $m_dutoan->namns - 1 }}
+                BÁO CÁO NHÂN VIÊN HỢP ĐỒNG THEO NGHỊ ĐỊNH 111 CỦA ĐƠN VỊ CÓ MẶT ĐẾN THÁNG 07 NĂM {{ $m_dutoan->namns - 1 }}
             </td>
         </tr>
        

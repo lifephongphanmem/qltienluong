@@ -2146,8 +2146,23 @@ class nguonkinhphi_donvi_baocaoController extends Controller
             $inputs = $request->all();
             // dd($inputs);
             $m_nguonkp = nguonkinhphi::where('masodv', $inputs['masodv'])->get();
+            $m_thongtu = dmthongtuquyetdinh::where('sohieu', $inputs['sohieu'])->first();
             $m_donvi = dmdonvi::where('madv', $m_nguonkp->first()->madv)->first();
             $inputs['donvitinh'] = $inputs['donvitinh'] ?? 1;
+
+            //Tạm làm để lấy lương cơ bản nhân
+            switch ($inputs['sohieu']) {
+                case '732024nd_cp': {
+                        $luongcb_cot4 = '1800000'; //lương cột 4 trên báo cáo
+                        $luongcb_cot5 = '2340000'; //lương cột 5 trên báo cáo
+                        break;
+                    }
+                default: {
+                        $luongcb_cot4 = '1490000'; //lương cột 4 trên báo cáo
+                        $luongcb_cot5 = '1490000'; //lương cột 5 trên báo cáo
+                        break;
+                    }
+            }
             //dd($m_nguonkp);
             $m_dsdv = dmdonvi::all();
             $a_level = array_column($m_dsdv->toArray(), 'caphanhchinh', 'madv');
@@ -2174,8 +2189,8 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                 'tdv' => $m_nguon_1->count(),
                 'mk' => 16,
                 'mk2' => 21,
-                'quyluong34' => round($m_nguon_1->count() * 16 * 1490000),
-                'quyluong33' => round($m_nguon_1->count() * 21 * 1490000),
+                'quyluong34' => round($m_nguon_1->count() * 16 * $luongcb_cot4),
+                'quyluong33' => round($m_nguon_1->count() * 21 * $luongcb_cot5),
             ]);
             $ar_I[1]['solieu']['tong'] = ($ar_I[1]['solieu']['quyluong33'] - $ar_I[1]['solieu']['quyluong34']) * 5;
             //
@@ -2185,8 +2200,8 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                 'tdv' => $m_nguon_2->count(),
                 'mk' => 13.7,
                 'mk2' => 18,
-                'quyluong34' => round($m_nguon_2->count() * 13.7 * 1490000),
-                'quyluong33' => round($m_nguon_2->count() * 18 * 1490000),
+                'quyluong34' => round($m_nguon_2->count() * 13.7 * $luongcb_cot4),
+                'quyluong33' => round($m_nguon_2->count() * 18 * $luongcb_cot5),
             ]);
             $ar_I[2]['solieu']['tong'] = ($ar_I[2]['solieu']['quyluong33'] - $ar_I[2]['solieu']['quyluong34']) * 5;
             //
@@ -2196,8 +2211,8 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                 'tdv' => $m_nguon_3->count(),
                 'mk' => 11.4,
                 'mk2' => 15,
-                'quyluong34' => round($m_nguon_3->count() * 11.4 * 1490000),
-                'quyluong33' => round($m_nguon_3->count() * 15 * 1490000),
+                'quyluong34' => round($m_nguon_3->count() * 11.4 * $luongcb_cot4),
+                'quyluong33' => round($m_nguon_3->count() * 15 * $luongcb_cot5),
             ]);
             $ar_I[3]['solieu']['tong'] = ($ar_I[3]['solieu']['quyluong33'] - $ar_I[3]['solieu']['quyluong34']) * 5;
             //Tổng phân loại xã
@@ -2221,8 +2236,8 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                 'tdv' => $m_nguonkp->sum('sothonbiengioi_2d'),
                 'mk' => 5,
                 'mk2' => 6,
-                'quyluong34' => round($m_nguonkp->sum('sothonbiengioi_2d') * 5 * 1490000),
-                'quyluong33' => round($m_nguonkp->sum('sothonbiengioi_2d') * 6 * 1490000),
+                'quyluong34' => round($m_nguonkp->sum('sothonbiengioi_2d') * 5 * $luongcb_cot4),
+                'quyluong33' => round($m_nguonkp->sum('sothonbiengioi_2d') * 6 * $luongcb_cot5),
             ]);
             $ar_I[6]['solieu']['tong'] = ($ar_I[6]['solieu']['quyluong33'] - $ar_I[6]['solieu']['quyluong34']) * 5;
 
@@ -2232,7 +2247,7 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                 'mk' => 0,
                 'mk2' => 6,
                 'quyluong34' => 0,
-                'quyluong33' => round($m_nguonkp->sum('sotodanphobiengioi_2d') * 6 * 1490000),
+                'quyluong33' => round($m_nguonkp->sum('sotodanphobiengioi_2d') * 6 * $luongcb_cot5),
             ]);
             $ar_I[7]['solieu']['tong'] = ($ar_I[7]['solieu']['quyluong33'] - $ar_I[7]['solieu']['quyluong34']) * 5;
 
@@ -2254,8 +2269,8 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                 'tdv' => $m_nguonkp->sum('sothon350hgd_2d'),
                 'mk' => 5,
                 'mk2' => 6,
-                'quyluong34' => round($m_nguonkp->sum('sothon350hgd_2d') * 5 * 1490000),
-                'quyluong33' => round($m_nguonkp->sum('sothon350hgd_2d') * 6 * 1490000),
+                'quyluong34' => round($m_nguonkp->sum('sothon350hgd_2d') * 5 * $luongcb_cot4),
+                'quyluong33' => round($m_nguonkp->sum('sothon350hgd_2d') * 6 * $luongcb_cot5),
             ]);
             $ar_I[9]['solieu']['tong'] = ($ar_I[9]['solieu']['quyluong33'] - $ar_I[9]['solieu']['quyluong34']) * 5;
 
@@ -2264,8 +2279,8 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                 'tdv' => $m_nguonkp->sum('sotodanpho500hgd_2d'),
                 'mk' => 3,
                 'mk2' => 6,
-                'quyluong34' => round($m_nguonkp->sum('sotodanpho500hgd_2d') * 3 * 1490000),
-                'quyluong33' => round($m_nguonkp->sum('sotodanpho500hgd_2d') * 6 * 1490000),
+                'quyluong34' => round($m_nguonkp->sum('sotodanpho500hgd_2d') * 3 * $luongcb_cot4),
+                'quyluong33' => round($m_nguonkp->sum('sotodanpho500hgd_2d') * 6 * $luongcb_cot5),
             ]);
             $ar_I[10]['solieu']['tong'] = ($ar_I[10]['solieu']['quyluong33'] - $ar_I[10]['solieu']['quyluong34']) * 5;
 
@@ -2274,8 +2289,8 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                 'tdv' => $m_nguonkp->sum('sothontrongdiem_2d'),
                 'mk' => 3,
                 'mk2' => 6,
-                'quyluong34' => round($m_nguonkp->sum('sothontrongdiem_2d') * 3 * 1490000),
-                'quyluong33' => round($m_nguonkp->sum('sothontrongdiem_2d') * 6 * 1490000),
+                'quyluong34' => round($m_nguonkp->sum('sothontrongdiem_2d') * 3 * $luongcb_cot4),
+                'quyluong33' => round($m_nguonkp->sum('sothontrongdiem_2d') * 6 * $luongcb_cot5),
             ]);
             $ar_I[11]['solieu']['tong'] = ($ar_I[11]['solieu']['quyluong33'] - $ar_I[11]['solieu']['quyluong34']) * 5;
 
@@ -2284,8 +2299,8 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                 'tdv' => $m_nguonkp->sum('sochuyentuthon350hgd_2d'),
                 'mk' => 3,
                 'mk2' => 6,
-                'quyluong34' => round($m_nguonkp->sum('sochuyentuthon350hgd_2d') * 3 * 1490000),
-                'quyluong33' => round($m_nguonkp->sum('sochuyentuthon350hgd_2d') * 6 * 1490000),
+                'quyluong34' => round($m_nguonkp->sum('sochuyentuthon350hgd_2d') * 3 * $luongcb_cot4),
+                'quyluong33' => round($m_nguonkp->sum('sochuyentuthon350hgd_2d') * 6 * $luongcb_cot5),
             ]);
             $ar_I[12]['solieu']['tong'] = ($ar_I[12]['solieu']['quyluong33'] - $ar_I[12]['solieu']['quyluong34']) * 5;
             //Số liệu II.2 8 = 9 + 10 + 11 + 12
@@ -2306,8 +2321,8 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                 'tdv' => $m_nguonkp->sum('sothonconlai_2d'),
                 'mk' => 3,
                 'mk2' => 4.5,
-                'quyluong34' => round($m_nguonkp->sum('sothonconlai_2d') * 3 * 1490000),
-                'quyluong33' => round($m_nguonkp->sum('sothonconlai_2d') * 4.5 * 1490000),
+                'quyluong34' => round($m_nguonkp->sum('sothonconlai_2d') * 3 * $luongcb_cot4),
+                'quyluong33' => round($m_nguonkp->sum('sothonconlai_2d') * 4.5 * $luongcb_cot5),
             ]);
             $ar_I[14]['solieu']['tong'] = ($ar_I[14]['solieu']['quyluong33'] - $ar_I[14]['solieu']['quyluong34']) * 5;
             //Tổ dân phố
@@ -2315,8 +2330,8 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                 'tdv' => $m_nguonkp->sum('sotoconlai_2d'),
                 'mk' => 3,
                 'mk2' => 4.5,
-                'quyluong34' => round($m_nguonkp->sum('sotoconlai_2d') * 3 * 1490000),
-                'quyluong33' => round($m_nguonkp->sum('sotoconlai_2d') * 4.5 * 1490000),
+                'quyluong34' => round($m_nguonkp->sum('sotoconlai_2d') * 3 * $luongcb_cot4),
+                'quyluong33' => round($m_nguonkp->sum('sotoconlai_2d') * 4.5 * $luongcb_cot5),
             ]);
             $ar_I[15]['solieu']['tong'] = ($ar_I[15]['solieu']['quyluong33'] - $ar_I[15]['solieu']['quyluong34']) * 5;
             //Số liệu II.3  13 = 14 + 15
@@ -2349,8 +2364,14 @@ class nguonkinhphi_donvi_baocaoController extends Controller
             );
 
             //dd($a_It);
-            return view('reports.thongtu78.huyen.mau2e')
+            if ($inputs['sohieu'] == '732024nd_cp') {
+                $view = 'reports.nghidinh73.donvi.mau2e';
+            } else {
+                $view = 'reports.thongtu78.huyen.mau2e';
+            }
+            return view($view)
                 ->with('m_dv', $m_donvi)
+                ->with('m_thongtu', $m_thongtu)
                 ->with('ar_I', $ar_I)
                 ->with('a_It', $a_It)
                 ->with('inputs', $inputs)
@@ -2464,24 +2485,88 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                 $chitiet->nhucau2b = round($chitiet->quy1_tong + $chitiet->quy2_tong + $chitiet->quy3_tong);
                 //Tính số liệu 2d
                 if ($chitiet->maphanloai == 'KVXP') {
-                    $sotien = 1490000 * 5;
+                    // $sotien = 1490000 * 5;
+                    //Tạm làm để lấy số tiền, tính chênh lệch phân loại xã chạy cho nđ73
+                    switch ($inputs['sohieu']) {
+                        case '732024nd_cp': {
+                                $nd33 = getMucKhoanPhuCapXa('ND33/2023', $chitiet->phanloaixa) * 2340000;
+                                $nd34 = getMucKhoanPhuCapXa('ND34/2019', $chitiet->phanloaixa) * 1800000;
+                                $chenhlech_plxa = ($nd33 - $nd34) * 5;
+                                //Xã biên giới;
+                                $xa_nd34 = $chitiet->sothonbiengioi_2d * 5 * 1800000;
+                                $xa_nd33 = $chitiet->sothonbiengioi_2d * 6 * 2340000;
+                                $tdp_nd34 = $chitiet->sotodanphobiengioi_2d * 6 * 1800000;
+                                $tdp_nd33 = $chitiet->sotodanphobiengioi_2d * 6 * 2340000;
+                                $chenhlech_xabg = (($xa_nd33 - $xa_nd34) + ($tdp_nd33 - $tdp_nd34)) * 5;
+
+                                //Số xã có 350 HGD trở lên
+                                $thon350hgd_34 = $chitiet->sothon350hgd_2d * 5 * 1800000;
+                                $thon350hgd_33 = $chitiet->sothon350hgd_2d * 6 * 2340000;
+                                $thon350hgd = ($thon350hgd_33 -  $thon350hgd_34) * 5;
+
+                                $tdp500hgd_34 = $chitiet->sotodanpho500hgd_2d * 3 * 1800000;
+                                $tdp500hgd_33 = $chitiet->sotodanpho500hgd_2d * 6 * 2340000;
+                                $ttdp500hgd = ($tdp500hgd_33 -  $tdp500hgd_34) * 5;
+
+                                $thongtrongdiem_34 = $chitiet->sothontrongdiem_2d * 3 * 1800000;
+                                $thontrongdiem_33 = $chitiet->sothontrongdiem_2d * 6 * 2340000;
+                                $thontrongdiem = ($thontrongdiem_33 -  $thongtrongdiem_34) * 5;
+
+                                $sochuyentuthon350hgd_34 = $chitiet->sochuyentuthon350hgd_2d * 3 * 1800000;
+                                $sochuyentuthon350hgd_33 = $chitiet->sochuyentuthon350hgd_2d * 6 * 2340000;
+                                $sochuyentuthon350hgd = ($sochuyentuthon350hgd_33 -  $sochuyentuthon350hgd_34) * 5;
+
+                                $chenhlech_xahgd = $thon350hgd + $ttdp500hgd + $thontrongdiem + $sochuyentuthon350hgd;
+                                //Số xã còn lại
+                                $sothonconlai_34 = $chitiet->sothonconlai_2d * 3 * 1800000;
+                                $sothonconlai_33 = $chitiet->sothonconlai_2d * 4.5 * 2340000;
+                                $sothonconlai = ($sothonconlai_33 -  $sothonconlai_34) * 5;
+
+                                $sotoconlai_34 = $chitiet->sotoconlai_2d * 3 * 1800000;
+                                $sotoconlai_33 = $chitiet->sotoconlai_2d * 4.5 * 2340000;
+                                $sotoconlai = ($sotoconlai_33 -  $sotoconlai_34) * 5;
+
+                                $chenhlech_xacl = $sothonconlai + $sotoconlai;
+                                //2e
+                                $solieu_2e = $chenhlech_plxa + $chenhlech_xabg + $chenhlech_xahgd + $chenhlech_xacl;
+                                break;
+                            }
+                        default: {
+                                $sotien = 1490000 * 5;
+                                $chenhlech_plxa = (getMucKhoanPhuCapXa('ND33/2023', $chitiet->phanloaixa) - getMucKhoanPhuCapXa('ND34/2019', $chitiet->phanloaixa)) * $sotien;
+
+                                $chenhlech_xabg = $chitiet->sothonbiengioi_2d * (6 - 5) * $sotien +
+                                    $chitiet->sotodanphobiengioi_2d * (6 - 0) * $sotien;
+                                //Số xã có 350 HGD trở lên
+                                $chenhlech_xahgd = $chitiet->sothon350hgd_2d * (6 - 5) * $sotien +
+                                    $chitiet->sotodanpho500hgd_2d * (6 - 3) * $sotien +
+                                    $chitiet->sothontrongdiem_2d * (6 - 3) * $sotien +
+                                    $chitiet->sochuyentuthon350hgd_2d * (6 - 3) * $sotien;
+                                //Số xã còn lại
+                                $chenhlech_xacl = $chitiet->sothonconlai_2d * (4.5 - 3) * $sotien +
+                                    $chitiet->sotoconlai_2d * (4.5 - 3) * $sotien;
+                                //2e
+                                $solieu_2e = $chenhlech_plxa + $chenhlech_xabg + $chenhlech_xahgd + $chenhlech_xacl;
+                                break;
+                            }
+                    }
                     $solieu_2d = round($chitiet->quyluonggiam_2k * 5);
                     //Tính số liệu 2e                    
                     //chênh lệch xã
-                    $chenhlech_plxa = (getMucKhoanPhuCapXa('ND33/2023', $chitiet->phanloaixa) - getMucKhoanPhuCapXa('ND34/2019', $chitiet->phanloaixa)) * $sotien;
+                    // $chenhlech_plxa = (getMucKhoanPhuCapXa('ND33/2023', $chitiet->phanloaixa) - getMucKhoanPhuCapXa('ND34/2019', $chitiet->phanloaixa)) * $sotien;
                     //Xã biên giới
-                    $chenhlech_xabg = $chitiet->sothonbiengioi_2d * (6 - 5) * $sotien +
-                        $chitiet->sotodanphobiengioi_2d * (6 - 0) * $sotien;
-                    //Số xã có 350 HGD trở lên
-                    $chenhlech_xahgd = $chitiet->sothon350hgd_2d * (6 - 5) * $sotien +
-                        $chitiet->sotodanpho500hgd_2d * (6 - 3) * $sotien +
-                        $chitiet->sothontrongdiem_2d * (6 - 3) * $sotien +
-                        $chitiet->sochuyentuthon350hgd_2d * (6 - 3) * $sotien;
-                    //Số xã còn lại
-                    $chenhlech_xacl = $chitiet->sothonconlai_2d * (4.5 - 3) * $sotien +
-                        $chitiet->sotoconlai_2d * (4.5 - 3) * $sotien;
-                    //2e
-                    $solieu_2e = $chenhlech_plxa + $chenhlech_xabg + $chenhlech_xahgd + $chenhlech_xacl;
+                    // $chenhlech_xabg = $chitiet->sothonbiengioi_2d * (6 - 5) * $sotien +
+                    //     $chitiet->sotodanphobiengioi_2d * (6 - 0) * $sotien;
+                    // //Số xã có 350 HGD trở lên
+                    // $chenhlech_xahgd = $chitiet->sothon350hgd_2d * (6 - 5) * $sotien +
+                    //     $chitiet->sotodanpho500hgd_2d * (6 - 3) * $sotien +
+                    //     $chitiet->sothontrongdiem_2d * (6 - 3) * $sotien +
+                    //     $chitiet->sochuyentuthon350hgd_2d * (6 - 3) * $sotien;
+                    // //Số xã còn lại
+                    // $chenhlech_xacl = $chitiet->sothonconlai_2d * (4.5 - 3) * $sotien +
+                    //     $chitiet->sotoconlai_2d * (4.5 - 3) * $sotien;
+                    // //2e
+                    // $solieu_2e = $chenhlech_plxa + $chenhlech_xabg + $chenhlech_xahgd + $chenhlech_xacl;
                     $chitiet->nhucau_4a = $solieu_2d + $solieu_2e;
 
                     //số liệu 2c
@@ -2566,7 +2651,7 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                     }
                 }
             }
-// dd($m_chitiet);
+            // dd($m_chitiet);
             //dd($a_A);
             //Phần B
             $a_BI = array();
@@ -2615,7 +2700,12 @@ class nguonkinhphi_donvi_baocaoController extends Controller
             // dd($a_A);
 
             // return view('reports.thongtu78.huyen.mau4a')
-            return view('reports.nghidinh73.donvi.mau4a')
+            if ($inputs['sohieu'] == '732024nd_cp') {
+                $view = 'reports.nghidinh73.donvi.mau4a';
+            } else {
+                $view = 'reports.thongtu78.huyen.mau4a';
+            }
+            return view($view)
                 ->with('model', $m_nguonkp)
                 ->with('a_A', $a_A)
                 ->with('a_BI', $a_BI)
@@ -2635,6 +2725,7 @@ class nguonkinhphi_donvi_baocaoController extends Controller
             $inputs = $request->all();
             $m_nguonkp = nguonkinhphi::where('masodv', $inputs['masodv'])->get();
             $m_donvi = dmdonvi::where('madv', $m_nguonkp->first()->madv)->first();
+            $m_thongtu = dmthongtuquyetdinh::where('sohieu', $inputs['sohieu'])->first();
             $inputs['donvitinh'] = 1;
 
             // $m_thongtu = dmthongtuquyetdinh::where('sohieu', $m_nguonkp->first()->sohieu)->first();
@@ -2693,42 +2784,62 @@ class nguonkinhphi_donvi_baocaoController extends Controller
 
                 if ($chitiet->maphanloai == 'KVXP') {
                     if ($chitiet->phanloaixa == 'XL1') {
-                        $clt7 = round(16 * 310000);
-                        $cl5t = round(21 * 310000 * 5);
+                        // $clt7 = round(16 * 310000);
+                        // $cl5t = round(21 * 310000 * 5);
+                        $clt7 = round(16 * $m_thongtu->chenhlech);
+                        $cl5t = round(21 * $m_thongtu->chenhlech * 5);
                     } else if ($chitiet->phanloaixa == 'XL2') {
-                        $clt7 = round(13.7 * 310000);
-                        $cl5t = round(18 * 310000 * 5);
+                        // $clt7 = round(13.7 * 310000);
+                        // $cl5t = round(18 * 310000 * 5);
+                        $clt7 = round(13.7 * $m_thongtu->chenhlech);
+                        $cl5t = round(18 * $m_thongtu->chenhlech * 5);
                     } else if ($chitiet->phanloaixa == 'XL3') {
-                        $clt7 = round(11.4 * 310000);
-                        $cl5t = round(15 * 310000 * 5);
+                        // $clt7 = round(11.4 * 310000);
+                        // $cl5t = round(15 * 310000 * 5);
+                        $clt7 = round(11.4 * $m_thongtu->chenhlech);
+                        $cl5t = round(15 * $m_thongtu->chenhlech * 5);
                     }
                     $solieu_plxa = $clt7 + $cl5t;
                     //Số xã biên giới
-                    $solieu_xabiengioi_clt7 = round($chitiet->sothonbiengioi_2d * 5 * 310000);
-                    $solieu_xabiengioi_cl5t = round($chitiet->sothonbiengioi_2d * 6 * 310000 * 5);
+                    // $solieu_xabiengioi_clt7 = round($chitiet->sothonbiengioi_2d * 5 * 310000);
+                    // $solieu_xabiengioi_cl5t = round($chitiet->sothonbiengioi_2d * 6 * 310000 * 5);
+                    $solieu_xabiengioi_clt7 = round($chitiet->sothonbiengioi_2d * 5 * $m_thongtu->chenhlech);
+                    $solieu_xabiengioi_cl5t = round($chitiet->sothonbiengioi_2d * 6 * $m_thongtu->chenhlech * 5);
                     $solieu_xabiengioi = $solieu_xabiengioi_clt7 +  $solieu_xabiengioi_cl5t;
                     //số thôn có 350 hộ trở lên
-                    $soho_350_clt7 = round($chitiet->sothon350hgd_2d * 5 * 310000);
-                    $soho_350_cl5t = round($chitiet->sothon350hgd_2d * 6 * 310000 * 5);
+                    // $soho_350_clt7 = round($chitiet->sothon350hgd_2d * 5 * 310000);
+                    // $soho_350_cl5t = round($chitiet->sothon350hgd_2d * 6 * 310000 * 5);
+                    $soho_350_clt7 = round($chitiet->sothon350hgd_2d * 5 * $m_thongtu->chenhlech);
+                    $soho_350_cl5t = round($chitiet->sothon350hgd_2d * 6 * $m_thongtu->chenhlech * 5);
                     $soho_350 = $soho_350_clt7 + $soho_350_cl5t;
-                    $soho_500_clt7 = round($chitiet->sotodanpho500hgd_2d * 3 * 310000);
-                    $soho_500_cl5t = round($chitiet->sotodanpho500hgd_2d * 6 * 310000 * 5);
+                    // $soho_500_clt7 = round($chitiet->sotodanpho500hgd_2d * 3 * 310000);
+                    // $soho_500_cl5t = round($chitiet->sotodanpho500hgd_2d * 6 * 310000 * 5);
+                    $soho_500_clt7 = round($chitiet->sotodanpho500hgd_2d * 3 * $m_thongtu->chenhlech);
+                    $soho_500_cl5t = round($chitiet->sotodanpho500hgd_2d * 6 * $m_thongtu->chenhlech * 5);
                     $soho_500 = $soho_500_clt7 + $soho_500_cl5t;
                     //tổ dân phố trọng điểm an ninh
-                    $sothon_trongdiem_clt7 = round($chitiet->sothontrongdiem_2d * 3 * 310000);
-                    $sothon_trongdiem_cl5t = round($chitiet->sothontrongdiem_2d * 6 * 310000 * 5);
+                    // $sothon_trongdiem_clt7 = round($chitiet->sothontrongdiem_2d * 3 * 310000);
+                    // $sothon_trongdiem_cl5t = round($chitiet->sothontrongdiem_2d * 6 * 310000 * 5);
+                    $sothon_trongdiem_clt7 = round($chitiet->sothontrongdiem_2d * 3 * $m_thongtu->chenhlech);
+                    $sothon_trongdiem_cl5t = round($chitiet->sothontrongdiem_2d * 6 * $m_thongtu->chenhlech * 5);
                     $sothon_trongdiem = $sothon_trongdiem_clt7 + $sothon_trongdiem_cl5t;
                     //tổ dân phố chuyển từ thôn
-                    $sochuyentuthon_clt7 = round($chitiet->sochuyentuthon350hgd_2d * 3 * 310000);
-                    $sochuyentuthon_cl5t = round($chitiet->sochuyentuthon350hgd_2d * 6 * 310000 * 5);
+                    // $sochuyentuthon_clt7 = round($chitiet->sochuyentuthon350hgd_2d * 3 * 310000);
+                    // $sochuyentuthon_cl5t = round($chitiet->sochuyentuthon350hgd_2d * 6 * 310000 * 5);
+                    $sochuyentuthon_clt7 = round($chitiet->sochuyentuthon350hgd_2d * 3 * $m_thongtu->chenhlech);
+                    $sochuyentuthon_cl5t = round($chitiet->sochuyentuthon350hgd_2d * 6 * $m_thongtu->chenhlech * 5);
                     $sochuyentuthon = $sochuyentuthon_clt7 +  $sochuyentuthon_cl5t;
                     //Thôn còn lại
-                    $sothonconlai_clt7 = round($chitiet->sothonconlai_2d * 3 * 310000);
-                    $sothonconlai_cl5t = round($chitiet->sothonconlai_2d * 4.5 * 310000 * 5);
+                    // $sothonconlai_clt7 = round($chitiet->sothonconlai_2d * 3 * 310000);
+                    // $sothonconlai_cl5t = round($chitiet->sothonconlai_2d * 4.5 * 310000 * 5);
+                    $sothonconlai_clt7 = round($chitiet->sothonconlai_2d * 3 * $m_thongtu->chenhlech);
+                    $sothonconlai_cl5t = round($chitiet->sothonconlai_2d * 4.5 * $m_thongtu->chenhlech * 5);
                     $sothonconlai =  $sothonconlai_clt7 +  $sothonconlai_cl5t;
                     //tổ dân phố còn lại
-                    $sotoconlai_clt7 = round($chitiet->sotoconlai_2d * 3 * 310000);
-                    $sotoconlai_cl5t = round($chitiet->sotoconlai_2d * 4.5 * 310000 * 5);
+                    // $sotoconlai_clt7 = round($chitiet->sotoconlai_2d * 3 * 310000);
+                    // $sotoconlai_cl5t = round($chitiet->sotoconlai_2d * 4.5 * 310000 * 5);
+                    $sotoconlai_clt7 = round($chitiet->sotoconlai_2d * 3 * $m_thongtu->chenhlech);
+                    $sotoconlai_cl5t = round($chitiet->sotoconlai_2d * 4.5 * $m_thongtu->chenhlech * 5);
                     $sotoconlai = $sotoconlai_clt7 + $sotoconlai_cl5t;
                     $thontodanpho = $solieu_xabiengioi +  $soho_350 + $soho_500 + $sothon_trongdiem +  $sochuyentuthon + $sothonconlai +  $sotoconlai;
                     $chitiet->nhucau2c = $solieu_plxa + $thontodanpho;
@@ -2846,11 +2957,16 @@ class nguonkinhphi_donvi_baocaoController extends Controller
 
             //dd($data);
             $inputs['donvitinh'] = 1;
-
-            return view('reports.thongtu78.huyen.mau4b')
+            if ($inputs['sohieu'] == '732024nd_cp') {
+                $view = 'reports.nghidinh73.donvi.mau4b';
+            } else {
+                $view = 'reports.thongtu78.huyen.mau4b';
+            }
+            return view($view)
                 //->with('model', $model)
                 // ->with('model_thongtu', $model_thongtu)
                 ->with('data', $data)
+                ->with('m_thongtu', $m_thongtu)
                 ->with('m_dv', $m_donvi)
                 ->with('inputs', $inputs)
                 ->with('pageTitle', 'Danh sách nguồn kinh phí của đơn vị');

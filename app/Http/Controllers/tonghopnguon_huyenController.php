@@ -156,7 +156,6 @@ class tonghopnguon_huyenController extends Controller
             $inputs['soluong'] = $soluong;
             $inputs['madvbc'] = session('admin')->madvbc;
             $inputs['macqcq'] = $madv;
-
             return view('functions.tonghopnguon.index')
                 ->with('model', $model)
                 ->with('a_trangthai', $a_trangthai)

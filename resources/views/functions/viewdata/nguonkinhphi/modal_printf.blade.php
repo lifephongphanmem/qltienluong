@@ -91,6 +91,7 @@
             </div>
         </div>
         <input type="hidden" id="masodv" name="masodv" value="" />
+        <input type="hidden" id="sohieu_tt" name="sohieu" value="" />
         <div class="modal-footer">
             <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
             <button type="submit" data-dismiss="modal" class="btn btn-success" onclick="ClickBCtt107()">Đồng ý</button>
@@ -108,6 +109,7 @@
     function ThongTinKetXuat(thang, url) {
         var form = $('#printf_mautt107');
         form.find("[name^='thang']").prop('disabled', thang);
+        form.find("[name^='sohieu']").val($('#sohieu').val());
 
         form.prop('action', url);
         var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');

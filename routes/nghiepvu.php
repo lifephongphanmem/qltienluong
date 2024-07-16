@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\dutoanluong_insolieuController;
 use App\Http\Controllers\dutoanluongController;
 use App\Http\Controllers\hosotamngungtheodoiController;
 use Illuminate\Support\Facades\Route;
@@ -113,7 +114,9 @@ Route::group(['prefix' => 'nghiep_vu'], function () {
             Route::get('mautt107_m3', 'dutoanluongController@printf_tt107_m3');
             Route::get('nangluong', 'dutoanluongController@printf_nangluong');
             //thiết kế mẫu in cho vạn ninh
-            Route::get('kinhphikhongchuyentrach', 'dutoanluong_insolieuController@kinhphikhongchuyentrach');
+
+            // Route::get('kinhphikhongchuyentrach', 'dutoanluong_insolieuController@kinhphikhongchuyentrach');
+            Route::get('kinhphikhongchuyentrach', [dutoanluong_insolieuController::class,'kinhphikhongchuyentrach']);
             Route::get('tonghopcanboxa', 'dutoanluong_insolieuController@tonghopcanboxa');
             Route::post('tonghopbienche', 'dutoanluong_insolieuController@tonghopbienche');
             Route::post('tonghophopdong', 'dutoanluong_insolieuController@tonghophopdong');
