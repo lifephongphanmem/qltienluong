@@ -40,7 +40,7 @@
                     'class' => 'horizontal-form form-validate',
                 ]) !!}
                 <input type="hidden" id="masodv" name="masodv" value="{{ $model->masodv }}" />
-                <input type="hidden" id='huyen' name="huyen" value="{{$inputs['huyen']??0}}">
+                <input type="hidden" id='huyen' name="huyen" value="{{ $inputs['huyen'] ?? 0 }}">
                 <div class="row">
                     <div class="col-md-12">
                         <!-- BEGIN PORTLET-->
@@ -98,7 +98,7 @@
                                         <label class="control-label">Nội dung</label>
                                         {!! Form::textarea('noidung', null, ['id' => 'noidung', 'class' => 'form-control', 'rows' => '3']) !!}
                                     </div>
-                                </div>                                
+                                </div>
                             </div>
                             <!-- END PORTLET-->
                         </div>
@@ -108,19 +108,18 @@
                     @case('TT78_2022')
                         @include('manage.nguonkinhphi.TT78.index')
                     @break
+
                     @case('ND73_2024')
                         @include('manage.nguonkinhphi.ND73.index')
                     @break
+
                     @default
                         @include('manage.nguonkinhphi.includes.index')
                 @endswitch
                 <hr>
                 <div class="form-actions" style="text-align: center;">
+                    <a onclick="history.back()" class="btn btn-default"><i class="fa fa-reply"></i>&nbsp;Quay lại</a>
                     <button type="submit" class="btn btn-default">Hoàn thành <i class="fa fa-save mlx"></i></button>
-                    {{-- <a href="{{ url($furl . 'danh_sach') }}" class="btn btn-default"><i class="fa fa-reply"></i>&nbsp;Quay
-                        lại</a> --}}
-                        <a onclick="history.back()" class="btn btn-default"><i class="fa fa-reply"></i>&nbsp;Quay
-                            lại</a>
                 </div>
             </div>
             {!! Form::close() !!}

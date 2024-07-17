@@ -1,5 +1,17 @@
 <div id="tab2a" class="tab-pane active">
     <div class="form-body">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label class="control-label font-weight-bold">Quỹ tiền thưởng</label>
+                    {!! Form::text('quythuong_2a', null, [
+                        'id' => 'quythuong_2a',
+                        'class' => 'form-control text-right',
+                        'data-mask' => 'fdecimal',
+                    ]) !!}
+                </div>
+            </div>
+        </div>
         <div class="row" style="margin-top: 10px">
             <div class="col-md-12">
                 <table id="sample_4" class="table table-hover table-striped table-bordered">
@@ -13,7 +25,6 @@
                             <th class="text-center" style="width: 10%">Tổng các khoản phụ cấp</br>(Hệ số)</th>
                             <th class="text-center" style="width: 10%">Các khoản đóng góp</br>(Hệ số)</th>
                             <th class="text-center" style="width: 10%">Tổng cộng</th>
-
                             {{-- <th class="text-center">Thao tác</th> --}}
                         </tr>
                     </thead>
@@ -31,7 +42,6 @@
                                 <td class="text-right">{{ dinhdangsothapphan($value->tongbh_dv, 5) }}</td>
                                 <td class="text-right">{{ dinhdangsothapphan($value->tongbh_dv + $value->tonghs, 5) }}
                                 </td>
-
                                 {{-- <td> --}}
                                 {{-- <button type="button" onclick="indutoan('{{$value->mact}}','{{$value->masodv}}')" class="btn btn-default btn-xs mbs" data-target="#indt-modal" data-toggle="modal"> --}}
                                 {{-- <i class="fa fa-edit"></i>&nbsp; Sửa</button> --}}
@@ -43,5 +53,4 @@
             </div>
         </div>
     </div>
-
 </div>

@@ -59,29 +59,38 @@
             <td>B</td>
             <td>TỔNG NHU CẦU NĂM 2024</td>
             <td class="money">
-                {{ dinhdangso($a_TC['BI'] + $a_TC['BII'], 0, $inputs['donvitinh']) }}
+                {{ dinhdangso($a_TC['B1'] + $a_TC['B2']+ $a_TC['B3'], 0, $inputs['donvitinh']) }}
             </td>
         </tr>
-
-
+        <!-- B.I -->
         <tr style="font-weight: bold;">
             <td>I</td>
+            <td>Tổng nhu cầu kinh phí tăng thêm để thực hiện cải cách tiền lương theo Nghị định số 24/2023/NĐ-CP và Nghị
+                định số 42/2023/NĐ-CP (tính đủ 12 tháng)</td>
+            <td class="money">{{ dinhdangso(array_sum(array_column($a_B1, 'sotien')), 0, $inputs['donvitinh']) }}</td>
+        </tr>       
+
+        <!-- B.II -->
+        <tr style="font-weight: bold;">
+            <td>II</td>
             <td>Tổng nhu cầu kinh phí tăng thêm để thực hiện cải cách tiền lương theo Nghị định số 73/2024/NĐ-CP</td>
-            <td class="money">{{ dinhdangso($a_TC['BI'], 0, $inputs['donvitinh']) }}</td>
+            <td class="money">{{ dinhdangso($a_TC['B2'], 0, $inputs['donvitinh']) }}</td>
         </tr>
-        @foreach ($a_BI as $dulieu)
+        @foreach ($a_B2 as $dulieu)
             <tr>
                 <td>{{ $dulieu['tt'] }}</td>
                 <td>{{ $dulieu['noidung'] }}</td>
                 <td class="money">{{ dinhdangso($dulieu['sotien'], 0, $inputs['donvitinh']) }}</td>
             </tr>
         @endforeach
+
+        <!-- B.III -->
         <tr style="font-weight: bold;">
-            <td>II</td>
+            <td>III</td>
             <td>Nhu cầu thực hiện một số loại phụ cấp, trợ cấp theo quy định</td>
-            <td class="money">{{ dinhdangso($a_TC['BII'], 0, $inputs['donvitinh']) }}</td>
+            <td class="money">{{ dinhdangso($a_TC['B3'], 0, $inputs['donvitinh']) }}</td>
         </tr>
-        @foreach ($a_BII as $dulieu)
+        @foreach ($a_B3 as $dulieu)
             <tr>
                 <td>{{ $dulieu['tt'] }}</td>
                 <td>{{ $dulieu['noidung'] }}</td>
@@ -91,21 +100,21 @@
         <tr style="font-weight: bold;">
             <td>C</td>
             <td>CHÊNH LỆCH NHU CẦU VÀ NGUỒN NĂM 2024</td>
-            <td class="money">{{ dinhdangso(abs($a_TC['A'] - $a_TC['BI'] - $a_TC['BII']), 0, $inputs['donvitinh']) }}
+            <td class="money">{{ dinhdangso(abs($a_TC['A'] - $a_TC['B1'] - $a_TC['B2']- $a_TC['B3']), 0, $inputs['donvitinh']) }}
             </td>
         </tr>
         <tr>
             <td>1</td>
             <td>Phần thiếu nguồn ngân sách trung ương hỗ trợ</td>
             <td>
-                {{ dinhdangso($a_TC['A'] > $a_TC['BI'] + $a_TC['BII'] ? 0 : abs($a_TC['A'] - $a_TC['BI'] - $a_TC['BII']), 0, $inputs['donvitinh']) }}
+                {{ dinhdangso($a_TC['A'] > $a_TC['B1'] + $a_TC['B2'] +  $a_TC['B3']? 0 : abs($a_TC['A'] - $a_TC['B1'] - $a_TC['B2']- $a_TC['B3']), 0, $inputs['donvitinh']) }}
             </td>
         </tr>
         <tr>
             <td>2</td>
             <td>Nguồn thực hiện cải cách tiền lương còn dư</td>
             <td class="money">
-                {{ dinhdangso($a_TC['A'] > $a_TC['BI'] + $a_TC['BII'] ? $a_TC['A'] - $a_TC['BI'] - $a_TC['BII'] : 0, 0, $inputs['donvitinh']) }}
+                {{ dinhdangso($a_TC['A'] > $a_TC['B1'] + $a_TC['B2'] +  $a_TC['B3']? $a_TC['A'] - $a_TC['B1'] - $a_TC['B2'] - $a_TC['B3']: 0, 0, $inputs['donvitinh']) }}
             </td>
         </tr>
     </table>
@@ -123,7 +132,7 @@
         </tr>
         <tr style="font-style: italic">
             <td style="text-align: center;" width="50%"></td>
-            <td style="text-align: center;" width="50%">((Ký tên, đóng dấu))</td>
+            <td style="text-align: center;" width="50%">(Ký tên, đóng dấu)</td>
         </tr>
         <tr>
             <td><br><br><br></td>

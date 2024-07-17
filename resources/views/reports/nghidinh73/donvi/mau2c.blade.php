@@ -28,10 +28,7 @@
         </tr>
         <tr>
             <td colspan="2">
-                {{-- <p style="text-align: center; font-style: italic">(Ban hành kèm theo Thông tư số 50/2023/TT-BTC ngày 17
-                    tháng 7 năm 2023 của Bộ trưởng Bộ Tài chính)</p> --}}
-                    <p style="text-align: center; font-style: italic">(Ban hành kèm theo Nghị định số 73/2024/NĐ-CP ngày 30
-                        tháng 6 năm 2024)</p>
+                <p style="text-align: center; font-style: italic">{{ $m_thongtu->ghichu }}</p>
             </td>
         </tr>
     </table>
@@ -41,7 +38,6 @@
             <th style="width: 2%">STT</th>
             <th>CHỈ TIÊU</th>
             <th style="width: 8%">TỔNG ĐƠN VỊ HÀNH CHÍNH CẤP XÃ, THÔN </th>
-            <th style="width: 8%">MỨC KHOÁN QUỸ PHỤ CẤP 1 THÁNG THEO NGHỊ ĐỊNH 34/2019/NĐ-CP</th>
             <th style="width: 8%">MỨC KHOÁN QUỸ PHỤ CẤP 1 THÁNG THEO NGHỊ ĐỊNH 33/2023/NĐ-CP</th>
             <th style="width: 8%">CHÊNH LỆCH KINH PHÍ KHOÁN QUỸ PHỤ CẤP THÁNG 07 NĂM 2024</th>
             <th style="width: 8%">CHÊNH LỆCH KINH PHÍ KHOÁN QUỸ PHỤ CẤP 05 THÁNG CUỐI NĂM 2024</th>
@@ -53,21 +49,18 @@
             <td>B</td>
             <td>1</td>
             <td>2</td>
-            <td>3</td>
-            <td>4= 1x2x(2,34-1,8)</td>
-            <td>5=1x3x(2,34-1,8)x5T</td>
-            <td>6=4+5</td>
+            <td>3=1x2x1,8</td>
+            <td>4=1x3x2,34</td>
+            <td>5=(4-3)*6</td>
         </tr>
         <tr style="font-weight: bold">
             <td></td>
             <td>TỔNG SỐ</td>
             <td class="text-center">{{ dinhdangsothapphan($a_It['tdv']) }}</td>
             <td class="text-center">{{ dinhdangsothapphan($a_It['mk']) }}</td>
-            <td class="text-center">{{ dinhdangsothapphan($a_It['mk2']) }}</td>
-            <td class="text-right">{{ dinhdangsothapphan($a_It['clt7']) }}</td>
-            <td class="text-right">{{ dinhdangsothapphan($a_It['cl5t']) }}</td>
-            <td class="text-right">{{ dinhdangsothapphan($a_It['tong']) }}</td>
-
+            <td class="text-center">{{ dinhdangsothapphan($a_It['muccu']) }}</td>
+            <td class="text-right">{{ dinhdangsothapphan($a_It['mucapdung']) }}</td>
+            <td class="text-right">{{ dinhdangsothapphan($a_It['chenhlech']) }}</td>
         </tr>
         @foreach ($ar_I as $dulieu)
             <tr style="text-align: right; {{ isset($dulieu['style']) ? $dulieu['style'] : '' }}">
@@ -75,10 +68,9 @@
                 <td style=" text-align: left">{{ $dulieu['noidung'] }}</td>
                 <td class="text-center">{{ dinhdangsothapphan($dulieu['solieu']['tdv']) }}</td>
                 <td class="text-center">{{ dinhdangsothapphan($dulieu['solieu']['mk'], 3) }}</td>
-                <td class="text-center">{{ dinhdangsothapphan($dulieu['solieu']['mk2'], 3) }}</td>
-                <td>{{ dinhdangsothapphan($dulieu['solieu']['clt7'], 0, $inputs['donvitinh']) }}</td>
-                <td>{{ dinhdangsothapphan($dulieu['solieu']['cl5t'], 0, $inputs['donvitinh']) }}</td>
-                <td>{{ dinhdangsothapphan($dulieu['solieu']['tong'], 0, $inputs['donvitinh']) }}</td>
+                <td>{{ dinhdangsothapphan($dulieu['solieu']['muccu'], 0, $inputs['donvitinh']) }}</td>
+                <td>{{ dinhdangsothapphan($dulieu['solieu']['mucapdung'], 0, $inputs['donvitinh']) }}</td>
+                <td>{{ dinhdangsothapphan($dulieu['solieu']['chenhlech'], 0, $inputs['donvitinh']) }}</td>
             </tr>
         @endforeach
     </table>
@@ -92,7 +84,7 @@
         </tr>
         <tr style="font-weight: bold">
             <td style="text-align: center;" width="50%"></td>
-            <td style="text-align: center;" width="50%">{{  mb_strtoupper($m_dv->cdlanhdao) }}</td>
+            <td style="text-align: center;" width="50%">{{ mb_strtoupper($m_dv->cdlanhdao) }}</td>
         </tr>
         <tr style="font-style: italic">
             <td style="text-align: center;" width="50%"></td>
