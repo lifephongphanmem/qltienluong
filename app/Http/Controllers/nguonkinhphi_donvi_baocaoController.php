@@ -3080,7 +3080,7 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                 $a_B2[6] = array('tt' => '7', 'noidung' => 'Kinh phí tăng thêm thực hiện chế độ bồi dưỡng phục vụ hoạt động cấp ủy thuộc cấp tỉnh theo Quy định 09-QĐ/VVPTW ngày 22/9/2017', 'sotien' => '0');
 
 
-                $a_B2[0]['sotien'] = $m_chitiet->where('nhomnhucau', 'BIENCHE')->sum('tongnhucau');
+                $a_B2[0]['sotien'] = $m_chitiet->where('nhomnhucau', 'BIENCHE')->where('mact', '1506672780')->sum('tongnhucau');
                 $a_B2[1]['sotien'] = $m_chitiet->where('nhomnhucau', 'CANBOCT')->sum('tongnhucau');
                 $a_B2[2]['sotien'] = $m_chitiet->where('nhomnhucau', 'HDND')->sum('tongnhucau');
                 $a_B2[3]['sotien'] = $m_nguonkp->sum('nhucau2b'); //Lấy dữ liệu mẫu 2b
