@@ -44,7 +44,7 @@
             <th style="width: 2%;" rowspan="3">
                 CHÊNH</br>LỆCH</br>QUỸ</br>LƯƠNG</br>PHỤ</br>CẤP</br>TĂNG</br>THÊM</br>01</br>THÁNG</th>
             <th style="width: 6%;text-transform: uppercase" rowspan="3">NHU CẦU</br>KINH PHÍ THỰC HIỆN {{$m_thongtu->tenttqd}}</th>
-
+            <th style="width: 6%;text-transform: uppercase" rowspan="3">QUY TIỀN THƯỞNG THEO</br>{{$m_thongtu->tenttqd}}</th>
         </tr>
         <tr style="">
             <th style="width: 2%;" rowspan="2">TỔNG</br>CỘNG</th>
@@ -90,8 +90,9 @@
                 <td>24</td>
                 <td>25</td>
                 <td>26</td>
+                <td>27</td>
             @else
-                @for ($j = 1; $j < $col + 4; $j++)
+                @for ($j = 1; $j < $col + 5; $j++)
                     <td>{{ 18 + $j }}</td>
                 @endfor
             @endif
@@ -112,6 +113,7 @@
             {{-- Chênh lệch --}}
             <td>{{ dinhdangso($a_Tong['chenhlech01thang']) }}</td>
             <td>{{ dinhdangso($a_Tong['chenhlech06thang']) }}</td>
+            <td>{{ dinhdangso($a_Tong['quythuong']) }}</td>
         </tr>
         @foreach ($ar_I as $dulieu)
             <tr style="text-align: center">
@@ -129,6 +131,7 @@
                 {{-- Chênh lệch --}}
                 <td style="text-align: right;{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['chenhlech01thang']) }}</td>
                 <td style="text-align: right;{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['chenhlech06thang']) }}</td>
+                <td style="text-align: right;{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['quythuong']) }}</td>
             </tr>
         @endforeach
 
@@ -148,6 +151,7 @@
                 {{-- Chênh lệch --}}
                 <td style="text-align: right;{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['chenhlech01thang']) }}</td>
                 <td style="text-align: right;{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['chenhlech06thang']) }}</td>
+                <td style="text-align: right;{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['quythuong']) }}</td>
             </tr>
         @endforeach
 
@@ -167,6 +171,7 @@
                 {{-- Chênh lệch --}}
                 <td style="text-align: right;{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['chenhlech01thang']) }}</td>
                 <td style="text-align: right;{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['chenhlech06thang']) }}</td>
+                <td style="text-align: right;{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['quythuong']) }}</td>
             </tr>
         @endforeach
 
@@ -186,6 +191,7 @@
                 {{-- Chênh lệch --}}
                 <td style="text-align: right;{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['chenhlech01thang']) }}</td>
                 <td style="text-align: right;{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['chenhlech06thang']) }}</td>
+                <td style="text-align: right;{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['quythuong']) }}</td>
             </tr>
         @endforeach
     </table>

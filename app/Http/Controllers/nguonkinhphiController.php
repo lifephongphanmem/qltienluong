@@ -156,10 +156,9 @@ class nguonkinhphiController extends Controller
                     $cb->lvhd = null;
                     continue;
                 }
-                if($cb->heso == 0 && $cb->luonghd != 0)
-                {
-                   $model->forget($key);
-                   continue;
+                if ($cb->heso == 0 && $cb->luonghd != 0) {
+                    $model->forget($key);
+                    continue;
                 }
                 $cb->macongtac = $a_congtac[$cb->mact];
                 $cb->masodv = $masodv;
@@ -536,7 +535,6 @@ class nguonkinhphiController extends Controller
                             $m_cb[$key] = $a_nb[$key];
                         }
                     }
-                    
                 }
                 // dd($a_nb);
                 $a_tnn = a_getelement($m_tnn, array('thang_tnn' => $a_thang[$i]['thang']));
@@ -575,14 +573,14 @@ class nguonkinhphiController extends Controller
                             continue;
                         }
                     }
-                    if(isset($inputs['kyluat'])){
+                    if (isset($inputs['kyluat'])) {
                         //kiểm tra cán bộ bị kỷ luật
                         $a_kl = $m_kl->where('macanbo', $key)->where('ngaytu', '<=', $ngaylap)->where('ngayden', '>=', $ngaylap);
                         // dd($a_kl);
                         if (count($a_kl) > 0) { //cán bộ bị kỷ luật
                             $a_cb = $m_cb[$key];
                             //dd($this->getHeSoPc_ts($a_cb,$a_pc,$a_pc_ts));
-                            $a_data[] = $this->getHeSoPc_kl($a_pc,$a_cb, $inputs['chenhlech']);
+                            $a_data[] = $this->getHeSoPc_kl($a_pc, $a_cb, $inputs['chenhlech']);
                             continue;
                         }
                     }
@@ -759,7 +757,7 @@ class nguonkinhphiController extends Controller
                     $model->sobiencheduocgiao = $model_2a->where('nhomnhucau', 'BIENCHE')->sum('canbo_congtac');
                 }
             }
-            //dd(session('admin') );
+            //dd($m_thongtu->masobaocao);
             return view('manage.nguonkinhphi.edit')
                 ->with('furl', '/nguon_kinh_phi/')
                 ->with('model', $model)
@@ -779,7 +777,7 @@ class nguonkinhphiController extends Controller
         if (Session::has('admin')) {
             $inputs = $request->all();
             $model = nguonkinhphi::where('masodv', $inputs['masodv'])->first();
-
+            $m_thongtu = dmthongtuquyetdinh::where('sohieu', $model->sohieu)->first();
             //Sau xây dựng các trường trong thông tư
             $a_solieu = [
                 '2b' => 13950,
@@ -826,7 +824,6 @@ class nguonkinhphiController extends Controller
                 'sothontrongdiem_2d',
                 'sothonconlai_2d',
                 'sotoconlai_2d',
-
                 //mẫu 2d tt50
                 'soluongcanbo_2d',
                 'hesoluongbq_2d',
@@ -859,7 +856,6 @@ class nguonkinhphiController extends Controller
                 'hesophucap_2i',
                 //Mẫu 2k
                 'soluonggiam_2k',
-
                 //Mẫu 4a
                 'nhucau',
                 'kinhphigiamxa_4a',
@@ -883,31 +879,39 @@ class nguonkinhphiController extends Controller
                 'huydongktx_hocphi_4a',
                 'huydongktx_vienphi_4a',
                 'huydongktx_khac_4a',
-
+                //Mẫu 2a_nd73
+                'quythuong_2a',
+                'thuchien2',
+                'nsnngiam',
+                'tongnhucau1',
             ];
             // dd($inputs);
             foreach ($a_truong  as $truong) {
                 if (isset($inputs[$truong]))
                     $inputs[$truong] = chkDbl($inputs[$truong]);
             }
-            //Tính toán số liệu mẫu 2b (310000*4.5% = 13950)
-            $inputs['quy1_tong'] = round(($inputs['quy3_1'] - $inputs['quy1_1'] + $inputs['quy2_1'] - $inputs['quy1_1'] + $inputs['tongsonguoi1'] * $a_solieu['2b']) * 6);
-            $inputs['quy2_tong'] = round(($inputs['quy3_2'] - $inputs['quy1_2'] + $inputs['quy2_2'] - $inputs['quy1_2'] + $inputs['tongsonguoi2'] * $a_solieu['2b']) * 6);
-            $inputs['quy3_tong'] = round(($inputs['quy3_3'] - $inputs['quy1_3'] + $inputs['quy2_3'] - $inputs['quy1_3'] + $inputs['tongsonguoi3'] * $a_solieu['2b']) * 6);
+            //Báo cáo theo nghị định 73/2024 bỏ phần tính trước do mỗi nghị định 1 công thức
+            //dd($m_thongtu->masobaocao);
+            if ($m_thongtu->masobaocao != 'ND73_2024') {
+                //Tính toán số liệu mẫu 2b (310000*4.5% = 13950)
+                $inputs['quy1_tong'] = round(($inputs['quy3_1'] - $inputs['quy1_1'] + $inputs['quy2_1'] - $inputs['quy1_1'] + $inputs['tongsonguoi1'] * $a_solieu['2b']) * 6);
+                $inputs['quy2_tong'] = round(($inputs['quy3_2'] - $inputs['quy1_2'] + $inputs['quy2_2'] - $inputs['quy1_2'] + $inputs['tongsonguoi2'] * $a_solieu['2b']) * 6);
+                $inputs['quy3_tong'] = round(($inputs['quy3_3'] - $inputs['quy1_3'] + $inputs['quy2_3'] - $inputs['quy1_3'] + $inputs['tongsonguoi3'] * $a_solieu['2b']) * 6);
 
 
-            //Tính toán số liệu mẫu 2d
-            //Nếu xã không nhập soluongdinhbien thì lấy max theo nđ33
-            // $inputs['soluongdinhbien_2d']=$inputs['soluongdinhbien_2d'] != 0?$inputs['soluongdinhbien_2d']:getSoLuongCanBoDinhMuc('ND33/2023/XA', session('admin')->phanloaixa);
-            // $inputs['soluongdinhbien_2d']=getSoLuongCanBoDinhMuc('ND33/2023/XA', session('admin')->phanloaixa);
+                //Tính toán số liệu mẫu 2d
+                //Nếu xã không nhập soluongdinhbien thì lấy max theo nđ33
+                // $inputs['soluongdinhbien_2d']=$inputs['soluongdinhbien_2d'] != 0?$inputs['soluongdinhbien_2d']:getSoLuongCanBoDinhMuc('ND33/2023/XA', session('admin')->phanloaixa);
+                // $inputs['soluongdinhbien_2d']=getSoLuongCanBoDinhMuc('ND33/2023/XA', session('admin')->phanloaixa);
 
-            // Thay đổi số lượng định biên ndd34 cho nhập và số lương định biên nđ 33 thì lấy mặc định
+                // Thay đổi số lượng định biên ndd34 cho nhập và số lương định biên nđ 33 thì lấy mặc định
 
-            // $inputs['quyluonggiam_2k'] = round((getSoLuongCanBoDinhMuc($a_solieu['2d_ndcu'], session('admin')->phanloaixa) - $inputs['soluongdinhbien_2d'])
-            //     * ($inputs['hesoluongbq_2d'] + $inputs['hesophucapbq_2d'] + $inputs['tyledonggop_2d']) * $a_solieu['2d']);
-            $inputs['quyluonggiam_2k'] = round(($inputs['soluongdinhbien_2d'] - getSoLuongCanBoDinhMuc($a_solieu['2d_nd33'], session('admin')->phanloaixa))
-                * ($inputs['hesoluongbq_2d'] + $inputs['hesophucapbq_2d'] + $inputs['tyledonggop_2d']) * $a_solieu['2d']);
-
+                // $inputs['quyluonggiam_2k'] = round((getSoLuongCanBoDinhMuc($a_solieu['2d_ndcu'], session('admin')->phanloaixa) - $inputs['soluongdinhbien_2d'])
+                //     * ($inputs['hesoluongbq_2d'] + $inputs['hesophucapbq_2d'] + $inputs['tyledonggop_2d']) * $a_solieu['2d']);
+                $inputs['quyluonggiam_2k'] = round(($inputs['soluongdinhbien_2d'] - getSoLuongCanBoDinhMuc($a_solieu['2d_nd33'], session('admin')->phanloaixa))
+                    * ($inputs['hesoluongbq_2d'] + $inputs['hesophucapbq_2d'] + $inputs['tyledonggop_2d']) * $a_solieu['2d']);
+            }
+            //    dd($inputs);
             $model->update($inputs);
             if ($inputs['huyen'] == 1) {
                 return redirect('chuc_nang/xem_du_lieu/nguon/huyen?sohieu=' . $model->sohieu . '&trangthai=ALL&phanloai=ALL');
@@ -1656,7 +1660,7 @@ class nguonkinhphiController extends Controller
     }
     function getHeSoPc_kl($a_pc, $m_cb, $luongcb = 0, $vk = true)
     {
-       
+
         $stbhxh_dv = 0;
         $stbhyt_dv = 0;
         $stkpcd_dv = 0;
@@ -1675,8 +1679,8 @@ class nguonkinhphiController extends Controller
             $mapc_st = 'st_' . $mapc;
             //Tính tỉ lệ hưởng lương cho cán bộ bị kỷ luật 03102023;
 
-                $m_cb[$mapc] = round($m_cb[$mapc] * 0.5, session('admin')->lamtron);
-         
+            $m_cb[$mapc] = round($m_cb[$mapc] * 0.5, session('admin')->lamtron);
+
             switch (getDbl($a_pc[$i]['phanloai'])) {
                 case 0: {
                         $m_cb['tonghs'] += $m_cb[$mapc];

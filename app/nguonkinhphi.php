@@ -28,8 +28,6 @@ class nguonkinhphi extends Model
         'boiduong',
         'thunhapthap',
         'diaban',
-
-
         'baohiem',
         'nguonkp',
 
@@ -44,7 +42,6 @@ class nguonkinhphi extends Model
         'nguoiguih',
         'lydo',
         //thêm mới theo thông tư 46/2019
-
         'bosung',
         'caicach',
 
@@ -118,9 +115,7 @@ class nguonkinhphi extends Model
         'hesoluong_2i',
         'hesophucap_2i',
         //Mẫu 2k
-        'soluonggiam_2k',
-        
-
+        'soluonggiam_2k', 
 
         //Mẫu 4a
         'tinhgiam',
@@ -136,7 +131,9 @@ class nguonkinhphi extends Model
         'satnhapxa_4a',
         'tietkiem1', //trước 1 năm
         'tietkiem2', //trước 2 năm
-        'thuchien1', //trước 1 năm
+        'thuchien1',
+        'thuchien2',
+        'nsnngiam',
         'dutoan',
         'dutoan1', //trước 1 năm
         'huydongtx_hocphi_4a',
@@ -154,5 +151,7 @@ class nguonkinhphi extends Model
         'phucapchucvu_2c',
         'phucapvuotkhung_2c',
         'phucaptnn_2c',
+        //Mẫu 2a
+        'quythuong_2a',
     ];
 }

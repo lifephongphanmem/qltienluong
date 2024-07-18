@@ -26,6 +26,16 @@
                                             ]) !!}
                                         </div>
                                     </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="control-label">50% tăng thu NSĐP dự toán 2024 so với dự toán năm 2023</label>
+                                            {!! Form::text('thuchien2', null, [
+                                                'id' => 'thuchien2',
+                                                'class' => 'form-control nguonkp text-right',
+                                                'data-mask' => 'fdecimal',
+                                            ]) !!}
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <div class="row">
@@ -83,6 +93,16 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
+                                            <label class="control-label">50% phần NSNN giảm chi hỗ trợ hoạt động thường xuyên trong lĩnh vực hành chính và các đơn vị sự nghiệp công lập</label>
+                                            {!! Form::text('nsnngiam', null, [
+                                                'id' => 'nsnngiam',
+                                                'class' => 'form-control nguonkp text-right',
+                                                'data-mask' => 'fdecimal',
+                                            ]) !!}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
                                             <label class="control-label">Nguồn Cải cách tiền lương năm 2023 chuyển
                                                 sang năm 2024</label>
                                             {!! Form::text('caicach', null, [
@@ -102,14 +122,48 @@
                 </div>
             </div>
 
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- BEGIN PORTLET-->
+                    <div class="portlet box blue">
+                        <div class="portlet-title">
+                            <div class="caption text-uppercase">
+                                B.I - Tổng nhu cầu kinh phí tăng thêm để thực hiện cải cách tiền lương theo Nghị định số 24/2023/NĐ-CP và Nghị định số 42/2023/NĐ-CP
+                            </div>
+                            <div class="tools">
+                                <a href="javascript:;" class="collapse" data-original-title="" title=""></a>
+                            </div>
+                        </div>
+                        <div class="portlet-body" style="display: block;">
+                            <div class="form-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="control-label">Tổng nhu cầu kinh phí tăng thêm</label>
+                                            {!! Form::text('tongnhucau1', null, [
+                                                'id' => 'tongnhucau1',
+                                                'class' => 'form-control nhucaupc text-right',
+                                                'data-mask' => 'fdecimal',
+                                            ]) !!}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <!-- END PORTLET-->
+                </div>
+            </div>
 
             <div class="row">
                 <div class="col-md-12">
                     <!-- BEGIN PORTLET-->
                     <div class="portlet box blue">
                         <div class="portlet-title">
-                            <div class="caption">
-                                B.I - NHU CẦU KINH PHÍ TĂNG THÊM
+                            <div class="caption text-uppercase">
+                                B.II - Tổng nhu cầu kinh phí tăng thêm để thực hiện cải cách tiền lương theo Nghị định số 73/2024/NĐ-CP 
                             </div>
                             <div class="tools">
                                 <a href="javascript:;" class="collapse" data-original-title="" title=""></a>
@@ -146,7 +200,7 @@
                     <div class="portlet box blue">
                         <div class="portlet-title">
                             <div class="caption">
-                                B.II - NHU CẦU KINH PHÍ THỰC HIỆC PHỤ CẤP,TRỢ CẤP 
+                                B.III - NHU CẦU KINH PHÍ THỰC HIỆC PHỤ CẤP,TRỢ CẤP 
                             </div>
                             <div class="tools">
                                 <a href="javascript:;" class="collapse" data-original-title="" title=""></a>
@@ -154,23 +208,6 @@
                         </div>
                         <div class="portlet-body" style="display: block;">
                             <div class="form-body">
-
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <!-- Dùng thu hút để lưu =>ko pải thêm trường -->
-                                            <label class="control-label">Phụ cấp Ưu đãi nghề đối với công chức viên chức
-                                                tại các cơ sở y tế</label>
-                                            {!! Form::text('kpthuhut', null, [
-                                                'id' => 'kpthuhut',
-                                                'class' => 'form-control nhucaupc text-right',
-                                                'data-mask' => 'fdecimal',
-                                            ]) !!}
-
-                                        </div>
-                                    </div>
-                                </div>
-
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
@@ -231,12 +268,11 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label class="control-label">Kinh phí tăng/giảm do thực hiện Nghị định số
-                                                33/2023/NĐ-CP</label>
+                                            <label class="control-label">Các khoản phụ cấp, trợ cấp khác</label>
                                             {!! Form::text('nhucau', null, [
                                                 'id' => 'nhucau',
                                                 'class' => 'form-control nhucaupc text-right',
-                                                'data-mask' => 'fdecimal','readonly'=>'true'
+                                                'data-mask' => 'fdecimal',
                                             ]) !!}
                                         </div>
                                     </div>
