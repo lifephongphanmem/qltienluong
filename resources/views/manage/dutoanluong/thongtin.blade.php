@@ -133,20 +133,20 @@
                                                 <div class="col-md-3">
                                                     <div class="form-group">
                                                         <label class="control-label">Phân loại xã </label>
-                                                        {!! Form::select('phanloaixa', getPhanLoaiXa(), session('admin')->phanloaixa, ['class' => 'form-control','readonly'=>true]) !!}
+                                                        {!! Form::select('phanloaixa', getPhanLoaiXa(), session('admin')->phanloaixa, ['id'=>'phanloaixa','class' => 'form-control']) !!}
                                                     </div>
                                                 </div>
                                                 <div class="col-md-2">
                                                     <div class="form-group">
                                                         <label class="control-label">Số cán bộ định mức </label>
-                                                        {!! Form::text('songuoi', getSoLuongCanBoDinhMuc('ND33/2024',session('admin')->phanloaixa), ['class' => 'form-control text-right', 'data-mask' => 'fdecimal','readonly'=>true]) !!}
+                                                        {!! Form::text('songuoi', getSoLuongCanBoDinhMuc('ND33/2024',session('admin')->phanloaixa), ['id'=>'canbodinhmuc','class' => 'form-control text-right', 'data-mask' => 'fdecimal','readonly'=>true]) !!}
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-2">
                                                     <div class="form-group">
                                                         <label class="control-label">Mức khoán quỹ phụ cấp </label>
-                                                        {!! Form::text('phanloaixa_heso', getMucKhoanPhuCapXa('ND33/2024',session('admin')->phanloaixa), ['class' => 'form-control text-right', 'data-mask' => 'fdecimal','readonly'=>true]) !!}
+                                                        {!! Form::text('phanloaixa_heso', getMucKhoanPhuCapXa('ND33/2024',session('admin')->phanloaixa), ['id'=>'phanloaxa_heso','class' => 'form-control text-right', 'data-mask' => 'fdecimal','readonly'=>true]) !!}
                                                     </div>
                                                 </div>
                                                 <div class="col-md-2">
@@ -234,7 +234,6 @@
                                     <!-- END PORTLET-->
                                 </div>
                             </div>
-                            {!! Form::hidden('phanloaixa', session('admin')->phanloaixa, ['class' => 'form-control']) !!}
                         @else
                             {!! Form::hidden('phanloaixa', session('admin')->phanloaixa, ['class' => 'form-control']) !!}
                             {!! Form::hidden('phanloaixa_heso', 21, ['class' => 'form-control text-right', 'data-mask' => 'fdecimal']) !!}
@@ -510,6 +509,24 @@
             })
             $('#chitiet-modal').modal('hide');
         }
+        $('#phanloaixa').on('change',function(){
+            plxa=$('#phanloaixa').val();
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+            $.ajax({
+                url: '{{ $furl }}' + 'getPLXa',
+                type: 'GET',
+                data: {
+                    _token: CSRF_TOKEN,
+                    phanloaixa: plxa
+                },
+                dataType: 'JSON',
+                success: function(data) {
+                    console.log(data);
+                    $('#canbodinhmuc').val(data.slcanbodinhmuc);
+                    $('#phanloaxa_heso').val(data.muckhoanphucap);
+                }
+            });
+        })
     </script>
     @include('includes.script.scripts')
 @stop
