@@ -48,6 +48,7 @@
                 <th style="width: 5%;">STT</th>
                 <th>Chỉ tiêu</th>
                 <th style="width: 15%;">Tổng đơn vị hành<br>chính cấp xã, thôn</th>
+                <th style="width: 15%;">Số cán bộ tăng thêm</th>
                 <th style="width: 15%;">Mức khoán quỹ<br>phụ cấp</th>
                 <th style="width: 15%;">Kinh phí khoán lương</th>
             </tr>
@@ -57,6 +58,7 @@
                 <th>(1)</th>
                 <th>(2)</th>
                 <th>(3)</th>
+                <th>(4)</th>
             </tr>
         </thead>
 
@@ -65,22 +67,24 @@
             <td class="text-center">TỔNG SỐ</td>
             <td class="text-center"></td>
             <th class="text-center"></th>
+            <th class="text-center"></th>
             <td class="text-right">
                 {{$model != []?dinhdangso(
-                    ($model->sothonxabiengioi * $model->sothonxabiengioi_heso +
+                    (($model->sothonxabiengioi * $model->sothonxabiengioi_heso +
                         $model->sothonxakhokhan * $model->sothonxakhokhan_heso +
                         $model->sothonxatrongdiem * $model->sothonxatrongdiem_heso +
                         $model->sothonxakhac * $model->sothonxakhac_heso +
                         $model->sothonxaloai1 * $model->sothonxaloai1_heso +
                         $model->phanloaixa_heso) *
                         12 *
-                        $model->luongcoban,
+                        $model->luongcoban) + ($model->socanbotangthem * 12 * ($model->luongcoban*1.5)),
                 ):'' }}
             </td>
         </tr>
         <tr style="font-weight: bold;">
             <td>I</td>
             <td>Xã, phường, thị trấn</td>
+            <td class="text-center"></td>
             <td class="text-center"></td>
             <th class="text-center"></th>
             <th class="text-center"></th>
@@ -91,28 +95,61 @@
             <td>1</td>
             <td>Xã loại 1</td>
             <td class="text-center">{{ $model != []?$model->phanloaixa == 'XL1' ? 1 : '':'' }}</td>
+            <td></td>
             <td class="text-center">{{ $model != []?$model->phanloaixa == 'XL1' ? $model->phanloaixa_heso : '':'' }}</td>
             <td class="text-right">
                 {{ $model != []?$model->phanloaixa == 'XL1' ? dinhdangso($model->phanloaixa_heso * 12 * $model->luongcoban, 0) : '':'' }}
             </td>
         </tr>
         <tr>
+            <td>-</td>
+            <td>Số cán bộ tăng thêm</td>
+            <td></td>
+            <td class="text-center">{{ $model != []?$model->phanloaixa == 'XL1' ? $model->socanbotangthem : '':'' }}</td>
+            <td class="text-center">{{ $model != []?$model->phanloaixa == 'XL1' ? 1.5 : '':'' }}</td>
+            <td class="text-right">
+                {{ $model != []?$model->phanloaixa == 'XL1' ? dinhdangso($model->socanbotangthem * 12 * ($model->luongcoban*1.5), 0) : '':'' }}
+            </td>
+        </tr>
+        <tr>
             <td>2</td>
             <td>Xã loại 2</td>
             <td class="text-center">{{ $model != []?$model->phanloaixa == 'XL2' ? 1 : '':'' }}</td>
+            <td></td>
             <td class="text-center">{{ $model != []?$model->phanloaixa == 'XL2' ? $model->phanloaixa_heso : '':'' }}</td>
             <td class="text-right">
                 {{ $model != []?$model->phanloaixa == 'XL2' ? dinhdangso($model->phanloaixa_heso * 12 * $model->luongcoban, 0) : '':'' }}
             </td>
         </tr>
         <tr>
+            <td>-</td>
+            <td>Số cán bộ tăng thêm</td>
+            <td></td>
+            <td class="text-center">{{ $model != []?$model->phanloaixa == 'XL2' ? $model->socanbotangthem : '':'' }}</td>
+            <td class="text-center">{{ $model != []?$model->phanloaixa == 'XL2' ? 1.5 : '':'' }}</td>
+            <td class="text-right">
+                {{ $model != []?$model->phanloaixa == 'XL2' ? dinhdangso($model->socanbotangthem * 12 * ($model->luongcoban*1.5), 0) : '':'' }}
+            </td>
+        </tr>
+        <tr>
             <td>3</td>
             <td>Xã loại 3</td>
             <td class="text-center">{{ $model != []?$model->phanloaixa == 'XL3' ? 1 : '':'' }}</td>
+            <td></td>
             <td class="text-center">{{ $model != []?$model->phanloaixa == 'XL3' ? $model->phanloaixa_heso : '':'' }}</td>
             <td class="text-right">
                 {{ $model != []?$model->phanloaixa == 'XL3' ? dinhdangso($model->phanloaixa_heso * 12 * $model->luongcoban, 0) : '':'' }}
             </td>
+            <tr>
+                <td>-</td>
+                <td>Số cán bộ tăng thêm</td>
+                <td></td>
+                <td class="text-center">{{ $model != []?$model->phanloaixa == 'XL3' ? $model->socanbotangthem : '':'' }}</td>
+                <td class="text-center">{{ $model != []?$model->phanloaixa == 'XL3' ? 1.5 : '':'' }}</td>
+                <td class="text-right">
+                    {{ $model != []?$model->phanloaixa == 'XL3' ? dinhdangso($model->socanbotangthem * 12 * ($model->luongcoban*1.5), 0) : '':'' }}
+                </td>
+            </tr>
         </tr>
 
         <tr style="font-weight: bold;">
@@ -121,6 +158,7 @@
             <td class="text-center">
                 {{ $model != []?dinhdangso($model->sothonxabiengioi + $model->sothonxakhokhan + $model->sothonxatrongdiem + $model->sothonxakhac + $model->sothonxaloai1):'' }}
             </td>
+            <th class="text-center"></th>
             <th class="text-center"></th>
             <td class="text-right">
                 {{ $model != []?dinhdangso(
@@ -141,11 +179,13 @@
             <td class="text-center"></td>
             <td></td>
             <td></td>
+            <td></td>
         </tr>
         <tr>
             <td>-</td>
             <td>Thôn thuộc xã biên giới, hải đảo</td>
             <td class="text-center">{{ $model != []?dinhdangso($model->sothonxabiengioi):'' }}</td>
+            <td></td>
             <td class="text-center">{{ $model != []?dinhdangso($model->sothonxabiengioi_heso):'' }}</td>
             <td class="text-right">
                 {{ $model != []?dinhdangso($model->sothonxabiengioi * $model->sothonxabiengioi_heso * 12 * $model->luongcoban):'' }}
@@ -157,11 +197,13 @@
             <td></td>
             <td></td>
             <td></td>
+            <td></td>
         </tr>
         <tr>
             <td>-</td>
             <td>Thôn thuộc xã khó khăn theo Quyết định 30/2007/QĐ-TTg</td>
             <td class="text-center">{{ $model != []?dinhdangso($model->sothonxakhokhan):'' }}</td>
+            <td></td>
             <td class="text-center">{{ $model != []?dinhdangso($model->sothonxakhokhan_heso):'' }}</td>
             <td class="text-right">
                 {{ $model != []?dinhdangsothapphan($model->sothonxakhokhan * $model->sothonxakhokhan_heso * 12 * $model->luongcoban):'' }}
@@ -173,11 +215,13 @@
             <td></td>
             <td></td>
             <td></td>
+            <td></td>
         </tr>
         <tr>
             <td>-</td>
             <td>Thôn thuộc xã loại I, loại II</td>
             <td class="text-center">{{ $model != []?dinhdangso($model->sothonxaloai1):'' }}</td>
+            <td></td>
             <td class="text-center">{{ $model != []?dinhdangso($model->sothonxaloai1_heso):'' }}</td>
             <td class="text-right">
                 {{ $model != []?dinhdangsothapphan($model->sothonxaloai1 * $model->sothonxaloai1_heso * 12 * $model->luongcoban):'' }}
@@ -189,11 +233,13 @@
             <td></td>
             <td></td>
             <td></td>
+            <td></td>
         </tr>
         <tr>
             <td>-</td>
             <td>Thôn thuộc xã trọng điểm, phức tạp về an ninh trật tự</td>
             <td class="text-center">{{ $model != []?dinhdangso($model->sothonxatrongdiem):'' }}</td>
+            <td></td>
             <td class="text-center">{{ $model != []?dinhdangsothapphan($model->sothonxatrongdiem_heso, $lamtron):'' }}</td>
             <td class="text-right">
                 {{ $model != []?dinhdangsothapphan($model->sothonxatrongdiem * $model->sothonxatrongdiem_heso * 12 * $model->luongcoban):'' }}
@@ -205,11 +251,13 @@
             <td></td>
             <td></td>
             <td></td>
+            <td></td>
         </tr>
         <tr>
             <td>-</td>
             <td>Thôn thuộc xã còn lại</td>
             <td class="text-center">{{ $model != []?dinhdangso($model->sothonxakhac):'' }}</td>
+            <td></td>
             <td class="text-center">{{ $model != []?dinhdangso($model->sothonxakhac_heso):'' }}</td>
             <td class="text-right">
                 {{ $model != []?dinhdangsothapphan($model->sothonxakhac * $model->sothonxakhac_heso * 12 * $model->luongcoban):'' }}

@@ -133,25 +133,32 @@
                                                 <div class="col-md-3">
                                                     <div class="form-group">
                                                         <label class="control-label">Phân loại xã </label>
-                                                        {!! Form::select('phanloaixa', getPhanLoaiXa(), session('admin')->phanloaixa, ['class' => 'form-control','disabled'=>true]) !!}
+                                                        {!! Form::select('phanloaixa', getPhanLoaiXa(), session('admin')->phanloaixa, ['class' => 'form-control','readonly'=>true]) !!}
                                                     </div>
                                                 </div>
-                                                <div class="col-md-3">
+                                                <div class="col-md-2">
                                                     <div class="form-group">
-                                                        <label class="control-label">Số quy định </label>
-                                                        {!! Form::text('songuoi', getSoLuongCanBoDinhMuc('ND33/2024',session('admin')->phanloaixa), ['class' => 'form-control text-right', 'data-mask' => 'fdecimal','disabled'=>true]) !!}
+                                                        <label class="control-label">Số cán bộ định mức </label>
+                                                        {!! Form::text('songuoi', getSoLuongCanBoDinhMuc('ND33/2024',session('admin')->phanloaixa), ['class' => 'form-control text-right', 'data-mask' => 'fdecimal','readonly'=>true]) !!}
                                                     </div>
                                                 </div>
-                                                <div class="col-md-3">
-                                                    <div class="form-group">
-                                                        <label class="control-label">Số tăng thêm </label>
-                                                        {!! Form::text('songuoitangthem', 0, ['class' => 'form-control text-right', 'data-mask' => 'fdecimal']) !!}
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-3">
+
+                                                <div class="col-md-2">
                                                     <div class="form-group">
                                                         <label class="control-label">Mức khoán quỹ phụ cấp </label>
-                                                        {!! Form::text('phanloaixa_heso', getMucKhoanPhuCapXa('ND33/2024',session('admin')->phanloaixa), ['class' => 'form-control text-right', 'data-mask' => 'fdecimal','disabled'=>true]) !!}
+                                                        {!! Form::text('phanloaixa_heso', getMucKhoanPhuCapXa('ND33/2024',session('admin')->phanloaixa), ['class' => 'form-control text-right', 'data-mask' => 'fdecimal','readonly'=>true]) !!}
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <div class="form-group">
+                                                        <label class="control-label">Số cán bộ tăng thêm </label>
+                                                        {!! Form::text('socanbotangthem', 0, ['class' => 'form-control text-right', 'data-mask' => 'fdecimal']) !!}
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label class="control-label">Mức khoán quỹ phụ cấp cán bộ tăng thêm </label>
+                                                        {!! Form::text('canbotangthem_heso', 1.5, ['class' => 'form-control text-right', 'data-mask' => 'fdecimal','readonly'=>true]) !!}
                                                     </div>
                                                 </div>
                                             </div>
@@ -227,6 +234,7 @@
                                     <!-- END PORTLET-->
                                 </div>
                             </div>
+                            {!! Form::hidden('phanloaixa', session('admin')->phanloaixa, ['class' => 'form-control']) !!}
                         @else
                             {!! Form::hidden('phanloaixa', session('admin')->phanloaixa, ['class' => 'form-control']) !!}
                             {!! Form::hidden('phanloaixa_heso', 21, ['class' => 'form-control text-right', 'data-mask' => 'fdecimal']) !!}

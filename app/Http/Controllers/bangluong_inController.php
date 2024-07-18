@@ -1329,7 +1329,11 @@ class bangluong_inController extends Controller
                 if ($model_trc != null) {
                     $ct->chenhlech = $ct->luongtn;
                     $canbo = $model_trc->where('macanbo', $ct->macanbo)->where('mact', $ct->mact)->first();
-                    if ($canbo != null) {
+                    $cb_chuyenplct=$model_trc->where('macanbo',$ct->macanbo)->first();
+                    if(isset($cb_chuyenplct) && !isset($canbo)){
+                        //trường hợp chuyển plct
+                        $ct->chenhlech = $ct->luongtn - $cb_chuyenplct->luongtn;
+                    }elseif ($canbo != null) {
                         $ct->chenhlech = $ct->luongtn - $canbo->luongtn;
                     }
                 }

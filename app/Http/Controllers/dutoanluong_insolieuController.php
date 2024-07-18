@@ -148,7 +148,7 @@ class dutoanluong_insolieuController extends Controller
             }
             // dd($model);
             $m_donvi = dmdonvi::where('madv', session('admin')->madv)->first();
-            //dd($model);
+            // dd($model);
             return view('reports.dutoanluong.donvi.kinhphikhongchuyentrach')
                 ->with('model', $model)
                 ->with('m_donvi', $m_donvi)

@@ -43,5 +43,6 @@ class dutoanluong extends Model
         'sothonxakhac_heso',
         'sothonxaloai1',
         'sothonxaloai1_heso',
+        'socanbotangthem' //Số cán bộ tăng thêm theo nd33/2024
     ];
 }
