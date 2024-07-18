@@ -85,7 +85,7 @@ class dutoanluongController extends Controller
             $inputs = $request->all();
 
             $model = dutoanluong::where('madv', session('admin')->madv)->where('namns', $inputs['namns'])->first();
-            
+
             if ($model != null) {
                 return redirect('/nghiep_vu/quan_ly/du_toan?maso=' . $model->masodv);
             }
@@ -103,8 +103,8 @@ class dutoanluongController extends Controller
                 ->where('manguonkp', $inputs['manguonkp1'])
                 ->where('phanloai', 'BANGLUONG')
                 ->first();
-            if ($m_bl == null ) {
-                    $message='Bảng lương tháng ' . $inputs['thang'] . ' năm ' . $inputs['nam'] .' không tồn tại. Bạn cần tạo bảng lương trước để có thể tạo dự toán.';              
+            if ($m_bl == null) {
+                $message = 'Bảng lương tháng ' . $inputs['thang'] . ' năm ' . $inputs['nam'] . ' không tồn tại. Bạn cần tạo bảng lương trước để có thể tạo dự toán.';
                 return view('errors.data_error')
                     ->with('message', $message)
                     ->with('furl', '/nghiep_vu/quan_ly/du_toan/danh_sach');
@@ -298,7 +298,7 @@ class dutoanluongController extends Controller
                 ->where('manguonkp', $inputs['manguonkp'])
                 ->where('phanloai', 'BANGLUONG')
                 ->first();
-                // dd($m_bl);
+            // dd($m_bl);
             if ($m_bl == null) {
                 return view('errors.data_error')
                     ->with('message', 'Bảng lương tháng ' . $inputs['thang'] . ' năm ' . $inputs['nam'] . ' không tồn tại. Bạn cần tạo bảng lương trước để có thể tạo dự toán.')
@@ -397,7 +397,9 @@ class dutoanluongController extends Controller
             foreach ($m_bl_ct as $chitiet) {
                 $chitiet->macanbo_goc = $chitiet->macanbo;
                 // if ($chitiet->mact == '1506673585') {
-                    if (in_array($chitiet->mact, ['1689729806','1506673585'])) {
+                if (in_array($chitiet->mact, ['1689729806', '1506673585'])) {
+                    //trường hợp hợp đồng mà tính theo hệ số thì bỏ qua
+                    // if($chitiet->luonghd != 0){
                     //do hợp đồng 68, 111 lương cố định
                     //gán lại lương cơ bản theo mức mới
                     $chitiet->luongcoban = $inputs['luongcoban'];
@@ -405,6 +407,7 @@ class dutoanluongController extends Controller
                     $chitiet->tongbh_dv = $chitiet->bhxh_dv + $chitiet->bhyt_dv + $chitiet->bhtn_dv + $chitiet->kpcd_dv;
                     //dd($chitiet);
                     continue;
+                    // }
                 }
                 $chenhlech = round($inputs['luongcoban'] / $chitiet->luongcoban, 10);
                 //chưa xử lý cán bộ kiêm nhiệm
@@ -436,7 +439,7 @@ class dutoanluongController extends Controller
                 //tính riêng cho HD 68 do quy đổi hệ số hay bi làm tròn
                 // if ($chitiet->mact == '1506673585') {
                 //Đổi sang hđ 111
-                    if (in_array($chitiet->mact, ['1689729806','1506673585'])) {
+                if (in_array($chitiet->mact, ['1689729806', '1506673585'])) {
                     $chitiet->stbhxh_dv = round($chitiet->stbhxh_dv *  $chenhlech, 0);
                     $chitiet->stbhyt_dv = round($chitiet->stbhyt_dv  *  $chenhlech, 0);
                     $chitiet->stbhtn_dv = round($chitiet->stbhtn_dv  *  $chenhlech, 0);
@@ -666,6 +669,7 @@ class dutoanluongController extends Controller
             $inputs['sothonxakhac_heso'] = chkDbl($inputs['sothonxakhac_heso']);
             $inputs['sothonxaloai1_heso'] = chkDbl($inputs['sothonxaloai1_heso']);
             $inputs['phanloaixa_heso'] = chkDbl($inputs['phanloaixa_heso']);
+            $inputs['socanbotangthem'] = chkDbl($inputs['socanbotangthem']);
             // dd($a_data);
             foreach (array_chunk($a_data, 50) as $data) {
                 dutoanluong_bangluong::insert($data);
@@ -1998,5 +2002,18 @@ class dutoanluongController extends Controller
                 ->with('pageTitle', 'Chi tiết tổng hợp lương tại đơn vị');
         } else
             return view('errors.notlogin');
+    }
+
+    public function getPhanLoaiXa(Request $request)
+    {
+        $inputs = $request->all();
+        $slcanbodinhmuc = getSoLuongCanBoDinhMuc('ND33/2024', $inputs['phanloaixa']);
+        $muckhoanpc = getMucKhoanPhuCapXa('ND33/2024', $inputs['phanloaixa']);
+        $result = array(
+            'slcanbodinhmuc' => $slcanbodinhmuc,
+            'muckhoanphucap' => $muckhoanpc
+        );
+
+        return response()->json($result);
     }
 }
