@@ -331,7 +331,7 @@ class dutoanluongController extends Controller
                 }
             }
 
-            //dd($m_bl_ct);
+            // dd($m_bl_ct1);
             $a_baohiem = dmphanloaicongtac_baohiem::where('madv', session('admin')->madv)->get()->keyBy('mact')->toarray();
             // dd($a_baohiem);
             $model_phucap = dmphucap_donvi::select('mapc', 'phanloai', 'congthuc', 'baohiem', 'tenpc', 'thaisan', 'nghiom', 'dieudong', 'thuetn', 'tapsu')
@@ -396,8 +396,9 @@ class dutoanluongController extends Controller
             $inputs['luongcoban'] = getDbl($inputs['luongcoban']);
             foreach ($m_bl_ct as $chitiet) {
                 $chitiet->macanbo_goc = $chitiet->macanbo;
-                if ($chitiet->mact == '1506673585') {
-                    //do hợp đồng 68 lương cố định
+                // if ($chitiet->mact == '1506673585') {
+                    if (in_array($chitiet->mact, ['1689729806','1506673585'])) {
+                    //do hợp đồng 68, 111 lương cố định
                     //gán lại lương cơ bản theo mức mới
                     $chitiet->luongcoban = $inputs['luongcoban'];
                     $chitiet->masodv = $masodv;
@@ -435,7 +436,7 @@ class dutoanluongController extends Controller
                 //tính riêng cho HD 68 do quy đổi hệ số hay bi làm tròn
                 // if ($chitiet->mact == '1506673585') {
                 //Đổi sang hđ 111
-                    if ($chitiet->mact == '1689729806') {
+                    if (in_array($chitiet->mact, ['1689729806','1506673585'])) {
                     $chitiet->stbhxh_dv = round($chitiet->stbhxh_dv *  $chenhlech, 0);
                     $chitiet->stbhyt_dv = round($chitiet->stbhyt_dv  *  $chenhlech, 0);
                     $chitiet->stbhtn_dv = round($chitiet->stbhtn_dv  *  $chenhlech, 0);

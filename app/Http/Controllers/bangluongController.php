@@ -1087,16 +1087,15 @@ class bangluongController extends Controller
             //trường hợp cán bộ tập sự, thử việc nộp bảo hiểm theo số lương thực nhận
             // (chỉ cần tính các phụ cấp theo hệ số và số tiền; hệ số theo % sẽ đc tính lại theo phụ cấp gốc)
             if ($m_cb[$key]['theodoi'] == 6 || $m_cb[$key]['mact'] == '1506673422') {
-                foreach ($a_tapsu as $pc) { 
-                    if($a_pc[$pc]['phanloai'] == '2')
-                    {
+                foreach ($a_tapsu as $pc) {
+                    if ($a_pc[$pc]['phanloai'] == '2') {
                         continue;
-                    }                 
+                    }
                     if ($m_cb[$key][$pc] > 0 && $m_cb[$key][$pc] < 50) {
                         $m_cb[$key][$pc] = round($m_cb[$key][$pc] * $m_cb[$key]['pthuong'] / 100, session('admin')->lamtron);
                     }
                 }
-                            // dd($m_cb[$key]);
+                // dd($m_cb[$key]);
             }
             // dd($m_cb[$key]);
 
@@ -5104,13 +5103,12 @@ class bangluongController extends Controller
                     foreach (explode(',', $tm->mapc) as $maso) {
                         if ($maso != '') {
                             $tm->sotien += $m_tinhtoan->sum($maso);
-                            
                         }
                     }
-                    if($tm->mapc != 'stkpcd_dv'){
-                        $tm->ttbh=$tm->sotien;
-                    }else{
-                        $tm->stkpcd=$tm->sotien;
+                    if ($tm->mapc != 'stkpcd_dv') {
+                        $tm->ttbh = $tm->sotien;
+                    } else {
+                        $tm->stkpcd = $tm->sotien;
                     }
                     continue;
                 }
@@ -5146,7 +5144,7 @@ class bangluongController extends Controller
                         $tm->ttbh_dv += $m_tinhtoan_pc->sum('ttbh_dv');
                     }
                 }
-                $tm->chuyenkhoan=$tm->sotien - $tm->ttbh;
+                $tm->chuyenkhoan = $tm->sotien - $tm->ttbh;
             }
 
             $model_tm = $model_tm->where('sotien', '>', 0);
@@ -5157,8 +5155,8 @@ class bangluongController extends Controller
             //         ->all();
             // });
             // $a_muc = a_unique($a_muc);
-            $a_muc=array_unique(array_column($model_tm->toarray(),'muc'));
-// dd($a_muc);
+            $a_muc = array_unique(array_column($model_tm->toarray(), 'muc'));
+            // dd($a_muc);
             // dd($model_tm->wherein('muc',['6100','6300']));
             // dd($model_tm);
             // dd($inputs);
@@ -5580,22 +5578,22 @@ class bangluongController extends Controller
             }
             $model = $this->getBangLuong($inputs);
 
-            $m_nhomcongtac=nhomphanloaict::orderBy('stt','asc')->get();
-// dd($m_nhomcongtac);
-            $model_congtac=new Collection();
-            if(count($m_nhomcongtac) > 0){
-                foreach($m_nhomcongtac as $ct){
-                    $phanloai=nhomphanloaict_phanloaict::where('manhom',$ct->manhom)->get();
-                    $ct->phanloai=array_column($phanloai->toarray(),'maphanloaict');
-                    $ct->isnhomct=1;
+            $m_nhomcongtac = nhomphanloaict::orderBy('stt', 'asc')->get();
+            // dd($m_nhomcongtac);
+            $model_congtac = new Collection();
+            if (count($m_nhomcongtac) > 0) {
+                foreach ($m_nhomcongtac as $ct) {
+                    $phanloai = nhomphanloaict_phanloaict::where('manhom', $ct->manhom)->get();
+                    $ct->phanloai = array_column($phanloai->toarray(), 'maphanloaict');
+                    $ct->isnhomct = 1;
                     $model_congtac->push($ct);
                 }
-            }else{
+            } else {
                 $model_congtac = dmphanloaict::select('mact', 'tenct', 'macongtac')
-                ->wherein('mact', a_unique(array_column($model->toarray(), 'mact')))->get();
+                    ->wherein('mact', a_unique(array_column($model->toarray(), 'mact')))->get();
             }
 
-                // dd($model_congtac);
+            // dd($model_congtac);
             // $hscb=hosocanbo::all();
             $m_hs = hosocanbo::wherein('macanbo', array_column($model->toarray(), 'macanbo'))->get();
             $a_macanbo = array_column($m_hs->toarray(), 'macanbo');
@@ -5676,12 +5674,14 @@ class bangluongController extends Controller
                     $canbo = $model_bl_trc->where('macanbo', $ct->macanbo)->where('mact', $ct->mact)
                         ->where('mapb', $ct->mapb)->first();
 
-                    if ($canbo != null) {
+                    $canbo_chuyenplct = $model_bl_trc->where('macanbo', $ct->macanbo)
+                        ->where('mapb', $ct->mapb)->first();
+                    if (isset($canbo_chuyenplct) && !isset($canbo)) {//cán bộ đổi phân loại công tác
                         foreach ($model_pc as $pc) {
                             $mapc = $pc->mapc;
                             $mapc_st = 'st_' . $pc->mapc;
-                            $ct->$mapc -= $canbo->$mapc;
-                            $ct->$mapc_st -= $canbo->$mapc_st;
+                            $ct->$mapc -= $canbo_chuyenplct->$mapc;
+                            $ct->$mapc_st -= $canbo_chuyenplct->$mapc_st;
                             if ($ct->$mapc_st > 0) {
                                 $ct->ghichu .= 'Tăng ' . $a_tenpc[$mapc] . '; ';
                             };
@@ -5693,33 +5693,66 @@ class bangluongController extends Controller
 
                         //tính lại lương thực nhận do đã giảm trừ
                         // $ct->luongtn = $ct->ttl - $ct->ttbh - ($canbo->ttl - $canbo->ttbh);
-                        $ct->luongtn -= $canbo->luongtn;
-                        $ct->tonghs -= $canbo->tonghs;
-                        $ct->ttl -= $canbo->ttl;
-                        $ct->stbhxh -= $canbo->stbhxh;
-                        $ct->stbhyt -= $canbo->stbhyt;
-                        $ct->stkpcd -= $canbo->stkpcd;
-                        $ct->stbhtn -= $canbo->stbhtn;
-                        $ct->ttbh -= $canbo->ttbh;
-                        $ct->stbhxh_dv -= $canbo->stbhxh_dv;
-                        $ct->stbhyt_dv -= $canbo->stbhyt_dv;
-                        $ct->stkpcd_dv -= $canbo->stkpcd_dv;
-                        $ct->stbhtn_dv -= $canbo->stbhtn_dv;
-                        $ct->ttbh_dv -= $canbo->ttbh_dv;
+                        $ct->luongtn -= $canbo_chuyenplct->luongtn;
+                        $ct->tonghs -= $canbo_chuyenplct->tonghs;
+                        $ct->ttl -= $canbo_chuyenplct->ttl;
+                        $ct->stbhxh -= $canbo_chuyenplct->stbhxh;
+                        $ct->stbhyt -= $canbo_chuyenplct->stbhyt;
+                        $ct->stkpcd -= $canbo_chuyenplct->stkpcd;
+                        $ct->stbhtn -= $canbo_chuyenplct->stbhtn;
+                        $ct->ttbh -= $canbo_chuyenplct->ttbh;
+                        $ct->stbhxh_dv -= $canbo_chuyenplct->stbhxh_dv;
+                        $ct->stbhyt_dv -= $canbo_chuyenplct->stbhyt_dv;
+                        $ct->stkpcd_dv -= $canbo_chuyenplct->stkpcd_dv;
+                        $ct->stbhtn_dv -= $canbo_chuyenplct->stbhtn_dv;
+                        $ct->ttbh_dv -= $canbo_chuyenplct->ttbh_dv;
                     } else {
-                        foreach ($model_pc as $pc) {
-                            $mapc = $pc->mapc;
-                            $mapc_st = 'st_' . $pc->mapc;
-                            // $ct->$mapc -= $canbo->$mapc;
-                            // $ct->$mapc_st -= $canbo->$mapc_st;
-                            // if ($ct->$mapc_st > 0) {
-                            //     $ct->ghichu .= 'Tăng ' . $a_tenpc[$mapc] . '; ';
-                            // };
-                            // if ($ct->$mapc_st < 0) {
-                            //     $ct->ghichu .= 'Giảm ' . $a_tenpc[$mapc] . '; ';
-                            // }
+                        //cán bộ có cùng phân loại ct
+                        if ($canbo != null) {
+                            foreach ($model_pc as $pc) {
+                                $mapc = $pc->mapc;
+                                $mapc_st = 'st_' . $pc->mapc;
+                                $ct->$mapc -= $canbo->$mapc;
+                                $ct->$mapc_st -= $canbo->$mapc_st;
+                                if ($ct->$mapc_st > 0) {
+                                    $ct->ghichu .= 'Tăng ' . $a_tenpc[$mapc] . '; ';
+                                };
+                                if ($ct->$mapc_st < 0) {
+                                    $ct->ghichu .= 'Giảm ' . $a_tenpc[$mapc] . '; ';
+                                }
+                            }
+
+
+                            //tính lại lương thực nhận do đã giảm trừ
+                            // $ct->luongtn = $ct->ttl - $ct->ttbh - ($canbo->ttl - $canbo->ttbh);
+                            $ct->luongtn -= $canbo->luongtn;
+                            $ct->tonghs -= $canbo->tonghs;
+                            $ct->ttl -= $canbo->ttl;
+                            $ct->stbhxh -= $canbo->stbhxh;
+                            $ct->stbhyt -= $canbo->stbhyt;
+                            $ct->stkpcd -= $canbo->stkpcd;
+                            $ct->stbhtn -= $canbo->stbhtn;
+                            $ct->ttbh -= $canbo->ttbh;
+                            $ct->stbhxh_dv -= $canbo->stbhxh_dv;
+                            $ct->stbhyt_dv -= $canbo->stbhyt_dv;
+                            $ct->stkpcd_dv -= $canbo->stkpcd_dv;
+                            $ct->stbhtn_dv -= $canbo->stbhtn_dv;
+                            $ct->ttbh_dv -= $canbo->ttbh_dv;
+                        } else {
+                            foreach ($model_pc as $pc) {
+                                $mapc = $pc->mapc;
+                                $mapc_st = 'st_' . $pc->mapc;
+                                // $ct->$mapc -= $canbo->$mapc;
+                                // $ct->$mapc_st -= $canbo->$mapc_st;
+                                // if ($ct->$mapc_st > 0) {
+                                //     $ct->ghichu .= 'Tăng ' . $a_tenpc[$mapc] . '; ';
+                                // };
+                                // if ($ct->$mapc_st < 0) {
+                                //     $ct->ghichu .= 'Giảm ' . $a_tenpc[$mapc] . '; ';
+                                // }
+                            }
+                            $ct->ghichu .= 'Cán bộ mới';
                         }
-                        $ct->ghichu .= 'Cán bộ mới';
                     }
                     if ($m_truylinh != null) { //nếu có bảng truy lĩnh lương 
                         if ($canbo != null) {
@@ -5817,14 +5850,14 @@ class bangluongController extends Controller
             );
 
             $m_dv = dmdonvi::where('madv', $m_bl->madv)->first();
-            $m_thuyetminh=bangthuyetminh::where('madv',$m_dv->madv)->where('thang',$m_bl->thang)->where('nam',$m_bl->nam)->first();
-            $thuyetminh_ct=new Collection();
-            if(isset($m_thuyetminh)){
-                $thuyetminh_ct=bangthuyetminh_chitiet::where('mathuyetminh',$m_thuyetminh->mathuyetminh)->orderby('tanggiam', 'desc')->get();
+            $m_thuyetminh = bangthuyetminh::where('madv', $m_dv->madv)->where('thang', $m_bl->thang)->where('nam', $m_bl->nam)->first();
+            $thuyetminh_ct = new Collection();
+            if (isset($m_thuyetminh)) {
+                $thuyetminh_ct = bangthuyetminh_chitiet::where('mathuyetminh', $m_thuyetminh->mathuyetminh)->orderby('tanggiam', 'desc')->get();
             }
-          
+
             // dd($thuyetminh_ct);
-            $view=isset($inputs['Madb'])?'reports.bangluong.donvi.mau09kh_vn':'reports.bangluong.donvi.mau09kh';
+            $view = isset($inputs['Madb']) ? 'reports.bangluong.donvi.mau09kh_vn' : 'reports.bangluong.donvi.mau09kh';
             // return view('reports.bangluong.donvi.mau09kh')
             return view($view)
                 ->with('model', $model)
