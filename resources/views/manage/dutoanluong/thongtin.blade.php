@@ -152,7 +152,7 @@
                                                 <div class="col-md-2">
                                                     <div class="form-group">
                                                         <label class="control-label">Số cán bộ tăng thêm </label>
-                                                        {!! Form::text('socanbotangthem', 0, ['class' => 'form-control text-right', 'data-mask' => 'fdecimal']) !!}
+                                                        {!! Form::text('socanbotangthem', 0, ['class' => 'form-control text-right']) !!}
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3">
