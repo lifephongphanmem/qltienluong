@@ -139,6 +139,7 @@
     //In dữ liệu
     function insolieu(url, mact) {
         $('#frm_insolieu').attr('action', url);
+        mact=$('#nam_dt').val() == '2025'?'1689729806':'1506673585';
         $('#frm_insolieu').find("[name^='mact']").val(mact.split(';')).trigger('change');
         $('#frm_insolieu').find("[name^='masodv']").val($('#masodv_dt').val());
         $('#frm_insolieu').find("[name^='namns']").val($('#nam_dt').val());

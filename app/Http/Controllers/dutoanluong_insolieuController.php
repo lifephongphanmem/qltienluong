@@ -112,8 +112,9 @@ class dutoanluong_insolieuController extends Controller
                 $ct->quyluong = $ct->tongcong * 12;
             }
             // dd($model);
+                $views=$inputs['namns'] == 2025?'reports.dutoanluong.donvi.nd111.bangluonghopdong':'reports.dutoanluong.donvi.bangluonghopdong';
             $a_phongban = array_column(dmphongban::where('madv', $m_dutoan->madv)->get()->toArray(), 'tenpb', 'mapb');
-            return view('reports.dutoanluong.donvi.bangluonghopdong')
+            return view($views)
                 ->with('model', $model)
                 ->with('m_chitiet', $m_chitiet)
                 ->with('col', $col)

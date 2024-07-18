@@ -163,7 +163,7 @@
                             <button type="button" onclick="insolieu('{{ $furl . 'bangluonghopdong' }}', '1689729806')"
                                 style="border-width: 0px" class="btn btn-default btn-xs mbs"
                                 data-target="#modal-insolieu" data-toggle="modal">
-                                <i class="fa fa-print"></i>&nbsp; In bảng lương hợp đồng 111 </button>
+                                <i class="fa fa-print"></i>&nbsp; In bảng lương hợp đồng </button>
                         </div>
                     </div>
                 </div>
