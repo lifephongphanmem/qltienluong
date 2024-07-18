@@ -671,7 +671,7 @@ class dutoanluongController extends Controller
             $inputs['phanloaixa_heso'] = chkDbl($inputs['phanloaixa_heso']);
             $inputs['socanbotangthem'] = chkDbl($inputs['socanbotangthem']);
             // dd($a_data);
-            foreach (array_chunk($a_data, 50) as $data) {
+            foreach (array_chunk($a_data, 1) as $data) {
                 dutoanluong_bangluong::insert($data);
             }
             dutoanluong_chitiet::insert($a_dutoan);
