@@ -402,9 +402,8 @@ class nguonkinhphi_donvi_baocaoController extends Controller
 
                     $ar_I[$key]['canbo_congtac'] = $dulieu_chitiet->sum('canbo_congtac');
                     // $ar_I[$key]['canbo_dutoan'] = $dulieu_chitiet->sum('canbo_dutoan');
-                    //05/07/2024: Lấy số biên chế được giao bằng với số cán bộ có mặt theo yêu cầu vp
-                    // $ar_I[$key]['canbo_dutoan'] = $dulieu_nguonkp->sum('sobiencheduocgiao');
-                    $ar_I[$key]['canbo_dutoan'] =  $ar_I[$key]['canbo_congtac'];
+                    $ar_I[$key]['canbo_dutoan'] = $dulieu_nguonkp->sum('sobiencheduocgiao');
+                    //$ar_I[$key]['canbo_dutoan'] =  $ar_I[$key]['canbo_congtac'];
                     //28/6/2023: tạm thời bỏ để lấy dữ liệu giống 4a
                     // $ar_I[$key]['chenhlech01thang'] = $a_solieu_moi['tongcong'] - $a_solieu['tongcong'];
                     // $ar_I[$key]['chenhlech06thang'] = $ar_I[$key]['chenhlech01thang'] * 6;
@@ -1112,9 +1111,9 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                     $ar_I[$key]['solieu_moi'] = $a_solieu_moi;
 
                     $ar_I[$key]['canbo_congtac'] = $dulieu_chitiet->sum('canbo_congtac');
-                    // $ar_I[$key]['canbo_dutoan'] = $dulieu_nguonkp->sum('sobiencheduocgiao');
-                    //05/07/2024: Lấy số biên chế được giao bằng với số cán bộ có mặt theo yêu cầu vp
-                    $ar_I[$key]['canbo_dutoan'] =  $ar_I[$key]['canbo_congtac'];
+                    $ar_I[$key]['canbo_dutoan'] = $dulieu_nguonkp->sum('sobiencheduocgiao');
+                    
+                    //$ar_I[$key]['canbo_dutoan'] =  $ar_I[$key]['canbo_congtac'];
                     // $ar_I[$key]['chenhlech01thang'] = $a_solieu_moi['tongcong'] - $a_solieu['tongcong'];
                     $ar_I[$key]['chenhlech01thang'] = $dulieu_chitiet->sum('ttl') + $dulieu_chitiet->sum('ttbh_dv');
                     $ar_I[$key]['chenhlech06thang'] = $ar_I[$key]['chenhlech01thang'] * 6;
@@ -2845,7 +2844,7 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                 }
 
                 //Phần A
-                 $a_A = get4a_TT50_A();
+                $a_A = get4a_TT50_A();
 
                 for ($capdo = 0; $capdo < 5; $capdo++) {
                     foreach ($a_A as $key => $chitiet) {
@@ -2953,7 +2952,7 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                     $chitiet->phanloaixa = $a_phanloaixa[$chitiet->madv];
                     //Tinh số liệu 2b 
                     $chitiet->nhucau2b = round($chitiet->quy1_tong + $chitiet->quy2_tong + $chitiet->quy3_tong);
-                    
+
                     if ($chitiet->maphanloai == 'KVXP') {
                         // $sotien = 1490000 * 5;
                         //Tạm làm để lấy số tiền, tính chênh lệch phân loại xã chạy cho nđ73
@@ -3018,14 +3017,14 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                         $chitiet->nhucau_4a = $solieu_2d + $solieu_2e;
 
                         //số liệu 2c
-                        if ($chitiet->phanloaixa == 'XL1') {                            
+                        if ($chitiet->phanloaixa == 'XL1') {
                             $solieu_plxa = round(21 * $m_thongtu->chenhlech * 6);
-                        } else if ($chitiet->phanloaixa == 'XL2') {                            
+                        } else if ($chitiet->phanloaixa == 'XL2') {
                             $solieu_plxa = round(18 * $m_thongtu->chenhlech * 6);
-                        } else if ($chitiet->phanloaixa == 'XL3') {                            
+                        } else if ($chitiet->phanloaixa == 'XL3') {
                             $solieu_plxa = round(15 * $m_thongtu->chenhlech * 6);
                         }
-                        
+
                         //Số xã biên giới
                         $solieu_xabiengioi = round($chitiet->sothonbiengioi_2d * 6 * $m_thongtu->chenhlech * 6);
                         //số thôn có 350 hộ trở lên
@@ -3067,8 +3066,8 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                 //Phần BI
                 $a_B1 = array();
                 $a_B1[0] = array('tt' => '1', 'noidung' => 'Tổng nhu cầu kinh phí tăng thêm để thực hiện cải cách tiền lương theo Nghị định số 24/2023/NĐ-CP và Nghị định số 42/2023/NĐ-CP (tính đủ 12 tháng) ', 'sotien' => '0');
-                $a_B1[0]['sotien'] =$m_nguonkp->sum('tongnhucau1');
-                
+                $a_B1[0]['sotien'] = $m_nguonkp->sum('tongnhucau1');
+
                 //Phần B.II
                 $a_B2 = array();
                 $a_B2[0] = array('tt' => '1', 'noidung' => 'Quỹ tiền lương, phụ cấp tăng thêm đối với cán bộ công chức khu vực hành chính, sự nghiệp ', 'sotien' => '0');
