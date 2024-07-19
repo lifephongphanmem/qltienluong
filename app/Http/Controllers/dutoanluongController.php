@@ -388,7 +388,7 @@ class dutoanluongController extends Controller
                     }
                 }
             }
-            //dd($m_bl_ct->toarray());
+            // dd($m_bl_ct->toarray());
             //dd($m_bl_ct->where('mact','1506672780'));
             //Tính lại lương theo mức lương cơ bản mới
             $a_hoten = array_column(hosocanbo::where('madv', session('admin')->madv)->get()->toarray(), 'tencanbo', 'macanbo');
@@ -399,7 +399,7 @@ class dutoanluongController extends Controller
                 // if ($chitiet->mact == '1506673585') {
                 if (in_array($chitiet->mact, ['1689729806', '1506673585'])) {
                     //trường hợp hợp đồng mà tính theo hệ số thì bỏ qua
-                    // if($chitiet->luonghd != 0){
+                    if($chitiet->luonghd != 0){
                     //do hợp đồng 68, 111 lương cố định
                     //gán lại lương cơ bản theo mức mới
                     $chitiet->luongcoban = $inputs['luongcoban'];
@@ -407,7 +407,7 @@ class dutoanluongController extends Controller
                     $chitiet->tongbh_dv = $chitiet->bhxh_dv + $chitiet->bhyt_dv + $chitiet->bhtn_dv + $chitiet->kpcd_dv;
                     //dd($chitiet);
                     continue;
-                    // }
+                    }
                 }
                 $chenhlech = round($inputs['luongcoban'] / $chitiet->luongcoban, 10);
                 //chưa xử lý cán bộ kiêm nhiệm
