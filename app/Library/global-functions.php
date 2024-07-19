@@ -521,7 +521,10 @@ function dinhdangso($number, $decimals = 0, $unit = '1', $dec_point = ',', $thou
     $number = round($number / $r, $decimals);
     $formattedNumber = number_format($number, $decimals, $dec_point, $thousands_sep);
     // Loại bỏ các số 0 ở cuối và dấu chấm nếu không cần thiết
-    return rtrim(rtrim($formattedNumber, '0'), '.');
+    if ($unit = '1')
+        return $formattedNumber;
+    else
+        return rtrim(rtrim($formattedNumber, '0'), '.');
 }
 
 function trim_zeros($str)
