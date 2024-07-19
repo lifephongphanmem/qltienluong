@@ -2020,6 +2020,7 @@ class tonghopnguon_huyenController extends Controller
                 ->with('m_dv', $m_dv)
                 ->with('m_banhanh', $m_banhanh)
                 ->with('m_thongtu', $m_thongtu)
+                ->with('inputs', $inputs)
                 //->with('a_phucap', $a_phucap)
                 ->with('a_phucap', getPhuCap2a_78())
                 //->with('a_phucap_st', $a_phucap_st)

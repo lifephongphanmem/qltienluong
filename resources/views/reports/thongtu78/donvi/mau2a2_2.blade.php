@@ -31,7 +31,8 @@
     @if (isset($m_banhanh) && $m_banhanh->noidung != '')
         <p id="data_body2" style="text-align: center; font-style: italic">{{ '(' . $m_banhanh->noidung . ')' }}</p>
     @endif
-    <p id="data_body3" style="text-align: right; font-style: italic">Đơn vị: Đồng</p>
+    <p id="data_body3" style="text-align: right; font-style: italic">Đơn vị:
+        {{ $inputs['donvitinh'] == 1 ? 'Đồng' : ($inputs['donvitinh'] == 2 ? 'Nghìn đồng' : 'Triệu đồng') }}</p>
     <table id="data_body3" cellspacing="0" cellpadding="0" border="1"
         style="margin: 20px auto; font-size: 10px; border-collapse: collapse;">
         <tr>
@@ -55,7 +56,6 @@
             <th style="width: 2%;"rowspan="2">CÁC</br>KHOẢN</br>ĐÓNG</br>GÓP</br>BHXH,</br>BHYT,</br>BHTN,</br>KPCĐ</th>
         </tr>
         <tr style="">
-
             <?php
             foreach ($a_phucap as $key => $val) {
                 if ($key == 'heso') {
@@ -70,10 +70,7 @@
                     <th>{{ $pc }}</th>
                 @endforeach
             @endif
-
         </tr>
-
-
 
         <tr style="font-weight: bold; text-align: center">
             <td>1</td>
@@ -103,17 +100,17 @@
             <td style="text-align: center"></td>
             <td style="text-align: left">TỔNG SỐ</td>
             {{-- Mức lương mới --}}
-            <td>{{ dinhdangso($a_Tong['solieu_moi']['tongcong']) }}</td>
-            <td>{{ dinhdangso($a_Tong['solieu_moi']['st_heso']) }}</td>
-            <td>{{ dinhdangso($a_Tong['solieu_moi']['st_tongpc']) }}</td>
+            <td>{{ dinhdangso($a_Tong['solieu_moi']['tongcong'], 0, $inputs['donvitinh']) }}</td>
+            <td>{{ dinhdangso($a_Tong['solieu_moi']['st_heso'], 0, $inputs['donvitinh']) }}</td>
+            <td>{{ dinhdangso($a_Tong['solieu_moi']['st_tongpc'], 0, $inputs['donvitinh']) }}</td>
             @foreach ($a_phucap_st as $mapc => $pc)
-                <td>{{ dinhdangso($a_Tong['solieu_moi'][$mapc]) }}</td>
+                <td>{{ dinhdangso($a_Tong['solieu_moi'][$mapc], 0, $inputs['donvitinh']) }}</td>
             @endforeach
-            <td>{{ dinhdangso($a_Tong['solieu_moi']['ttbh_dv']) }}</td>
+            <td>{{ dinhdangso($a_Tong['solieu_moi']['ttbh_dv'], 0, $inputs['donvitinh']) }}</td>
             {{-- Chênh lệch --}}
-            <td>{{ dinhdangso($a_Tong['chenhlech01thang']) }}</td>
-            <td>{{ dinhdangso($a_Tong['chenhlech06thang']) }}</td>
-            <td>{{ dinhdangso($a_Tong['quythuong']) }}</td>
+            <td>{{ dinhdangso($a_Tong['chenhlech01thang'], 0, $inputs['donvitinh']) }}</td>
+            <td>{{ dinhdangso($a_Tong['chenhlech06thang'], 0, $inputs['donvitinh']) }}</td>
+            <td>{{ dinhdangso($a_Tong['quythuong'], 0, $inputs['donvitinh']) }}</td>
         </tr>
         @foreach ($ar_I as $dulieu)
             <tr style="text-align: center">
@@ -121,17 +118,17 @@
                 <td style="text-align: left;{{ $dulieu['style'] }}">{{ $dulieu['noidung'] }}</td>
 
                 {{-- Mức lương mới --}}
-                <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu_moi']['tongcong']) }}</td>
-                <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu_moi']['st_heso']) }}</td>
-                <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu_moi']['st_tongpc']) }}</td>
+                <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu_moi']['tongcong'], 0, $inputs['donvitinh']) }}</td>
+                <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu_moi']['st_heso'], 0, $inputs['donvitinh']) }}</td>
+                <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu_moi']['st_tongpc'], 0, $inputs['donvitinh']) }}</td>
                 @foreach ($a_phucap_st as $mapc => $pc)
-                    <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu_moi'][$mapc]) }}</td>
+                    <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu_moi'][$mapc], 0, $inputs['donvitinh']) }}</td>
                 @endforeach
-                <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu_moi']['ttbh_dv']) }}</td>
+                <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu_moi']['ttbh_dv'], 0, $inputs['donvitinh']) }}</td>
                 {{-- Chênh lệch --}}
-                <td style="text-align: right;{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['chenhlech01thang']) }}</td>
-                <td style="text-align: right;{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['chenhlech06thang']) }}</td>
-                <td style="text-align: right;{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['quythuong']) }}</td>
+                <td style="text-align: right;{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['chenhlech01thang'], 0, $inputs['donvitinh']) }}</td>
+                <td style="text-align: right;{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['chenhlech06thang'], 0, $inputs['donvitinh']) }}</td>
+                <td style="text-align: right;{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['quythuong'], 0, $inputs['donvitinh']) }}</td>
             </tr>
         @endforeach
 
@@ -141,17 +138,17 @@
                 <td style="text-align: left;{{ $dulieu['style'] }}">{{ $dulieu['noidung'] }}</td>
 
                 {{-- Mức lương mới --}}
-                <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu_moi']['tongcong']) }}</td>
-                <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu_moi']['st_heso']) }}</td>
-                <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu_moi']['st_tongpc']) }}</td>
+                <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu_moi']['tongcong'], 0, $inputs['donvitinh']) }}</td>
+                <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu_moi']['st_heso'], 0, $inputs['donvitinh']) }}</td>
+                <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu_moi']['st_tongpc'], 0, $inputs['donvitinh']) }}</td>
                 @foreach ($a_phucap_st as $mapc => $pc)
-                    <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu_moi'][$mapc]) }}</td>
+                    <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu_moi'][$mapc], 0, $inputs['donvitinh']) }}</td>
                 @endforeach
-                <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu_moi']['ttbh_dv']) }}</td>
+                <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu_moi']['ttbh_dv'], 0, $inputs['donvitinh']) }}</td>
                 {{-- Chênh lệch --}}
-                <td style="text-align: right;{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['chenhlech01thang']) }}</td>
-                <td style="text-align: right;{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['chenhlech06thang']) }}</td>
-                <td style="text-align: right;{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['quythuong']) }}</td>
+                <td style="text-align: right;{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['chenhlech01thang'], 0, $inputs['donvitinh']) }}</td>
+                <td style="text-align: right;{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['chenhlech06thang'], 0, $inputs['donvitinh']) }}</td>
+                <td style="text-align: right;{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['quythuong'], 0, $inputs['donvitinh']) }}</td>
             </tr>
         @endforeach
 
@@ -161,17 +158,17 @@
                 <td style="text-align: left;{{ $dulieu['style'] }}">{{ $dulieu['noidung'] }}</td>
 
                 {{-- Mức lương mới --}}
-                <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu_moi']['tongcong']) }}</td>
-                <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu_moi']['st_heso']) }}</td>
-                <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu_moi']['st_tongpc']) }}</td>
+                <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu_moi']['tongcong'], 0, $inputs['donvitinh']) }}</td>
+                <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu_moi']['st_heso'], 0, $inputs['donvitinh']) }}</td>
+                <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu_moi']['st_tongpc'], 0, $inputs['donvitinh']) }}</td>
                 @foreach ($a_phucap_st as $mapc => $pc)
-                    <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu_moi'][$mapc]) }}</td>
+                    <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu_moi'][$mapc], 0, $inputs['donvitinh']) }}</td>
                 @endforeach
-                <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu_moi']['ttbh_dv']) }}</td>
+                <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu_moi']['ttbh_dv'], 0, $inputs['donvitinh']) }}</td>
                 {{-- Chênh lệch --}}
-                <td style="text-align: right;{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['chenhlech01thang']) }}</td>
-                <td style="text-align: right;{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['chenhlech06thang']) }}</td>
-                <td style="text-align: right;{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['quythuong']) }}</td>
+                <td style="text-align: right;{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['chenhlech01thang'], 0, $inputs['donvitinh']) }}</td>
+                <td style="text-align: right;{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['chenhlech06thang'], 0, $inputs['donvitinh']) }}</td>
+                <td style="text-align: right;{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['quythuong'], 0, $inputs['donvitinh']) }}</td>
             </tr>
         @endforeach
 
@@ -181,17 +178,17 @@
                 <td style="text-align: left;{{ $dulieu['style'] }}">{{ $dulieu['noidung'] }}</td>
 
                 {{-- Mức lương mới --}}
-                <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu_moi']['tongcong']) }}</td>
-                <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu_moi']['st_heso']) }}</td>
-                <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu_moi']['st_tongpc']) }}</td>
+                <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu_moi']['tongcong'], 0, $inputs['donvitinh']) }}</td>
+                <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu_moi']['st_heso'], 0, $inputs['donvitinh']) }}</td>
+                <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu_moi']['st_tongpc'], 0, $inputs['donvitinh']) }}</td>
                 @foreach ($a_phucap_st as $mapc => $pc)
-                    <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu_moi'][$mapc]) }}</td>
+                    <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu_moi'][$mapc], 0, $inputs['donvitinh']) }}</td>
                 @endforeach
-                <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu_moi']['ttbh_dv']) }}</td>
+                <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu_moi']['ttbh_dv'], 0, $inputs['donvitinh']) }}</td>
                 {{-- Chênh lệch --}}
-                <td style="text-align: right;{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['chenhlech01thang']) }}</td>
-                <td style="text-align: right;{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['chenhlech06thang']) }}</td>
-                <td style="text-align: right;{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['quythuong']) }}</td>
+                <td style="text-align: right;{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['chenhlech01thang'], 0, $inputs['donvitinh']) }}</td>
+                <td style="text-align: right;{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['chenhlech06thang'], 0, $inputs['donvitinh']) }}</td>
+                <td style="text-align: right;{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['quythuong'], 0, $inputs['donvitinh']) }}</td>
             </tr>
         @endforeach
     </table>
