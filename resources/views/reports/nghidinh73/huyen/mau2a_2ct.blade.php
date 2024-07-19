@@ -213,7 +213,7 @@
                         {{-- Chenh lệch --}}
                         <td style="text-align: right;">{{ dinhdangso($m_donvi->sum('chenhlech01thang')) }}</td>
                         <td style="text-align: right;">{{ dinhdangso($m_donvi->sum('chenhlech06thang')) }}</td>
-                        <td style="text-align: right;"></td>
+                        <td style="text-align: right;">{{ dinhdangso($m_donvi->sum('quythuong')) }}</td>
                     </tr>
 
                     <!-- Dải từng đơn vị cho nhóm giáo dục -->
@@ -254,7 +254,7 @@
                                 {{-- Chenh lệch --}}
                                 <td style="text-align: right;">{{ dinhdangso($m_donvi_gd->sum('chenhlech01thang')) }}</td>
                                 <td style="text-align: right;">{{ dinhdangso($m_donvi_gd->sum('chenhlech06thang')) }}</td>
-                                <td style="text-align: right;"></td>
+                                <td style="text-align: right;">{{ dinhdangso($m_donvi_gd->sum('quythuong')) }}</td>                                
                             </tr>
                         @endforeach
                     @endif
@@ -327,7 +327,7 @@
                     {{-- Chenh lệch --}}
                     <td style="text-align: right;">{{ dinhdangso($m_donvi->sum('chenhlech01thang')) }}</td>
                     <td style="text-align: right;">{{ dinhdangso($m_donvi->sum('chenhlech06thang')) }}</td>
-                    <td style="text-align: right;"></td>
+                    <td style="text-align: right;">{{ dinhdangso($m_donvi->sum('quythuong')) }}</td>
                 </tr>
             @endforeach
         @endforeach
