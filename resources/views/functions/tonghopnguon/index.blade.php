@@ -224,6 +224,18 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
+                            <button type="button" onclick="insolieu('{{ $furl_th . 'mau2a_2ct' }}',null)"
+                                style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                data-target="#modal-insolieu" data-toggle="modal">
+                                <i class="fa fa-print"></i>&nbsp;Bảng tổng hợp nhu cầu kinh phí (Mẫu 2a - Chi tiết đơn
+                                vị)</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
                             <button type="button" onclick="insolieu('{{ $furl_th . 'mau2a_vn' }}',null)"
                                 style="border-width: 0px" class="btn btn-default btn-xs mbs"
                                 data-target="#modal-insolieu" data-toggle="modal">
@@ -257,19 +269,20 @@
                     </div>
                 </div>
 
-                <div class="row">
+                <div class="row" id="btnIn2d">
                     <div class="col-md-12">
                         <div class="form-group">
                             <button type="button" onclick="insolieu('{{ $furl_th . 'mau2d' }}',null)"
                                 style="border-width: 0px" class="btn btn-default btn-xs mbs"
                                 data-target="#modal-insolieu" data-toggle="modal">
-                                <i class="fa fa-print"></i>&nbsp;Tổng hợp kinh phí giảm theo nghị định số 33/2023/NĐ-CP -
+                                <i class="fa fa-print"></i>&nbsp;Tổng hợp kinh phí giảm theo nghị định số 33/2023/NĐ-CP
+                                -
                                 cán bộ, công chức cấp xã (Mẫu 2d)</button>
                         </div>
                     </div>
-                </div>                
+                </div>
 
-                <div class="row">
+                <div class="row" id="btnIn2e">
                     <div class="col-md-12">
                         <div class="form-group">
                             <button type="button" onclick="insolieu('{{ $furl_th . 'mau2e' }}',null)"
@@ -281,17 +294,18 @@
                     </div>
                 </div>
 
-                <div class="row">
+                <div class="row" id="btnIn2g">
                     <div class="col-md-12">
                         <div class="form-group">
                             <button type="button" onclick="insolieu('{{ $furl_th . 'mau2g' }}',null)"
                                 style="border-width: 0px" class="btn btn-default btn-xs mbs"
                                 data-target="#modal-insolieu" data-toggle="modal">
-                                <i class="fa fa-print"></i>&nbsp;Tổng hợp phụ cấp ưu đãi nghề theo nghị định số 05/2023/NĐ-CP (Mẫu 2g)</button>
+                                <i class="fa fa-print"></i>&nbsp;Tổng hợp phụ cấp ưu đãi nghề theo nghị định số
+                                05/2023/NĐ-CP (Mẫu 2g)</button>
                         </div>
                     </div>
                 </div>
-               
+
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
@@ -304,7 +318,7 @@
                     </div>
                 </div>
 
-                <div class="row">
+                <div class="row" id="btnIn4b">
                     <div class="col-md-12">
                         <div class="form-group">
                             <button type="button" onclick="insolieu('{{ $furl_th . 'mau4b' }}',null)"
@@ -314,6 +328,7 @@
                         </div>
                     </div>
                 </div>
+
             </div>
             <div class="modal-footer">
                 <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
@@ -389,6 +404,17 @@
             $('#sohieu_in').val(sohieu);
             $('#madvbc_in').val(madvbc);
             $('#macqcq_in').val(macqcq);
+            if(sohieu == '732024nd_cp'){
+                document.getElementById('btnIn4b').style.display = 'none';
+                document.getElementById('btnIn2d').style.display = 'none';
+                document.getElementById('btnIn2g').style.display = 'none';
+                document.getElementById('btnIn2e').style.display = 'none';
+            }else{
+                document.getElementById('btnIn4b').style.display = 'block';
+                document.getElementById('btnIn2d').style.display = 'block';
+                document.getElementById('btnIn2g').style.display = 'block';
+                document.getElementById('btnIn2e').style.display = 'block';
+            }
         }
 
         function insolieu(url, mact) {
