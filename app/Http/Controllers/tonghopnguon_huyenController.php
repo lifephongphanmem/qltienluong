@@ -2668,7 +2668,7 @@ class tonghopnguon_huyenController extends Controller
             })->orwhere(function ($qr) use ($inputs) {
                 $qr->where('madv', $inputs['macqcq'])->where('sohieu', $inputs['sohieu']);
             })->get();
-            // dd($m_nguonkp->where('madv','1511709453'));
+             //dd($m_nguonkp);
             $a_linhvuc = array_column($m_nguonkp->toarray(), 'linhvuchoatdong', 'masodv');
             $a_donvi =  array_column($m_nguonkp->toarray(), 'madv', 'masodv');
 
@@ -3400,7 +3400,7 @@ class tonghopnguon_huyenController extends Controller
                 $chitiet->chenhlech01thang = $chitiet->tongcong_moi - $chitiet->tongcong_cu;
                 $chitiet->chenhlech06thang = $chitiet->chenhlech01thang * 6;
                 if (($chitiet->nhomnhucau == 'BIENCHE' && $chitiet->mact == '1506672780') || $chitiet->nhomnhucau == 'CANBOCT') {
-                    $chitiet->quythuong = $m_nguonkp->where('masodv', $chitiet->masodv, 'masodv')->sum('quythuong_2a');
+                    $chitiet->quythuong = $m_nguonkp->where('masodv', $chitiet->masodv)->sum('quythuong_2a');                    
                 } else
                     $chitiet->quythuong = 0;                 
             }
@@ -4145,7 +4145,7 @@ class tonghopnguon_huyenController extends Controller
                 $chitiet->chenhlech01thang = $chitiet->tongcong_moi - $chitiet->tongcong_cu;
                 $chitiet->chenhlech06thang = $chitiet->chenhlech01thang * 6;
                 if (($chitiet->nhomnhucau == 'BIENCHE' && $chitiet->mact == '1506672780') || $chitiet->nhomnhucau == 'CANBOCT') {
-                    $chitiet->quythuong = $m_nguonkp->where('masodv', $chitiet->masodv, 'masodv')->sum('quythuong_2a');
+                    $chitiet->quythuong = $m_nguonkp->where('masodv', $chitiet->masodv)->sum('quythuong_2a');
                 } else
                     $chitiet->quythuong = 0; 
             }
