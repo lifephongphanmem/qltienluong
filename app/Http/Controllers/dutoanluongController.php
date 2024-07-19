@@ -317,6 +317,8 @@ class dutoanluongController extends Controller
             $m_bl_ct = (new dataController())->getBangluong_ct($m_bl->thang, $m_bl->mabl);
             $a_plct = getPLCTDuToan();
             $a_pc = getColDuToan();
+            $a_pc_dv=dmphucap_donvi::where('madv',session('admin')->madv)->get();
+            // dd($a_pc_dv);
 
             //thêm cán bộ chưa có từ $m_bl1 (phụ) vào $m_bl (chính)
             // dd($m_bl_ct);
@@ -381,10 +383,12 @@ class dutoanluongController extends Controller
                         // dd($value);
                     } else {
                         //chạy lại 1 vòng để hệ số, số tiền (do báo cáo lấy hệ số, số tiền)
-                        foreach ($a_pc as $pc) {
-                            $tenpc_st = 'st_' . $pc;
-                            $value->$pc = round($value->$tenpc_st / $value->luongcoban, 10);
-                        }
+                    //     foreach ($a_pc as $pc) {
+                    //         //Chỉ chạy các pc tính hệ số, pc số tiền tính sau do liên quan đến mức lương mới
+                    //         // if($a_pc_dv->where('mapc',$pc)->first()->phanloai == 1)
+                    //         $tenpc_st = 'st_' . $pc;
+                    //         $value->$pc = round($value->$tenpc_st / $value->luongcoban, 10);
+                    //     }
                     }
                 }
             }
@@ -424,9 +428,36 @@ class dutoanluongController extends Controller
 
                 foreach ($a_pc as $pc) {
                     $tenpc_st = 'st_' . $pc;
-                    $chitiet->$tenpc_st = round($inputs['luongcoban'] * $chitiet->$pc, 0);
+                    $pc_dv=$a_pc_dv->where('mapc',$pc)->first();
+                    //Tính lại số tiền, hệ số theo mức lương mới
+                    switch ($pc_dv->phanloai) {
+                        case 0:{
+                            $chitiet->$tenpc_st = round($inputs['luongcoban'] * $chitiet->$pc, 0);
+                            break;
+                        }
+                        case 1: { //số tiền
+                            $chitiet->$pc=round($chitiet->$pc/$inputs['luongcoban'],10);
+                                break;
+                            }
+                        case 2: { //phần trăm
+                                $heso = 0;
+                                //Lấy số tiền để tính  
+                                foreach (explode(',', $pc_dv->congthuc) as $ct) {
+                                    if ($ct != '')
+                                        $heso += $chitiet->$ct;
+                                }   
+                                $heso = round(($heso * $chitiet->$pc) / 100, session('admin')->lamtron);
+                                $chitiet-> $tenpc_st = round($heso * $inputs['luongcoban'], session('admin')->lamtron);
+                                $chitiet->$pc = $heso;
+                                break;
+                            }
+                        default: { //trường hợp còn lại (ẩn,...)
+                                break;
+                            }
+                        }
                     $chitiet->tonghs += $chitiet->$pc;
                     $chitiet->ttl += $chitiet->$tenpc_st;
+
                 }
                 //quy đổi bảo hiểm thành hệ số
                 $chitiet->bhxh_dv = round($chitiet->stbhxh_dv / $chitiet->luongcoban, session('admin')->lamtron);
@@ -545,7 +576,7 @@ class dutoanluongController extends Controller
             $inputs['luonghs_dt'] = 0;
             $inputs['luongbh_dt'] = 0;
             $a_dutoan = [];
-            //dd($m_bl_ct->toarray());
+            // dd($m_bl_ct->toarray());
             //Tổng hợp lại dự toán cho cán bộ theo bảng lương
             foreach (array_unique(array_column($m_bl_ct->toarray(), 'mact')) as $data) {
                 $dutoan = [];
