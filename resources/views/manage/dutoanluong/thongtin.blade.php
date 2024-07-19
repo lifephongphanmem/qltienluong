@@ -250,6 +250,7 @@
                             ]) !!}
                             {!! Form::hidden('sothonxakhac', 0, ['class' => 'form-control']) !!}
                             {!! Form::hidden('sothonxakhac_heso', 4.5, ['class' => 'form-control text-right', 'data-mask' => 'fdecimal']) !!}
+                            {!! Form::hidden('socanbotangthem', 0, ['class' => 'form-control text-right', 'data-mask' => 'fdecimal']) !!}
                         @endif
 
                         <div class="row">
