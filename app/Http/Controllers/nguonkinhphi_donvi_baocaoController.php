@@ -737,7 +737,7 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                     // $ar_III[$key]['chenhlech06thang'] = $ar_III[$key]['chenhlech01thang'] * 6;
                     $ar_III[$key]['chenhlech01thang'] = $dulieu_chitiet->sum('ttl') + $dulieu_chitiet->sum('ttbh_dv');
                     $ar_III[$key]['chenhlech06thang'] = $ar_III[$key]['chenhlech01thang'] * 6;
-                    $ar_III[$key]['quythuong'] = $dulieu_nguonkp->sum('quythuong_2a');
+                    $ar_III[$key]['quythuong'] =0;
                 }
             }
             // dd($ar_III);
@@ -884,7 +884,7 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                     // $ar_IV[$key]['chenhlech06thang'] = $ar_IV[$key]['chenhlech01thang'] * 6;
                     $ar_IV[$key]['chenhlech01thang'] = $a_solieu_moi['tongcong'] - $a_solieu['tongcong'];
                     $ar_IV[$key]['chenhlech06thang'] = $ar_IV[$key]['chenhlech01thang'] * 6;
-                    $ar_IV[$key]['quythuong'] = $dulieu_nguonkp->sum('quythuong_2a');
+                    $ar_IV[$key]['quythuong'] =0;
                 }
             }
 
@@ -993,6 +993,8 @@ class nguonkinhphi_donvi_baocaoController extends Controller
             } else {
                 $view = 'reports.thongtu78.donvi.mau2a_2';
             }
+            $inputs['donvitinh'] = $inputs['donvitinh'] ?? '1';
+            //dd($ar_I);
             return view($view)
                 // return view('reports.thongtu78.donvi.mau2a2')
                 ->with('furl', '/tong_hop_bao_cao/')
@@ -1270,7 +1272,6 @@ class nguonkinhphi_donvi_baocaoController extends Controller
             }
             //
 
-
             //
             //Tính toán số liệu phần II
             $ar_II = getChuyenTrach();
@@ -1393,7 +1394,7 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                     $ar_III[$key]['canbo_dutoan'] = $dulieu_chitiet->sum('canbo_dutoan');
                     $ar_III[$key]['chenhlech01thang'] = $a_solieu_moi['tongcong'] - $a_solieu['tongcong'];
                     $ar_III[$key]['chenhlech06thang'] = $ar_III[$key]['chenhlech01thang'] * 6;
-                    $ar_III[$key]['quythuong'] =  $dulieu_nguonkp->sum('quythuong_2a');
+                    $ar_III[$key]['quythuong'] =  0; //Nhóm III và IV tính cán bộ trên nhóm I và II
                 }
             }
 
@@ -1517,7 +1518,7 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                     $ar_IV[$key]['canbo_dutoan'] = $dulieu_chitiet->sum('canbo_dutoan');
                     $ar_IV[$key]['chenhlech01thang'] = $a_solieu_moi['tongcong'] - $a_solieu['tongcong'];
                     $ar_IV[$key]['chenhlech06thang'] = $ar_IV[$key]['chenhlech01thang'] * 6;
-                    $ar_IV[$key]['quythuong'] = $dulieu_nguonkp->sum('quythuong_2a');
+                    $ar_IV[$key]['quythuong'] = 0; //Nhóm III và IV tính cán bộ trên nhóm I và II
                 }
             }
 
@@ -1624,6 +1625,8 @@ class nguonkinhphi_donvi_baocaoController extends Controller
             } else {
                 $view = 'reports.thongtu78.donvi.mau2a2_2';
             }
+            $inputs['donvitinh'] = $inputs['donvitinh'] ?? '1';
+            
             return view($view)
                 // return view('reports.thongtu78.donvi.mau2a2_2_cu')
                 ->with('furl', '/tong_hop_bao_cao/')

@@ -349,7 +349,7 @@ function chuyenkhongdau($str)
 }
 function chuyenkytulogin($text)
 {
-    $text=str_replace("&","-KYTUVA-",$text);
+    $text = str_replace("&", "-KYTUVA-", $text);
     return $text;
 }
 
@@ -519,8 +519,12 @@ function dinhdangso($number, $decimals = 0, $unit = '1', $dec_point = ',', $thou
     }
 
     $number = round($number / $r, $decimals);
-    //kết quả dạng 985,40000 => dùng là duyệt ngược nếu = 0 => loại bỏ
-    return number_format($number, $decimals, $dec_point, $thousands_sep);
+    $formattedNumber = number_format($number, $decimals, $dec_point, $thousands_sep);
+    // Loại bỏ các số 0 ở cuối và dấu chấm nếu không cần thiết
+    if ($unit = '1')
+        return $formattedNumber;
+    else
+        return rtrim(rtrim($formattedNumber, '0'), '.');
 }
 
 function trim_zeros($str)
@@ -650,4 +654,3 @@ function toAlpha($data)
         return $alpha;
     }
 }
-
