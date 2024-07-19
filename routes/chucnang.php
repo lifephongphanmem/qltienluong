@@ -364,6 +364,7 @@ Route::group(['prefix' => 'chuc_nang'], function () {
 
             Route::post('mau2a', 'tonghopnguon_huyenController@mau2a');
             Route::post('mau2a_2', 'tonghopnguon_huyenController@mau2a_2');
+            Route::post('mau2a_2ct', [tonghopnguon_huyenController::class,'mau2a_2ct']);
             Route::post('mau2a_vn', 'tonghopnguon_huyenController@mau2a_vn');
             Route::post('mau2a_pldv', 'tonghopnguon_huyenController@mau2a_pldv');
 
