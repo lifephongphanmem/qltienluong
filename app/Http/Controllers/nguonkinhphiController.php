@@ -884,6 +884,8 @@ class nguonkinhphiController extends Controller
                 'thuchien2',
                 'nsnngiam',
                 'tongnhucau1',
+                'nguonketdu_4a',
+                'nguontralai_4a',
             ];
             // dd($inputs);
             foreach ($a_truong  as $truong) {

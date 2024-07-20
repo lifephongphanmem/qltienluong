@@ -153,5 +153,7 @@ class nguonkinhphi extends Model
         'phucaptnn_2c',
         //Mẫu 2a
         'quythuong_2a',
+        'nguonketdu_4a',
+        'nguontralai_4a',
     ];
 }
