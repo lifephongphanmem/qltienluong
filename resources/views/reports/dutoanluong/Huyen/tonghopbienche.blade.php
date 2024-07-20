@@ -629,8 +629,17 @@
                         @endforeach
                         <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('bhtn_dv'), $lamtron) }}</td>
                         <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('baohiem'), $lamtron) }}</td>
-                        <td class="text-right">
+                        {{-- <td class="text-right">
                             {{ dinhdangsothapphan($model_chitiet->sum('tongcong') / chkDiv0($model_chitiet->where('phanloai', 'COMAT')->sum('canbo_congtac')), $lamtron) }}
+                        </td> --}}
+                        <td class="text-right">
+                            {{ dinhdangsothapphan(
+                                $model_chitiet->where('phanloai', 'COMAT')->sum('tongcong') /
+                                    chkDiv0($model_chitiet->where('phanloai', 'COMAT')->sum('canbo_congtac')) +
+                                    $model_chitiet->where('phanloai', 'CHUATUYEN')->sum('tongcong') /
+                                        chkDiv0($model_chitiet->where('phanloai', 'CHUATUYEN')->sum('canbo_congtac')),
+                                $lamtron,
+                            ) }}
                         </td>
                         <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('quyluong'), $lamtron) }}</td>
                     </tr>
@@ -818,8 +827,17 @@
                                 {{ dinhdangsothapphan($model_chitiet->sum('bhtn_dv'), $lamtron) }}</td>
                             <td class="text-right">
                                 {{ dinhdangsothapphan($model_chitiet->sum('baohiem'), $lamtron) }}</td>
-                            <td class="text-right">
+                            {{-- <td class="text-right">
                                 {{ dinhdangsothapphan($model_chitiet->sum('tongcong') / chkDiv0($model_chitiet->where('phanloai', 'COMAT')->sum('canbo_congtac')), $lamtron) }}
+                            </td> --}}
+                            <td class="text-right">
+                                {{ dinhdangsothapphan(
+                                    $model_chitiet->where('phanloai', 'COMAT')->sum('tongcong') /
+                                        chkDiv0($model_chitiet->where('phanloai', 'COMAT')->sum('canbo_congtac')) +
+                                        $model_chitiet->where('phanloai', 'CHUATUYEN')->sum('tongcong') /
+                                            chkDiv0($model_chitiet->where('phanloai', 'CHUATUYEN')->sum('canbo_congtac')),
+                                    $lamtron,
+                                ) }}
                             </td>
                             <td class="text-right">
                                 {{ dinhdangsothapphan($model_chitiet->sum('quyluong'), $lamtron) }}</td>

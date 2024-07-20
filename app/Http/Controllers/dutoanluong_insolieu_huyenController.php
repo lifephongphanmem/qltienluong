@@ -360,7 +360,8 @@ class dutoanluong_insolieu_huyenController extends Controller
                     $chitiet->tongphucap = $chitiet->tonghs - $chitiet->heso;
                     $chitiet->tongbh_dv = $chitiet->tongbh_dv / 12 * $chitiet->canbo_congtac;
                     $chitiet->tongcong = $chitiet->tonghs + $chitiet->tongbh_dv;
-                    $chitiet->hesotrungbinh = $chitiet->tongcong;
+                    // $chitiet->hesotrungbinh = $chitiet->tongcong;
+                    $chitiet->hesotrungbinh = round($chitiet->tongcong / $chitiet->canbo_congtac, 5);
                     $chitiet->quyluong = ($chitiet->ttl + $chitiet->ttbh_dv) * $chitiet->canbo_congtac / $inputs['donvitinh'];
                 }
 
@@ -504,7 +505,8 @@ class dutoanluong_insolieu_huyenController extends Controller
                     $chitiet->tongphucap = $chitiet->tonghs - $chitiet->heso;
                     $chitiet->tongbh_dv = $chitiet->tongbh_dv / 12 * $chitiet->canbo_dutoan;
                     $chitiet->tongcong = $chitiet->tonghs + $chitiet->tongbh_dv;
-                    $chitiet->hesotrungbinh = $chitiet->tongcong;
+                    // $chitiet->hesotrungbinh = $chitiet->tongcong;
+                    $chitiet->hesotrungbinh = round($chitiet->tongcong / $chitiet->canbo_congtac, 5);
                     $chitiet->quyluong = ($chitiet->ttl + $chitiet->ttbh_dv) * $chitiet->canbo_dutoan / $inputs['donvitinh'];
                 }
             }
@@ -592,8 +594,12 @@ class dutoanluong_insolieu_huyenController extends Controller
             //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
 
             //$m_donvi = dmdonvi::where('madv', session('admin')->madv)->first();
-
-            return view('reports.dutoanluong.Huyen.tonghophopdong')
+            if(in_array('1689729806',$inputs['mact'])){
+                $view='reports.dutoanluong.Huyen.nd111.tonghophopdong';
+            }else{
+                $view='reports.dutoanluong.Huyen.tonghophopdong';
+            }
+            return view($view)
                 ->with('model', $model)
                 ->with('lamtron', session('admin')->lamtron ?? 3)
                 ->with('m_donvi', $m_donvi)
@@ -666,7 +672,12 @@ class dutoanluong_insolieu_huyenController extends Controller
             }
 
             //dd($model);
-            return view('reports.dutoanluong.Huyen.tonghophopdong_m2')
+            if(in_array('1689729806',$inputs['mact'])){
+                $view='reports.dutoanluong.Huyen.nd111.tonghophopdong_m2';
+            }else{
+                $view='reports.dutoanluong.Huyen.tonghophopdong_m2';
+            }
+            return view($view)
                 ->with('model', $model)
                 ->with('col', $col)
                 ->with('lamtron', session('admin')->lamtron ?? 3)
