@@ -263,7 +263,8 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <button type="button" onclick="insolieu('{{ $furl_th . 'tonghophopdong' }}','1506673585')"
+                            {{-- <button type="button" onclick="insolieu('{{ $furl_th . 'tonghophopdong' }}','1506673585')" --}}
+                            <button type="button" onclick="insolieu('{{ $furl_th . 'tonghophopdong' }}','1689729806')"
                                 style="border-width: 0px" class="btn btn-default btn-xs mbs"
                                 data-target="#modal-insolieu" data-toggle="modal">
                                 <i class="fa fa-print"></i>&nbsp; Tổng hợp hợp đồng bổ sung quỹ lương (Mẫu 01)</button>
@@ -275,7 +276,8 @@
                     <div class="col-md-12">
                         <div class="form-group">
                             <button type="button"
-                                onclick="insolieu('{{ $furl_th . 'tonghophopdong_m2' }}','1506673585')"
+                                {{-- onclick="insolieu('{{ $furl_th . 'tonghophopdong_m2' }}','1506673585')" --}}
+                                onclick="insolieu('{{ $furl_th . 'tonghophopdong_m2' }}','1689729806')"
                                 style="border-width: 0px" class="btn btn-default btn-xs mbs"
                                 data-target="#modal-insolieu" data-toggle="modal">
                                 <i class="fa fa-print"></i>&nbsp; Tổng hợp hợp đồng bổ sung quỹ lương (Mẫu 02)</button>
