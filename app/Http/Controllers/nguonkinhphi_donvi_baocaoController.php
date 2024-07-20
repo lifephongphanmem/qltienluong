@@ -1971,7 +1971,7 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                     ->with('pageTitle', 'TỔNG HỢP KINH PHÍ TĂNG THÊM ĐỂ THỰC HIỆN CHẾ ĐỘ PHỤ CẤP ĐỐI VỚI CÁN BỘ KHÔNG CHUYÊN TRÁCH');
             } else {
                 $ar_I = array();
-
+                $ar_I[0] = array('val' => 'XL1;XL2;XL3', 'tt' => 'I', 'noidung' => 'Xã, phường, thị trấn', 'style' => 'font-weight:bold;',);
                 $m_nguon_1 = $m_nguonkp->where('phanloaixa', 'XL1');
                 $ar_I[1] = array('val' => 'XL1', 'tt' => '1', 'noidung' => 'Xã loại I', 'solieu' => [
                     'tdv' => $m_nguon_1->count(),
@@ -2000,13 +2000,13 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                 ]);
 
                 //0 = 1+2+3
-                $ar_I[0] = array('val' => 'XL1;XL2;XL3', 'tt' => 'I', 'noidung' => 'Xã, phường, thị trấn', 'style' => 'font-weight:bold;', 'solieu' => [
+                $ar_I[0]['solieu'] = [
                     'tdv' =>  $ar_I[1]['solieu']['tdv'] + $ar_I[2]['solieu']['tdv'] + $ar_I[3]['solieu']['tdv'],
                     'mk' => 0,
                     'muccu' => $ar_I[1]['solieu']['muccu'] + $ar_I[2]['solieu']['muccu'] + $ar_I[3]['solieu']['muccu'],
                     'mucapdung' => $ar_I[1]['solieu']['mucapdung'] + $ar_I[2]['solieu']['mucapdung'] + $ar_I[3]['solieu']['mucapdung'],
                     'chenhlech' => $ar_I[1]['solieu']['chenhlech'] + $ar_I[2]['solieu']['chenhlech'] + $ar_I[3]['solieu']['chenhlech'],
-                ]);
+                ];
 
                 //II  4= 5+7+12
                 $ar_I[4] = array('val' => 'DBKK;BGHD;DBTD', 'tt' => 'II', 'noidung' => 'Thôn, tổ dân phố', 'style' => 'font-weight:bold;');
@@ -3109,7 +3109,7 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                 // $a_BII[5]['sotien'] = $m_nguonkp->sum('nhucau2c');
 
                 $a_TC = array(
-                    'A' => ($a_A[0]['sotien'] + $a_A[1]['sotien'] + $a_A[2]['sotien'] + $a_A[3]['sotien'] + $a_A[7]['sotien'] + $a_A[8]['sotien']),
+                    'A' => ($a_A[0]['sotien'] + $a_A[1]['sotien'] + $a_A[2]['sotien'] + $a_A[3]['sotien'] + $a_A[7]['sotien'] + $a_A[8]['sotien']+ $a_A[9]['sotien']+ $a_A[10]['sotien']),
                     'B1' => array_sum(array_column($a_B1, 'sotien')),
                     'B2' => array_sum(array_column($a_B2, 'sotien')),
                     'B3' => array_sum(array_column($a_B3, 'sotien'))

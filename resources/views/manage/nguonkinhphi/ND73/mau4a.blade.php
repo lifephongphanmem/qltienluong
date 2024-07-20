@@ -113,6 +113,29 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="control-label">70% kết dư ngân sách năm 2023</label>
+                                            {!! Form::text('nguonketdu_4a', null, [
+                                                'id' => 'nguonketdu_4a',
+                                                'class' => 'form-control nguonkp text-right',
+                                                'data-mask' => 'fdecimal',
+                                            ]) !!}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="control-label">Bố trí trả lại nguồn cải cách tiền lương của các năm trước</label>
+                                            {!! Form::text('nguontralai_4a', null, [
+                                                'id' => 'nguontralai_4a',
+                                                'class' => 'form-control nguonkp text-right',
+                                                'data-mask' => 'fdecimal',
+                                            ]) !!}
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
 

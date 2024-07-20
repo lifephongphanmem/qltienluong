@@ -1356,6 +1356,14 @@ function get4a_NĐ73_A()
         'tt' => '6', 'noidung' => 'Nguồn thực hiện cải cách tiền lương năm 2023 chưa sử dụng hết chuyển sang năm 2024',
         'sotien' => '0', 'phanloai' => '0', 'tentruong' => 'caicach'
     );
+    $a_A[9] = array(
+        'tt' => '7', 'noidung' => '70% kết dư ngân sách năm 2023',
+        'sotien' => '0', 'phanloai' => '0', 'tentruong' => 'nguonketdu_4a'
+    );
+    $a_A[10] = array(
+        'tt' => '8', 'noidung' => 'Bố trí trả lại nguồn cải cách tiền lương của các năm trước',
+        'sotien' => '0', 'phanloai' => '0', 'tentruong' => 'nguontralai_4a'
+    );
 
     return $a_A;
 }
