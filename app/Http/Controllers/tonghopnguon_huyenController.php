@@ -1429,7 +1429,9 @@ class tonghopnguon_huyenController extends Controller
                     // $ar_I[$key]['chenhlech06thang'] = $ar_I[$key]['chenhlech01thang'] * 6;
                     $ar_I[$key]['chenhlech01thang'] = $dulieu_chitiet->sum('ttl') + $dulieu_chitiet->sum('ttbh_dv');
                     $ar_I[$key]['chenhlech06thang'] = $ar_I[$key]['chenhlech01thang'] * 6;
-                    $ar_I[$key]['quythuong'] = $dulieu_nguonkp->sum('quythuong_2a');;
+                    //$ar_I[$key]['quythuong'] = $dulieu_nguonkp->sum('quythuong_2a');
+                    // 2340000 *10% * tongheso
+                    $ar_I[$key]['quythuong'] = round(6 * $a_solieu['heso'] * $luongcb_moi / 10);
                 }
             }
 
@@ -1669,7 +1671,9 @@ class tonghopnguon_huyenController extends Controller
                     // $ar_II[$key]['chenhlech06thang'] = $ar_II[$key]['chenhlech01thang'] * 6;
                     $ar_II[$key]['chenhlech01thang'] = $dulieu_chitiet->sum('ttl') + $dulieu_chitiet->sum('ttbh_dv');
                     $ar_II[$key]['chenhlech06thang'] = $ar_II[$key]['chenhlech01thang'] * 6;
-                    $ar_II[$key]['quythuong'] = $dulieu_nguonkp->sum('quythuong_2a');
+                    //$ar_II[$key]['quythuong'] = $dulieu_nguonkp->sum('quythuong_2a');
+                    // 2340000 *10% * tongheso
+                    $ar_II[$key]['quythuong'] = round(6 * $a_solieu['heso'] * $luongcb_moi / 10);
                 }
             }
 
@@ -2145,7 +2149,9 @@ class tonghopnguon_huyenController extends Controller
                     $ar_I[$key]['canbo_dutoan'] = $dulieu_nguonkp->sum('sobiencheduocgiao');
                     $ar_I[$key]['chenhlech01thang'] = $a_solieu_moi['tongcong'] - $a_solieu['tongcong'];
                     $ar_I[$key]['chenhlech06thang'] = $ar_I[$key]['chenhlech01thang'] * 6;
-                    $ar_I[$key]['quythuong'] = $dulieu_nguonkp->sum('quythuong_2a');
+                    //$ar_I[$key]['quythuong'] = $dulieu_nguonkp->sum('quythuong_2a');
+                    // 2340000 *10% * tongheso
+                    $ar_I[$key]['quythuong'] = round(6 * $a_solieu['heso'] * $luongcb_moi / 10);
                 }
             }
 
@@ -2350,7 +2356,9 @@ class tonghopnguon_huyenController extends Controller
                     $ar_II[$key]['canbo_dutoan'] = $dulieu_nguonkp->sum('sobiencheduocgiao');
                     $ar_II[$key]['chenhlech01thang'] = $a_solieu_moi['tongcong'] - $a_solieu['tongcong'];
                     $ar_II[$key]['chenhlech06thang'] = $ar_II[$key]['chenhlech01thang'] * 6;
-                    $ar_II[$key]['quythuong'] = $dulieu_nguonkp->sum('quythuong_2a');;
+                    //$ar_II[$key]['quythuong'] = $dulieu_nguonkp->sum('quythuong_2a');
+                    // 2340000 *10% * tongheso
+                    $ar_II[$key]['quythuong'] = round(6 * $a_solieu['heso'] * $luongcb_moi / 10);
                 }
             }
 
@@ -2799,7 +2807,9 @@ class tonghopnguon_huyenController extends Controller
                     $ar_I[$key]['canbo_dutoan'] = $dulieu_nguonkp->sum('sobiencheduocgiao');
                     $ar_I[$key]['chenhlech01thang'] = $a_solieu_moi['tongcong'] - $a_solieu['tongcong'];
                     $ar_I[$key]['chenhlech06thang'] = $ar_I[$key]['chenhlech01thang'] * 6;
-                    $ar_I[$key]['quythuong'] = $dulieu_nguonkp->sum('quythuong_2a');
+                    //$ar_I[$key]['quythuong'] = $dulieu_nguonkp->sum('quythuong_2a');
+                    // 2340000 *10% * tongheso
+                    $ar_I[$key]['quythuong'] = round(6 * $a_solieu['heso'] * $luongcb_moi / 10);
                 }
             }
 
@@ -3023,7 +3033,9 @@ class tonghopnguon_huyenController extends Controller
                     $ar_II[$key]['canbo_dutoan'] = $dulieu_nguonkp->sum('sobiencheduocgiao');
                     $ar_II[$key]['chenhlech01thang'] = $a_solieu_moi['tongcong'] - $a_solieu['tongcong'];
                     $ar_II[$key]['chenhlech06thang'] = $ar_II[$key]['chenhlech01thang'] * 6;
-                    $ar_II[$key]['quythuong'] = $dulieu_nguonkp->sum('quythuong_2a');
+                    //$ar_II[$key]['quythuong'] = $dulieu_nguonkp->sum('quythuong_2a');
+                    // 2340000 *10% * tongheso
+                    $ar_II[$key]['quythuong'] = round(6 * $a_solieu['heso'] * $luongcb_moi / 10);
                 }
             }
 
@@ -3400,7 +3412,9 @@ class tonghopnguon_huyenController extends Controller
                 $chitiet->chenhlech01thang = $chitiet->tongcong_moi - $chitiet->tongcong_cu;
                 $chitiet->chenhlech06thang = $chitiet->chenhlech01thang * 6;
                 if (($chitiet->nhomnhucau == 'BIENCHE' && $chitiet->mact == '1506672780') || $chitiet->nhomnhucau == 'CANBOCT') {
-                    $chitiet->quythuong = $m_nguonkp->where('masodv', $chitiet->masodv)->sum('quythuong_2a');
+                    //$chitiet->quythuong = $m_nguonkp->where('masodv', $chitiet->masodv)->sum('quythuong_2a');
+                    // 2340000 *10% * tongheso
+                    $chitiet->quythuong = round(6 * $chitiet->heso * $luongcb_moi / 10);
                 } else
                     $chitiet->quythuong = 0;
             }
@@ -3619,7 +3633,9 @@ class tonghopnguon_huyenController extends Controller
                     $ar_I[$key]['canbo_dutoan'] = $dulieu_nguonkp->sum('sobiencheduocgiao');
                     $ar_I[$key]['chenhlech01thang'] = $a_solieu_moi['tongcong'] - $a_solieu['tongcong'];
                     $ar_I[$key]['chenhlech06thang'] = $ar_I[$key]['chenhlech01thang'] * 6;
-                    $ar_I[$key]['quythuong'] = $dulieu_nguonkp->sum('quythuong_2a');
+                    //$ar_I[$key]['quythuong'] = $dulieu_nguonkp->sum('quythuong_2a');
+                    // 2340000 *10% * tongheso
+                    $ar_I[$key]['quythuong'] = round(6 * $a_solieu['heso'] * $luongcb_moi / 10);
                 }
             }
 
@@ -3828,7 +3844,9 @@ class tonghopnguon_huyenController extends Controller
                     $ar_II[$key]['canbo_dutoan'] = $dulieu_nguonkp->sum('sobiencheduocgiao');
                     $ar_II[$key]['chenhlech01thang'] = $a_solieu_moi['tongcong'] - $a_solieu['tongcong'];
                     $ar_II[$key]['chenhlech06thang'] = $ar_II[$key]['chenhlech01thang'] * 6;
-                    $ar_II[$key]['quythuong'] = $dulieu_nguonkp->sum('quythuong_2a');
+                    //$ar_II[$key]['quythuong'] = $dulieu_nguonkp->sum('quythuong_2a');
+                    // 2340000 *10% * tongheso
+                    $ar_II[$key]['quythuong'] = round(6 * $a_solieu['heso'] * $luongcb_moi / 10);
                 }
             }
 
@@ -4145,7 +4163,9 @@ class tonghopnguon_huyenController extends Controller
                 $chitiet->chenhlech01thang = $chitiet->tongcong_moi - $chitiet->tongcong_cu;
                 $chitiet->chenhlech06thang = $chitiet->chenhlech01thang * 6;
                 if (($chitiet->nhomnhucau == 'BIENCHE' && $chitiet->mact == '1506672780') || $chitiet->nhomnhucau == 'CANBOCT') {
-                    $chitiet->quythuong = $m_nguonkp->where('masodv', $chitiet->masodv)->sum('quythuong_2a');
+                    //$chitiet->quythuong = $m_nguonkp->where('masodv', $chitiet->masodv)->sum('quythuong_2a');
+                    // 2340000 *10% * tongheso
+                    $chitiet->quythuong = round(6 * $chitiet->heso * $luongcb_moi / 10);
                 } else
                     $chitiet->quythuong = 0;
             }

@@ -722,8 +722,8 @@
                                                 <i class="fa fa-caret-right"></i>Thông tư, quyết định</a></li>
                                         <li><a href="{{ url('danh_muc/thuetncn/index') }}">
                                                 <i class="fa fa-caret-right"></i>Thuế thu nhập cá nhân</a></li>
-                                                <li><a href="{{ url('danh_muc/nhomphanloaict/index') }}">
-                                                    <i class="fa fa-caret-right"></i>Nhóm phân loại công tác</a></li>
+                                        <li><a href="{{ url('danh_muc/nhomphanloaict/index') }}">
+                                                <i class="fa fa-caret-right"></i>Nhóm phân loại công tác</a></li>
                                     </ul>
                                 </li>
 
@@ -778,7 +778,11 @@
     </div>
     </div-->
                 <!-- END PAGE BREADCRUMB -->
-
+                @if (session('admin')->thongbao != '')
+                    <marquee>
+                        <b style="color: #ff0000">Thông báo: {!! html_entity_decode(session('admin')->thongbao) !!}</b>
+                    </marquee>
+                @endif
                 @yield('content')
             </div>
         </div>
