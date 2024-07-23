@@ -119,6 +119,7 @@ class nguonkinhphiController extends Controller
             $model = hosocanbo::select($a_th)->where('madv', session('admin')->madv)
                 ->where('theodoi', '<', '9')
                 ->get();
+            $m_cb_kiemtra = $model->keyBy('macanbo')->toarray();//Lấy danh sách cán bộ để kiểm tra cho kiêm nhiệm
 
             $m_thoict = hosothoicongtac::where('madv', session('admin')->madv)
                 ->wherebetween('ngaynghi', [$model_thongtu->ngayapdung, $inputs['namdt'] . '-12-31'])->get();
@@ -335,15 +336,15 @@ class nguonkinhphiController extends Controller
                 $m_nb = array();
                 $m_tnn = array();
             }
-
+            // dd($m_cb_kn->where('macanbo','1511585824_1541647136'));
+            $i_kn = 0;
             foreach ($m_cb_kn as $key => $ct) {
-                if (!isset($m_cb[$ct->macanbo])) {
+                if (!isset($m_cb_kiemtra[$ct->macanbo])) {
                     $m_cb_kn->forget($key);
                     continue;
                 }
-                $ct->macongtac = $a_congtac[$ct->mact];
-                // dd($ct);
-                $canbo = $m_cb[$ct->macanbo];
+                $ct->macongtac = $a_congtac[$ct->mact];                
+                $canbo = $m_cb_kiemtra[$ct->macanbo];
                 $ct->tencanbo = $canbo['tencanbo'];
                 $ct->stt = $canbo['stt'];
                 $ct->msngbac = $canbo['msngbac'];
@@ -368,11 +369,11 @@ class nguonkinhphiController extends Controller
                 $ct->kpcd_dv = 0;
                 $ct->masodv = $masodv;
                 $ct->lvhd = $canbo['lvhd'];
-                // $a_kq = $ct->toarray();
-                // unset($a_kq['phanloai']);
-                // $m_cb[$ct->macanbo . '_' . $i++] = $a_kq;
+                $a_kq = $ct->toarray();
+                unset($a_kq['phanloai']);
+                $m_cb[$ct->macanbo . '_' . $i_kn++] = $a_kq;
             }
-
+            //dd($m_cb);
             foreach ($m_nh as $key => $val) {
                 $canbo = $this->getHeSoPc_nh($a_pc, $m_nh[$key]);
                 if ($canbo['tonghs'] > 0) {
@@ -476,6 +477,7 @@ class nguonkinhphiController extends Controller
                 }
             }
             // dd($m_cb);
+            /*2024.07.23 bỏ phần này do đã add kiêm nhiệm ở phần trên
             //TÍnh lương cho phu cấp kiêm nhiệm
             $i = 1;
             foreach ($m_cb_kn as $val) {
@@ -489,7 +491,7 @@ class nguonkinhphiController extends Controller
                     $m_cb[$ct->macanbo . '_' . $i++] = $a_kq;
             }
             //Lọc lại các cán bộ có tonghs = 0;
-
+*/
 
             //dd($m_cb['1565583148_1669774144_1']);
             $a_thang = array(

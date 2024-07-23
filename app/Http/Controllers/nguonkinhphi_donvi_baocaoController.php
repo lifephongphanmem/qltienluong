@@ -76,7 +76,7 @@ class nguonkinhphi_donvi_baocaoController extends Controller
             });
             $model_congtac = a_unique($model_congtac);
 
-            // dd($model);
+            // dd($model->where('thang','07')->where('mact','1536459380')->toarray());
             $a_phongban = array_column(dmphongban::where('madv', $model_thongtin->madv)->get()->toArray(), 'tenpb', 'mapb');
 
             return view('reports.nguonkinhphi.donvi.bangluong')

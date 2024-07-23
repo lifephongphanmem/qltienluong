@@ -758,25 +758,8 @@
         <!-- BEGIN CONTENT -->
         <div class="page-content-wrapper">
             <div class="page-content" style="padding-top: 0px;">
-                <!-- BEGIN PAGE BREADCRUMB -->
-                <!--div class="page-bar">
-    <ul class="page-breadcrumb breadcrumb">
-    <li>
-    <i class="fa fa-home"></i>
-        <a href="{{ url('') }}">Trang chủ</a>
-    <i class="fa fa-angle-right"></i>
-    </li>
-    <li>
-    {{ $pageTitle }}
-    </li>
-    </ul>
+                {{ $pageTitle }}
 
-    <div class="page-toolbar">
-    <div class="page-toolbar">
-    <b><div id="clock"></div></b>
-    </div>
-    </div>
-    </div-->
                 <!-- END PAGE BREADCRUMB -->
                 @if (session('admin')->thongbao != '')
                     <marquee>
