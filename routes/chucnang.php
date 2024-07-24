@@ -380,6 +380,7 @@ Route::group(['prefix' => 'chuc_nang'], function () {
             Route::post('mau2l', 'tonghopnguon_huyenController@mau2l');
             
             Route::post('mau4a', 'tonghopnguon_huyenController@mau4a');
+            Route::post('mau4a_a', 'tonghopnguon_huyenController@mau4a_a');
             Route::post('mau4b', 'tonghopnguon_huyenController@mau4b');
             //2023.06.20 Dữ liệu đơn vị quản lý nhập
             Route::post('dulieu_dvql', 'tonghopnguon_huyenController@luu_dulieu_dvql');

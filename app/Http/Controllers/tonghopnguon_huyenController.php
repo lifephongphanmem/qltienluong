@@ -309,6 +309,13 @@ class tonghopnguon_huyenController extends Controller
                 'phucapchucvu_2c',
                 'phucapvuotkhung_2c',
                 'phucaptnn_2c',
+                //Mẫu 2a_nd73
+                'quythuong_2a',
+                'thuchien2',
+                'nsnngiam',
+                'tongnhucau1',
+                'nguonketdu_4a',
+                'nguontralai_4a',
             ];
             foreach ($a_truong  as $truong) {
                 if (isset($inputs[$truong]))
@@ -5691,6 +5698,256 @@ class tonghopnguon_huyenController extends Controller
                     ->with('inputs', $inputs)
                     ->with('pageTitle', 'Danh sách nguồn kinh phí của đơn vị');
             }
+        } else
+            return view('errors.notlogin');
+    }
+
+    //Mẫu 4a phần A
+    function mau4a_a(Request $request)
+    {
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $m_thongtu = dmthongtuquyetdinh::where('sohieu', $inputs['sohieu'])->first();
+            $m_banhanh = nguonkinhphi::where('madv', $inputs['macqcq'])->where('sohieu', $inputs['sohieu'])->first();
+            $m_nguonkp = nguonkinhphi::where(function ($qr) use ($inputs) {
+                $qr->where('macqcq', $inputs['macqcq'])->where('trangthai', 'DAGUI')->where('sohieu', $inputs['sohieu']);
+            })->orwhere(function ($qr) use ($inputs) {
+                $qr->where('madv', $inputs['macqcq'])->where('sohieu', $inputs['sohieu']);
+            })->get();
+            $m_dsdv = dmdonvi::all();
+            $a_thongtindv = array_column($m_dsdv->toArray(), 'tendv', 'madv');
+            //dd($m_nguonkp->toarray());
+            foreach ($m_nguonkp as $chitiet) {
+                $chitiet->tendv = $a_thongtindv[$chitiet->madv];
+                if ($chitiet->maphanloai == 'KVXP') {
+                    $chitiet->nhomnhucau = 'CANBOCT';
+                } else {
+                    $chitiet->nhomnhucau = 'BIENCHE';
+                }
+                //Tính trc các số liệu tổng
+                $chitiet->tonghuydong = $chitiet->huydongktx_khac_4a + $chitiet->huydongktx_vienphi_4a + $chitiet->huydongktx_hocphi_4a;
+                $chitiet->tongcong = $chitiet->thuchien1 + $chitiet->thuchien2 +  $chitiet->tietkiem + $chitiet->tonghuydong
+                    +  $chitiet->nsnngiam + $chitiet->caicach + $chitiet->nguonketdu_4a + $chitiet->nguontralai_4a;
+            }
+
+            $ar_I = getHCSN();
+            $dulieu_pI = $m_nguonkp->where('nhomnhucau', 'BIENCHE');
+
+            //Vòng cấp độ 3
+            foreach ($ar_I as $key => $chitiet) {
+                if ($chitiet['phanloai'] == '0') {
+                    $dulieu_chitiet = $dulieu_pI;
+                    foreach ($chitiet['chitiet'] as $k => $v) {
+                        $dulieu_nguonkp = $dulieu_chitiet->where($k, $v);;
+                    }
+                    $ar_I[$key]['thuchien1'] = $dulieu_nguonkp->sum('thuchien1');
+                    $ar_I[$key]['thuchien2'] = $dulieu_nguonkp->sum('thuchien2');
+                    $ar_I[$key]['tietkiem'] = $dulieu_nguonkp->sum('tietkiem');
+
+                    $ar_I[$key]['huydongktx_hocphi_4a'] = $dulieu_nguonkp->sum('huydongktx_hocphi_4a');
+                    $ar_I[$key]['huydongktx_vienphi_4a'] = $dulieu_nguonkp->sum('huydongktx_vienphi_4a');
+                    $ar_I[$key]['huydongktx_khac_4a'] = $dulieu_nguonkp->sum('huydongktx_khac_4a');
+                    $ar_I[$key]['tonghuydong'] = $dulieu_nguonkp->sum('tonghuydong');
+
+                    $ar_I[$key]['nsnngiam'] = $dulieu_nguonkp->sum('nsnngiam');
+                    $ar_I[$key]['caicach'] = $dulieu_nguonkp->sum('caicach');
+                    $ar_I[$key]['nguonketdu_4a'] = $dulieu_nguonkp->sum('nguonketdu_4a');
+                    $ar_I[$key]['nguontralai_4a'] = $dulieu_nguonkp->sum('nguontralai_4a');
+                    $ar_I[$key]['tongcong'] =  $dulieu_nguonkp->sum('tongcong');;
+                }
+            }
+            //Vòng cấp độ 2
+            foreach ($ar_I as $key => $chitiet) {
+                if ($chitiet['capdo'] == '2') {
+                    $ar_I[$key]['thuchien1'] = 0;
+                    $ar_I[$key]['thuchien2'] = 0;
+                    $ar_I[$key]['tietkiem'] = 0;
+
+                    $ar_I[$key]['huydongktx_hocphi_4a'] = 0;
+                    $ar_I[$key]['huydongktx_vienphi_4a'] = 0;
+                    $ar_I[$key]['huydongktx_khac_4a'] = 0;
+                    $ar_I[$key]['tonghuydong'] =  0;
+
+                    $ar_I[$key]['nsnngiam'] = 0;
+                    $ar_I[$key]['caicach'] = 0;
+                    $ar_I[$key]['nguonketdu_4a'] = 0;
+                    $ar_I[$key]['nguontralai_4a'] = 0;
+                    $ar_I[$key]['tongcong'] = 0;
+
+                    foreach ($chitiet['chitiet'] as $k) {
+                        $ar_I[$key]['thuchien1'] += $ar_I[$k]['thuchien1'];
+                        $ar_I[$key]['thuchien2'] += $ar_I[$k]['thuchien2'];
+                        $ar_I[$key]['tietkiem'] += $ar_I[$k]['tietkiem'];
+
+                        $ar_I[$key]['huydongktx_hocphi_4a'] += $ar_I[$k]['huydongktx_hocphi_4a'];
+                        $ar_I[$key]['huydongktx_vienphi_4a'] += $ar_I[$k]['huydongktx_vienphi_4a'];
+                        $ar_I[$key]['huydongktx_khac_4a'] += $ar_I[$k]['huydongktx_khac_4a'];
+                        $ar_I[$key]['tonghuydong'] +=  $ar_I[$k]['tonghuydong'];
+
+                        $ar_I[$key]['nsnngiam'] += $ar_I[$k]['nsnngiam'];
+                        $ar_I[$key]['caicach'] += $ar_I[$k]['caicach'];
+                        $ar_I[$key]['nguonketdu_4a'] += $ar_I[$k]['nguonketdu_4a'];
+                        $ar_I[$key]['nguontralai_4a'] += $ar_I[$k]['nguontralai_4a'];
+                        $ar_I[$key]['tongcong'] += $ar_I[$k]['tongcong'];
+                    }
+                }
+            }
+            //Vòng cấp độ 1
+            foreach ($ar_I as $key => $chitiet) {
+                if ($chitiet['capdo'] == '1') {
+                    $ar_I[$key]['thuchien1'] = 0;
+                    $ar_I[$key]['thuchien2'] = 0;
+                    $ar_I[$key]['tietkiem'] = 0;
+
+                    $ar_I[$key]['huydongktx_hocphi_4a'] = 0;
+                    $ar_I[$key]['huydongktx_vienphi_4a'] = 0;
+                    $ar_I[$key]['huydongktx_khac_4a'] = 0;
+                    $ar_I[$key]['tonghuydong'] =  0;
+
+                    $ar_I[$key]['nsnngiam'] = 0;
+                    $ar_I[$key]['caicach'] = 0;
+                    $ar_I[$key]['nguonketdu_4a'] = 0;
+                    $ar_I[$key]['nguontralai_4a'] = 0;
+                    $ar_I[$key]['tongcong'] = 0;
+
+                    foreach ($chitiet['chitiet'] as $k) {
+                        $ar_I[$key]['thuchien1'] += $ar_I[$k]['thuchien1'];
+                        $ar_I[$key]['thuchien2'] += $ar_I[$k]['thuchien2'];
+                        $ar_I[$key]['tietkiem'] += $ar_I[$k]['tietkiem'];
+
+                        $ar_I[$key]['huydongktx_hocphi_4a'] += $ar_I[$k]['huydongktx_hocphi_4a'];
+                        $ar_I[$key]['huydongktx_vienphi_4a'] += $ar_I[$k]['huydongktx_vienphi_4a'];
+                        $ar_I[$key]['huydongktx_khac_4a'] += $ar_I[$k]['huydongktx_khac_4a'];
+                        $ar_I[$key]['tonghuydong'] +=  $ar_I[$k]['tonghuydong'];
+
+                        $ar_I[$key]['nsnngiam'] += $ar_I[$k]['nsnngiam'];
+                        $ar_I[$key]['caicach'] += $ar_I[$k]['caicach'];
+                        $ar_I[$key]['nguonketdu_4a'] += $ar_I[$k]['nguonketdu_4a'];
+                        $ar_I[$key]['nguontralai_4a'] += $ar_I[$k]['nguontralai_4a'];
+                        $ar_I[$key]['tongcong'] += $ar_I[$k]['tongcong'];
+                    }
+                }
+            }
+            //Vòng cấp độ 9
+            foreach ($ar_I as $key => $chitiet) {
+                if ($chitiet['capdo'] == '9') {
+                    $ar_I[$key]['thuchien1'] = 0;
+                    $ar_I[$key]['thuchien2'] = 0;
+                    $ar_I[$key]['tietkiem'] = 0;
+
+                    $ar_I[$key]['huydongktx_hocphi_4a'] = 0;
+                    $ar_I[$key]['huydongktx_vienphi_4a'] = 0;
+                    $ar_I[$key]['huydongktx_khac_4a'] = 0;
+                    $ar_I[$key]['tonghuydong'] =  0;
+
+                    $ar_I[$key]['nsnngiam'] = 0;
+                    $ar_I[$key]['caicach'] = 0;
+                    $ar_I[$key]['nguonketdu_4a'] = 0;
+                    $ar_I[$key]['nguontralai_4a'] = 0;
+                    $ar_I[$key]['tongcong'] = 0;
+                }
+            }
+            //
+
+            //Tính toán số liệu phần II
+            $ar_II = getChuyenTrach();
+            $dulieu_pII = $m_nguonkp->where('nhomnhucau', 'CANBOCT');
+
+            //Vòng cấp độ 3
+            foreach ($ar_II as $key => $chitiet) {
+                if ($chitiet['phanloai'] == '0') {
+                    $dulieu_chitiet = $dulieu_pII;
+                    foreach ($chitiet['chitiet'] as $k => $v) {
+                        $dulieu_nguonkp = $dulieu_chitiet->where($k, $v);;
+                    }
+                    //dd($dulieu_nguonkp);
+                    $ar_II[$key]['thuchien1'] = $dulieu_nguonkp->sum('thuchien1');
+                    $ar_II[$key]['thuchien2'] = $dulieu_nguonkp->sum('thuchien2');
+                    $ar_II[$key]['tietkiem'] = $dulieu_nguonkp->sum('tietkiem');
+                    $ar_II[$key]['huydongktx_hocphi_4a'] = $dulieu_nguonkp->sum('huydongktx_hocphi_4a');
+                    $ar_II[$key]['huydongktx_vienphi_4a'] = $dulieu_nguonkp->sum('huydongktx_vienphi_4a');
+                    $ar_II[$key]['huydongktx_khac_4a'] = $dulieu_nguonkp->sum('huydongktx_khac_4a');
+                    $ar_II[$key]['tonghuydong'] =  $dulieu_nguonkp->sum('tonghuydong');
+                    $ar_II[$key]['nsnngiam'] = $dulieu_nguonkp->sum('nsnngiam');
+                    $ar_II[$key]['caicach'] = $dulieu_nguonkp->sum('caicach');
+                    $ar_II[$key]['nguonketdu_4a'] = $dulieu_nguonkp->sum('nguonketdu_4a');
+                    $ar_II[$key]['nguontralai_4a'] = $dulieu_nguonkp->sum('nguontralai_4a');
+                    $ar_II[$key]['tongcong'] =  $dulieu_nguonkp->sum('tongcong');;
+                }
+            }
+            //dd($ar_II);
+            //Tính toán tổng cộng
+            $a_Tong = [
+                'thuchien1' => $ar_I[0]['thuchien1'] + $ar_II[0]['thuchien1'],
+                'thuchien2' => $ar_I[0]['thuchien2'] + $ar_II[0]['thuchien2'],
+                'tietkiem' => $ar_I[0]['tietkiem'] + $ar_II[0]['tietkiem'],
+                'huydongktx_hocphi_4a' => $ar_I[0]['huydongktx_hocphi_4a'] + $ar_II[0]['huydongktx_hocphi_4a'],
+                'huydongktx_vienphi_4a' => $ar_I[0]['huydongktx_vienphi_4a'] + $ar_II[0]['huydongktx_vienphi_4a'],
+                'huydongktx_khac_4a' => $ar_I[0]['huydongktx_khac_4a'] + $ar_II[0]['huydongktx_khac_4a'],
+                'tonghuydong' => $ar_I[0]['tonghuydong'] + $ar_II[0]['tonghuydong'],
+
+                'nsnngiam' => $ar_I[0]['nsnngiam'] + $ar_II[0]['nsnngiam'],
+                'caicach' => $ar_I[0]['caicach'] + $ar_II[0]['caicach'],
+                'nguonketdu_4a' => $ar_I[0]['nguonketdu_4a'] + $ar_II[0]['nguonketdu_4a'],
+                'nguontralai_4a' => $ar_I[0]['nguontralai_4a'] + $ar_II[0]['nguontralai_4a'],
+                'tongcong' => $ar_I[0]['tongcong'] + $ar_II[0]['tongcong'],
+            ];
+
+            $m_nhomgiaoduc = $m_nguonkp->where('linhvuchoatdong', 'GD');
+            $m_chitiet = $m_nguonkp->where('linhvuchoatdong', '<>', 'GD');
+
+            $a_giaoduc = [
+                'MAMNON' => 'Khối Trường Mầm non',
+                'TIEUHOC' => 'Khối Trường Tiểu học',
+                'THCS' => 'Khối Trường Trung học cơ sở',
+                'THvaTHCS' => 'Khối Trường Tiểu học và Trung học cơ sở',
+            ];
+
+            foreach ($a_giaoduc as $key => $val) {
+                $dulieu = $m_nhomgiaoduc->where('maphanloai', $key);
+                if ($dulieu->count() == 0) {
+                    continue;
+                }
+                $chitiet = clone $m_nhomgiaoduc->first();
+                $chitiet->madv = $key;
+                $chitiet->tendv = $val;
+                $chitiet->tenct = $v;
+                $chitiet->mact = $k;
+                $chitiet->linhvuchoatdong = 'GD';
+                //gán số liệu
+                $chitiet->thuchien1 = $dulieu->sum('thuchien1');
+                $chitiet->thuchien2 = $dulieu->sum('thuchien2');
+                $chitiet->tietkiem = $dulieu->sum('tietkiem');
+                $chitiet->huydongktx_hocphi_4a = $dulieu->sum('huydongktx_hocphi_4a');
+                $chitiet->huydongktx_vienphi_4a = $dulieu->sum('huydongktx_vienphi_4a');
+                $chitiet->huydongktx_khac_4a = $dulieu->sum('huydongktx_khac_4a');
+                $chitiet->tonghuydong = $dulieu->sum('tonghuydong');
+                $chitiet->nsnngiam = $dulieu->sum('nsnngiam');
+                $chitiet->caicach = $dulieu->sum('caicach');
+                $chitiet->nguonketdu_4a = $dulieu->sum('nguonketdu_4a');
+                $chitiet->nguontralai_4a = $dulieu->sum('nguontralai_4a');
+                $chitiet->tongcong = $dulieu->sum('tongcong');
+                //Gán vào chi tiết để dải
+                $m_chitiet->add($chitiet);
+            }
+            // dd($m_nhomgiaoduc->toarray());
+            $m_donvi = dmdonvi::where('madv', $inputs['macqcq'])->first();
+            // dd($m_chitiet);
+            return view('reports.nghidinh73.huyen.mau4a_a')
+                ->with('furl', '/tong_hop_bao_cao/')
+                ->with('ar_I', $ar_I)
+                ->with('ar_II', $ar_II)
+
+                ->with('a_Tong', $a_Tong)
+                ->with('m_dv', $m_donvi)
+                ->with('m_chitiet', $m_chitiet)
+                ->with('inputs', $inputs)
+
+                ->with('m_banhanh', $m_banhanh)
+                ->with('m_thongtu', $m_thongtu)
+                ->with('a_nhomgd', array_keys($a_giaoduc))
+                ->with('m_nhomgiaoduc', $m_nhomgiaoduc->sortby('maqhns'))
+                ->with('pageTitle', 'Báo cáo nhu cầu kinh phí');
         } else
             return view('errors.notlogin');
     }

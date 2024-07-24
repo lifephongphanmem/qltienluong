@@ -318,6 +318,18 @@
                     </div>
                 </div>
 
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <button type="button" onclick="insolieu('{{ $furl_th . 'mau4a_a' }}',null)"
+                                style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                data-target="#modal-insolieu" data-toggle="modal">
+                                <i class="fa fa-print"></i>&nbsp;Báo cáo nguồn kinh phí để thực hiện cải cách tiền lương
+                                (Mẫu 4a - Phần A)</button>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="row" id="btnIn4b">
                     <div class="col-md-12">
                         <div class="form-group">
