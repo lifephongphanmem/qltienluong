@@ -22,7 +22,7 @@ class tonghopnguon_tinhController extends Controller
             $inputs = $request->all();
             $model_nguon_tinh = nguonkinhphi_tinh::where('sohieu', $inputs['sohieu'])->where('trangthai','DAGUI')->get();
            
-            $model = dmdonvibaocao::where('level', 'H')->get();
+            $model = dmdonvibaocao::where('level', 'H')->where('baocao','1')->get();
             // dd($model);
             $a_trangthai = getStatus();
             foreach ($model as $val) {

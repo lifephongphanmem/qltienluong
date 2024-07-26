@@ -56,6 +56,7 @@
                                 <th class="text-center">Tên khu vực, địa bàn</th>
                                 <th class="text-center">Đơn vị tổng hợp số liệu</th>
                                 <th class="text-center">Trạng thái ký bảo trì</th>
+                                <th class="text-center">Báo cáo số liệu</th>
                                 <th class="text-center">Thao tác</th>
                             </tr>
                         </thead>
@@ -67,6 +68,7 @@
                                         <td>{{$value->tendvbc}}</td>
                                         <td>{{$value->tendv}}</td>
                                         <td>{{$value->kybaotri == 0?'Chưa ký bảo trì': 'Đã ký bảo trì'}}</td>
+                                        <td>{{$a_baocao[$value->baocao] ?? $value->baocao}}</td>
                                         <td>
                                             <a href="{{url('/danh_muc/khu_vuc/chi_tiet?ma_so='.$value->madvbc.'&phan_loai=SD')}}" class="btn btn-default btn-xs mbs">
                                                 <i class="fa fa-list-alt"></i>&nbsp; Danh sách đơn vị</a>
@@ -109,6 +111,9 @@
 
                     <label class="form-control-label">Ký hợp đồng bảo trì</label>
                     {!! Form::select('kybaotri',$kybaotri,null,array('id' => 'kybaotri', 'class' => 'form-control'))!!}
+
+                    <label class="form-control-label">Báo cáo cấp trên</label>
+                    {!! Form::select('baocao',$a_baocao,null,array('id' => 'baocao', 'class' => 'form-control'))!!}
 
                     <label class="form-control-label">Ghi chú</label>
                     {!!Form::textarea('ghichu', null, array('id' => 'ghichu','class' => 'form-control','rows'=>'3'))!!}
@@ -174,6 +179,7 @@
                     $('#level').val(data.level);
                     $('#ghichu').val(data.ghichu);
                     $('#kybaotri').val(data.kybaotri);
+                    $('#baocao').val(data.baocao);
                 },
                 error: function(message){
                     toastr.error(message,'Lỗi!');
@@ -209,6 +215,7 @@
                             level: $('#level').val(),
                             ghichu: ghichu,
                             kybaotri: kybaotri,
+                            baocao: $('#baocao').val(),
                         },
                         dataType: 'JSON',
                         success: function (data) {
@@ -230,7 +237,8 @@
                             level: $('#level').val(),
                             ghichu: ghichu,
                             madvbc: madvbc,
-                            kybaotri: kybaotri
+                            kybaotri: kybaotri,
+                            baocao: $('#baocao').val(),
                         },
                         dataType: 'JSON',
                         success: function (data) {
