@@ -74,30 +74,30 @@
             </tr>
         @endforeach
     </table>
+    <!-- 2024.07.26 bỏ chữ ký theo y.c
+        <table id="data_footer" class="header" width="96%" border="0" cellspacing="0" cellpadding="8"
+            style="margin:20px auto; text-align: center;">
+            <tr>
+                <td style="text-align: left;" width="50%"></td>
+                <td style="text-align: center; font-style: italic" width="50%">........,Ngày......tháng.......năm..........
+                </td>
+            </tr>
+            <tr style="font-weight: bold">
+                <td style="text-align: center;" width="50%"></td>
+                <td style="text-align: center;" width="50%">{{ mb_strtoupper($m_dv->cdlanhdao) }}</td>
+            </tr>
+            <tr style="font-style: italic">
+                <td style="text-align: center;" width="50%"></td>
+                <td style="text-align: center;" width="50%">(Ký tên, đóng dấu)</td>
+            </tr>
+            <tr>
+                <td><br><br><br></td>
+            </tr>
 
-    <table id="data_footer" class="header" width="96%" border="0" cellspacing="0" cellpadding="8"
-        style="margin:20px auto; text-align: center;">
-        <tr>
-            <td style="text-align: left;" width="50%"></td>
-            <td style="text-align: center; font-style: italic" width="50%">........,Ngày......tháng.......năm..........
-            </td>
-        </tr>
-        <tr style="font-weight: bold">
-            <td style="text-align: center;" width="50%"></td>
-            <td style="text-align: center;" width="50%">{{ mb_strtoupper($m_dv->cdlanhdao) }}</td>
-        </tr>
-        <tr style="font-style: italic">
-            <td style="text-align: center;" width="50%"></td>
-            <td style="text-align: center;" width="50%">(Ký tên, đóng dấu)</td>
-        </tr>
-        <tr>
-            <td><br><br><br></td>
-        </tr>
-
-        <tr>
-            <td style="text-align: center;" width="50%">{{ '' }}</td>
-            <td style="text-align: center;" width="50%">{{ $m_dv->lanhdao }}</td>
-        </tr>
-    </table>
-
+            <tr>
+                <td style="text-align: center;" width="50%">{{ '' }}</td>
+                <td style="text-align: center;" width="50%">{{ $m_dv->lanhdao }}</td>
+            </tr>
+        </table>
+    -->
 @stop

@@ -34,54 +34,55 @@
         {{ $inputs['donvitinh'] == 1 ? 'Đồng' : ($inputs['donvitinh'] == 2 ? 'Nghìn đồng' : 'Triệu đồng') }}</p>
     <table id="data_body4" cellspacing="0" cellpadding="0" border="1"
         style="margin: 20px auto; font-size: 10px; border-collapse: collapse;">
-        <tr>
-            <th style="width: 2%;" rowspan="2">STT</th>
-            <th rowspan="2">NỘI DUNG</th>
-            <th style="width: 10%;" rowspan="2">TỔNG CỘNG</th>
-            <th style="width: 5%;" rowspan="2">
-                70% tăng thu NSĐP
-            </th>
-            <th style="width: 5%;" rowspan="2">
-                50% tăng thu NSĐP
-            </th>
+        <thead>
+            <tr>
+                <th style="width: 2%;" rowspan="2">STT</th>
+                <th rowspan="2">NỘI DUNG</th>
+                <th style="width: 10%;" rowspan="2">TỔNG CỘNG</th>
+                <th style="width: 5%;" rowspan="2">
+                    70% tăng thu NSĐP
+                </th>
+                <th style="width: 5%;" rowspan="2">
+                    50% tăng thu NSĐP
+                </th>
 
-            <th style="width: 5%;" rowspan="2">
-                Số tiết kiệm chi 10 chi thường xuyên năm 2024
-            </th>
-            <th style="width: 5%;" colspan="4">
-                Số thu được huy động từ nguồn để lại đơn vị 2024
-            </th>
-            <th style="width: 5%;" rowspan="2">
-                50% phần NSNN giảm chi hỗ trợ hoạt động thường xuyên trong lĩnh vực hành chính và các đơn vị sự nghiệp công
-                lập
-            </th>
-            <th style="width: 5%;" rowspan="2">
-                Nguồn thực hiện cải cách tiền lương năm 2023 chưa sử dụng hết chuyển sang năm 2024
-            </th>
-            <th style="width: 5%;" rowspan="2">
-                70% kết dư ngân sách năm 2023
-            </th>
-            <th style="width: 5%;" rowspan="2">
-                Bố trí trả lại nguồn cải cách tiền lương của các năm trước
-            </th>
-        </tr>
+                <th style="width: 5%;" rowspan="2">
+                    Số tiết kiệm chi 10 chi thường xuyên năm 2024
+                </th>
+                <th style="width: 5%;" colspan="4">
+                    Số thu được huy động từ nguồn để lại đơn vị 2024
+                </th>
+                <th style="width: 5%;" rowspan="2">
+                    50% phần NSNN giảm chi hỗ trợ hoạt động thường xuyên trong lĩnh vực hành chính và các đơn vị sự nghiệp
+                    công
+                    lập
+                </th>
+                <th style="width: 5%;" rowspan="2">
+                    Nguồn thực hiện cải cách tiền lương năm 2023 chưa sử dụng hết chuyển sang năm 2024
+                </th>
+                <th style="width: 5%;" rowspan="2">
+                    70% kết dư ngân sách năm 2023
+                </th>
+                <th style="width: 5%;" rowspan="2">
+                    Bố trí trả lại nguồn cải cách tiền lương của các năm trước
+                </th>
+            </tr>
 
-
-        <tr style="font-weight: bold; text-align: center">
-            <th style="width: 5%;">
-                Tổng
-            </th>
-            <th style="width: 3%;">
-                Học phí
-            </th>
-            <th style="width: 3%;">
-                Viện phí
-            </th>
-            <th style="width: 3%;">
-                Nguồn thu khác
-            </th>
-        </tr>
-
+            <tr style="font-weight: bold; text-align: center">
+                <th style="width: 5%;">
+                    Tổng
+                </th>
+                <th style="width: 3%;">
+                    Học phí
+                </th>
+                <th style="width: 3%;">
+                    Viện phí
+                </th>
+                <th style="width: 3%;">
+                    Nguồn thu khác
+                </th>
+            </tr>
+        </thead>
         <tr style="font-weight: bold;text-align: center">
             <td style="text-align: center"></td>
             <td style="text-align: left">TỔNG SỐ</td>
@@ -236,29 +237,30 @@
             @endforeach
         @endforeach
     </table>
+    <!-- 2024.07.26 bỏ chữ ký theo y.c
+        <table id="data_footer" class="header" width="96%" border="0" cellspacing="0" cellpadding="8"
+            style="margin:20px auto; text-align: center;">
+            <tr>
+                <td style="text-align: left;" width="50%"></td>
+                <td style="text-align: center; font-style: italic" width="50%">........,Ngày......tháng.......năm..........
+                </td>
+            </tr>
+            <tr style="font-weight: bold">
+                <td style="text-align: center;" width="50%"></td>
+                <td style="text-align: center;" width="50%">{{ $m_dv->cdlanhdao }}</td>
+            </tr>
+            <tr style="font-style: italic">
+                <td style="text-align: center;" width="50%"></td>
+                <td style="text-align: center;" width="50%">(Ký tên, đóng dấu)</td>
+            </tr>
+            <tr>
+                <td><br><br><br></td>
+            </tr>
 
-    <table id="data_footer" class="header" width="96%" border="0" cellspacing="0" cellpadding="8"
-        style="margin:20px auto; text-align: center;">
-        <tr>
-            <td style="text-align: left;" width="50%"></td>
-            <td style="text-align: center; font-style: italic" width="50%">........,Ngày......tháng.......năm..........
-            </td>
-        </tr>
-        <tr style="font-weight: bold">
-            <td style="text-align: center;" width="50%"></td>
-            <td style="text-align: center;" width="50%">{{ $m_dv->cdlanhdao }}</td>
-        </tr>
-        <tr style="font-style: italic">
-            <td style="text-align: center;" width="50%"></td>
-            <td style="text-align: center;" width="50%">(Ký tên, đóng dấu)</td>
-        </tr>
-        <tr>
-            <td><br><br><br></td>
-        </tr>
-
-        <tr>
-            <td style="text-align: center;" width="50%">{{ '' }}</td>
-            <td style="text-align: center;" width="50%">{{ $m_dv->lanhdao }}</td>
-        </tr>
-    </table>
+            <tr>
+                <td style="text-align: center;" width="50%">{{ '' }}</td>
+                <td style="text-align: center;" width="50%">{{ $m_dv->lanhdao }}</td>
+            </tr>
+        </table>
+    -->
 @stop
