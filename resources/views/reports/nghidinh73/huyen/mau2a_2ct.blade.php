@@ -326,7 +326,8 @@
                     {{ dinhdangso($dulieu['quythuong'], 0, $inputs['donvitinh']) }}</td>
             </tr>
             <?php
-            $model = $dulieu_pII->where('maphanloai', $dulieu['chitiet']['maphanloai']);
+            $model = $dulieu_pII;
+            // $model = $dulieu_pII->where('maphanloai', $dulieu['chitiet']['maphanloai']);
             $a_dv = array_unique(array_column($model->toarray(), 'tendv', 'madv'));
             $idv = 1;
             ?>

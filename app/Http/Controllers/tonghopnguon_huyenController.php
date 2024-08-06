@@ -2066,7 +2066,12 @@ class tonghopnguon_huyenController extends Controller
             $m_plct = dmphanloaict::all();
             $a_nhomplct_hc = array_column($m_plct->toArray(), 'nhomnhucau_hc', 'mact');
             $a_nhomplct_xp = array_column($m_plct->toArray(), 'nhomnhucau_xp', 'mact');
-            foreach ($m_chitiet as $chitiet) {
+            $a_plct_nhucau = getPLCTNhuCau();
+            foreach ($m_chitiet as $key => $chitiet) {
+                if (!in_array($chitiet->mact, $a_plct_nhucau)) { //Lọc các phân loại công tác ko tổng hợp
+                    $m_chitiet->forget($key);
+                    continue;
+                }
                 $chitiet->madv = $a_donvi[$chitiet->masodv];
                 //$chitiet->madvbc = $a_madvbc[$chitiet->madv];
 
@@ -2701,9 +2706,14 @@ class tonghopnguon_huyenController extends Controller
             $m_plct = dmphanloaict::all();
             $a_nhomplct_hc = array_column($m_plct->toArray(), 'nhomnhucau_hc', 'mact');
             $a_nhomplct_xp = array_column($m_plct->toArray(), 'nhomnhucau_xp', 'mact');
-
+            $a_plct_nhucau = getPLCTNhuCau();
             $a_donvibienche = [];
-            foreach ($m_chitiet as $chitiet) {
+            foreach ($m_chitiet as $key => $chitiet) {
+                if (!in_array($chitiet->mact, $a_plct_nhucau)) { //Lọc các phân loại công tác ko tổng hợp
+                    $m_chitiet->forget($key);
+                    continue;
+                }
+                //Tính toán số liệu
                 $chitiet->madv = $a_donvi[$chitiet->masodv];
                 $chitiet->tendv = $a_thongtindv[$chitiet->madv];
                 $chitiet->machuong = $a_chuong[$chitiet->madv];
@@ -2718,8 +2728,14 @@ class tonghopnguon_huyenController extends Controller
                 } else {
                     $chitiet->nhomnhucau = $a_nhomplct_hc[$chitiet->mact];
                 }
-                //lấy thông tin cán bộ dự toán cho nhóm biên chế
 
+                //2024.08.06 chỉ lấy cán bộ biên chế cho nhóm BIENCHE
+                if ($chitiet->nhomnhucau == 'BIENCHE' && $chitiet->mact != '1506672780') {
+                    $m_chitiet->forget($key);
+                    continue;
+                }
+
+                //lấy thông tin cán bộ dự toán cho nhóm biên chế
                 if (!in_array($chitiet->madv, $a_donvibienche) && in_array($chitiet->nhomnhucau, ['BIENCHE', 'CANBOCT'])) {
                     $chitiet->canbo_dutoan = $m_nguonkp->where('masodv', $chitiet->masodv)->first()->sobiencheduocgiao ?? $chitiet->canbo_dutoan;
                     $a_donvibienche[] = $chitiet->madv;
@@ -2741,10 +2757,7 @@ class tonghopnguon_huyenController extends Controller
             //dd($m_nguonkp->where('linhvuchoatdong', 'QLNN')->toarray());
             //Tính toán số liệu phần I
             $ar_I = getHCSN();
-            //$dulieu_pI = $m_chitiet->where('maphanloai', '<>', 'KVXP');
-            // $dulieu_pI = $m_chitiet->where('nhomnhucau', 'BIENCHE');
-            //05/07/2024: Mẫu chỉ lấy phân loại công tác: biên chế(mact: 1506672780) 
-            $dulieu_pI = $m_chitiet->where('nhomnhucau', 'BIENCHE')->where('mact', '1506672780');
+            $dulieu_pI = $m_chitiet->where('nhomnhucau', 'BIENCHE');
             // dd($dulieu_pI);
             //Vòng cấp độ 3
             foreach ($ar_I as $key => $chitiet) {
@@ -3444,12 +3457,13 @@ class tonghopnguon_huyenController extends Controller
                 } else
                     $chitiet->quythuong = 0;
             }
-            
+
             //06/07/2024: Chỉ lấy biên chế
-            $m_nhomgiaoduc = $m_chitiet->where('linhvuchoatdong', 'GD')->where('mact', '1506672780');
+            //$m_nhomgiaoduc = $m_chitiet->where('linhvuchoatdong', 'GD')->where('mact', '1506672780');
+            $m_nhomgiaoduc = $m_chitiet->where('linhvuchoatdong', 'GD');
 
-            $m_chitiet = $m_chitiet->where('linhvuchoatdong', '<>', 'GD')->where('mact', '1506672780');
-
+            //$m_chitiet = $m_chitiet->where('linhvuchoatdong', '<>', 'GD')->where('mact', '1506672780');
+            $m_chitiet = $m_chitiet->where('linhvuchoatdong', '<>', 'GD');
             $a_giaoduc = [
                 'MAMNON' => 'Khối Trường Mầm non',
                 'TIEUHOC' => 'Khối Trường Tiểu học',
@@ -3502,7 +3516,7 @@ class tonghopnguon_huyenController extends Controller
             }
             // dd($m_nhomgiaoduc->toarray());
             $m_donvi = dmdonvi::where('madv', $inputs['macqcq'])->first();
-            // dd($m_chitiet);
+
             return view('reports.nghidinh73.huyen.mau2a_2ct')
                 ->with('furl', '/tong_hop_bao_cao/')
                 ->with('ar_I', $ar_I)
@@ -3556,7 +3570,13 @@ class tonghopnguon_huyenController extends Controller
             $a_nhomplct_xp = array_column($m_plct->toArray(), 'nhomnhucau_xp', 'mact');
 
             $a_donvibienche = [];
-            foreach ($m_chitiet as $chitiet) {
+
+            $a_plct_nhucau = getPLCTNhuCau();
+            foreach ($m_chitiet as $key => $chitiet) {
+                if (!in_array($chitiet->mact, $a_plct_nhucau)) { //Lọc các phân loại công tác ko tổng hợp
+                    $m_chitiet->forget($key);
+                    continue;
+                }
                 $chitiet->madv = $a_donvi[$chitiet->masodv];
                 $chitiet->tendv = $a_thongtindv[$chitiet->madv];
                 $chitiet->machuong = $a_chuong[$chitiet->madv];
@@ -3571,8 +3591,13 @@ class tonghopnguon_huyenController extends Controller
                 } else {
                     $chitiet->nhomnhucau = $a_nhomplct_hc[$chitiet->mact];
                 }
-                //lấy thông tin cán bộ dự toán cho nhóm biên chế
 
+                //2024.08.06 chỉ lấy cán bộ biên chế cho nhóm BIENCHE
+                if ($chitiet->nhomnhucau == 'BIENCHE' && $chitiet->mact != '1506672780') {
+                    $m_chitiet->forget($key);
+                    continue;
+                }
+                //lấy thông tin cán bộ dự toán cho nhóm biên chế
                 if (!in_array($chitiet->madv, $a_donvibienche) && in_array($chitiet->nhomnhucau, ['BIENCHE', 'CANBOCT'])) {
                     $chitiet->canbo_dutoan = $m_nguonkp->where('masodv', $chitiet->masodv)->first()->sobiencheduocgiao ?? $chitiet->canbo_dutoan;
                     $a_donvibienche[] = $chitiet->madv;
@@ -3600,9 +3625,8 @@ class tonghopnguon_huyenController extends Controller
             //dd($m_nguonkp->where('linhvuchoatdong', 'QLNN')->toarray());
             //Tính toán số liệu phần I
             $ar_I = getHCSN();
-          
-            //05/07/2024: Mẫu chỉ lấy phân loại công tác: biên chế(mact: 1506672780) 
-            $dulieu_pI = $m_chitiet->where('nhomnhucau', 'BIENCHE')->where('mact', '1506672780');
+
+            $dulieu_pI = $m_chitiet->where('nhomnhucau', 'BIENCHE');
             // dd($dulieu_pI);
             //Vòng cấp độ 3
             foreach ($ar_I as $key => $chitiet) {
@@ -4193,10 +4217,13 @@ class tonghopnguon_huyenController extends Controller
 
             // dd($m_chitiet->where('masodv','1511709453_1688477216'));
             //Tách nhóm giáo dục
-          
+
             //06/07/2024: Chỉ lấy biên chế
-            $m_nhomgiaoduc = $m_chitiet->where('linhvuchoatdong', 'GD')->where('mact', '1506672780');
-            $m_chitiet = $m_chitiet->where('linhvuchoatdong', '<>', 'GD')->where('mact', '1506672780');
+            // $m_nhomgiaoduc = $m_chitiet->where('linhvuchoatdong', 'GD')->where('mact', '1506672780');
+            // $m_chitiet = $m_chitiet->where('linhvuchoatdong', '<>', 'GD')->where('mact', '1506672780');
+
+            $m_nhomgiaoduc = $m_chitiet->where('linhvuchoatdong', 'GD');
+            $m_chitiet = $m_chitiet->where('linhvuchoatdong', '<>', 'GD');
 
             $a_giaoduc = [
                 'MAMNON' => 'Khối Trường Mầm non',
