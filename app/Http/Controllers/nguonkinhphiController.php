@@ -58,7 +58,7 @@ class nguonkinhphiController extends Controller
 
             $a_cqcq = array_column(dmdonvi::select('madv', 'tendv')->where('madvbc', session('admin')->madvbc)
                 ->where('phanloaitaikhoan', 'TH')->get()->toarray(), 'tendv', 'madv');
-            //dd(session('admin'));
+            //dd($inputs['sohieu']);
             return view('manage.nguonkinhphi.index')
                 //->with('furl', '/nguon_kinh_phi/')
                 ->with('inputs', $inputs)

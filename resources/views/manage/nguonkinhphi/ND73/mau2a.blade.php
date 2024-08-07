@@ -1,6 +1,6 @@
 <div id="tab2a" class="tab-pane active">
     <div class="form-body">
-        <div class="row">
+        {{-- <div class="row">
             <div class="col-md-4">
                 <div class="form-group">
                     <label class="control-label font-weight-bold">Quỹ tiền thưởng</label>
@@ -11,7 +11,7 @@
                     ]) !!}
                 </div>
             </div>
-        </div>
+        </div> --}}
         <div class="row" style="margin-top: 10px">
             <div class="col-md-12">
                 <table id="sample_4" class="table table-hover table-striped table-bordered">

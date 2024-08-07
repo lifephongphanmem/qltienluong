@@ -127,35 +127,42 @@
                     </div>
                 </div>
 
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <button type="button" onclick="ThongTinKetXuat(true,'{{ $inputs['furl'] . 'mau2d' }}',null)"
-                            style="border-width: 0px" class="btn btn-default btn-xs mbs"
-                            data-target="#mautt107-modal" data-toggle="modal">
-                            <i class="fa fa-print"></i>&nbsp;Tổng hợp kinh phí giảm theo nghị định số 33/2023/NĐ-CP -
-                            cán bộ, công chức cấp xã (Mẫu 2d)</button>
+                @if ($inputs['sohieu'] != '732024nd_cp')
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <button type="button"
+                                onclick="ThongTinKetXuat(true,'{{ $inputs['furl'] . 'mau2d' }}',null)"
+                                style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                data-target="#mautt107-modal" data-toggle="modal">
+                                <i class="fa fa-print"></i>&nbsp;Tổng hợp kinh phí giảm theo nghị định số 33/2023/NĐ-CP
+                                -
+                                cán bộ, công chức cấp xã (Mẫu 2d)</button>
+                        </div>
                     </div>
-                </div>
 
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <button type="button" onclick="ThongTinKetXuat(true,'{{ $inputs['furl'] . 'mau2e' }}',null)"
-                            style="border-width: 0px" class="btn btn-default btn-xs mbs"
-                            data-target="#mautt107-modal" data-toggle="modal">
-                            <i class="fa fa-print"></i>&nbsp;Tổng hợp kinh phí tăng theo nghị định 34/2023/NĐ-CP -
-                            người hoạt động không chuyên trách ở cấp xã, ở thôn, tổ dân phố (Mẫu 2e)</button>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <button type="button"
+                                onclick="ThongTinKetXuat(true,'{{ $inputs['furl'] . 'mau2e' }}',null)"
+                                style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                data-target="#mautt107-modal" data-toggle="modal">
+                                <i class="fa fa-print"></i>&nbsp;Tổng hợp kinh phí tăng theo nghị định 34/2023/NĐ-CP -
+                                người hoạt động không chuyên trách ở cấp xã, ở thôn, tổ dân phố (Mẫu 2e)</button>
+                        </div>
                     </div>
-                </div>
-                
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <button type="button" onclick="ThongTinKetXuat(true,'{{ $inputs['furl'] . 'mau2g' }}',null)"
-                            style="border-width: 0px" class="btn btn-default btn-xs mbs"
-                            data-target="#mautt107-modal" data-toggle="modal">
-                            <i class="fa fa-print"></i>&nbsp;Tổng hợp phụ cấp ưu đãi nghề theo nghị định số 05/2023/NĐ-CP (Mẫu 2g)</button>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <button type="button"
+                                onclick="ThongTinKetXuat(true,'{{ $inputs['furl'] . 'mau2g' }}',null)"
+                                style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                data-target="#mautt107-modal" data-toggle="modal">
+                                <i class="fa fa-print"></i>&nbsp;Tổng hợp phụ cấp ưu đãi nghề theo nghị định số
+                                05/2023/NĐ-CP (Mẫu 2g)</button>
+                        </div>
                     </div>
-                </div>      
-            </div>           
+                @endif
+            </div>
 
             <div class="row">
                 <div class="col-md-6">
@@ -167,16 +174,18 @@
                             (Mẫu 4a)</button>
                     </div>
                 </div>
-
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <button type="button" onclick="ThongTinKetXuat(true,'{{ $inputs['furl'] . 'mau4b' }}',null)"
-                            style="border-width: 0px" class="btn btn-default btn-xs mbs"
-                            data-target="#mautt107-modal" data-toggle="modal">
-                            <i class="fa fa-print"></i>&nbsp;Tổng hợp nhu cầu và nguồn thực hiện (Mẫu 4b)</button>
+                
+                @if ($inputs['sohieu'] != '732024nd_cp')
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <button type="button"
+                                onclick="ThongTinKetXuat(true,'{{ $inputs['furl'] . 'mau4b' }}',null)"
+                                style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                data-target="#mautt107-modal" data-toggle="modal">
+                                <i class="fa fa-print"></i>&nbsp;Tổng hợp nhu cầu và nguồn thực hiện (Mẫu 4b)</button>
+                        </div>
                     </div>
-                </div>
-
+                @endif
                 {{-- <div class="col-md-6">
                     <div class="form-group">
                         <button type="button" onclick="intonghopdt('{{ '/nguon_kinh_phi/printf?maso=' }}')"
@@ -237,8 +246,8 @@
             </div>
         </div>
         <input type="hidden" id="masodv" name="masodv" value="" />
-        <input type="hidden" name="sohieu" value="{{$inputs['sohieu']}}" />
-        
+        <input type="hidden" name="sohieu" value="{{ $inputs['sohieu'] }}" />
+
         <div class="modal-footer">
             <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
             <button type="submit" data-dismiss="modal" class="btn btn-success" onclick="ClickBCqd19()">Đồng
@@ -299,7 +308,7 @@
             </div>
         </div>
         <input type="hidden" id="masodv" name="masodv" value="" />
-        <input type="hidden" name="sohieu" value="{{$inputs['sohieu']}}" />
+        <input type="hidden" name="sohieu" value="{{ $inputs['sohieu'] }}" />
         <div class="modal-footer">
             <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
             <button type="submit" data-dismiss="modal" class="btn btn-success" onclick="ClickBCtt107()">Đồng
