@@ -4806,11 +4806,11 @@ class tonghopnguon_huyenController extends Controller
                 ];
 
                 $a_It = array(
-                    'tdv' =>  $ar_I[0]['solieu']['tdv'] + $ar_I[4]['solieu']['tdv'],
+                    'tdv' =>  $ar_I[0]['solieu']['tdv'] + $ar_I[7]['solieu']['tdv'],
                     'mk' => 0,
-                    'muccu' =>  $ar_I[0]['solieu']['muccu'] + $ar_I[4]['solieu']['muccu'],
-                    'mucapdung' => $ar_I[0]['solieu']['mucapdung'] + $ar_I[4]['solieu']['mucapdung'],
-                    'chenhlech' =>  $ar_I[0]['solieu']['chenhlech'] + $ar_I[4]['solieu']['chenhlech'],
+                    'muccu' =>  $ar_I[0]['solieu']['muccu'] + $ar_I[7]['solieu']['muccu'],
+                    'mucapdung' => $ar_I[0]['solieu']['mucapdung'] + $ar_I[7]['solieu']['mucapdung'],
+                    'chenhlech' =>  $ar_I[0]['solieu']['chenhlech'] + $ar_I[7]['solieu']['chenhlech'],
                 );
 
                 //dd($ar_I);
