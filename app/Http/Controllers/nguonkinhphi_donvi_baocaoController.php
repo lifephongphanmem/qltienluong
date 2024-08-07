@@ -3059,11 +3059,17 @@ class nguonkinhphi_donvi_baocaoController extends Controller
 
                         //số liệu 2c
                         if ($chitiet->phanloaixa == 'XL1') {
-                            $solieu_plxa = round(21 * $m_thongtu->chenhlech * 6);
+                            $solieu_plxa = round(22 * $m_thongtu->chenhlech * 6);
                         } else if ($chitiet->phanloaixa == 'XL2') {
-                            $solieu_plxa = round(18 * $m_thongtu->chenhlech * 6);
+                            $solieu_plxa = round(20 * $m_thongtu->chenhlech * 6);
                         } else if ($chitiet->phanloaixa == 'XL3') {
-                            $solieu_plxa = round(15 * $m_thongtu->chenhlech * 6);
+                            $solieu_plxa = round(18 * $m_thongtu->chenhlech * 6);
+                        } else if ($chitiet->phanloaixa == 'PL1') {
+                            $solieu_plxa = round(23 * $m_thongtu->chenhlech * 6);
+                        } else if ($chitiet->phanloaixa == 'PL2') {
+                            $solieu_plxa = round(21 * $m_thongtu->chenhlech * 6);
+                        } else {
+                            $solieu_plxa = round(19 * $m_thongtu->chenhlech * 6);
                         }
 
                         //Số xã biên giới
