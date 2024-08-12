@@ -50,7 +50,7 @@
             <td>1</td>
             <td>2</td>
             <td>3=1x2x1,8</td>
-            <td>4=1x3x2,34</td>
+            <td>4=1x2x2,34</td>
             <td>5=(4-3)*6</td>
         </tr>
         <tr style="font-weight: bold">
