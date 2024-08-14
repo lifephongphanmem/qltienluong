@@ -48,6 +48,7 @@
                 <th style="width: 5%;">STT</th>
                 <th>Chỉ tiêu</th>
                 <th style="width: 15%;">Tổng đơn vị hành<br>chính cấp xã, thôn</th>
+                <th style="width: 15%;">Số cán bộ tăng thêm</th>
                 <th style="width: 15%;">Mức khoán quỹ<br>phụ cấp</th>
                 <th style="width: 15%;">Kinh phí khoán lương</th>
             </tr>
@@ -57,6 +58,7 @@
                 <th>(1)</th>
                 <th>(2)</th>
                 <th>(3)</th>
+                <th>(4)</th>
             </tr>
         </thead>
 
@@ -64,7 +66,8 @@
             <td></td>
             <td class="text-center">TỔNG SỐ</td>
             <td class="text-center"></td>
-            <th class="text-center"></th>
+            <td class="text-center"></td>
+            <td class="text-center"></td>
             <td class="text-right">
                 {{ dinhdangso($model->sum('tongsotienthon') + $model->sum('sotienphanloaixa'), 0) }}
             </td>
@@ -73,6 +76,7 @@
             <td>I</td>
             <td>Xã, phường, thị trấn</td>
             <td class="text-center">{{ dinhdangso($model->count(), 0) }}</td>
+            <td></td>
             <th class="text-center">{{ dinhdangso($model->sum('phanloaixa_heso'), 0) }}</th>
             <td class="text-right">{{ dinhdangso($model->sum('sotienphanloaixa'), 0) }}
             </td>
@@ -81,10 +85,21 @@
             <td>1</td>
             <td>Xã loại 1</td>
             <td class="text-center">{{ dinhdangso($model->where('phanloaixa', 'XL1')->count(), 0) }}</td>
+            <td></td>
             {{-- <td class="text-center">{{ $model->where('phanloaixa', 'XL1')->first()->phanloaixa_heso ?? '16' }}</td> --}}
             <td class="text-center">{{ $model->where('phanloaixa', 'XL1')->first()->phanloaixa_heso ?? '' }}</td>
             <td class="text-right">
                 {{ dinhdangso($model->where('phanloaixa', 'XL1')->sum('sotienphanloaixa'), 0) }}
+            </td>
+        </tr>
+        <tr>
+            <td>-</td>
+            <td>Số cán bộ tăng thêm</td>
+            <td></td>
+            <td class="text-center">{{ dinhdangso($model->where('phanloaixa', 'XL1')->sum('socanbotangthem'), 0) }}</td>
+            <td class="text-center">1.5</td>
+            <td class="text-right">
+                {{ dinhdangso($model->where('phanloaixa', 'XL1')->sum('sotiencbtangthem'), 0) }}
             </td>
         </tr>
         <tr>
@@ -99,6 +114,16 @@
             </td>
         </tr>
         <tr>
+            <td>-</td>
+            <td>Số cán bộ tăng thêm</td>
+            <td></td>
+            <td class="text-center">{{ dinhdangso($model->where('phanloaixa', 'XL2')->sum('socanbotangthem'), 0) }}</td>
+            <td class="text-center">1.5</td>
+            <td class="text-right">
+                {{ dinhdangso($model->where('phanloaixa', 'XL2')->sum('sotiencbtangthem'), 0) }}
+            </td>
+        </tr>
+        <tr>
             <td>3</td>
             <td>Xã loại 3</td>
             <td class="text-center">{{ dinhdangso($model->where('phanloaixa', 'XL3')->count(), 0) }}</td>
@@ -110,6 +135,16 @@
                 {{ dinhdangso($model->where('phanloaixa', 'XL3')->sum('sotienphanloaixa'), 0) }}
             </td>
         </tr>
+        <tr>
+            <td>-</td>
+            <td>Số cán bộ tăng thêm</td>
+            <td></td>
+            <td class="text-center">{{ dinhdangso($model->where('phanloaixa', 'XL3')->sum('socanbotangthem'), 0) }}</td>
+            <td class="text-center">1.5</td>
+            <td class="text-right">
+                {{ dinhdangso($model->where('phanloaixa', 'XL3')->sum('sotiencbtangthem'), 0) }}
+            </td>
+        </tr>
 
         <tr style="font-weight: bold;">
             <td>II</td>
@@ -117,6 +152,7 @@
             <td class="text-center">
                 {{ dinhdangso($model->sum('tongsothon')) }}
             </td>
+            <th class="text-center"></th>
             <th class="text-center"></th>
             <td class="text-right">
                 {{ dinhdangso($model->sum('tongsotienthon'), 0) }}
@@ -133,6 +169,7 @@
             <td>-</td>
             <td>Thôn thuộc xã biên giới, hải đảo</td>
             <td class="text-center">{{ dinhdangso($model->sum('sothonxabiengioi')) }}</td>
+            <td></td>
             {{-- <td class="text-center">{{ dinhdangsothapphan($model->first()->sothonxabiengioi_heso ?? 5, 2) }}</td> --}}
             <td class="text-center">{{ dinhdangsothapphan($model->first()->sothonxabiengioi_heso ?? '', 2) }}</td>
             <td class="text-right">
@@ -145,12 +182,14 @@
             <td></td>
             <td></td>
             <td></td>
+            <td></td>
         </tr>
         <tr>
             <td>-</td>
             <td>Thôn thuộc xã khó khăn theo Quyết định 30/2007/QĐ-TTg</td>
             <td class="text-center">{{ dinhdangso($model->sum('sothonxakhokhan')) }}</td>
             {{-- <td class="text-center">{{ dinhdangsothapphan($model->first()->sothonxakhokhan_heso ?? 5, 2) }}</td> --}}
+            <td></td>
             <td class="text-center">{{ dinhdangsothapphan($model->first()->sothonxakhokhan_heso ?? '', 2) }}</td>
             <td class="text-right">
                 {{ dinhdangsothapphan($model->sum('sotienxakhokhan'), 5) }}
@@ -162,11 +201,13 @@
             <td></td>
             <td></td>
             <td></td>
+            <td></td>
         </tr>
         <tr>
             <td>-</td>
             <td>Thôn thuộc xã loại I, loại II</td>
             <td class="text-center">{{ dinhdangso($model->sum('sothonxaloai1')) }}</td>
+            <td></td>
             {{-- <td class="text-center">{{ dinhdangsothapphan($model->first()->sothonxaloai1_heso ?? 5, 2) }}</td> --}}
             <td class="text-center">{{ dinhdangsothapphan($model->first()->sothonxaloai1_heso ?? '', 2) }}</td>
             <td class="text-right">
@@ -179,11 +220,13 @@
             <td></td>
             <td></td>
             <td></td>
+            <td></td>
         </tr>
         <tr>
             <td>-</td>
             <td>Thôn thuộc xã trọng điểm, phức tạp về an ninh trật tự</td>
             <td class="text-center">{{ dinhdangso($model->sum('sothonxatrongdiem')) }}</td>
+            <td></td>
             {{-- <td class="text-center">{{ dinhdangsothapphan($model->first()->sothonxatrongdiem_heso ?? 0.5, 2) }}</td> --}}
             <td class="text-center">{{ dinhdangsothapphan($model->first()->sothonxatrongdiem_heso ?? '', 2) }}</td>
             <td class="text-right">
@@ -196,11 +239,13 @@
             <td></td>
             <td></td>
             <td></td>
+            <td></td>
         </tr>
         <tr>
             <td>-</td>
             <td>Thôn thuộc xã còn lại</td>
             <td class="text-center">{{ dinhdangso($model->sum('sothonxakhac')) }}</td>
+            <td></td>
             {{-- <td class="text-center">{{ dinhdangsothapphan($model->first()->sothonxakhac_heso ?? 3, 2) }}</td> --}}
             <td class="text-center">{{ dinhdangsothapphan($model->first()->sothonxakhac_heso ?? '', 2) }}</td>
             <td class="text-right">

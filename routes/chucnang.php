@@ -6,6 +6,8 @@ use App\Http\Controllers\dutoanluong_khoiController;
 use App\Http\Controllers\tonghopluong_huyenController;
 use App\Http\Controllers\tonghopluong_tinhController;
 use App\Http\Controllers\tonghopnguon_huyenController;
+use App\Http\Controllers\xemdulieu_dutoanController;
+use App\Http\Controllers\xemdulieucapduoiController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -311,7 +313,8 @@ Route::group(['prefix' => 'chuc_nang'], function () {
     });
 
     Route::group(['prefix' => 'xem_du_lieu'], function () {
-        Route::get('index', 'xemdulieucapduoiController@donvi_luong');
+        // Route::get('index', 'xemdulieucapduoiController@donvi_luong');
+        Route::get('index',[xemdulieucapduoiController::class,'donvi_luong']);
         Route::get('huyen', 'xemdulieucapduoiController@index_huyen');
         Route::get('tinh', 'xemdulieucapduoiController@index_tinh');
         Route::get('tinh/solieu', 'xemdulieucapduoiController@tonghop_huyen');
@@ -329,7 +332,8 @@ Route::group(['prefix' => 'chuc_nang'], function () {
         });
 
         Route::group(['prefix' => 'du_toan'], function () {
-            Route::get('khoi', 'xemdulieu_dutoanController@index_khoi');
+            // Route::get('khoi', 'xemdulieu_dutoanController@index_khoi');
+            Route::get('khoi',[xemdulieu_dutoanController::class,'index_khoi']);
             Route::get('huyen', 'xemdulieu_dutoanController@index_huyen');
             Route::get('tinh', 'xemdulieu_dutoanController@index_tinh');
             Route::post('danhsach', 'xemdulieu_dutoanController@danhsach');

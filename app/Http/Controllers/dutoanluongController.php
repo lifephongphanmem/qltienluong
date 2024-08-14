@@ -266,9 +266,11 @@ class dutoanluongController extends Controller
                 $result['message'] .= '<td>' . dinhdangsothapphan($value->$mapc, 3) . '</td>';
             }
             $result['message'] .= '<td class="text-center">';
-            $result['message'] .= '<button type="button" onclick="setChiTieu(&#39;' . $value->id . '&#39;,)" class="btn btn-default btn-xs mbs"';
-            $result['message'] .= ' data-target="#chitiet-modal" data-toggle="modal">';
-            $result['message'] .= ' <i class="fa fa-edit"></i>&nbsp; Sửa</button>';
+            // if ($value->mact == '1506672780') {
+                $result['message'] .= '<button type="button" onclick="setChiTieu(&#39;' . $value->id . '&#39;,)" class="btn btn-default btn-xs mbs"';
+                $result['message'] .= ' data-target="#chitiet-modal" data-toggle="modal">';
+                $result['message'] .= ' <i class="fa fa-edit"></i>&nbsp; Sửa</button>';
+            // }
             $result['message'] .= '</td>';
             $result['message'] .= '</tr>';
         }
@@ -561,7 +563,7 @@ class dutoanluongController extends Controller
                 $val->luongcoban = $inputs['luongcoban'];
             }
 
-            //dd($m_chitieu);
+            // dd($m_chitieu);
             //Mảng lưu thông tin dự toán chi tiết
             $inputs['luongnb_dt'] = 0;
             $inputs['luonghs_dt'] = 0;
@@ -612,6 +614,7 @@ class dutoanluongController extends Controller
             }
             //dd($inputs);   
             //Tổng hợp cán bộ chưa tuyển
+            // dd(array_unique(array_column($m_chitieu->toarray(), 'mact')));
             foreach (array_unique(array_column($m_chitieu->toarray(), 'mact')) as $data) {
                 $dutoan = [];
                 $canbo = $m_chitieu->where('mact', $data);
@@ -652,7 +655,7 @@ class dutoanluongController extends Controller
                 //Lưu dự toán
                 $a_dutoan[] = $dutoan;
             }
-            //dd($a_dutoan);
+            // dd($a_dutoan);
             $a_data = $m_bl_ct->keyBy('macanbo')->toarray();
             $a_th = $a_pc;
             foreach ($a_pc as $pc) {

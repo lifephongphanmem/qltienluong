@@ -522,7 +522,7 @@
                 },
                 dataType: 'JSON',
                 success: function(data) {
-                    console.log(data);
+                    // console.log(data);
                     $('#canbodinhmuc').val(data.slcanbodinhmuc);
                     $('#phanloaxa_heso').val(data.muckhoanphucap);
                 }

@@ -193,7 +193,7 @@
                     <div class="col-md-12">
                         <div class="form-group">
                             <button type="button"
-                                onclick="insolieu('{{ $furl_xem . 'tonghopbienche' }}', '1506672780;1506673604')"
+                                onclick="insolieu('{{ $furl_xem . 'tonghopbienche' }}', '1506672780;1506673604;1637915601')"
                                 style="border-width: 0px" class="btn btn-default btn-xs mbs"
                                 data-target="#modal-insolieu" data-toggle="modal">
                                 <i class="fa fa-print"></i>&nbsp; Tổng hợp biên chế, hệ số
