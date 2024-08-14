@@ -8,6 +8,7 @@ use App\Http\Controllers\tonghopluong_tinhController;
 use App\Http\Controllers\tonghopnguon_huyenController;
 use App\Http\Controllers\xemdulieu_dutoanController;
 use App\Http\Controllers\xemdulieucapduoiController;
+use App\Http\Controllers\tonghopnguon_tinhController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -384,6 +385,7 @@ Route::group(['prefix' => 'chuc_nang'], function () {
             Route::post('mau2l', 'tonghopnguon_huyenController@mau2l');
             
             Route::post('mau4a', 'tonghopnguon_huyenController@mau4a');
+            Route::post('mau4a_a', 'tonghopnguon_huyenController@mau4a_a');
             Route::post('mau4b', 'tonghopnguon_huyenController@mau4b');
             //2023.06.20 Dữ liệu đơn vị quản lý nhập
             Route::post('dulieu_dvql', 'tonghopnguon_huyenController@luu_dulieu_dvql');
@@ -401,7 +403,7 @@ Route::group(['prefix' => 'chuc_nang'], function () {
             Route::get('tonghop', 'tonghopnguon_khoiController@tonghop'); //tạm
         });
         Route::group(['prefix' => 'tinh'], function () {
-            Route::get('index', 'tonghopnguon_tinhController@index');
+            Route::get('index', [tonghopnguon_tinhController::class,'index']);
             Route::post('tralai', 'tonghopnguon_tinhController@tralai');
             Route::get('getlydo', 'tonghopnguon_tinhController@getlydo');
         });

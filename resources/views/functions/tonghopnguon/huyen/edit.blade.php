@@ -100,6 +100,10 @@
                 @switch($m_thongtu->masobaocao)
                     @case('TT78_2022')
                         @include('functions.tonghopnguon.huyen.edit_chitiet_78')
+                    @break                  
+
+                    @case('ND73_2024')
+                        @include('functions.tonghopnguon.huyen.edit_chitiet_73')
                     @break
 
                     @default

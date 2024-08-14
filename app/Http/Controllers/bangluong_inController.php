@@ -1983,21 +1983,21 @@ class bangluong_inController extends Controller
                     $a_thangtruoc = array_column($model_bl_trc->toarray(), $key, 'macanbo');
                     $a_chenhlech = array_diff($a_thangnay, $a_thangtruoc);
 
-                    if ($chenhlech > 0) {
-                        $tang = new Collection();
-                        $tang->mapc = $key;
-                        $tang->tenpc = $val;
-                        $tang->chenhlech = $chenhlech;
-                        $tang->ghichu = count($a_chenhlech) . ' người';
-                        $model_tang->add($tang);
-                    } else {
-                        $giam = new Collection();
-                        $giam->mapc = $key;
-                        $giam->tenpc = $val;
-                        $giam->chenhlech = -$chenhlech;
-                        $giam->ghichu = count($a_chenhlech) . ' người';
-                        $model_giam->add($giam);
-                    }
+                    // if ($chenhlech > 0) {
+                    //     $tang = new Collection();
+                    //     $tang->mapc = $key;
+                    //     $tang->tenpc = $val;
+                    //     $tang->chenhlech = $chenhlech;
+                    //     $tang->ghichu = count($a_chenhlech) . ' người';
+                    //     $model_tang->add($tang);
+                    // } else {
+                    //     $giam = new Collection();
+                    //     $giam->mapc = $key;
+                    //     $giam->tenpc = $val;
+                    //     $giam->chenhlech = -$chenhlech;
+                    //     $giam->ghichu = count($a_chenhlech) . ' người';
+                    //     $model_giam->add($giam);
+                    // }
                 }
             }
 
@@ -2152,21 +2152,21 @@ class bangluong_inController extends Controller
                     $a_thangtruoc = array_column($model_bl_trc->toarray(), $key, 'macanbo');
                     $a_chenhlech = array_diff($a_thangnay, $a_thangtruoc);
 
-                    if ($chenhlech > 0) {
-                        $tang = new Collection();
-                        $tang->mapc = $key;
-                        $tang->tenpc = $val;
-                        $tang->chenhlech = $chenhlech;
-                        $tang->ghichu = count($a_chenhlech) . ' người';
-                        $model_tang->add($tang);
-                    } else {
-                        $giam = new Collection();
-                        $giam->mapc = $key;
-                        $giam->tenpc = $val;
-                        $giam->chenhlech = -$chenhlech;
-                        $giam->ghichu = count($a_chenhlech) . ' người';
-                        $model_giam->add($giam);
-                    }
+                    // if ($chenhlech > 0) {
+                    //     $tang = new Collection();
+                    //     $tang->mapc = $key;
+                    //     $tang->tenpc = $val;
+                    //     $tang->chenhlech = $chenhlech;
+                    //     $tang->ghichu = count($a_chenhlech) . ' người';
+                    //     $model_tang->add($tang);
+                    // } else {
+                    //     $giam = new Collection();
+                    //     $giam->mapc = $key;
+                    //     $giam->tenpc = $val;
+                    //     $giam->chenhlech = -$chenhlech;
+                    //     $giam->ghichu = count($a_chenhlech) . ' người';
+                    //     $model_giam->add($giam);
+                    // }
                 }
             }
 

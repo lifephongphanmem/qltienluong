@@ -200,6 +200,8 @@ class UsersController extends Controller
                 $ttuser->luongcoban = $gen['luongcb'];
                 $ttuser->thongbao = $gen['thongbao'];
                 $ttuser->ipf1 = $gen['ipf1'];
+                $ttuser->thongbao = $gen['thongbao'];;
+
                 $ttuser->phanloaitaikhoan = $model_donvi->phanloaitaikhoan;
                 $ttuser->phamvitonghop = $model_donvi->phamvitonghop;
                 $ttuser->lamtron = $model_donvi->lamtron;

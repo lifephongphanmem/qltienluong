@@ -59,7 +59,7 @@
             <td>B</td>
             <td>TỔNG NHU CẦU NĂM 2024</td>
             <td class="money">
-                {{ dinhdangso($a_TC['B1'] + $a_TC['B2']+ $a_TC['B3'], 0, $inputs['donvitinh']) }}
+                {{ dinhdangso($a_TC['B1'] + $a_TC['B2'] + $a_TC['B3'], 0, $inputs['donvitinh']) }}
             </td>
         </tr>
         <!-- B.I -->
@@ -68,7 +68,7 @@
             <td>Tổng nhu cầu kinh phí tăng thêm để thực hiện cải cách tiền lương theo Nghị định số 24/2023/NĐ-CP và Nghị
                 định số 42/2023/NĐ-CP (tính đủ 12 tháng)</td>
             <td class="money">{{ dinhdangso(array_sum(array_column($a_B1, 'sotien')), 0, $inputs['donvitinh']) }}</td>
-        </tr>       
+        </tr>
 
         <!-- B.II -->
         <tr style="font-weight: bold;">
@@ -100,48 +100,49 @@
         <tr style="font-weight: bold;">
             <td>C</td>
             <td>CHÊNH LỆCH NHU CẦU VÀ NGUỒN NĂM 2024</td>
-            <td class="money">{{ dinhdangso(abs($a_TC['A'] - $a_TC['B1'] - $a_TC['B2']- $a_TC['B3']), 0, $inputs['donvitinh']) }}
+            <td class="money">
+                {{ dinhdangso(abs($a_TC['A'] - $a_TC['B1'] - $a_TC['B2'] - $a_TC['B3']), 0, $inputs['donvitinh']) }}
             </td>
         </tr>
         <tr>
             <td>1</td>
             <td>Phần thiếu nguồn ngân sách trung ương hỗ trợ</td>
             <td>
-                {{ dinhdangso($a_TC['A'] > $a_TC['B1'] + $a_TC['B2'] +  $a_TC['B3']? 0 : abs($a_TC['A'] - $a_TC['B1'] - $a_TC['B2']- $a_TC['B3']), 0, $inputs['donvitinh']) }}
+                {{ dinhdangso($a_TC['A'] > $a_TC['B1'] + $a_TC['B2'] + $a_TC['B3'] ? 0 : abs($a_TC['A'] - $a_TC['B1'] - $a_TC['B2'] - $a_TC['B3']), 0, $inputs['donvitinh']) }}
             </td>
         </tr>
         <tr>
             <td>2</td>
             <td>Nguồn thực hiện cải cách tiền lương còn dư</td>
             <td class="money">
-                {{ dinhdangso($a_TC['A'] > $a_TC['B1'] + $a_TC['B2'] +  $a_TC['B3']? $a_TC['A'] - $a_TC['B1'] - $a_TC['B2'] - $a_TC['B3']: 0, 0, $inputs['donvitinh']) }}
+                {{ dinhdangso($a_TC['A'] > $a_TC['B1'] + $a_TC['B2'] + $a_TC['B3'] ? $a_TC['A'] - $a_TC['B1'] - $a_TC['B2'] - $a_TC['B3'] : 0, 0, $inputs['donvitinh']) }}
             </td>
         </tr>
     </table>
+    <!-- 2024.07.26 bỏ chữ ký theo y.c
+        <table id="data_footer1" class="header" width="96%" border="0" cellspacing="0" cellpadding="8"
+            style="margin:20px auto; text-align: center;">
+            <tr>
+                <td style="text-align: left;" width="50%"></td>
+                <td style="text-align: center; font-style: italic" width="50%">........,Ngày......tháng.......năm..........
+                </td>
+            </tr>
+            <tr style="font-weight: bold">
+                <td style="text-align: center;" width="50%"></td>
+                <td style="text-align: center;" width="50%">{{ mb_strtoupper($m_dv->cdlanhdao) }}</td>
+            </tr>
+            <tr style="font-style: italic">
+                <td style="text-align: center;" width="50%"></td>
+                <td style="text-align: center;" width="50%">(Ký tên, đóng dấu)</td>
+            </tr>
+            <tr>
+                <td><br><br><br></td>
+            </tr>
 
-    <table id="data_footer1" class="header" width="96%" border="0" cellspacing="0" cellpadding="8"
-        style="margin:20px auto; text-align: center;">
-        <tr>
-            <td style="text-align: left;" width="50%"></td>
-            <td style="text-align: center; font-style: italic" width="50%">........,Ngày......tháng.......năm..........
-            </td>
-        </tr>
-        <tr style="font-weight: bold">
-            <td style="text-align: center;" width="50%"></td>
-            <td style="text-align: center;" width="50%">{{ mb_strtoupper($m_dv->cdlanhdao) }}</td>
-        </tr>
-        <tr style="font-style: italic">
-            <td style="text-align: center;" width="50%"></td>
-            <td style="text-align: center;" width="50%">(Ký tên, đóng dấu)</td>
-        </tr>
-        <tr>
-            <td><br><br><br></td>
-        </tr>
-
-        <tr>
-            <td style="text-align: center;" width="50%">{{ '' }}</td>
-            <td style="text-align: center;" width="50%">{{ $m_dv->lanhdao }}</td>
-        </tr>
-    </table>
-
+            <tr>
+                <td style="text-align: center;" width="50%">{{ '' }}</td>
+                <td style="text-align: center;" width="50%">{{ $m_dv->lanhdao }}</td>
+            </tr>
+        </table>
+    -->
 @stop

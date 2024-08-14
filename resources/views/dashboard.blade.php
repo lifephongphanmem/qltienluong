@@ -23,12 +23,6 @@
 @stop
 
 @section('content')
-    @if (session('admin')->thongbao != '')
-        <marquee style="margin-bottom: 5px;">
-            <b style="color: #ff0000">Thông báo:</b> {!! html_entity_decode(session('admin')->thongbao) !!}
-        </marquee>
-    @endif
-
     <!-- END PAGE HEADER-->
     <!-- BEGIN DASHBOARD STATS -->
     <!--div class="row margin-top-10"-->
