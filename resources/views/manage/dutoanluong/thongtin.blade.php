@@ -355,7 +355,7 @@
                                                             @endforeach
                                                             <td class="text-center">
                                                                 <!-- Chỉ cho chỉnh sửa ở plct biên chế -->
-                                                                @if ($value->mact == '1506672780')
+                                                                @if (in_array($value->mact,['1506672780','1506673604']))
                                                                     <button type="button"
                                                                         onclick="setChiTieu('{{ $value->id }}')"
                                                                         class="btn btn-default btn-xs mbs"
