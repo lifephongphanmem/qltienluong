@@ -239,7 +239,7 @@
             <td>Thôn thuộc xã biên giới, hải đảo</td>
             <td class="text-center">{{ dinhdangso($model->sum('sothonxabiengioi')) }}</td>
             <td></td>
-            <td class="text-center">{{ dinhdangsothapphan($model->first()->sothonxabiengioi_heso ?? '', 2) }}</td>
+            <td class="text-center">{{ dinhdangsothapphan($model->first()->sothonxabiengioi_heso ?? '6', 2) }}</td>
             <td class="text-right">
                 {{ dinhdangsothapphan($model->sum('sotienxabiengioi'), 5) }}
             </td>
@@ -259,7 +259,7 @@
                 của cơ quan có thẩm quyền</td>
             <td class="text-center">{{ dinhdangso($model->sum('sothonxa350ho')) }}</td>
             <td></td>
-            <td class="text-center">{{ dinhdangsothapphan($model->first()->sothonxa350ho_heso ?? '', 2) }}</td>
+            <td class="text-center">{{ dinhdangsothapphan($model->first()->sothonxa350ho_heso ?? '6', 2) }}</td>
             <td class="text-right">
                 {{ dinhdangsothapphan($model->sum('sothonxa350ho'), 5) }}
             </td>
@@ -269,7 +269,7 @@
             <td>Số tổ dân phố có từ 500 hộ gia đình trở lên</td>
             <td class="text-center">{{ dinhdangso($model->sum('sotodanpho500ho'))}}</td>
             <td></td>
-            <td class="text-center">{{ dinhdangsothapphan($model->first()->sotodanpho500ho_heso ?? '', 2) }}</td>
+            <td class="text-center">{{ dinhdangsothapphan($model->first()->sotodanpho500ho_heso ?? '6', 2) }}</td>
             <td class="text-right">
                 {{ dinhdangsothapphan($model->sum('sotodanpho500ho'), 5) }}
             </td>
@@ -279,7 +279,7 @@
             <td>Tổ dân phố thuộc xã trọng điểm về an ninh trật tự theo Quyết định của cơ quan có thẩm quyền</td>
             <td class="text-center">{{ dinhdangso($model->sum('sothonxatrongdiem')) }}</td>
             <td></td>
-            <td class="text-center">{{ dinhdangsothapphan($model->first()->sothonxatrongdiem_heso ?? '', 2) }}</td>
+            <td class="text-center">{{ dinhdangsothapphan($model->first()->sothonxatrongdiem_heso ?? '6', 2) }}</td>
             <td class="text-right">
                 {{ dinhdangsothapphan($model->sum('sothonxatrongdiem'), 5) }}
             </td>
@@ -289,7 +289,7 @@
             <td>Tổ dân phố chuyển từ thôn có 350 hộ gia đình trở lên do thành lập đơn vị hành chính đô thị cấp xã</td>
             <td class="text-center">{{ dinhdangso($model->sum('sochuyentuthon350hgd')) }}</td>
             <td></td>
-            <td class="text-center">{{ dinhdangsothapphan($model->first()->sochuyentuthon350hgd_heso ?? '', 2) }}</td>
+            <td class="text-center">{{ dinhdangsothapphan($model->first()->sochuyentuthon350hgd_heso ?? '6', 2) }}</td>
             <td class="text-right">
                 {{ dinhdangsothapphan($model->sum('sochuyentuthon350hgd'), 5) }}
             </td>
@@ -307,7 +307,7 @@
             <td>Thôn còn lại</td>
             <td class="text-center">{{ dinhdangso($model->sum('sothonxakhac')) }}</td>
             <td></td>
-            <td class="text-center">{{ dinhdangsothapphan($model->first()->sothonxakhac_heso ?? '', 2) }}</td>
+            <td class="text-center">{{ dinhdangsothapphan($model->first()->sothonxakhac_heso ?? '4,5', 2) }}</td>
             <td class="text-right">
                 {{ dinhdangsothapphan($model->sum('sothonxakhac'), 5)}}
             </td>
@@ -317,7 +317,7 @@
             <td>Tổ dân phố</td>
             <td class="text-center">{{ dinhdangso($model->sum('sotodanphokhac')) }}</td>
             <td></td>
-            <td class="text-center">{{ dinhdangsothapphan($model->first()->sotodanphokhac_heso ?? '', 2) }}</td>
+            <td class="text-center">{{ dinhdangsothapphan($model->first()->sotodanphokhac_heso ?? '4,5', 2) }}</td>
             <td class="text-right">
                 {{ dinhdangsothapphan($model->sum('sotodanphokhac'), 5) }}
             </td>
