@@ -182,14 +182,17 @@ class dutoanluong_insolieu_huyenController extends Controller
                 $chitiet->sotienphanloaixa = ($chitiet->phanloaixa_heso * 12 * $chitiet->luongcoban) / $inputs['donvitinh'];
 
                 $chitiet->sotienxabiengioi = ($chitiet->sothonxabiengioi * $chitiet->sothonxabiengioi_heso * 12 * $chitiet->luongcoban) / $inputs['donvitinh'];
-                $chitiet->sotienxakhokhan = ($chitiet->sothonxakhokhan * $chitiet->sothonxakhokhan_heso * 12 * $chitiet->luongcoban) / $inputs['donvitinh'];
+                $chitiet->sothonxa350ho = ($chitiet->sothonxa350ho * $chitiet->sothonxa350ho_heso * 12 * $chitiet->luongcoban) / $inputs['donvitinh'];
+                $chitiet->sotodanpho500ho = ($chitiet->sotodanpho500ho * $chitiet->sotodanpho500ho_heso * 12 * $chitiet->luongcoban) / $inputs['donvitinh'];
                 $chitiet->sotienxatrongdiem = ($chitiet->sothonxatrongdiem * $chitiet->sothonxatrongdiem_heso * 12 * $chitiet->luongcoban) / $inputs['donvitinh'];
                 $chitiet->sotienxakhac = ($chitiet->sothonxakhac * $chitiet->sothonxakhac_heso * 12 * $chitiet->luongcoban) / $inputs['donvitinh'];
-                $chitiet->sotienxaloai1 = ($chitiet->sothonxaloai1 * $chitiet->sothonxaloai1_heso * 12 * $chitiet->luongcoban) / $inputs['donvitinh'];
-                $chitiet->tongsotienthon = $chitiet->sotienxabiengioi + $chitiet->sotienxakhokhan
-                    + $chitiet->sotienxatrongdiem + $chitiet->sotienxakhac + $chitiet->sotienxaloai1;
+                $chitiet->sochuyentuthon350hgd = ($chitiet->sochuyentuthon350hgd * $chitiet->sochuyentuthon350hgd_heso * 12 * $chitiet->luongcoban) / $inputs['donvitinh'];
+                $chitiet->sotodanphokhac = ($chitiet->sotodanphokhac * $chitiet->sotodanphokhac_heso * 12 * $chitiet->luongcoban) / $inputs['donvitinh'];
+                $chitiet->tongsotienthon = $chitiet->sotienxabiengioi + $chitiet->sothonxa350ho + $chitiet->sotodanpho500ho
+                    + $chitiet->sotienxatrongdiem + $chitiet->sotienxakhac + $chitiet->sochuyentuthon350hgd+ $chitiet->sotodanphokhac;
 
-                $chitiet->tongsothon = $chitiet->sothonxabiengioi + $chitiet->sothonxakhokhan + $chitiet->sothonxatrongdiem + $chitiet->sothonxakhac + $chitiet->sothonxaloai1;
+                $chitiet->tongsothon = $chitiet->sothonxabiengioi + $chitiet->sothonxa350ho + $chitiet->sotodanpho500ho + $chitiet->sothonxatrongdiem + $chitiet->sothonxakhac + $chitiet->sochuyentuthon350hgd
+                + $chitiet->sotodanphokhac;
                 $chitiet->sotiencbtangthem=$chitiet->socanbotangthem * 12 * ($chitiet->luongcoban *1.5);
             }
             return view('reports.dutoanluong.Huyen.kinhphikhongchuyentrach')
