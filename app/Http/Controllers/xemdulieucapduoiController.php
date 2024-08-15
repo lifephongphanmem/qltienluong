@@ -73,19 +73,19 @@ class xemdulieucapduoiController extends Controller
                         ->get();
                 })
                 ->get();
-
+                // dd($model_donvi);
             $model_tonghop = tonghopluong_donvi::where('macqcq', $madv)->where('madv', '<>', $madv)
                 ->where('thang', $inputs['thang'])
                 ->where('nam', $inputs['nam'])
                 ->where('trangthai', 'DAGUI')->get();
-
+// dd($model_tonghop);
             // dd(array_column($model_tonghop->toarray(),'madv','nguoigui'));
             //
-            // $model_tonghopkhoi = tonghopluong_khoi::where('macqcq', $madv)
-            //     ->where('thang', $inputs['thang'])
-            //     ->where('nam', $inputs['nam'])
-            //     ->where('trangthai', 'DAGUI')->get();
-
+            $model_tonghopkhoi = tonghopluong_khoi::where('macqcq', $madv)
+                ->where('thang', $inputs['thang'])
+                ->where('nam', $inputs['nam'])
+                ->where('trangthai', 'DAGUI')->get();
+// dd($model_tonghopkhoi);
             /*
             if(!isset($inputs['trangthai']) || $inputs['trangthai']=='ALL'){
                 $model_donvi = dmdonvi::select('madv', 'tendv','macqcq','maphanloai')->where('macqcq', $madv)->get();
@@ -148,7 +148,7 @@ class xemdulieucapduoiController extends Controller
             foreach ($model_donvi as $dv) {
                 $dv->tendvcq = getTenDV($dv->macqcq);
                 $tonghop = $model_tonghop->where('madv', $dv->madv)->first();
-                // $tonghopkhoi = $model_tonghopkhoi->where('madv', $dv->madv)->first();
+                $tonghopkhoi = $model_tonghopkhoi->where('madv', $dv->madv)->first();
                 $dv->tralai = $tralai;
                 $dv->mathdv = NULL;
                 $dv->ngaygui = '';
@@ -158,13 +158,13 @@ class xemdulieucapduoiController extends Controller
                     $dv->trangthai = $tonghop->trangthai;
                     $dv->ngaygui = $tonghop->ngaygui;
                 }
-                // if ($tonghopkhoi != null) {
-                //     $dv->mathdv = $tonghopkhoi->mathdv;
-                //     $dv->trangthai = $tonghopkhoi->trangthai;
-                //     $dv->ngaygui = $tonghopkhoi->ngaygui;
-                //     $dv->thang = $tonghopkhoi->thang;
-                //     $dv->nam = $tonghopkhoi->nam;
-                // }
+                if ($tonghopkhoi != null) {
+                    $dv->mathdv = $tonghopkhoi->mathdv;
+                    $dv->trangthai = $tonghopkhoi->trangthai;
+                    $dv->ngaygui = $tonghopkhoi->ngaygui;
+                    $dv->thang = $tonghopkhoi->thang;
+                    $dv->nam = $tonghopkhoi->nam;
+                }
             }
             if ($inputs['trangthai'] != 'ALL') {
                 $model_donvi = $model_donvi->where('trangthai', $inputs['trangthai']);

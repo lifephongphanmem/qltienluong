@@ -781,7 +781,7 @@ class tonghopluong_khoiController extends Controller
             $nam = $inputs['nam'];
             $madv = session('admin')->madv;
             $model = tonghopluong_khoi::where('nam', $nam)->where('thang', $thang)->where('madv', $madv)->first();
-
+// dd($model);
 
             if ($model != null) {
                 //Trường hợp đơn vị bị trả lại dữ liệu muốn gửi lại
