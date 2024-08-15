@@ -106,6 +106,7 @@
             <td>2</td>
             <td>Xã loại 2</td>
             <td class="text-center">{{ dinhdangso($model->where('phanloaixa', 'XL2')->count(), 0) }}</td>
+            <td></td>
             <td class="text-center">
                 {{-- {{ $model->where('phanloaixa', 'XL2')->first()->phanloaixa_heso ?? dinhdangsothapphan('13,7', 2) }}</td> --}}
                 {{ $model->where('phanloaixa', 'XL2')->first()->phanloaixa_heso ?? '' }}</td>
@@ -127,6 +128,7 @@
             <td>3</td>
             <td>Xã loại 3</td>
             <td class="text-center">{{ dinhdangso($model->where('phanloaixa', 'XL3')->count(), 0) }}</td>
+            <td></td>
             {{-- <td class="text-center">
                 {{ $model->where('phanloaixa', 'XL3')->first()->phanloaixa_heso ?? dinhdangsothapphan('11,4', 2) }}</td> --}}
                 <td class="text-center">
@@ -149,6 +151,7 @@
             <td>4</td>
             <td>Phường loại 1</td>
             <td class="text-center">{{ dinhdangso($model->where('phanloaixa', 'PL1')->count(), 0) }}</td>
+            <td></td>
             {{-- <td class="text-center">
                 {{ $model->where('phanloaixa', 'XL3')->first()->phanloaixa_heso ?? dinhdangsothapphan('11,4', 2) }}</td> --}}
                 <td class="text-center">
@@ -171,8 +174,7 @@
             <td>5</td>
             <td>Phường loại 2</td>
             <td class="text-center">{{ dinhdangso($model->where('phanloaixa', 'PL2')->count(), 0) }}</td>
-            {{-- <td class="text-center">
-                {{ $model->where('phanloaixa', 'XL3')->first()->phanloaixa_heso ?? dinhdangsothapphan('11,4', 2) }}</td> --}}
+            <td></td>
                 <td class="text-center">
                     {{ $model->where('phanloaixa', 'PL2')->first()->phanloaixa_heso ?? '' }}</td>
             <td class="text-right">
@@ -193,6 +195,7 @@
             <td>6</td>
             <td>Phường loại 3</td>
             <td class="text-center">{{ dinhdangso($model->where('phanloaixa', 'PL3')->count(), 0) }}</td>
+            <td></td>
             {{-- <td class="text-center">
                 {{ $model->where('phanloaixa', 'XL3')->first()->phanloaixa_heso ?? dinhdangsothapphan('11,4', 2) }}</td> --}}
                 <td class="text-center">
@@ -227,6 +230,7 @@
             <td>1</td>
             <td>Số xã biên giới, hải đảo</td>
             <td class="text-center"></td>
+            <td></td>
             <td></td>
             <td></td>
         </tr>
