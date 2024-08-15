@@ -133,20 +133,33 @@
                                                 <div class="col-md-3">
                                                     <div class="form-group">
                                                         <label class="control-label">Phân loại xã </label>
-                                                        {!! Form::select('phanloaixa', getPhanLoaiXa(), session('admin')->phanloaixa, ['id'=>'phanloaixa','class' => 'form-control']) !!}
+                                                        {!! Form::select('phanloaixa', getPhanLoaiXa(), session('admin')->phanloaixa, [
+                                                            'id' => 'phanloaixa',
+                                                            'class' => 'form-control',
+                                                        ]) !!}
                                                     </div>
                                                 </div>
                                                 <div class="col-md-2">
                                                     <div class="form-group">
                                                         <label class="control-label">Số cán bộ định mức </label>
-                                                        {!! Form::text('songuoi', getSoLuongCanBoDinhMuc('ND33/2024',session('admin')->phanloaixa), ['id'=>'canbodinhmuc','class' => 'form-control text-right', 'data-mask' => 'fdecimal','readonly'=>true]) !!}
+                                                        {!! Form::text('songuoi', getSoLuongCanBoDinhMuc('ND33/2024', session('admin')->phanloaixa), [
+                                                            'id' => 'canbodinhmuc',
+                                                            'class' => 'form-control text-right',
+                                                            'data-mask' => 'fdecimal',
+                                                            'readonly' => true,
+                                                        ]) !!}
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-2">
                                                     <div class="form-group">
                                                         <label class="control-label">Mức khoán quỹ phụ cấp </label>
-                                                        {!! Form::text('phanloaixa_heso', getMucKhoanPhuCapXa('ND33/2024',session('admin')->phanloaixa), ['id'=>'phanloaxa_heso','class' => 'form-control text-right', 'data-mask' => 'fdecimal','readonly'=>true]) !!}
+                                                        {!! Form::text('phanloaixa_heso', getMucKhoanPhuCapXa('ND33/2024', session('admin')->phanloaixa), [
+                                                            'id' => 'phanloaxa_heso',
+                                                            'class' => 'form-control text-right',
+                                                            'data-mask' => 'fdecimal',
+                                                            'readonly' => true,
+                                                        ]) !!}
                                                     </div>
                                                 </div>
                                                 <div class="col-md-2">
@@ -157,8 +170,13 @@
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="form-group">
-                                                        <label class="control-label">Mức khoán quỹ phụ cấp cán bộ tăng thêm </label>
-                                                        {!! Form::text('canbotangthem_heso', 1.5, ['class' => 'form-control text-right', 'data-mask' => 'fdecimal','readonly'=>true]) !!}
+                                                        <label class="control-label">Mức khoán quỹ phụ cấp cán bộ tăng thêm
+                                                        </label>
+                                                        {!! Form::text('canbotangthem_heso', 1.5, [
+                                                            'class' => 'form-control text-right',
+                                                            'data-mask' => 'fdecimal',
+                                                            'readonly' => true,
+                                                        ]) !!}
                                                     </div>
                                                 </div>
                                             </div>
@@ -178,35 +196,35 @@
 
                                             <div class="row">
                                                 <div class="col-md-6">
-                                                    <label class="control-label">Số thôn thuộc xã khó khăn theo QĐ
-                                                        30/2007/QĐ-TTg</label>
-                                                    {!! Form::text('sothonxakhokhan', 0, ['class' => 'form-control']) !!}
+                                                    <label class="control-label">Số thôn có 350 hộ gia đình trở lên</label>
+                                                    {!! Form::text('sothonxa350ho', 0, ['class' => 'form-control']) !!}
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="form-group">
                                                         <label class="control-label">Mức khoán quỹ phụ cấp </label>
-                                                        {!! Form::text('sothonxakhokhan_heso', 6, ['class' => 'form-control text-right', 'data-mask' => 'fdecimal']) !!}
+                                                        {!! Form::text('sothonxa350ho_heso', 6, ['class' => 'form-control text-right', 'data-mask' => 'fdecimal']) !!}
                                                     </div>
                                                 </div>
                                             </div>
 
                                             <div class="row">
                                                 <div class="col-md-6">
-                                                    <label class="control-label">Số thôn thuộc xã loại I, loại II</label>
-                                                    {!! Form::text('sothonxaloai1', 0, ['class' => 'form-control']) !!}
+                                                    <label class="control-label">Tổ dân phố có 500 hộ gia đình trở
+                                                        lên</label>
+                                                    {!! Form::text('sotodanpho500ho', 0, ['class' => 'form-control']) !!}
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="form-group">
                                                         <label class="control-label">Mức khoán quỹ phụ cấp </label>
-                                                        {!! Form::text('sothonxaloai1_heso', 6, ['class' => 'form-control text-right', 'data-mask' => 'fdecimal']) !!}
+                                                        {!! Form::text('sotodanpho500ho_heso', 6, ['class' => 'form-control text-right', 'data-mask' => 'fdecimal']) !!}
                                                     </div>
                                                 </div>
                                             </div>
 
                                             <div class="row">
                                                 <div class="col-md-6">
-                                                    <label class="control-label">Số thôn thuộc xã trọng điểm, phức
-                                                        tạp</label>
+                                                    <label class="control-label">Tổ dân phố thuộc xã trọng điểm, phức tạp về
+                                                        an ninh</label>
                                                     {!! Form::text('sothonxatrongdiem', 0, ['class' => 'form-control']) !!}
                                                 </div>
                                                 <div class="col-md-3">
@@ -219,6 +237,22 @@
 
                                             <div class="row">
                                                 <div class="col-md-6">
+                                                    <label class="control-label">Tổ dân phố chuyển từ thôn có 350 HGD trở
+                                                        lên</label>
+                                                    {!! Form::text('sochuyentuthon350hgd', 0, ['class' => 'form-control']) !!}
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label class="control-label">Mức khoán quỹ phụ cấp </label>
+                                                        {!! Form::text('sochuyentuthon350hgd_heso', 6, [
+                                                            'class' => 'form-control text-right',
+                                                            'data-mask' => 'fdecimal',
+                                                        ]) !!}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
                                                     <label class="control-label">Số thôn thuộc xã còn lại</label>
                                                     {!! Form::text('sothonxakhac', 0, ['class' => 'form-control']) !!}
                                                 </div>
@@ -226,6 +260,18 @@
                                                     <div class="form-group">
                                                         <label class="control-label">Mức khoán quỹ phụ cấp </label>
                                                         {!! Form::text('sothonxakhac_heso', 4.5, ['class' => 'form-control text-right', 'data-mask' => 'fdecimal']) !!}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <label class="control-label">Số tổ dân phố còn lại</label>
+                                                    {!! Form::text('sotodanphokhac', 0, ['class' => 'form-control']) !!}
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label class="control-label">Mức khoán quỹ phụ cấp </label>
+                                                        {!! Form::text('sotodanphokhac_heso', 4.5, ['class' => 'form-control text-right', 'data-mask' => 'fdecimal']) !!}
                                                     </div>
                                                 </div>
                                             </div>
@@ -239,17 +285,21 @@
                             {!! Form::hidden('phanloaixa_heso', 21, ['class' => 'form-control text-right', 'data-mask' => 'fdecimal']) !!}
                             {!! Form::hidden('sothonxabiengioi', 0, ['class' => 'form-control']) !!}
                             {!! Form::hidden('sothonxabiengioi_heso', 6, ['class' => 'form-control text-right', 'data-mask' => 'fdecimal']) !!}
-                            {!! Form::hidden('sothonxakhokhan', 0, ['class' => 'form-control']) !!}
-                            {!! Form::hidden('sothonxakhokhan_heso', 6, ['class' => 'form-control text-right', 'data-mask' => 'fdecimal']) !!}
-                            {!! Form::hidden('sothonxaloai1', 0, ['class' => 'form-control']) !!}
-                            {!! Form::hidden('sothonxaloai1_heso', 6, ['class' => 'form-control text-right', 'data-mask' => 'fdecimal']) !!}
+                            {!! Form::hidden('sothonxa350ho', 0, ['class' => 'form-control']) !!}
+                            {!! Form::hidden('sothonxa350ho_heso', 6, ['class' => 'form-control text-right', 'data-mask' => 'fdecimal']) !!}
+                            {!! Form::hidden('sotodanpho500ho', 0, ['class' => 'form-control']) !!}
+                            {!! Form::hidden('sotodanpho500ho_heso', 6, ['class' => 'form-control text-right', 'data-mask' => 'fdecimal']) !!}
                             {!! Form::hidden('sothonxatrongdiem', 0, ['class' => 'form-control']) !!}
                             {!! Form::hidden('sothonxatrongdiem_heso', 6, [
                                 'class' => 'form-control text-right',
                                 'data-mask' => 'fdecimal',
                             ]) !!}
+                            {!! Form::hidden('sochuyentuthon350hgd', 0, ['class' => 'form-control']) !!}
+                            {!! Form::hidden('sochuyentuthon350hgd_heso', 4.5, ['class' => 'form-control text-right', 'data-mask' => 'fdecimal']) !!}
                             {!! Form::hidden('sothonxakhac', 0, ['class' => 'form-control']) !!}
                             {!! Form::hidden('sothonxakhac_heso', 4.5, ['class' => 'form-control text-right', 'data-mask' => 'fdecimal']) !!}
+                            {!! Form::hidden('sotodanphokhac', 0, ['class' => 'form-control']) !!}
+                            {!! Form::hidden('sotodanphokhac_heso', 4.5, ['class' => 'form-control text-right', 'data-mask' => 'fdecimal']) !!}
                             {!! Form::hidden('socanbotangthem', 0, ['class' => 'form-control text-right', 'data-mask' => 'fdecimal']) !!}
                         @endif
 
@@ -306,11 +356,11 @@
                                                             <td class="text-center">
                                                                 <!-- Chỉ cho chỉnh sửa ở plct biên chế -->
                                                                 @if ($value->mact == '1506672780')
-                                                                <button type="button"
-                                                                onclick="setChiTieu('{{ $value->id }}')"
-                                                                class="btn btn-default btn-xs mbs"
-                                                                data-target="#chitiet-modal" data-toggle="modal">
-                                                                <i class="fa fa-edit"></i>&nbsp; Sửa</button>  
+                                                                    <button type="button"
+                                                                        onclick="setChiTieu('{{ $value->id }}')"
+                                                                        class="btn btn-default btn-xs mbs"
+                                                                        data-target="#chitiet-modal" data-toggle="modal">
+                                                                        <i class="fa fa-edit"></i>&nbsp; Sửa</button>
                                                                 @endif
 
                                                             </td>
@@ -488,12 +538,12 @@
                 }
             });
             $('#chvu-modal').modal('show');
-        }        
+        }
 
         function updChiTieu() {
             var formData = new FormData($('#frm_chitieu')[0]);
 
-            $.ajax({                
+            $.ajax({
                 url: '{{ $furl }}' + "updchitieu",
                 method: "POST",
                 cache: false,
@@ -510,8 +560,8 @@
             })
             $('#chitiet-modal').modal('hide');
         }
-        $('#phanloaixa').on('change',function(){
-            plxa=$('#phanloaixa').val();
+        $('#phanloaixa').on('change', function() {
+            plxa = $('#phanloaixa').val();
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             $.ajax({
                 url: '{{ $furl }}' + 'getPLXa',

@@ -683,16 +683,20 @@ class dutoanluongController extends Controller
             $inputs['phanloai'] = 'DUTOAN';
 
             $inputs['sothonxabiengioi'] = chkDbl($inputs['sothonxabiengioi']);
-            $inputs['sothonxakhokhan'] = chkDbl($inputs['sothonxakhokhan']);
+            $inputs['sothonxa350ho'] = chkDbl($inputs['sothonxa350ho']);
+            $inputs['sotodanpho500ho'] = chkDbl($inputs['sotodanpho500ho']);
             $inputs['sothonxatrongdiem'] = chkDbl($inputs['sothonxatrongdiem']);
             $inputs['sothonxakhac'] = chkDbl($inputs['sothonxakhac']);
-            $inputs['sothonxaloai1'] = chkDbl($inputs['sothonxaloai1']);
+            $inputs['sochuyentuthon350hgd'] = chkDbl($inputs['sochuyentuthon350hgd']);
+            $inputs['sotodanphokhac'] = chkDbl($inputs['sotodanphokhac']);
 
             $inputs['sothonxabiengioi_heso'] = chkDbl($inputs['sothonxabiengioi_heso']);
-            $inputs['sothonxakhokhan_heso'] = chkDbl($inputs['sothonxakhokhan_heso']);
+            $inputs['sothonxa350ho_heso'] = chkDbl($inputs['sothonxa350ho_heso']);
+            $inputs['sotodanpho500ho_heso'] = chkDbl($inputs['sotodanpho500ho_heso']);
             $inputs['sothonxatrongdiem_heso'] = chkDbl($inputs['sothonxatrongdiem_heso']);
             $inputs['sothonxakhac_heso'] = chkDbl($inputs['sothonxakhac_heso']);
-            $inputs['sothonxaloai1_heso'] = chkDbl($inputs['sothonxaloai1_heso']);
+            $inputs['sochuyentuthon350hgd_heso'] = chkDbl($inputs['sochuyentuthon350hgd_heso']);
+            $inputs['sotodanphokhac_heso'] = chkDbl($inputs['sotodanphokhac_heso']);
             $inputs['phanloaixa_heso'] = chkDbl($inputs['phanloaixa_heso']);
             $inputs['socanbotangthem'] = chkDbl($inputs['socanbotangthem']);
             // dd($a_data);
@@ -713,16 +717,24 @@ class dutoanluongController extends Controller
             $inputs = $request->all();
             $model = dutoanluong::where('masodv', $inputs['masodv'])->first();
             $inputs['sothonxabiengioi'] = chkDbl($inputs['sothonxabiengioi']);
-            $inputs['sothonxakhokhan'] = chkDbl($inputs['sothonxakhokhan']);
+            // $inputs['sothonxakhokhan'] = chkDbl($inputs['sothonxakhokhan']);
+            $inputs['sothonxa350ho'] = chkDbl($inputs['sothonxa350ho']);
+            $inputs['sotodanpho500ho'] = chkDbl($inputs['sotodanpho500ho']);
             $inputs['sothonxatrongdiem'] = chkDbl($inputs['sothonxatrongdiem']);
             $inputs['sothonxakhac'] = chkDbl($inputs['sothonxakhac']);
-            $inputs['sothonxaloai1'] = chkDbl($inputs['sothonxaloai1']);
+            $inputs['sochuyentuthon350hgd'] = chkDbl($inputs['sochuyentuthon350hgd']);
+            // $inputs['sothonxaloai1'] = chkDbl($inputs['sothonxaloai1']);
+            $inputs['sotodanphokhac'] = chkDbl($inputs['sotodanphokhac']);
 
             $inputs['sothonxabiengioi_heso'] = chkDbl($inputs['sothonxabiengioi_heso']);
-            $inputs['sothonxakhokhan_heso'] = chkDbl($inputs['sothonxakhokhan_heso']);
+            // $inputs['sothonxakhokhan_heso'] = chkDbl($inputs['sothonxakhokhan_heso']);
+            $inputs['sothonxa350ho_heso'] = chkDbl($inputs['sothonxa350ho_heso']);
+            $inputs['sotodanpho500ho_heso'] = chkDbl($inputs['sotodanpho500ho_heso']);
             $inputs['sothonxatrongdiem_heso'] = chkDbl($inputs['sothonxatrongdiem_heso']);
             $inputs['sothonxakhac_heso'] = chkDbl($inputs['sothonxakhac_heso']);
-            $inputs['sothonxaloai1_heso'] = chkDbl($inputs['sothonxaloai1_heso']);
+            // $inputs['sothonxaloai1_heso'] = chkDbl($inputs['sothonxaloai1_heso']);
+            $inputs['sochuyentuthon350hgd_heso'] = chkDbl($inputs['sochuyentuthon350hgd_heso']);
+            $inputs['sotodanphokhac_heso'] = chkDbl($inputs['sotodanphokhac_heso']);
             $inputs['phanloaixa_heso'] = chkDbl($inputs['phanloaixa_heso']);
             $model->update($inputs);
             return redirect('/nghiep_vu/quan_ly/du_toan/danh_sach');
