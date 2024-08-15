@@ -266,9 +266,11 @@ class dutoanluongController extends Controller
                 $result['message'] .= '<td>' . dinhdangsothapphan($value->$mapc, 3) . '</td>';
             }
             $result['message'] .= '<td class="text-center">';
-            $result['message'] .= '<button type="button" onclick="setChiTieu(&#39;' . $value->id . '&#39;,)" class="btn btn-default btn-xs mbs"';
-            $result['message'] .= ' data-target="#chitiet-modal" data-toggle="modal">';
-            $result['message'] .= ' <i class="fa fa-edit"></i>&nbsp; Sửa</button>';
+            // if ($value->mact == '1506672780') {
+                $result['message'] .= '<button type="button" onclick="setChiTieu(&#39;' . $value->id . '&#39;,)" class="btn btn-default btn-xs mbs"';
+                $result['message'] .= ' data-target="#chitiet-modal" data-toggle="modal">';
+                $result['message'] .= ' <i class="fa fa-edit"></i>&nbsp; Sửa</button>';
+            // }
             $result['message'] .= '</td>';
             $result['message'] .= '</tr>';
         }
@@ -561,7 +563,7 @@ class dutoanluongController extends Controller
                 $val->luongcoban = $inputs['luongcoban'];
             }
 
-            //dd($m_chitieu);
+            // dd($m_chitieu);
             //Mảng lưu thông tin dự toán chi tiết
             $inputs['luongnb_dt'] = 0;
             $inputs['luonghs_dt'] = 0;
@@ -612,6 +614,7 @@ class dutoanluongController extends Controller
             }
             //dd($inputs);   
             //Tổng hợp cán bộ chưa tuyển
+            // dd(array_unique(array_column($m_chitieu->toarray(), 'mact')));
             foreach (array_unique(array_column($m_chitieu->toarray(), 'mact')) as $data) {
                 $dutoan = [];
                 $canbo = $m_chitieu->where('mact', $data);
@@ -652,7 +655,7 @@ class dutoanluongController extends Controller
                 //Lưu dự toán
                 $a_dutoan[] = $dutoan;
             }
-            //dd($a_dutoan);
+            // dd($a_dutoan);
             $a_data = $m_bl_ct->keyBy('macanbo')->toarray();
             $a_th = $a_pc;
             foreach ($a_pc as $pc) {
@@ -680,16 +683,20 @@ class dutoanluongController extends Controller
             $inputs['phanloai'] = 'DUTOAN';
 
             $inputs['sothonxabiengioi'] = chkDbl($inputs['sothonxabiengioi']);
-            $inputs['sothonxakhokhan'] = chkDbl($inputs['sothonxakhokhan']);
+            $inputs['sothonxa350ho'] = chkDbl($inputs['sothonxa350ho']);
+            $inputs['sotodanpho500ho'] = chkDbl($inputs['sotodanpho500ho']);
             $inputs['sothonxatrongdiem'] = chkDbl($inputs['sothonxatrongdiem']);
             $inputs['sothonxakhac'] = chkDbl($inputs['sothonxakhac']);
-            $inputs['sothonxaloai1'] = chkDbl($inputs['sothonxaloai1']);
+            $inputs['sochuyentuthon350hgd'] = chkDbl($inputs['sochuyentuthon350hgd']);
+            $inputs['sotodanphokhac'] = chkDbl($inputs['sotodanphokhac']);
 
             $inputs['sothonxabiengioi_heso'] = chkDbl($inputs['sothonxabiengioi_heso']);
-            $inputs['sothonxakhokhan_heso'] = chkDbl($inputs['sothonxakhokhan_heso']);
+            $inputs['sothonxa350ho_heso'] = chkDbl($inputs['sothonxa350ho_heso']);
+            $inputs['sotodanpho500ho_heso'] = chkDbl($inputs['sotodanpho500ho_heso']);
             $inputs['sothonxatrongdiem_heso'] = chkDbl($inputs['sothonxatrongdiem_heso']);
             $inputs['sothonxakhac_heso'] = chkDbl($inputs['sothonxakhac_heso']);
-            $inputs['sothonxaloai1_heso'] = chkDbl($inputs['sothonxaloai1_heso']);
+            $inputs['sochuyentuthon350hgd_heso'] = chkDbl($inputs['sochuyentuthon350hgd_heso']);
+            $inputs['sotodanphokhac_heso'] = chkDbl($inputs['sotodanphokhac_heso']);
             $inputs['phanloaixa_heso'] = chkDbl($inputs['phanloaixa_heso']);
             $inputs['socanbotangthem'] = chkDbl($inputs['socanbotangthem']);
             // dd($a_data);
@@ -710,16 +717,24 @@ class dutoanluongController extends Controller
             $inputs = $request->all();
             $model = dutoanluong::where('masodv', $inputs['masodv'])->first();
             $inputs['sothonxabiengioi'] = chkDbl($inputs['sothonxabiengioi']);
-            $inputs['sothonxakhokhan'] = chkDbl($inputs['sothonxakhokhan']);
+            // $inputs['sothonxakhokhan'] = chkDbl($inputs['sothonxakhokhan']);
+            $inputs['sothonxa350ho'] = chkDbl($inputs['sothonxa350ho']);
+            $inputs['sotodanpho500ho'] = chkDbl($inputs['sotodanpho500ho']);
             $inputs['sothonxatrongdiem'] = chkDbl($inputs['sothonxatrongdiem']);
             $inputs['sothonxakhac'] = chkDbl($inputs['sothonxakhac']);
-            $inputs['sothonxaloai1'] = chkDbl($inputs['sothonxaloai1']);
+            $inputs['sochuyentuthon350hgd'] = chkDbl($inputs['sochuyentuthon350hgd']);
+            // $inputs['sothonxaloai1'] = chkDbl($inputs['sothonxaloai1']);
+            $inputs['sotodanphokhac'] = chkDbl($inputs['sotodanphokhac']);
 
             $inputs['sothonxabiengioi_heso'] = chkDbl($inputs['sothonxabiengioi_heso']);
-            $inputs['sothonxakhokhan_heso'] = chkDbl($inputs['sothonxakhokhan_heso']);
+            // $inputs['sothonxakhokhan_heso'] = chkDbl($inputs['sothonxakhokhan_heso']);
+            $inputs['sothonxa350ho_heso'] = chkDbl($inputs['sothonxa350ho_heso']);
+            $inputs['sotodanpho500ho_heso'] = chkDbl($inputs['sotodanpho500ho_heso']);
             $inputs['sothonxatrongdiem_heso'] = chkDbl($inputs['sothonxatrongdiem_heso']);
             $inputs['sothonxakhac_heso'] = chkDbl($inputs['sothonxakhac_heso']);
-            $inputs['sothonxaloai1_heso'] = chkDbl($inputs['sothonxaloai1_heso']);
+            // $inputs['sothonxaloai1_heso'] = chkDbl($inputs['sothonxaloai1_heso']);
+            $inputs['sochuyentuthon350hgd_heso'] = chkDbl($inputs['sochuyentuthon350hgd_heso']);
+            $inputs['sotodanphokhac_heso'] = chkDbl($inputs['sotodanphokhac_heso']);
             $inputs['phanloaixa_heso'] = chkDbl($inputs['phanloaixa_heso']);
             $model->update($inputs);
             return redirect('/nghiep_vu/quan_ly/du_toan/danh_sach');

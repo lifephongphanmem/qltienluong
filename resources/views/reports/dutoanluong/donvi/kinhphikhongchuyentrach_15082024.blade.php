@@ -30,19 +30,19 @@
 
         <tr>
             <td colspan="2" style="text-align: center; font-weight: bold; font-size: 20px; text-transform: uppercase">
-                TỔNG HỢP KINH PHÍ ĐỂ THỰC HIỆN CHẾ ĐỘ PHỤ CẤP ĐỐI VỚI CÁN BỘ KHÔNG CHUYÊN TRÁCH CẤP THÔN, XÃ VÀ TỔ DÂN PHỐ NĂM
-                {{ $inputs['namns'] }}
+                TỔNG HỢP KINH PHÍ ĐỂ THỰC HIỆN CHẾ ĐỘ PHỤ CẤP ĐỐI VỚI CÁN BỘ KHÔNG CHUYÊN TRÁCH CẤP THÔN, XÃ VÀ TỔ DÂN PHỐ
+                {{ $model != []?$model->namns:'' }}
             </td>
         </tr>
 
         <tr>
             <td style="text-align: right" colspan="2" style="font-weight:bold; font-size: 12px;">
-                Đơn vị: {{getDonViTinh()[$inputs['donvitinh']]}}
+                Đơn vị: Đồng
             </td>
         </tr>
     </table>
     <table id="data_body" cellspacing="0" cellpadding="0" border="1"
-        style="margin: 20px auto; border-collapse: collapse;font-size: {{$inputs['cochu'] ?? 12}}px;">
+        style="margin: 20px auto; border-collapse: collapse;">
         <thead>
             <tr class="text-center">
                 <th style="width: 5%;">STT</th>
@@ -66,96 +66,111 @@
             <td></td>
             <td class="text-center">TỔNG SỐ</td>
             <td class="text-center"></td>
-            <td class="text-center"></td>
-            <td class="text-center"></td>
+            <th class="text-center"></th>
+            <th class="text-center"></th>
             <td class="text-right">
-                {{ dinhdangso($model->sum('tongsotienthon') + $model->sum('sotienphanloaixa'), 0) }}
+                {{$model != []?dinhdangso(
+                    (($model->sothonxabiengioi * $model->sothonxabiengioi_heso +
+                        $model->sothonxakhokhan * $model->sothonxakhokhan_heso +
+                        $model->sothonxatrongdiem * $model->sothonxatrongdiem_heso +
+                        $model->sothonxakhac * $model->sothonxakhac_heso +
+                        $model->sothonxaloai1 * $model->sothonxaloai1_heso +
+                        $model->phanloaixa_heso) *
+                        12 *
+                        $model->luongcoban) + ($model->socanbotangthem * 12 * ($model->luongcoban*1.5)),
+                ):'' }}
             </td>
         </tr>
         <tr style="font-weight: bold;">
             <td>I</td>
             <td>Xã, phường, thị trấn</td>
-            <td class="text-center">{{ dinhdangso($model->count(), 0) }}</td>
-            <td></td>
-            <th class="text-center">{{ dinhdangso($model->sum('phanloaixa_heso'), 0) }}</th>
-            <td class="text-right">{{ dinhdangso($model->sum('sotienphanloaixa'), 0) }}
-            </td>
+            <td class="text-center"></td>
+            <td class="text-center"></td>
+            <th class="text-center"></th>
+            <th class="text-center"></th>
+            {{-- <td class="text-right">{{ $model != []?dinhdangso($model->phanloaixa_heso * 12 * $model->luongcoban, 0):'' }}
+            </td> --}}
         </tr>
         <tr>
             <td>1</td>
             <td>Xã loại 1</td>
-            <td class="text-center">{{ dinhdangso($model->where('phanloaixa', 'XL1')->count(), 0) }}</td>
+            <td class="text-center">{{ $model != []?$model->phanloaixa == 'XL1' ? 1 : '':'' }}</td>
             <td></td>
-            {{-- <td class="text-center">{{ $model->where('phanloaixa', 'XL1')->first()->phanloaixa_heso ?? '16' }}</td> --}}
-            <td class="text-center">{{ $model->where('phanloaixa', 'XL1')->first()->phanloaixa_heso ?? '' }}</td>
+            <td class="text-center">{{ $model != []?$model->phanloaixa == 'XL1' ? $model->phanloaixa_heso : '':'' }}</td>
             <td class="text-right">
-                {{ dinhdangso($model->where('phanloaixa', 'XL1')->sum('sotienphanloaixa'), 0) }}
+                {{ $model != []?$model->phanloaixa == 'XL1' ? dinhdangso($model->phanloaixa_heso * 12 * $model->luongcoban, 0) : '':'' }}
             </td>
         </tr>
         <tr>
             <td>-</td>
             <td>Số cán bộ tăng thêm</td>
             <td></td>
-            <td class="text-center">{{ dinhdangso($model->where('phanloaixa', 'XL1')->sum('socanbotangthem'), 0) }}</td>
-            <td class="text-center">1.5</td>
+            <td class="text-center">{{ $model != []?$model->phanloaixa == 'XL1' ? $model->socanbotangthem : '':'' }}</td>
+            <td class="text-center">{{ $model != []?$model->phanloaixa == 'XL1' ? 1.5 : '':'' }}</td>
             <td class="text-right">
-                {{ dinhdangso($model->where('phanloaixa', 'XL1')->sum('sotiencbtangthem'), 0) }}
+                {{ $model != []?$model->phanloaixa == 'XL1' ? dinhdangso($model->socanbotangthem * 12 * ($model->luongcoban*1.5), 0) : '':'' }}
             </td>
         </tr>
         <tr>
             <td>2</td>
             <td>Xã loại 2</td>
-            <td class="text-center">{{ dinhdangso($model->where('phanloaixa', 'XL2')->count(), 0) }}</td>
-            <td class="text-center">
-                {{-- {{ $model->where('phanloaixa', 'XL2')->first()->phanloaixa_heso ?? dinhdangsothapphan('13,7', 2) }}</td> --}}
-                {{ $model->where('phanloaixa', 'XL2')->first()->phanloaixa_heso ?? '' }}</td>
+            <td class="text-center">{{ $model != []?$model->phanloaixa == 'XL2' ? 1 : '':'' }}</td>
+            <td></td>
+            <td class="text-center">{{ $model != []?$model->phanloaixa == 'XL2' ? $model->phanloaixa_heso : '':'' }}</td>
             <td class="text-right">
-                {{ dinhdangso($model->where('phanloaixa', 'XL2')->sum('sotienphanloaixa'), 0) }}
+                {{ $model != []?$model->phanloaixa == 'XL2' ? dinhdangso($model->phanloaixa_heso * 12 * $model->luongcoban, 0) : '':'' }}
             </td>
         </tr>
         <tr>
             <td>-</td>
             <td>Số cán bộ tăng thêm</td>
             <td></td>
-            <td class="text-center">{{ dinhdangso($model->where('phanloaixa', 'XL2')->sum('socanbotangthem'), 0) }}</td>
-            <td class="text-center">1.5</td>
+            <td class="text-center">{{ $model != []?$model->phanloaixa == 'XL2' ? $model->socanbotangthem : '':'' }}</td>
+            <td class="text-center">{{ $model != []?$model->phanloaixa == 'XL2' ? 1.5 : '':'' }}</td>
             <td class="text-right">
-                {{ dinhdangso($model->where('phanloaixa', 'XL2')->sum('sotiencbtangthem'), 0) }}
+                {{ $model != []?$model->phanloaixa == 'XL2' ? dinhdangso($model->socanbotangthem * 12 * ($model->luongcoban*1.5), 0) : '':'' }}
             </td>
         </tr>
         <tr>
             <td>3</td>
             <td>Xã loại 3</td>
-            <td class="text-center">{{ dinhdangso($model->where('phanloaixa', 'XL3')->count(), 0) }}</td>
-            {{-- <td class="text-center">
-                {{ $model->where('phanloaixa', 'XL3')->first()->phanloaixa_heso ?? dinhdangsothapphan('11,4', 2) }}</td> --}}
-                <td class="text-center">
-                    {{ $model->where('phanloaixa', 'XL3')->first()->phanloaixa_heso ?? '' }}</td>
-            <td class="text-right">
-                {{ dinhdangso($model->where('phanloaixa', 'XL3')->sum('sotienphanloaixa'), 0) }}
-            </td>
-        </tr>
-        <tr>
-            <td>-</td>
-            <td>Số cán bộ tăng thêm</td>
+            <td class="text-center">{{ $model != []?$model->phanloaixa == 'XL3' ? 1 : '':'' }}</td>
             <td></td>
-            <td class="text-center">{{ dinhdangso($model->where('phanloaixa', 'XL3')->sum('socanbotangthem'), 0) }}</td>
-            <td class="text-center">1.5</td>
+            <td class="text-center">{{ $model != []?$model->phanloaixa == 'XL3' ? $model->phanloaixa_heso : '':'' }}</td>
             <td class="text-right">
-                {{ dinhdangso($model->where('phanloaixa', 'XL3')->sum('sotiencbtangthem'), 0) }}
+                {{ $model != []?$model->phanloaixa == 'XL3' ? dinhdangso($model->phanloaixa_heso * 12 * $model->luongcoban, 0) : '':'' }}
             </td>
+            <tr>
+                <td>-</td>
+                <td>Số cán bộ tăng thêm</td>
+                <td></td>
+                <td class="text-center">{{ $model != []?$model->phanloaixa == 'XL3' ? $model->socanbotangthem : '':'' }}</td>
+                <td class="text-center">{{ $model != []?$model->phanloaixa == 'XL3' ? 1.5 : '':'' }}</td>
+                <td class="text-right">
+                    {{ $model != []?$model->phanloaixa == 'XL3' ? dinhdangso($model->socanbotangthem * 12 * ($model->luongcoban*1.5), 0) : '':'' }}
+                </td>
+            </tr>
         </tr>
 
         <tr style="font-weight: bold;">
             <td>II</td>
             <td>Thôn, tổ dân phố</td>
             <td class="text-center">
-                {{ dinhdangso($model->sum('tongsothon')) }}
+                {{ $model != []?dinhdangso($model->sothonxabiengioi + $model->sothonxakhokhan + $model->sothonxatrongdiem + $model->sothonxakhac + $model->sothonxaloai1):'' }}
             </td>
             <th class="text-center"></th>
             <th class="text-center"></th>
             <td class="text-right">
-                {{ dinhdangso($model->sum('tongsotienthon'), 0) }}
+                {{ $model != []?dinhdangso(
+                    ($model->sothonxabiengioi * $model->sothonxabiengioi_heso +
+                        $model->sothonxakhokhan * $model->sothonxakhokhan_heso +
+                        $model->sothonxatrongdiem * $model->sothonxatrongdiem_heso +
+                        $model->sothonxakhac * $model->sothonxakhac_heso +
+                        $model->sothonxaloai1 * $model->sothonxaloai1_heso) *
+                        12 *
+                        $model->luongcoban,
+                    0,
+                ):'' }}
             </td>
         </tr>
         <tr>
@@ -164,16 +179,16 @@
             <td class="text-center"></td>
             <td></td>
             <td></td>
+            <td></td>
         </tr>
         <tr>
             <td>-</td>
             <td>Thôn thuộc xã biên giới, hải đảo</td>
-            <td class="text-center">{{ dinhdangso($model->sum('sothonxabiengioi')) }}</td>
+            <td class="text-center">{{ $model != []?dinhdangso($model->sothonxabiengioi):'' }}</td>
             <td></td>
-            {{-- <td class="text-center">{{ dinhdangsothapphan($model->first()->sothonxabiengioi_heso ?? 5, 2) }}</td> --}}
-            <td class="text-center">{{ dinhdangsothapphan($model->first()->sothonxabiengioi_heso ?? '', 2) }}</td>
+            <td class="text-center">{{ $model != []?dinhdangso($model->sothonxabiengioi_heso):'' }}</td>
             <td class="text-right">
-                {{ dinhdangsothapphan($model->sum('sotienxabiengioi'), 5) }}
+                {{ $model != []?dinhdangso($model->sothonxabiengioi * $model->sothonxabiengioi_heso * 12 * $model->luongcoban):'' }}
             </td>
         </tr>
         <tr>
@@ -187,12 +202,11 @@
         <tr>
             <td>-</td>
             <td>Thôn thuộc xã khó khăn theo Quyết định 30/2007/QĐ-TTg</td>
-            <td class="text-center">{{ dinhdangso($model->sum('sothonxakhokhan')) }}</td>
-            {{-- <td class="text-center">{{ dinhdangsothapphan($model->first()->sothonxakhokhan_heso ?? 5, 2) }}</td> --}}
+            <td class="text-center">{{ $model != []?dinhdangso($model->sothonxakhokhan):'' }}</td>
             <td></td>
-            <td class="text-center">{{ dinhdangsothapphan($model->first()->sothonxakhokhan_heso ?? '', 2) }}</td>
+            <td class="text-center">{{ $model != []?dinhdangso($model->sothonxakhokhan_heso):'' }}</td>
             <td class="text-right">
-                {{ dinhdangsothapphan($model->sum('sotienxakhokhan'), 5) }}
+                {{ $model != []?dinhdangsothapphan($model->sothonxakhokhan * $model->sothonxakhokhan_heso * 12 * $model->luongcoban):'' }}
             </td>
         </tr>
         <tr>
@@ -206,12 +220,11 @@
         <tr>
             <td>-</td>
             <td>Thôn thuộc xã loại I, loại II</td>
-            <td class="text-center">{{ dinhdangso($model->sum('sothonxaloai1')) }}</td>
+            <td class="text-center">{{ $model != []?dinhdangso($model->sothonxaloai1):'' }}</td>
             <td></td>
-            {{-- <td class="text-center">{{ dinhdangsothapphan($model->first()->sothonxaloai1_heso ?? 5, 2) }}</td> --}}
-            <td class="text-center">{{ dinhdangsothapphan($model->first()->sothonxaloai1_heso ?? '', 2) }}</td>
+            <td class="text-center">{{ $model != []?dinhdangso($model->sothonxaloai1_heso):'' }}</td>
             <td class="text-right">
-                {{ dinhdangsothapphan($model->sum('sotienxaloai1'), 5) }}
+                {{ $model != []?dinhdangsothapphan($model->sothonxaloai1 * $model->sothonxaloai1_heso * 12 * $model->luongcoban):'' }}
             </td>
         </tr>
         <tr>
@@ -225,12 +238,11 @@
         <tr>
             <td>-</td>
             <td>Thôn thuộc xã trọng điểm, phức tạp về an ninh trật tự</td>
-            <td class="text-center">{{ dinhdangso($model->sum('sothonxatrongdiem')) }}</td>
+            <td class="text-center">{{ $model != []?dinhdangso($model->sothonxatrongdiem):'' }}</td>
             <td></td>
-            {{-- <td class="text-center">{{ dinhdangsothapphan($model->first()->sothonxatrongdiem_heso ?? 0.5, 2) }}</td> --}}
-            <td class="text-center">{{ dinhdangsothapphan($model->first()->sothonxatrongdiem_heso ?? '', 2) }}</td>
+            <td class="text-center">{{ $model != []?dinhdangsothapphan($model->sothonxatrongdiem_heso, $lamtron):'' }}</td>
             <td class="text-right">
-                {{ dinhdangsothapphan($model->sum('sotienxatrongdiem'), 5) }}
+                {{ $model != []?dinhdangsothapphan($model->sothonxatrongdiem * $model->sothonxatrongdiem_heso * 12 * $model->luongcoban):'' }}
             </td>
         </tr>
         <tr>
@@ -244,12 +256,11 @@
         <tr>
             <td>-</td>
             <td>Thôn thuộc xã còn lại</td>
-            <td class="text-center">{{ dinhdangso($model->sum('sothonxakhac')) }}</td>
+            <td class="text-center">{{ $model != []?dinhdangso($model->sothonxakhac):'' }}</td>
             <td></td>
-            {{-- <td class="text-center">{{ dinhdangsothapphan($model->first()->sothonxakhac_heso ?? 3, 2) }}</td> --}}
-            <td class="text-center">{{ dinhdangsothapphan($model->first()->sothonxakhac_heso ?? '', 2) }}</td>
+            <td class="text-center">{{ $model != []?dinhdangso($model->sothonxakhac_heso):'' }}</td>
             <td class="text-right">
-                {{ dinhdangsothapphan($model->sum('sotienxakhac'), 5) }}
+                {{ $model != []?dinhdangsothapphan($model->sothonxakhac * $model->sothonxakhac_heso * 12 * $model->luongcoban):'' }}
             </td>
         </tr>
     </table>

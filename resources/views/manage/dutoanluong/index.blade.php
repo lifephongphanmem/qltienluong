@@ -91,14 +91,18 @@
                                                         '{{ $value->phanloaixa_heso }}',
                                                         '{{ $value->sothonxabiengioi }}',
                                                         '{{ $value->sothonxabiengioi_heso }}',
-                                                        '{{ $value->sothonxakhokhan }}',
-                                                        '{{ $value->sothonxakhokhan_heso }}',
+                                                        '{{ $value->sothonxa350ho }}',
+                                                        '{{ $value->sothonxa350ho_heso }}',
+                                                        '{{ $value->sotodanpho500ho }}',
+                                                        '{{ $value->sotodanpho500ho_heso }}',
                                                         '{{ $value->sothonxatrongdiem }}',
                                                         '{{ $value->sothonxatrongdiem_heso }}',
                                                         '{{ $value->sothonxakhac }}',
                                                         '{{ $value->sothonxakhac_heso }}',
-                                                        '{{ $value->sothonxaloai1 }}',
-                                                        '{{ $value->sothonxaloai1_heso }}')"
+                                                        '{{ $value->sochuyentuthon350hgd }}',
+                                                        '{{ $value->sochuyentuthon350hgd_heso }}',
+                                                        '{{ $value->sotodanphokhac }}',
+                                                        '{{ $value->sotodanphokhac_heso }}')"
                                                         class="btn btn-default btn-sm mbs" data-target="#modal-KinhPhiKoCT"
                                                         data-toggle="modal">
                                                         <i class="fa fa-edit"></i></button>
@@ -373,51 +377,62 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label class="control-label">Mức khoán quỹ phụ cấp </label>
-                                {!! Form::text('sothonxabiengioi_heso', 5, ['class' => 'form-control text-right', 'data-mask' => 'fdecimal']) !!}
+                                {!! Form::text('sothonxabiengioi_heso', 6, ['class' => 'form-control text-right', 'data-mask' => 'fdecimal']) !!}
                             </div>
                         </div>
                     </div>
-
                     <div class="row">
                         <div class="col-md-8">
-                            <label class="control-label">Số thôn thuộc xã khó khăn theo QĐ
-                                30/2007/QĐ-TTg</label>
-                            {!! Form::text('sothonxakhokhan', 0, ['class' => 'form-control']) !!}
+                            <label class="control-label">Số thôn có 350 hộ gia đình trở lên</label>
+                            {!! Form::text('sothonxa350ho', 0, ['class' => 'form-control']) !!}
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label class="control-label">Mức khoán quỹ phụ cấp </label>
-                                {!! Form::text('sothonxakhokhan_heso', 5, ['class' => 'form-control text-right', 'data-mask' => 'fdecimal']) !!}
+                                {!! Form::text('sothonxa350ho_heso', 6, ['class' => 'form-control text-right', 'data-mask' => 'fdecimal']) !!}
                             </div>
                         </div>
                     </div>
-
                     <div class="row">
                         <div class="col-md-8">
-                            <label class="control-label">Số thôn thuộc xã loại I, loại II</label>
-                            {!! Form::text('sothonxaloai1', 0, ['class' => 'form-control']) !!}
+                            <label class="control-label">Tổ dân phố có 500 hộ gia đình trở lên</label>
+                            {!! Form::text('sotodanpho500ho', 0, ['class' => 'form-control']) !!}
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label class="control-label">Mức khoán quỹ phụ cấp </label>
-                                {!! Form::text('sothonxaloai1_heso', 5, ['class' => 'form-control text-right', 'data-mask' => 'fdecimal']) !!}
+                                {!! Form::text('sotodanpho500ho_heso', 6, ['class' => 'form-control text-right', 'data-mask' => 'fdecimal']) !!}
                             </div>
                         </div>
                     </div>
-
                     <div class="row">
                         <div class="col-md-8">
-                            <label class="control-label">Số thôn thuộc xã trọng điểm, phức
-                                tạp</label>
+                            <label class="control-label">Tổ dân phố thuộc xã trọng điểm, phức tạp về an ninh</label>
                             {!! Form::text('sothonxatrongdiem', 0, ['class' => 'form-control']) !!}
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label class="control-label">Mức khoán quỹ phụ cấp </label>
-                                {!! Form::text('sothonxatrongdiem_heso', 0.5, ['class' => 'form-control text-right', 'data-mask' => 'fdecimal']) !!}
+                                {!! Form::text('sothonxatrongdiem_heso', 6, ['class' => 'form-control text-right', 'data-mask' => 'fdecimal']) !!}
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <label class="control-label">Tổ dân phố chuyển từ thôn có 350 HGD trở lên</label>
+                            {!! Form::text('sochuyentuthon350hgd', 0, ['class' => 'form-control']) !!}
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label">Mức khoán quỹ phụ cấp </label>
+                                {!! Form::text('sochuyentuthon350hgd_heso', 6, [
+                                    'class' => 'form-control text-right',
+                                    'data-mask' => 'fdecimal',
+                                ]) !!}
+                            </div>
+                        </div>
+                    </div>
+
 
                     <div class="row">
                         <div class="col-md-8">
@@ -427,7 +442,19 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label class="control-label">Mức khoán quỹ phụ cấp </label>
-                                {!! Form::text('sothonxakhac_heso', 3, ['class' => 'form-control text-right', 'data-mask' => 'fdecimal']) !!}
+                                {!! Form::text('sothonxakhac_heso', 4.5, ['class' => 'form-control text-right', 'data-mask' => 'fdecimal']) !!}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <label class="control-label">Số tổ dân phố còn lại</label>
+                            {!! Form::text('sotodanphokhac', 0, ['class' => 'form-control']) !!}
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label">Mức khoán quỹ phụ cấp </label>
+                                {!! Form::text('sotodanphokhac_heso', 4.5, ['class' => 'form-control text-right', 'data-mask' => 'fdecimal']) !!}
                             </div>
                         </div>
                     </div>
@@ -487,24 +514,29 @@
         function disable_btn(obj) {
             // obj.prop('disabled', true);
         }
-
+        
         function getKinhPhiKoCT(masodv, phanloaixa, phanloaixa_heso, sothonxabiengioi,
-            sothonxabiengioi_heso, sothonxakhokhan, sothonxakhokhan_heso, sothonxatrongdiem,
-            sothonxatrongdiem_heso, sothonxakhac, sothonxakhac_heso, sothonxaloai1,
-            sothonxaloai1_heso) {
+            sothonxabiengioi_heso, sothonxa350ho, sothonxa350ho_heso,sotodanpho500ho,sotodanpho500ho_heso, sothonxatrongdiem,
+            sothonxatrongdiem_heso, sothonxakhac, sothonxakhac_heso, sochuyentuthon350hgd,
+            sochuyentuthon350hgd_heso,sotodanphokhac,sotodanphokhac_heso) {
+
             $('#frm_kpkct').find("[name^='masodv']").val(masodv);
             $('#frm_kpkct').find("[name^='phanloaixa']").val(phanloaixa);
             $('#frm_kpkct').find("[name^='phanloaixa_heso']").val(phanloaixa_heso);
             $('#frm_kpkct').find("[name^='sothonxabiengioi']").val(sothonxabiengioi);
             $('#frm_kpkct').find("[name^='sothonxabiengioi_heso']").val(sothonxabiengioi_heso);
-            $('#frm_kpkct').find("[name^='sothonxakhokhan']").val(sothonxakhokhan);
-            $('#frm_kpkct').find("[name^='sothonxakhokhan_heso']").val(sothonxakhokhan_heso);
+            $('#frm_kpkct').find("[name^='sothonxa350ho']").val(sothonxa350ho);
+            $('#frm_kpkct').find("[name^='sothonxa350ho_heso']").val(sothonxa350ho_heso);
+            $('#frm_kpkct').find("[name^='sotodanpho500ho']").val(sotodanpho500ho);
+            $('#frm_kpkct').find("[name^='sotodanpho500ho_heso']").val(sotodanpho500ho_heso);
             $('#frm_kpkct').find("[name^='sothonxatrongdiem']").val(sothonxatrongdiem);
             $('#frm_kpkct').find("[name^='sothonxatrongdiem_heso']").val(sothonxatrongdiem_heso);
             $('#frm_kpkct').find("[name^='sothonxakhac']").val(sothonxakhac);
             $('#frm_kpkct').find("[name^='sothonxakhac_heso']").val(sothonxakhac_heso);
-            $('#frm_kpkct').find("[name^='sothonxaloai1']").val(sothonxaloai1);
-            $('#frm_kpkct').find("[name^='sothonxaloai1_heso']").val(sothonxaloai1_heso);
+            $('#frm_kpkct').find("[name^='sochuyentuthon350hgd']").val(sochuyentuthon350hgd);
+            $('#frm_kpkct').find("[name^='sochuyentuthon350hgd_heso']").val(sochuyentuthon350hgd_heso);
+            $('#frm_kpkct').find("[name^='sotodanphokhac']").val(sotodanphokhac);
+            $('#frm_kpkct').find("[name^='sotodanphokhac_heso']").val(sotodanphokhac_heso);
         }
 
         function confirmChuyen(masodv) {

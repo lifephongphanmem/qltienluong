@@ -190,6 +190,7 @@ class dutoanluong_insolieu_huyenController extends Controller
                     + $chitiet->sotienxatrongdiem + $chitiet->sotienxakhac + $chitiet->sotienxaloai1;
 
                 $chitiet->tongsothon = $chitiet->sothonxabiengioi + $chitiet->sothonxakhokhan + $chitiet->sothonxatrongdiem + $chitiet->sothonxakhac + $chitiet->sothonxaloai1;
+                $chitiet->sotiencbtangthem=$chitiet->socanbotangthem * 12 * ($chitiet->luongcoban *1.5);
             }
             return view('reports.dutoanluong.Huyen.kinhphikhongchuyentrach')
                 ->with('model', $model)

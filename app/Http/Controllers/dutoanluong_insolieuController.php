@@ -304,6 +304,7 @@ class dutoanluong_insolieuController extends Controller
             $model = dutoanluong_chitiet::where('masodv', $inputs['masodv'])->wherein('mact', $inputs['mact'])->where('phanloai', '<>', 'CHUATUYEN')->get();
 
             $m_chuatuyen = dutoanluong_chitiet::where('masodv', $inputs['masodv'])->wherein('mact', $inputs['mact'])->where('phanloai', 'CHUATUYEN')->get();
+            // dd($m_chuatuyen);
             $a_plct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
             $a_pc = getColDuToan();
             foreach ($model as $chitiet) {
@@ -346,6 +347,7 @@ class dutoanluong_insolieuController extends Controller
                 $model->add($chitiet);
             }
             //dd($m_chuatuyen);
+            // dd($model);
             $m_donvi = dmdonvi::where('madv', $m_dutoan->madv)->first();
 
             //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo

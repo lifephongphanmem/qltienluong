@@ -400,6 +400,7 @@ class UsersController extends Controller
         ) {
             if ($ttuser->status == "active" && $ttuser->trangthai != "TD") {
                 Session::put('admin', $ttuser);
+                // dd(session('admin'));
                 return redirect('')
                     ->with('pageTitle', 'Tổng quan');
             } else
