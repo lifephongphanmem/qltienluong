@@ -270,6 +270,7 @@
                 },
                 dataType: 'JSON',
                 success: function(data) {
+                    console.log(data);
                     $('#lydo').val(data.lydo);
                 },
                 error: function(message) {
