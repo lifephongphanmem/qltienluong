@@ -653,7 +653,7 @@ class tonghopluong_khoiController extends Controller
                 $chitiet->tongtl = $chitiet->luongcoban * $chitiet->tonghs;
                 $chitiet->tongbh = $chitiet->stbhxh_dv + $chitiet->stbhyt_dv + $chitiet->stkpcd_dv + $chitiet->stbhtn_dv;
             }
-//dd($model);
+            //dd($model);
             return view('functions.tonghopluong.templates.detail')
                 ->with('furl', '/chuc_nang/tong_hop_luong/khoi/')
                 ->with('model', $model)
@@ -781,7 +781,7 @@ class tonghopluong_khoiController extends Controller
             $nam = $inputs['nam'];
             $madv = session('admin')->madv;
             $model = tonghopluong_khoi::where('nam', $nam)->where('thang', $thang)->where('madv', $madv)->first();
-// dd($model);
+            // dd($model);
 
             if ($model != null) {
                 //Trường hợp đơn vị bị trả lại dữ liệu muốn gửi lại
@@ -1004,7 +1004,8 @@ class tonghopluong_khoiController extends Controller
 
         $inputs = $request->all();
 
-        $model = tonghopluong_donvi::select('lydo')->where('mathk',$inputs['mathdv'])->first();
+        // $model = tonghopluong_donvi::select('lydo')->where('mathk',$inputs['mathdv'])->first();
+        $model = tonghopluong_khoi::select('lydo')->where('mathdv',$inputs['mathdv'])->first();
 
         die($model);
     }
