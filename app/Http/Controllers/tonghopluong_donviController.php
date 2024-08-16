@@ -28,6 +28,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\dataController as data;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\Session;
 
 class tonghopluong_donviController extends Controller
@@ -114,8 +115,9 @@ class tonghopluong_donviController extends Controller
             // dd($a_data);
             $inputs['macqcq'] = dsdonviquanly::where('nam', $inputs['nam'])->where('madv', session('admin')->madv)->first()->macqcq ?? session('admin')->macqcq;
             $madvbc = dmdonvi::where('madv', session('admin')->madv)->first()->madvbc;
-            $a_donvi = array_column(dmdonvi::select('madv', 'tendv')->where('madvbc', $madvbc)
+            $a_donvi = array_column(dmdonvi::join('users','dmdonvi.madv','=','users.madv')->select('dmdonvi.madv', 'tendv')->where('status','active')->where('madvbc', $madvbc)
                 ->where('phanloaitaikhoan', 'TH')->get()->toarray(), 'tendv', 'madv');
+                // dd($a_donvi);
             //dd($inputs);
             return view('functions.tonghopluong.donvi.index')
                 ->with('furl', '/chuc_nang/tong_hop_luong/don_vi/')
