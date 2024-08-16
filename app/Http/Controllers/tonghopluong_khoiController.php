@@ -146,7 +146,7 @@ class tonghopluong_khoiController extends Controller
                     }
                 }
             }
-            //dd($a_data);
+            // dd($a_data);
             return view('functions.tonghopluong.khoi.index')
                 ->with('furl', '/chuc_nang/tong_hop_luong/khoi/')
                 ->with('nam', $inputs['nam'])
