@@ -23,16 +23,16 @@ class dutoanluong_insolieuController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
-            //dd($inputs);            
+            // dd($inputs);            
             $m_dutoan = dutoanluong::where('masodv', $inputs['masodv'])->first();
-            //dd($m_dutoan);
+            // dd($m_dutoan);
             $model = dutoanluong_bangluong::where('masodv', $inputs['masodv'])->wherein('mact', $inputs['mact']);
             $inputs['mapb']  = $inputs['mapb'] ?? 'ALL';
             if ($inputs['mapb'] != 'ALL') {
                 $model = $model->where('mapb', $inputs['mapb']);
             }
             $model = $model->orderby('stt')->get();
-
+// dd($model);
             $m_chitiet = dutoanluong_chitiet::where('masodv', $inputs['masodv'])->wherein('mact', array_unique(array_column($model->toarray(), 'mact')))->get();
             $m_donvi = dmdonvi::where('madv', $m_dutoan->madv)->first();
             $model_congtac = dmphanloaict::wherein('mact', array_unique(array_column($model->toArray(), 'mact')))->get();
@@ -42,6 +42,7 @@ class dutoanluong_insolieuController extends Controller
             $a_phucap = array();
             $col = 0;
             $a_plct = array_column($model_congtac->toarray(), 'tenct', 'mact');
+            // dd($a_plct);
             foreach ($model_pc as $ct) {
                 if ($model->sum($ct->mapc) > 0) {
                     $a_phucap[$ct->mapc] = $ct->report;

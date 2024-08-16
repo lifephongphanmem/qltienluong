@@ -123,12 +123,17 @@ class tonghopnguon_khoiController extends Controller
                     $dv->trangthai = $nguon_khoi->trangthai;
                     //$dv->trangthai = 'DAGUI';
                 } else {
+
                     //Chưa tổng hợp dữ liệu
                     $sl = $model_nguon->where('sohieu', $dv->sohieu)->count();
                     $khoi = $dulieukhoi->where('sohieu', $dv->sohieu)->count();
                     $dv->sldv = $sl + $khoi . '/' . $soluong;
                     $dv->masodv = null;
-                    if ($dv->sohieu == 'tt78_2022') 
+                    // if($dv->sohieu == '732024nd_cp'){
+                    //     dd($sl + $khoi);
+                    // }
+                  
+                    // if ($dv->sohieu == 'tt78_2022') áp dụng cho tất cả các thông tư 16082024 để hiển thị nút gửi
                     
                     //dd($khoi);
 
