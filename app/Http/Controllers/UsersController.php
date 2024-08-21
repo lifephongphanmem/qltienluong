@@ -30,6 +30,7 @@ use App\nguonkinhphi;
 use App\nguonkinhphi_01thang;
 use App\nguonkinhphi_bangluong;
 use App\nguonkinhphi_phucap;
+use App\users_phanquyen;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 
@@ -615,13 +616,13 @@ class UsersController extends Controller
     public function permission($username)
     {
         if (Session::has('admin')) {
-            $model = Users::where('username', $username)->first();
-            $permission = json_decode(!empty($model->permission) ? $model->permission : getPermissionDefault($model->level));
-
-            return view('system.users.perms')
-                ->with('permission', $permission)
+            $model_taikhoan = Users::where('username', $username)->first();
+            $model = users_phanquyen::where('username', $username)->get();
+            return view('system.users.perms')                
                 ->with('url', '/danh_muc/tai_khoan/')
                 ->with('model', $model)
+                ->with('a_chucnang', getDanhSachChucNang())
+                ->with('model_taikhoan', $model_taikhoan)
                 ->with('pageTitle', 'Phân quyền cho tài khoản');
         } else
             return view('errors.notlogin');
