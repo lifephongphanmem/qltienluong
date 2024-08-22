@@ -52,13 +52,31 @@ class dutoanluongController extends Controller
                 $dutoan->luongnb_dt = 0;
                 $dutoan->luonghs_dt = 0;
                 $dutoan->luongbh_dt =  0;
+                $dutoan->luongcbkct_dt =  0;//Lương cán bộ không chuyên trách
+                //Tính cho cán bộ không chuyên trách 21/08/2024
+                if(in_array($dutoan->phanloaixa,['XL1','XL2','XL3','PL1','PL2','PL3'])){
+                    //Tính phân loại xã
+                        $solieu_plxa = round($dutoan->phanloaixa_heso * 12 * $dutoan->luongcoban);
+                        $solieu_cbtang = round($dutoan->socanbotangthem * 12 * ($dutoan->luongcoban * 1.5));
+                        $solieu_thontodanpho=round($dutoan->sothonxabiengioi * $dutoan->sothonxabiengioi_heso +
+                        $dutoan->sothonxa350ho * $dutoan->sothonxa350ho_heso +
+                        $dutoan->sotodanpho500ho * $dutoan->sotodanpho500ho_heso +
+                        $dutoan->sothonxatrongdiem * $dutoan->sothonxatrongdiem_heso +
+                        $dutoan->sochuyentuthon350hgd * $dutoan->sochuyentuthon350hgd_heso +
+                        $dutoan->sothonxakhac * $dutoan->sothonxakhac_heso +
+                        $dutoan->sotodanphokhac * $dutoan->sotodanphokhac_heso) *
+                        12 *
+                        $dutoan->luongcoban;
+                        $dutoan->luongcbkct_dt = $solieu_plxa + $solieu_cbtang + $solieu_thontodanpho;
+                    
+                }
                 //TÍnh toán lại
                 $chitiet = $model_chitiet->where('masodv', $dutoan->masodv);
                 //dd($chitiet);
                 $dutoan->luongnb_dt = $chitiet->sum('st_heso');
                 $dutoan->luonghs_dt = $chitiet->sum('ttl') - $dutoan->luongnb_dt;
                 $dutoan->luongbh_dt =  $chitiet->sum('ttbh_dv');
-                $dutoan->tongdutoan = $dutoan->luongnb_dt + $dutoan->luonghs_dt + $dutoan->luongbh_dt;
+                $dutoan->tongdutoan = $dutoan->luongnb_dt + $dutoan->luonghs_dt + $dutoan->luongbh_dt + $dutoan->luongcbkct_dt;
                 //dd($chitiet);
             }
             $a_cqcq = array_column(dmdonvi::select('madv', 'tendv')->where('madvbc', session('admin')->madvbc)

@@ -52,6 +52,7 @@
                                 <th>Lương theo</br>ngạch bậc</th>
                                 <th>Tổng các khoản</br>phụ cấp</th>
                                 <th>Các khoản</br>đóng góp</th>
+                                <th>Các khoản</br>cán bộ không chuyên trách</th>
                                 <th>Trạng thái</th>
                                 <th>Đơn vị tiếp nhận</th>
                                 <th style="width: 15%">Thao tác</th>
@@ -70,6 +71,7 @@
                                         <td class="text-right">{{ dinhdangsothapphan($value->luongnb_dt) }}</td>
                                         <td class="text-right">{{ dinhdangsothapphan($value->luonghs_dt) }}</td>
                                         <td class="text-right">{{ dinhdangsothapphan($value->luongbh_dt) }}</td>
+                                        <td class="text-right">{{ dinhdangsothapphan($value->luongcbkct_dt) }}</td>
                                         <td class="text-center bold">{{ $a_trangthai[$value['trangthai']] }}</td>
                                         <td>{{ getTenDV($value->macqcq) }}</td>
                                         <td>
