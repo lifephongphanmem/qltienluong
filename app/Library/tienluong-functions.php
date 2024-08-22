@@ -30,7 +30,7 @@ function getPhanLoaiThuyetMinh()
     return [
         'CANBO' => 'Thuyết minh theo cán bộ',
         'PHUCAP' => 'Thuyết minh theo phụ cấp',
-        'TONGHOP'=>'Tổng hợp'
+        'TONGHOP' => 'Tổng hợp'
     ];
 }
 
@@ -379,10 +379,18 @@ function getPLCTDuToan()
 function getThang()
 {
     return array(
-        '01' => '01', '02' => '02', '03' => '03',
-        '04' => '04', '05' => '05', '06' => '06',
-        '07' => '07', '08' => '08', '09' => '09',
-        '10' => '10', '11' => '11', '12' => '12'
+        '01' => '01',
+        '02' => '02',
+        '03' => '03',
+        '04' => '04',
+        '05' => '05',
+        '06' => '06',
+        '07' => '07',
+        '08' => '08',
+        '09' => '09',
+        '10' => '10',
+        '11' => '11',
+        '12' => '12'
     );
 }
 
@@ -390,10 +398,18 @@ function getThangBC()
 {
     return array(
         'ALL' => 'Tất cả các tháng',
-        '01' => '01', '02' => '02', '03' => '03',
-        '04' => '04', '05' => '05', '06' => '06',
-        '07' => '07', '08' => '08', '09' => '09',
-        '10' => '10', '11' => '11', '12' => '12'
+        '01' => '01',
+        '02' => '02',
+        '03' => '03',
+        '04' => '04',
+        '05' => '05',
+        '06' => '06',
+        '07' => '07',
+        '08' => '08',
+        '09' => '09',
+        '10' => '10',
+        '11' => '11',
+        '12' => '12'
     );
 }
 
@@ -401,8 +417,12 @@ function getThangBC_nhucau()
 {
     return array(
         'ALL' => 'Tất cả các tháng',
-        '07' => '07', '08' => '08', '09' => '09',
-        '10' => '10', '11' => '11', '12' => '12'
+        '07' => '07',
+        '08' => '08',
+        '09' => '09',
+        '10' => '10',
+        '11' => '11',
+        '12' => '12'
     );
 }
 
@@ -473,11 +493,11 @@ function getNhomCongTac($val_null = true)
 
 function getThongTuQD($val_null = true)
 {
-    $donvibaocao=App\dmdonvibaocao::where('madvbc',session('admin')->madvbc)->first();
-    if($donvibaocao->kybaotri == 1){
+    $donvibaocao = App\dmdonvibaocao::where('madvbc', session('admin')->madvbc)->first();
+    if ($donvibaocao->kybaotri == 1) {
         $model = array_column(App\dmthongtuquyetdinh::all()->toArray(), 'tenttqd', 'sohieu');
-    }else{
-        $model = array_column(App\dmthongtuquyetdinh::where('sohieu','!=','732024nd_cp')->get()->toArray(), 'tenttqd', 'sohieu');
+    } else {
+        $model = array_column(App\dmthongtuquyetdinh::where('sohieu', '!=', '732024nd_cp')->get()->toArray(), 'tenttqd', 'sohieu');
     }
 
     if ($val_null) {
@@ -1095,8 +1115,13 @@ function getHCSN_vn()
 function getHCSN_tinh()
 {
     $ar_I['TONGSO'] = array(
-        'stt' => '0', 'tt' => 'I', 'noidung' => 'KHU VỰC HCSN, ĐẢNG, ĐOÀN THỂ', 'phanloai' => '0',
-        'chitiet' => ['GDDT', 'YTE', 'KHCN', 'VHTT', 'PTTH', 'TDTT', 'DBXH', 'KT', 'MT', 'QLNNDDT'], 'capdo' => '1', 'style' => 'font-weight: bold;font-style: italic;',
+        'stt' => '0',
+        'tt' => 'I',
+        'noidung' => 'KHU VỰC HCSN, ĐẢNG, ĐOÀN THỂ',
+        'phanloai' => '0',
+        'chitiet' => ['GDDT', 'YTE', 'KHCN', 'VHTT', 'PTTH', 'TDTT', 'DBXH', 'KT', 'MT', 'QLNNDDT'],
+        'capdo' => '1',
+        'style' => 'font-weight: bold;font-style: italic;',
     );
     $ar_I['TRONGDO'] = array('stt' => '1', 'tt' => '-', 'noidung' => 'Trong đó', 'phanloai' => '9', 'chitiet' => [], 'capdo' => '9', 'style' => '');
     $ar_I['GDDT'] = array('stt' => '2', 'tt' => '1', 'noidung' => 'Sự nghiệp giáo dục - đào tạo', 'phanloai' => '1', 'chitiet' => ['GD', 'DT'], 'capdo' => '2', 'style' => '',);
@@ -1207,58 +1232,101 @@ function get4a_A()
     $a_A = array();
 
     $a_A[0] = array(
-        'tt' => '1', 'noidung' => '50% tăng/giảm thu NSĐP (không kể tăng thu tiền sử dụng đất, xổ số kiến thiết) thực hiện 2022 so dự toán Thủ tướng Chính phủ giao năm 2022',
-        'sotien' => '0', 'phanloai' => '0', 'tentruong' => 'thuchien1'
+        'tt' => '1',
+        'noidung' => '50% tăng/giảm thu NSĐP (không kể tăng thu tiền sử dụng đất, xổ số kiến thiết) thực hiện 2022 so dự toán Thủ tướng Chính phủ giao năm 2022',
+        'sotien' => '0',
+        'phanloai' => '0',
+        'tentruong' => 'thuchien1'
     );
     $a_A[1] = array(
-        'tt' => '2', 'noidung' => '50% tăng thu NSĐP (không kể tăng thu tiền sử dụng đất, xổ số kiến thiết) dự toán 2023 so dự toán 2022 Thủ tướng Chính phủ giao',
-        'sotien' => '0', 'phanloai' => '0', 'tentruong' => 'dutoan'
+        'tt' => '2',
+        'noidung' => '50% tăng thu NSĐP (không kể tăng thu tiền sử dụng đất, xổ số kiến thiết) dự toán 2023 so dự toán 2022 Thủ tướng Chính phủ giao',
+        'sotien' => '0',
+        'phanloai' => '0',
+        'tentruong' => 'dutoan'
     );
     $a_A[2] = array(
-        'tt' => '3', 'noidung' => '50% tăng thu NSĐP (không kể tăng thu tiền sử dụng đất, xổ số kiến thiết) dự toán 2022 so dự toán 2021 Thủ tướng Chính phủ giao',
-        'sotien' => '0', 'phanloai' => '0', 'tentruong' => 'dutoan1'
+        'tt' => '3',
+        'noidung' => '50% tăng thu NSĐP (không kể tăng thu tiền sử dụng đất, xổ số kiến thiết) dự toán 2022 so dự toán 2021 Thủ tướng Chính phủ giao',
+        'sotien' => '0',
+        'phanloai' => '0',
+        'tentruong' => 'dutoan1'
     );
     $a_A[3] = array(
-        'tt' => '4', 'noidung' => 'Số tiết kiệm 10% chi thường xuyên dự toán năm 2021',
-        'sotien' => '0', 'phanloai' => '0', 'tentruong' => 'tietkiem2'
+        'tt' => '4',
+        'noidung' => 'Số tiết kiệm 10% chi thường xuyên dự toán năm 2021',
+        'sotien' => '0',
+        'phanloai' => '0',
+        'tentruong' => 'tietkiem2'
     );
     $a_A[4] = array(
-        'tt' => '5', 'noidung' => 'Số tiết kiệm 10% chi thường xuyên dự toán tăng thêm năm 2022',
-        'sotien' => '0', 'phanloai' => '0', 'tentruong' => 'tietkiem1'
+        'tt' => '5',
+        'noidung' => 'Số tiết kiệm 10% chi thường xuyên dự toán tăng thêm năm 2022',
+        'sotien' => '0',
+        'phanloai' => '0',
+        'tentruong' => 'tietkiem1'
     );
     $a_A[5] = array(
-        'tt' => '6', 'noidung' => 'Số tiết kiệm 10% chi thường xuyên dự toán tăng thêm năm 2023',
-        'sotien' => '0', 'phanloai' => '0', 'tentruong' => 'tietkiem'
+        'tt' => '6',
+        'noidung' => 'Số tiết kiệm 10% chi thường xuyên dự toán tăng thêm năm 2023',
+        'sotien' => '0',
+        'phanloai' => '0',
+        'tentruong' => 'tietkiem'
     );
 
     $a_A[6] = array(
-        'tt' => '7', 'noidung' => 'Số thu được huy động từ nguồn để lại đơn vị năm 2023:', 'sotien' => '0', 'phanloai' => '2', 'tentruong' => [7, 11]
+        'tt' => '7',
+        'noidung' => 'Số thu được huy động từ nguồn để lại đơn vị năm 2023:',
+        'sotien' => '0',
+        'phanloai' => '2',
+        'tentruong' => [7, 11]
     );
     $a_A[7] = array(
-        'tt' => 'a', 'noidung' => 'Nguồn huy động từ các đơn vị tự đảm bảo(1):',
-        'sotien' => '0', 'phanloai' => '1', 'tentruong' => [8, 9, 10]
+        'tt' => 'a',
+        'noidung' => 'Nguồn huy động từ các đơn vị tự đảm bảo(1):',
+        'sotien' => '0',
+        'phanloai' => '1',
+        'tentruong' => [8, 9, 10]
     );
     $a_A[8] = array(
-        'tt' => '', 'noidung' => '+ Học phí',
-        'sotien' => '0', 'phanloai' => '0', 'tentruong' => 'huydongtx_hocphi_4a'
+        'tt' => '',
+        'noidung' => '+ Học phí',
+        'sotien' => '0',
+        'phanloai' => '0',
+        'tentruong' => 'huydongtx_hocphi_4a'
     );
     $a_A[9] = array(
-        'tt' => '', 'noidung' => '+ Viện phí', 'sotien' => '0', 'phanloai' => '0', 'tentruong' => 'huydongtx_vienphi_4a'
+        'tt' => '',
+        'noidung' => '+ Viện phí',
+        'sotien' => '0',
+        'phanloai' => '0',
+        'tentruong' => 'huydongtx_vienphi_4a'
     );
     $a_A[10] = array(
-        'tt' => '', 'noidung' => '+ Nguồn thu khác', 'sotien' => '0', 'phanloai' => '0', 'tentruong' => 'huydongtx_khac_4a'
+        'tt' => '',
+        'noidung' => '+ Nguồn thu khác',
+        'sotien' => '0',
+        'phanloai' => '0',
+        'tentruong' => 'huydongtx_khac_4a'
     );
 
     $a_A[11] = array(
-        'tt' => 'b', 'noidung' => 'Nguồn huy động từ các đơn vị chưa tự đảm bảo chi thường xuyên:', 'sotien' => '0', 'phanloai' => '1', 'tentruong' => [12, 13, 14]
+        'tt' => 'b',
+        'noidung' => 'Nguồn huy động từ các đơn vị chưa tự đảm bảo chi thường xuyên:',
+        'sotien' => '0',
+        'phanloai' => '1',
+        'tentruong' => [12, 13, 14]
     );
     $a_A[12] = array('tt' => '', 'noidung' => '+ Học phí', 'sotien' => '0', 'phanloai' => '0', 'tentruong' => 'huydongktx_hocphi_4a');
     $a_A[13] = array('tt' => '', 'noidung' => '+ Viện phí', 'sotien' => '0', 'phanloai' => '0', 'tentruong' => 'huydongktx_vienphi_4a');
     $a_A[14] = array('tt' => '', 'noidung' => '+ Nguồn thu khác', 'sotien' => '0', 'phanloai' => '0', 'tentruong' => 'huydongktx_khac_4a');
 
     $a_A[15] = array(
-        'tt' => '8', 'noidung' => 'Nguồn 50% phần ngân sách nhà nước giảm chi hỗ trợ hoạt động thường xuyên trong lĩnh vực hành chính (do tinh giản biên chế và đổi mới, sắp xếp lại bộ máy của hệ thống chính trị tinh gọn, hoạt động hiệu lực, hiệu quả) và các đơn vị sự nghiệp công lập (do thực hiện đổi mới hệ thống tổ chức và quản lý, nâng cao chất lượng và hiệu quả hoạt động của đơn vị sự nghiệp công lập) năm 2023',
-        'sotien' => '0', 'phanloai' => '9', 'tentruong' => []
+        'tt' => '8',
+        'noidung' => 'Nguồn 50% phần ngân sách nhà nước giảm chi hỗ trợ hoạt động thường xuyên trong lĩnh vực hành chính (do tinh giản biên chế và đổi mới, sắp xếp lại bộ máy của hệ thống chính trị tinh gọn, hoạt động hiệu lực, hiệu quả) và các đơn vị sự nghiệp công lập (do thực hiện đổi mới hệ thống tổ chức và quản lý, nâng cao chất lượng và hiệu quả hoạt động của đơn vị sự nghiệp công lập) năm 2023',
+        'sotien' => '0',
+        'phanloai' => '9',
+        'tentruong' => []
     );
 
     /*2023.23.06 Phần này lấy số liệu từ mẫu 2đ chứ ko pải cộng dồn lên
@@ -1268,30 +1336,52 @@ function get4a_A()
     );
     */
     $a_A[16] = array(
-        'tt' => '', 'noidung' => '+ Từ việc tinh giản biên chế tổ chức lại bộ máy (2)',
-        'sotien' => '0', 'sotien' => '0', 'phanloai' => '9', 'tentruong' => 'tinhgiambc_4a'
+        'tt' => '',
+        'noidung' => '+ Từ việc tinh giản biên chế tổ chức lại bộ máy (2)',
+        'sotien' => '0',
+        'sotien' => '0',
+        'phanloai' => '9',
+        'tentruong' => 'tinhgiambc_4a'
     );
     $a_A[17] = array(
-        'tt' => '', 'noidung' => '+ Từ việc sát nhập các đầu mối, cơ quan, đơn vị (2)',
-        'sotien' => '0', 'sotien' => '0', 'phanloai' => '9', 'tentruong' => 'satnhapdaumoi_4a'
+        'tt' => '',
+        'noidung' => '+ Từ việc sát nhập các đầu mối, cơ quan, đơn vị (2)',
+        'sotien' => '0',
+        'sotien' => '0',
+        'phanloai' => '9',
+        'tentruong' => 'satnhapdaumoi_4a'
     );
     $a_A[18] = array(
-        'tt' => '', 'noidung' => '+ Từ việc thay đổi cơ chế tự chủ của đơn vị sư nghiệp (3)',
-        'sotien' => '0', 'sotien' => '0', 'phanloai' => '9', 'tentruong' => 'thaydoicochetuchu_4a'
+        'tt' => '',
+        'noidung' => '+ Từ việc thay đổi cơ chế tự chủ của đơn vị sư nghiệp (3)',
+        'sotien' => '0',
+        'sotien' => '0',
+        'phanloai' => '9',
+        'tentruong' => 'thaydoicochetuchu_4a'
     );
     $a_A[19] = array(
-        'tt' => '', 'noidung' => '+ Từ việc sát nhập các xã không đủ điều kiện tiêu chuẩn',
-        'sotien' => '0', 'sotien' => '0', 'phanloai' => '9', 'tentruong' => 'satnhapxa_4a'
+        'tt' => '',
+        'noidung' => '+ Từ việc sát nhập các xã không đủ điều kiện tiêu chuẩn',
+        'sotien' => '0',
+        'sotien' => '0',
+        'phanloai' => '9',
+        'tentruong' => 'satnhapxa_4a'
     );
 
     $a_A[20] = array(
-        'tt' => '9', 'noidung' => 'Nguồn NSTW đã bổ sung trong dự toán 2023',
-        'sotien' => '0', 'phanloai' => '0', 'tentruong' => 'bosung'
+        'tt' => '9',
+        'noidung' => 'Nguồn NSTW đã bổ sung trong dự toán 2023',
+        'sotien' => '0',
+        'phanloai' => '0',
+        'tentruong' => 'bosung'
     );
 
     $a_A[21] = array(
-        'tt' => '10', 'noidung' => 'Nguồn thực hiện cải cách tiền lương năm 2022 chưa sử dụng hết chuyển sang năm 2023',
-        'sotien' => '0', 'phanloai' => '0', 'tentruong' => 'caicach'
+        'tt' => '10',
+        'noidung' => 'Nguồn thực hiện cải cách tiền lương năm 2022 chưa sử dụng hết chuyển sang năm 2023',
+        'sotien' => '0',
+        'phanloai' => '0',
+        'tentruong' => 'caicach'
     );
 
     return $a_A;
@@ -1302,23 +1392,36 @@ function get4a_TT50_A()
     $a_A = array();
 
     $a_A[0] = array(
-        'tt' => '1', 'noidung' => '70% tăng thu NSĐP ( không thể thu tiền sử dụng đất, thu sổ số kiến thiết, thu cổ phần hóa và thoái vốn doanh nghiệp nhà nước do địa phương quản lý, thu tiền thuê đất một lần được nhà nước đầu tư trước để bồi thường, giải phóng mặt bằng và thu từ xử lý tài sản công tại cơ quan, tổ chức , đơn vị được cơ quan có thẩm quyền quyết định sử dụng để chi đầu tư theo quy định; thu tiền bảo vệ và phát triển đất trồng lúa; phí tham quan các di tích, di sản thể giới; phí sử dụng công trình kết cấu hạ tầng, công trình dịch vụ, tiện ích công cộng trong khu vực cửa khẩu; phí bảo vệ môi trường đối với khai thác khoáng sản; phí bảo vệ môi trường với nước thải; thu từ quỹ đất công ích, thu hoa lợi, công sản tại xã và thu tiền cho thuê, cho thuê mua, bán nhà thuộc sở hữu nhà nước) thực hiện 2022 so dự toán Thủ tướng Chính phủ giao năm 2022',
-        'sotien' => '0', 'phanloai' => '0', 'tentruong' => 'thuchien1'
+        'tt' => '1',
+        'noidung' => '70% tăng thu NSĐP ( không thể thu tiền sử dụng đất, thu sổ số kiến thiết, thu cổ phần hóa và thoái vốn doanh nghiệp nhà nước do địa phương quản lý, thu tiền thuê đất một lần được nhà nước đầu tư trước để bồi thường, giải phóng mặt bằng và thu từ xử lý tài sản công tại cơ quan, tổ chức , đơn vị được cơ quan có thẩm quyền quyết định sử dụng để chi đầu tư theo quy định; thu tiền bảo vệ và phát triển đất trồng lúa; phí tham quan các di tích, di sản thể giới; phí sử dụng công trình kết cấu hạ tầng, công trình dịch vụ, tiện ích công cộng trong khu vực cửa khẩu; phí bảo vệ môi trường đối với khai thác khoáng sản; phí bảo vệ môi trường với nước thải; thu từ quỹ đất công ích, thu hoa lợi, công sản tại xã và thu tiền cho thuê, cho thuê mua, bán nhà thuộc sở hữu nhà nước) thực hiện 2022 so dự toán Thủ tướng Chính phủ giao năm 2022',
+        'sotien' => '0',
+        'phanloai' => '0',
+        'tentruong' => 'thuchien1'
     );
     $a_A[1] = array(
-        'tt' => '2', 'noidung' => 'Số tiết kiệm chi 10 chi thường xuyên năm 2023',
-        'sotien' => '0', 'phanloai' => '0', 'tentruong' => 'tietkiem'
+        'tt' => '2',
+        'noidung' => 'Số tiết kiệm chi 10 chi thường xuyên năm 2023',
+        'sotien' => '0',
+        'phanloai' => '0',
+        'tentruong' => 'tietkiem'
     );
     $a_A[2] = array(
-        'tt' => '3', 'noidung' => 'Số thu được huy động từ nguồn để lại đơn vị 2023 ( các đơn vị chưa tự đảm bảo chi thường xuyên )', 'sotien' => '0', 'phanloai' => '1', 'tentruong' => [3, 4, 5]
+        'tt' => '3',
+        'noidung' => 'Số thu được huy động từ nguồn để lại đơn vị 2023 ( các đơn vị chưa tự đảm bảo chi thường xuyên )',
+        'sotien' => '0',
+        'phanloai' => '1',
+        'tentruong' => [3, 4, 5]
     );
     $a_A[3] = array('tt' => '', 'noidung' => '+ Học phí', 'sotien' => '0', 'phanloai' => '0', 'tentruong' => 'huydongktx_hocphi_4a');
     $a_A[4] = array('tt' => '', 'noidung' => '+ Viện phí', 'sotien' => '0', 'phanloai' => '0', 'tentruong' => 'huydongktx_vienphi_4a');
     $a_A[5] = array('tt' => '', 'noidung' => '+ Nguồn thu khác', 'sotien' => '0', 'phanloai' => '0', 'tentruong' => 'huydongktx_khac_4a');
 
     $a_A[6] = array(
-        'tt' => '4', 'noidung' => 'Nguồn thực hiện cải cách tiền lương năm 2022 chưa sử dụng hết chuyển sang năm 2023',
-        'sotien' => '0', 'phanloai' => '0', 'tentruong' => 'caicach'
+        'tt' => '4',
+        'noidung' => 'Nguồn thực hiện cải cách tiền lương năm 2022 chưa sử dụng hết chuyển sang năm 2023',
+        'sotien' => '0',
+        'phanloai' => '0',
+        'tentruong' => 'caicach'
     );
 
     return $a_A;
@@ -1329,40 +1432,65 @@ function get4a_NĐ73_A()
     $a_A = array();
 
     $a_A[0] = array(
-        'tt' => '1', 'noidung' => '70% tăng thu NSĐP (không kể thu tiền sử dụng đất, thu xổ số kiến thiết, thu cổ phần hóa và thoái vốn doanh nghiệp nhà nước do địa phương quản lý, thu tiền thuê đất một lần được nhà đầu tư ứng trước để bồi thường, giải phóng mặt bằng và thu từ xử lý tài sản công tại cơ quan, tổ chức, đơn vị được cơ quan có thẩm quyền quyết định sử dụng để chi đầu tư theo quy định; thu tiền bảo vệ và phát triển đất trồng lúa; phí tham quan các khu di tích, di sản thế giới; phí sử dụng công trình kết cấu hạ tầng, công trình dịch vụ, tiện ích công cộng trong khu vực cửa khẩu; phí bảo vệ môi trường đối với khai thác khoáng sản; phí bảo vệ môi trường đối với nước thải; thu từ quỹ đất công ích, thu hoa lợi, công sản tại xã và thu tiền cho thuê, cho thuê mua, bán nhà thuộc sở hữu nhà nước) thực hiện 2023 so dự toán giao năm 2023',
-        'sotien' => '0', 'phanloai' => '0', 'tentruong' => 'thuchien1'
+        'tt' => '1',
+        'noidung' => '70% tăng thu NSĐP (không kể thu tiền sử dụng đất, thu xổ số kiến thiết, thu cổ phần hóa và thoái vốn doanh nghiệp nhà nước do địa phương quản lý, thu tiền thuê đất một lần được nhà đầu tư ứng trước để bồi thường, giải phóng mặt bằng và thu từ xử lý tài sản công tại cơ quan, tổ chức, đơn vị được cơ quan có thẩm quyền quyết định sử dụng để chi đầu tư theo quy định; thu tiền bảo vệ và phát triển đất trồng lúa; phí tham quan các khu di tích, di sản thế giới; phí sử dụng công trình kết cấu hạ tầng, công trình dịch vụ, tiện ích công cộng trong khu vực cửa khẩu; phí bảo vệ môi trường đối với khai thác khoáng sản; phí bảo vệ môi trường đối với nước thải; thu từ quỹ đất công ích, thu hoa lợi, công sản tại xã và thu tiền cho thuê, cho thuê mua, bán nhà thuộc sở hữu nhà nước) thực hiện 2023 so dự toán giao năm 2023',
+        'sotien' => '0',
+        'phanloai' => '0',
+        'tentruong' => 'thuchien1'
     );
 
     $a_A[1] = array(
-        'tt' => '2', 'noidung' => '50% tăng thu NSĐP (không kể thu tiền sử dụng đất, thu xổ số kiến thiết, thu cổ phần hóa và thoái vốn doanh nghiệp nhà nước do địa phương quản lý, thu tiền thuê đất một lần được nhà đầu tư ứng trước để bồi thường, giải phóng mặt bằng và thu từ xử lý tài sản công tại cơ quan, tổ chức, đơn vị được cơ quan có thẩm quyền quyết định sử dụng để chi đầu tư theo quy định; thu tiền bảo vệ và phát triển đất trồng lúa; phí tham quan các khu di tích, di sản thế giới; phí sử dụng công trình kết cấu hạ tầng, công trình dịch vụ, tiện ích công cộng trong khu vực cửa khẩu; phí bảo vệ môi trường đối với khai thác khoáng sản; phí bảo vệ môi trường đối với nước thải; thu từ quỹ đất công ích, thu hoa lợi, công sản tại xã và thu tiền cho thuê, cho thuê mua, bán nhà thuộc sở hữu nhà nước) dự toán 2024 so với dự toán năm 2023',
-        'sotien' => '0', 'phanloai' => '0', 'tentruong' => 'thuchien2'
+        'tt' => '2',
+        'noidung' => '50% tăng thu NSĐP (không kể thu tiền sử dụng đất, thu xổ số kiến thiết, thu cổ phần hóa và thoái vốn doanh nghiệp nhà nước do địa phương quản lý, thu tiền thuê đất một lần được nhà đầu tư ứng trước để bồi thường, giải phóng mặt bằng và thu từ xử lý tài sản công tại cơ quan, tổ chức, đơn vị được cơ quan có thẩm quyền quyết định sử dụng để chi đầu tư theo quy định; thu tiền bảo vệ và phát triển đất trồng lúa; phí tham quan các khu di tích, di sản thế giới; phí sử dụng công trình kết cấu hạ tầng, công trình dịch vụ, tiện ích công cộng trong khu vực cửa khẩu; phí bảo vệ môi trường đối với khai thác khoáng sản; phí bảo vệ môi trường đối với nước thải; thu từ quỹ đất công ích, thu hoa lợi, công sản tại xã và thu tiền cho thuê, cho thuê mua, bán nhà thuộc sở hữu nhà nước) dự toán 2024 so với dự toán năm 2023',
+        'sotien' => '0',
+        'phanloai' => '0',
+        'tentruong' => 'thuchien2'
     );
 
     $a_A[2] = array(
-        'tt' => '3', 'noidung' => 'Số tiết kiệm chi 10 chi thường xuyên năm 2024',
-        'sotien' => '0', 'phanloai' => '0', 'tentruong' => 'tietkiem'
+        'tt' => '3',
+        'noidung' => 'Số tiết kiệm chi 10 chi thường xuyên năm 2024',
+        'sotien' => '0',
+        'phanloai' => '0',
+        'tentruong' => 'tietkiem'
     );
     $a_A[3] = array(
-        'tt' => '4', 'noidung' => 'Số thu được huy động từ nguồn để lại đơn vị 2024 ( các đơn vị chưa tự đảm bảo chi thường xuyên )', 'sotien' => '0', 'phanloai' => '1', 'tentruong' => [4, 5, 6]
+        'tt' => '4',
+        'noidung' => 'Số thu được huy động từ nguồn để lại đơn vị 2024 ( các đơn vị chưa tự đảm bảo chi thường xuyên )',
+        'sotien' => '0',
+        'phanloai' => '1',
+        'tentruong' => [4, 5, 6]
     );
     $a_A[4] = array('tt' => '', 'noidung' => '+ Học phí', 'sotien' => '0', 'phanloai' => '0', 'tentruong' => 'huydongktx_hocphi_4a');
     $a_A[5] = array('tt' => '', 'noidung' => '+ Viện phí', 'sotien' => '0', 'phanloai' => '0', 'tentruong' => 'huydongktx_vienphi_4a');
     $a_A[6] = array('tt' => '', 'noidung' => '+ Nguồn thu khác', 'sotien' => '0', 'phanloai' => '0', 'tentruong' => 'huydongktx_khac_4a');
     $a_A[7] = array(
-        'tt' => '5', 'noidung' => '50% phần NSNN giảm chi hỗ trợ hoạt động thường xuyên trong lĩnh vực hành chính và các đơn vị sự nghiệp công lập',
-         'sotien' => '0', 'phanloai' => '0', 'tentruong' => 'nsnngiam'
+        'tt' => '5',
+        'noidung' => '50% phần NSNN giảm chi hỗ trợ hoạt động thường xuyên trong lĩnh vực hành chính và các đơn vị sự nghiệp công lập',
+        'sotien' => '0',
+        'phanloai' => '0',
+        'tentruong' => 'nsnngiam'
     );
     $a_A[8] = array(
-        'tt' => '6', 'noidung' => 'Nguồn thực hiện cải cách tiền lương năm 2023 chưa sử dụng hết chuyển sang năm 2024',
-        'sotien' => '0', 'phanloai' => '0', 'tentruong' => 'caicach'
+        'tt' => '6',
+        'noidung' => 'Nguồn thực hiện cải cách tiền lương năm 2023 chưa sử dụng hết chuyển sang năm 2024',
+        'sotien' => '0',
+        'phanloai' => '0',
+        'tentruong' => 'caicach'
     );
     $a_A[9] = array(
-        'tt' => '7', 'noidung' => '70% kết dư ngân sách năm 2023',
-        'sotien' => '0', 'phanloai' => '0', 'tentruong' => 'nguonketdu_4a'
+        'tt' => '7',
+        'noidung' => '70% kết dư ngân sách năm 2023',
+        'sotien' => '0',
+        'phanloai' => '0',
+        'tentruong' => 'nguonketdu_4a'
     );
     $a_A[10] = array(
-        'tt' => '8', 'noidung' => 'Bố trí trả lại nguồn cải cách tiền lương của các năm trước',
-        'sotien' => '0', 'phanloai' => '0', 'tentruong' => 'nguontralai_4a'
+        'tt' => '8',
+        'noidung' => 'Bố trí trả lại nguồn cải cách tiền lương của các năm trước',
+        'sotien' => '0',
+        'phanloai' => '0',
+        'tentruong' => 'nguontralai_4a'
     );
 
     return $a_A;
@@ -1409,7 +1537,7 @@ function getSoLuongCanBoDinhMuc($nghidinh, $phanloaixa)
             'PL1' => 23,
             'PL2' => 21,
             'PL3' => 19,
-        ],        
+        ],
         'ND33/2024' => [
             'XL1' => 14,
             'XL2' => 12,
@@ -1440,21 +1568,22 @@ function getMucKhoanPhuCapXa($nghidinh, $phanloaixa)
     ];
     return $a_kq[$nghidinh][$phanloaixa] ?? 0;
 }
-function getNghiDinhPLXaPhuong($phanloaixa){
-    $kq=in_array($phanloaixa,['XL1','XL2','XL3'])?'ND33/2023/XA':'ND33/2023/PHUONG';
+function getNghiDinhPLXaPhuong($phanloaixa)
+{
+    $kq = in_array($phanloaixa, ['XL1', 'XL2', 'XL3']) ? 'ND33/2023/XA' : 'ND33/2023/PHUONG';
     return $kq;
 }
 
-function getDonviHuyen($nam,$madv,$chucnang = null)
+function getDonviHuyen($nam, $madv, $chucnang = null)
 {
-     //lấy danh sách đơn vị: đơn vị có macqcq = madv (bang dmdonvi) + đơn vị nam=nam && macqcq=madv
-     $a_donvicapduoi = [];
-     //đơn vị nam=nam && macqcq=madv
-     $model_dsql = dsdonviquanly::where('nam', $nam)->where('macqcq', $madv)->get();
-     $a_donvicapduoi = array_unique(array_column($model_dsql->toarray(), 'madv'));
+    //lấy danh sách đơn vị: đơn vị có macqcq = madv (bang dmdonvi) + đơn vị nam=nam && macqcq=madv
+    $a_donvicapduoi = [];
+    //đơn vị nam=nam && macqcq=madv
+    $model_dsql = dsdonviquanly::where('nam', $nam)->where('macqcq', $madv)->get();
+    $a_donvicapduoi = array_unique(array_column($model_dsql->toarray(), 'madv'));
 
-     //dd($a_donvicapduoi);
-     //đơn vị có macqcq = madv (bang dmdonvi)
+    //dd($a_donvicapduoi);
+    //đơn vị có macqcq = madv (bang dmdonvi)
     //  $model_dmdv = dmdonvi::where('macqcq', $madv)
     //      ->wherenotin('madv', function ($qr) use ($nam) {
     //          $qr->select('madv')->from('dsdonviquanly')->where('nam', $nam)->distinct()->get();
@@ -1462,9 +1591,9 @@ function getDonviHuyen($nam,$madv,$chucnang = null)
     //      ->where('madv', '!=', $madv) //bỏ đơn vị tổng hợp
     //      ->get();
     $model_dmdv = dmdonvi::where('macqcq', $madv)
-    ->wherenotin('madv', $a_donvicapduoi) //lọc các đơn vị đã khai báo trong dsdonviquanly
-    ->where('madv', '!=', $madv) //bỏ đơn vị tổng hợp
-    ->get();
+        ->wherenotin('madv', $a_donvicapduoi) //lọc các đơn vị đã khai báo trong dsdonviquanly
+        ->where('madv', '!=', $madv) //bỏ đơn vị tổng hợp
+        ->get();
     // foreach($model_dmdv as $ct)
     // {
     //     if($ct->created_at != null){
@@ -1480,27 +1609,40 @@ function getDonviHuyen($nam,$madv,$chucnang = null)
 
     // }
     // dd(23);
-     $a_donvicapduoi = array_unique(array_merge(array_column($model_dmdv->toarray(), 'madv'), $a_donvicapduoi));
+    $a_donvicapduoi = array_unique(array_merge(array_column($model_dmdv->toarray(), 'madv'), $a_donvicapduoi));
     //lấy lại madv ở dmdonvi de tranh truong hop có madv o dsdonviquanly nhưng không có ở dmdonvi
-    $model_donvi=dmdonvi::select('madv')->wherein('madv',$a_donvicapduoi)->get();
-    $a_donvicapduoi=array_column($model_donvi->toarray(),'madv');
+    $model_donvi = dmdonvi::select('madv')->wherein('madv', $a_donvicapduoi)->get();
+    $a_donvicapduoi = array_column($model_donvi->toarray(), 'madv');
     //  dd($a_donvicapduoi);
-    if($chucnang == 'DUTOAN'){
-        $model_donvitamdung = dmdonvi::where('trangthai', 'TD')->wherein('madv', $a_donvicapduoi)->where('ngaydung','<=',$nam.'-07-01')->get();
-    }elseif($chucnang == 'NKP'){
+    if ($chucnang == 'DUTOAN') {
+        $model_donvitamdung = dmdonvi::where('trangthai', 'TD')->wherein('madv', $a_donvicapduoi)->where('ngaydung', '<=', $nam . '-07-01')->get();
+    } elseif ($chucnang == 'NKP') {
         $model_donvitamdung = dmdonvi::where('trangthai', 'TD')->wherein('madv', $a_donvicapduoi)->get();
         //So sánh ngày gửi dữ liệu nguồn kp với ngày dừng đh để hiện dữ liệu cho đơn vị
 
- 
-    }else{
+
+    } else {
         $model_donvitamdung = dmdonvi::where('trangthai', 'TD')->wherein('madv', $a_donvicapduoi)->get();
     }
-     
-    $m_donvi=array_diff($a_donvicapduoi, array_column($model_donvitamdung->toarray(), 'madv'));
-    $array=[
-        'm_donvi'=>$m_donvi,
-        'model_donvitamdung'=>array_column($model_donvitamdung->toarray(), 'madv'),
-        'a_donvicapduoi'=>$a_donvicapduoi
+
+    $m_donvi = array_diff($a_donvicapduoi, array_column($model_donvitamdung->toarray(), 'madv'));
+    $array = [
+        'm_donvi' => $m_donvi,
+        'model_donvitamdung' => array_column($model_donvitamdung->toarray(), 'madv'),
+        'a_donvicapduoi' => $a_donvicapduoi
     ];
     return $array;
+}
+
+function getDanhSachChucNang()
+{
+    return [
+        'quanlyhoso'=>'Quản lý hồ sơ',
+        'chucnangnghiepvu'=>'Chức năng, nghiệp vụ',
+        'tonghopchiluong'=>'Tổng hợp dữ liệu chi trả lương',
+        'nguonkpvadutoan'=>'Nguồn kinh phí và dự toán',
+        'tracuutimkiem'=>'Tra cứu và tìm kiếm dữ liệu',
+        'baocaotonghop'=>'Báo cáo tổng hợp',
+        'thongtinhethong'=>'Thông tin hệ thống đơn vị',
+    ];
 }

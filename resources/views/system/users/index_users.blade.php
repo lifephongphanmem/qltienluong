@@ -75,9 +75,9 @@
                                                         <i class="fa fa-edit"></i> Chỉnh sửa
                                                     </a>
                                                 @endif
-                                                <!--a class="btn btn-default btn-xs mbs" href="{{url($url.'ma_so='.$value->username.'/permission')}}">
+                                                <a class="btn btn-default btn-xs mbs" href="{{url($url.'ma_so='.$value->username.'/permission')}}">
                                                     <i class="fa fa-list-ul"></i> Phân quyền
-                                                </a-->
+                                                </a>
                                                 @if(can('qltaikhoan','delete'))
                                                     <button type="button" onclick="cfDel('{{$url.'del_taikhoan/'.chuyenkytulogin($value->username)}}')" class="btn btn-default btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
                                                         <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
