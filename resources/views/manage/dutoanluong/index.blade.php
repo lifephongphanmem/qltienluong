@@ -52,7 +52,9 @@
                                 <th>Lương theo</br>ngạch bậc</th>
                                 <th>Tổng các khoản</br>phụ cấp</th>
                                 <th>Các khoản</br>đóng góp</th>
-                                <th>Các khoản</br>cán bộ không chuyên trách</th>
+                                @if ($maphanloai == 'KVXP')
+                                    <th>Các khoản</br>cán bộ không chuyên trách</th>
+                                @endif
                                 <th>Trạng thái</th>
                                 <th>Đơn vị tiếp nhận</th>
                                 <th style="width: 15%">Thao tác</th>
@@ -71,7 +73,9 @@
                                         <td class="text-right">{{ dinhdangsothapphan($value->luongnb_dt) }}</td>
                                         <td class="text-right">{{ dinhdangsothapphan($value->luonghs_dt) }}</td>
                                         <td class="text-right">{{ dinhdangsothapphan($value->luongbh_dt) }}</td>
-                                        <td class="text-right">{{ dinhdangsothapphan($value->luongcbkct_dt) }}</td>
+                                        @if ($maphanloai == 'KVXP')
+                                            <td class="text-right">{{ dinhdangsothapphan($value->luongcbkct_dt) }}</td>
+                                        @endif
                                         <td class="text-center bold">{{ $a_trangthai[$value['trangthai']] }}</td>
                                         <td>{{ getTenDV($value->macqcq) }}</td>
                                         <td>
@@ -516,11 +520,12 @@
         function disable_btn(obj) {
             // obj.prop('disabled', true);
         }
-        
+
         function getKinhPhiKoCT(masodv, phanloaixa, phanloaixa_heso, sothonxabiengioi,
-            sothonxabiengioi_heso, sothonxa350ho, sothonxa350ho_heso,sotodanpho500ho,sotodanpho500ho_heso, sothonxatrongdiem,
+            sothonxabiengioi_heso, sothonxa350ho, sothonxa350ho_heso, sotodanpho500ho, sotodanpho500ho_heso,
+            sothonxatrongdiem,
             sothonxatrongdiem_heso, sothonxakhac, sothonxakhac_heso, sochuyentuthon350hgd,
-            sochuyentuthon350hgd_heso,sotodanphokhac,sotodanphokhac_heso) {
+            sochuyentuthon350hgd_heso, sotodanphokhac, sotodanphokhac_heso) {
 
             $('#frm_kpkct').find("[name^='masodv']").val(masodv);
             $('#frm_kpkct').find("[name^='phanloaixa']").val(phanloaixa);

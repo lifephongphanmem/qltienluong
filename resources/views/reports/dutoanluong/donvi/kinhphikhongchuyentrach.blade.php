@@ -234,7 +234,7 @@
             <td>II</td>
             <td>Thôn, tổ dân phố</td>
             <td class="text-center">
-                {{ $model != [] ? dinhdangso($model->sothonxabiengioi + $model->sothonxakhokhan + $model->sothonxatrongdiem + $model->sothonxakhac + $model->sothonxaloai1) : '' }}
+                {{ $model != [] ? dinhdangso($model->sothonxabiengioi + $model->sothonxa350ho + $model->sotodanpho500ho + $model->sothonxatrongdiem + $model->sochuyentuthon350hgd + $model->sothonxakhac + $model->sotodanphokhac) : '' }}
             </td>
             <th class="text-center"></th>
             <th class="text-center"></th>

@@ -40,7 +40,7 @@ class dutoanluongController extends Controller
             $model_tenct = dmphanloaict::select('tenct', 'macongtac', 'mact')->get();
             $model_chitiet = dutoanluong_chitiet::wherein('masodv', array_column($model->toarray(), 'masodv'))->get();
             $maphanloai = session('admin')->maphanloai;
-           
+
             //Do chưa tuyển chỉ tính 12 tháng chưa nhân với số lượng cán bộ
             foreach ($model_chitiet as $chitiet) {
                 if ($chitiet->phanloai == 'CHUATUYEN') {
@@ -54,14 +54,14 @@ class dutoanluongController extends Controller
                 $dutoan->luongnb_dt = 0;
                 $dutoan->luonghs_dt = 0;
                 $dutoan->luongbh_dt =  0;
-                $dutoan->luongcbkct_dt =  0;//Lương cán bộ không chuyên trách
+                $dutoan->luongcbkct_dt =  0; //Lương cán bộ không chuyên trách
                 //Tính cho cán bộ không chuyên trách 21/08/2024
                 // if(in_array($dutoan->phanloaixa,['XL1','XL2','XL3','PL1','PL2','PL3'])){
-                    if($maphanloai == 'KVXP'){
+                if ($maphanloai == 'KVXP') {
                     //Tính phân loại xã
-                        $solieu_plxa = round($dutoan->phanloaixa_heso * 12 * $dutoan->luongcoban);
-                        $solieu_cbtang = round($dutoan->socanbotangthem * 12 * ($dutoan->luongcoban * 1.5));
-                        $solieu_thontodanpho=round($dutoan->sothonxabiengioi * $dutoan->sothonxabiengioi_heso +
+                    $solieu_plxa = round($dutoan->phanloaixa_heso * 12 * $dutoan->luongcoban);
+                    $solieu_cbtang = round($dutoan->socanbotangthem * 12 * ($dutoan->luongcoban * 1.5));
+                    $solieu_thontodanpho = round($dutoan->sothonxabiengioi * $dutoan->sothonxabiengioi_heso +
                         $dutoan->sothonxa350ho * $dutoan->sothonxa350ho_heso +
                         $dutoan->sotodanpho500ho * $dutoan->sotodanpho500ho_heso +
                         $dutoan->sothonxatrongdiem * $dutoan->sothonxatrongdiem_heso +
@@ -70,8 +70,7 @@ class dutoanluongController extends Controller
                         $dutoan->sotodanphokhac * $dutoan->sotodanphokhac_heso) *
                         12 *
                         $dutoan->luongcoban;
-                        $dutoan->luongcbkct_dt = $solieu_plxa + $solieu_cbtang + $solieu_thontodanpho;
-                    
+                    $dutoan->luongcbkct_dt = $solieu_plxa + $solieu_cbtang + $solieu_thontodanpho;
                 }
                 //TÍnh toán lại
                 $chitiet = $model_chitiet->where('masodv', $dutoan->masodv);
@@ -95,6 +94,7 @@ class dutoanluongController extends Controller
                 ->with('model_tenct', $model_tenct)
                 ->with('a_trangthai', getStatus())
                 ->with('a_cqcq', $a_cqcq)
+                ->with('maphanloai', $maphanloai)
                 ->with('pageTitle', 'Danh sách dự toán lương của đơn vị');
         } else
             return view('errors.notlogin');
@@ -288,9 +288,9 @@ class dutoanluongController extends Controller
             }
             $result['message'] .= '<td class="text-center">';
             // if ($value->mact == '1506672780') {
-                $result['message'] .= '<button type="button" onclick="setChiTieu(&#39;' . $value->id . '&#39;,)" class="btn btn-default btn-xs mbs"';
-                $result['message'] .= ' data-target="#chitiet-modal" data-toggle="modal">';
-                $result['message'] .= ' <i class="fa fa-edit"></i>&nbsp; Sửa</button>';
+            $result['message'] .= '<button type="button" onclick="setChiTieu(&#39;' . $value->id . '&#39;,)" class="btn btn-default btn-xs mbs"';
+            $result['message'] .= ' data-target="#chitiet-modal" data-toggle="modal">';
+            $result['message'] .= ' <i class="fa fa-edit"></i>&nbsp; Sửa</button>';
             // }
             $result['message'] .= '</td>';
             $result['message'] .= '</tr>';
@@ -389,22 +389,39 @@ class dutoanluongController extends Controller
                             if (in_array($mapc, $a_pc_bh))
                                 $sotienbaohiem += $value->$mapc_st;
                         }
-                        $baohiem = $a_baohiem[$value['mact']];
-                        $value['bhxh_dv'] = round(floatval($baohiem['bhxh_dv']) / 100, 5);
-                        $value['bhyt_dv'] = round(floatval($baohiem['bhyt_dv']) / 100, 5);
-                        $value['bhtn_dv'] = round(floatval($baohiem['bhtn_dv']) / 100, 5);
-                        $value['kpcd_dv'] = round(floatval($baohiem['kpcd_dv']) / 100, 5);
+                        // dd($value);
+                        //Bỏ tính bảo hiểm theo phân loại công tác, lấy bảo hiểm theo hồ sơ cán bộ 22082024
+                        // $baohiem = $a_baohiem[$value['mact']];
+                        // $value['bhxh_dv'] = round(floatval($baohiem['bhxh_dv']) / 100, 5);
+                        // $value['bhyt_dv'] = round(floatval($baohiem['bhyt_dv']) / 100, 5);
+                        // $value['bhtn_dv'] = round(floatval($baohiem['bhtn_dv']) / 100, 5);
+                        // $value['kpcd_dv'] = round(floatval($baohiem['kpcd_dv']) / 100, 5);
+                        // $value['tongbh_dv'] = $value->bhxh_dv + $value->bhyt_dv + $value->bhtn_dv + $value->kpcd_dv;
+
+                        // $value['stbhxh_dv'] = round($value['bhxh_dv'] * $sotienbaohiem, 0);
+                        // $value['stbhyt_dv'] = round($value['bhyt_dv']  * $sotienbaohiem, 0);
+                        // $value['stbhtn_dv'] = round($value['bhtn_dv'] * $sotienbaohiem, 0);
+                        // $value['stkpcd_dv'] = round($value['kpcd_dv'] * $sotienbaohiem, 0);
+                        // $value->ttbh_dv = $value->stbhxh_dv + $value->stbhyt_dv + $value->stbhtn_dv + $value->stkpcd_dv;
+
+                        $value['bhxh_dv'] = round(floatval($value->bhxh_dv) / 100, 5);
+                        $value['bhyt_dv'] = round(floatval($value->bhyt_dv) / 100, 5);
+                        $value['bhtn_dv'] = round(floatval($value->bhtn_dv) / 100, 5);
+                        $value['kpcd_dv'] = round(floatval($value->kpcd_dv) / 100, 5);
                         $value['tongbh_dv'] = $value->bhxh_dv + $value->bhyt_dv + $value->bhtn_dv + $value->kpcd_dv;
 
-                        $value['stbhxh_dv'] = round($value['bhxh_dv'] * $sotienbaohiem, 0);
-                        $value['stbhyt_dv'] = round($value['bhyt_dv']  * $sotienbaohiem, 0);
-                        $value['stbhtn_dv'] = round($value['bhtn_dv'] * $sotienbaohiem, 0);
-                        $value['stkpcd_dv'] = round($value['kpcd_dv'] * $sotienbaohiem, 0);
+                        $value['stbhxh_dv'] = round($value->bhxh_dv * $sotienbaohiem, 0);
+                        $value['stbhyt_dv'] = round($value->bhyt_dv  * $sotienbaohiem, 0);
+                        $value['stbhtn_dv'] = round($value->bhtn_dv * $sotienbaohiem, 0);
+                        $value['stkpcd_dv'] = round($value->kpcd_dv * $sotienbaohiem, 0);
                         $value->ttbh_dv = $value->stbhxh_dv + $value->stbhyt_dv + $value->stbhtn_dv + $value->stkpcd_dv;
 
 
                         // dd($value);
                     } else {
+                        // if($value->macanbo == '1511757512_1561169826'){
+                        //     dd($value->tongbh_dv);
+                        // }
                         //chạy lại 1 vòng để hệ số, số tiền (do báo cáo lấy hệ số, số tiền)
                         //     foreach ($a_pc as $pc) {
                         //         //Chỉ chạy các pc tính hệ số, pc số tiền tính sau do liên quan đến mức lương mới
@@ -500,7 +517,6 @@ class dutoanluongController extends Controller
                 //gán lại lương cơ bản theo mức mới
                 $chitiet->luongcoban = $inputs['luongcoban'];
             }
-
             //dự toán cho cán bộ chưa tuyển
             $m_chitieu = chitieubienche::select(array_merge(array('soluongtuyenthem', 'soluongduocgiao', 'soluongbienche', 'mact', 'mact_tuyenthem'), $a_pc))
                 ->where('madv', session('admin')->madv)
@@ -683,9 +699,26 @@ class dutoanluongController extends Controller
                 $a_th[] = 'st_' . $pc;
             }
             $a_th = array_merge(array(
-                'stt', 'macanbo', 'tencanbo', 'mact', 'macvcq', 'mapb',   'tonghs', 'ttl', 'luongcoban', 'masodv',
-                'stbhxh_dv', 'stbhyt_dv', 'stbhtn_dv', 'stkpcd_dv', 'ttbh_dv',
-                'bhxh_dv', 'bhyt_dv', 'bhtn_dv', 'kpcd_dv', 'tongbh_dv'
+                'stt',
+                'macanbo',
+                'tencanbo',
+                'mact',
+                'macvcq',
+                'mapb',
+                'tonghs',
+                'ttl',
+                'luongcoban',
+                'masodv',
+                'stbhxh_dv',
+                'stbhyt_dv',
+                'stbhtn_dv',
+                'stkpcd_dv',
+                'ttbh_dv',
+                'bhxh_dv',
+                'bhyt_dv',
+                'bhtn_dv',
+                'kpcd_dv',
+                'tongbh_dv'
             ), $a_th);
 
             foreach ($a_data as $key => $val) {
@@ -923,8 +956,23 @@ class dutoanluongController extends Controller
             //                ->get()->keyBy('macanbo')->toarray();
 
             $a_th = array_merge(array(
-                'ngaysinh', 'tencanbo', 'stt', 'gioitinh', 'msngbac', 'bac', 'ngayvao', 'ngaybc',
-                'bhxh_dv', 'bhyt_dv', 'bhtn_dv', 'kpcd_dv', 'ngaytu', 'ngayden', 'tnntungay', 'tnndenngay', 'theodoi'
+                'ngaysinh',
+                'tencanbo',
+                'stt',
+                'gioitinh',
+                'msngbac',
+                'bac',
+                'ngayvao',
+                'ngaybc',
+                'bhxh_dv',
+                'bhyt_dv',
+                'bhtn_dv',
+                'kpcd_dv',
+                'ngaytu',
+                'ngayden',
+                'tnntungay',
+                'tnndenngay',
+                'theodoi'
             ), $a_th);
             $model = hosocanbo::select($a_th)->where('madv', session('admin')->madv)
                 ->where('theodoi', '<', '9')
@@ -1281,10 +1329,29 @@ class dutoanluongController extends Controller
 
             //Lưu dữ liệu
             $a_col = array(
-                'bac', 'bhxh_dv', 'bhtn_dv', 'kpcd_dv', 'bhyt_dv', 'gioitinh', 'nam_nb', 'nam_ns',
-                'thang_nb', 'thang_ns', 'thang_tnn', 'ngayden', 'ngaysinh', 'tnndenngay',
-                'ngaytu', 'tnntungay', 'nam_tnn', 'nam_hh', 'thang_hh', 'ngaybc', 'ngayvao',
-                'soluongtuyenthem', 'mact_tuyenthem',
+                'bac',
+                'bhxh_dv',
+                'bhtn_dv',
+                'kpcd_dv',
+                'bhyt_dv',
+                'gioitinh',
+                'nam_nb',
+                'nam_ns',
+                'thang_nb',
+                'thang_ns',
+                'thang_tnn',
+                'ngayden',
+                'ngaysinh',
+                'tnndenngay',
+                'ngaytu',
+                'tnntungay',
+                'nam_tnn',
+                'nam_hh',
+                'thang_hh',
+                'ngaybc',
+                'ngayvao',
+                'soluongtuyenthem',
+                'mact_tuyenthem',
             );
             $a_data_nl = unset_key($a_data_nl, $a_col);
             $a_data = unset_key($a_data, $a_col);
