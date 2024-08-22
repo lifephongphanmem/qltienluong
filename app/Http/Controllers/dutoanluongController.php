@@ -39,6 +39,8 @@ class dutoanluongController extends Controller
             $model_nhomct = dmphanloaicongtac::select('macongtac', 'tencongtac')->get();
             $model_tenct = dmphanloaict::select('tenct', 'macongtac', 'mact')->get();
             $model_chitiet = dutoanluong_chitiet::wherein('masodv', array_column($model->toarray(), 'masodv'))->get();
+            $maphanloai = session('admin')->maphanloai;
+           
             //Do chưa tuyển chỉ tính 12 tháng chưa nhân với số lượng cán bộ
             foreach ($model_chitiet as $chitiet) {
                 if ($chitiet->phanloai == 'CHUATUYEN') {
@@ -54,7 +56,8 @@ class dutoanluongController extends Controller
                 $dutoan->luongbh_dt =  0;
                 $dutoan->luongcbkct_dt =  0;//Lương cán bộ không chuyên trách
                 //Tính cho cán bộ không chuyên trách 21/08/2024
-                if(in_array($dutoan->phanloaixa,['XL1','XL2','XL3','PL1','PL2','PL3'])){
+                // if(in_array($dutoan->phanloaixa,['XL1','XL2','XL3','PL1','PL2','PL3'])){
+                    if($maphanloai == 'KVXP'){
                     //Tính phân loại xã
                         $solieu_plxa = round($dutoan->phanloaixa_heso * 12 * $dutoan->luongcoban);
                         $solieu_cbtang = round($dutoan->socanbotangthem * 12 * ($dutoan->luongcoban * 1.5));
