@@ -32,7 +32,7 @@ class dutoanluong_insolieuController extends Controller
                 $model = $model->where('mapb', $inputs['mapb']);
             }
             $model = $model->orderby('stt')->get();
-// dd($model);
+            // dd($model);
             $m_chitiet = dutoanluong_chitiet::where('masodv', $inputs['masodv'])->wherein('mact', array_unique(array_column($model->toarray(), 'mact')))->get();
             $m_donvi = dmdonvi::where('madv', $m_dutoan->madv)->first();
             $model_congtac = dmphanloaict::wherein('mact', array_unique(array_column($model->toArray(), 'mact')))->get();
@@ -61,6 +61,7 @@ class dutoanluong_insolieuController extends Controller
                 $ct->tongcong = $ct->tonghs + $ct->tongbh_dv;
                 $ct->quyluong = ($ct->ttl + $ct->ttbh_dv) * 12;
             }
+
             //dd($m_chitiet->toarray());
             $a_phongban = array_column(dmphongban::where('madv', $m_dutoan->madv)->get()->toArray(), 'tenpb', 'mapb');
             return view('reports.dutoanluong.donvi.bangluongbienche')
