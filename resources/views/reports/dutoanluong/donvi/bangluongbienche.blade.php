@@ -81,7 +81,8 @@
             <td class="text-right">{{ dinhdangso($m_chitiet->sum('canbo_congtac')) }}</td>
             {{-- <th class="text-right">{{ dinhdangsothapphan($model->count(), $lamtron) }}</th> --}}
             @foreach ($a_plct as $key => $val)
-                <th class="text-right">{{ dinhdangsothapphan($m_chitiet->where('mact', $key)->first()->canbo_congtac, $lamtron) }}</th>
+                <th class="text-right">
+                    {{ dinhdangsothapphan($m_chitiet->where('mact', $key)->first()->canbo_congtac, $lamtron) }}</th>
             @endforeach
             <td class="text-right">{{ dinhdangsothapphan($model->sum('tongcong'), $lamtron) }}</td>
             <td class="text-right">{{ dinhdangsothapphan($model->sum('heso'), $lamtron) }}</td>
@@ -99,7 +100,7 @@
                 <?php
                 $stt = 0;
                 $a_macanbo = [];
-                $chitiet_ct = $m_chitiet->where('mact', $congtac->mact)
+                $chitiet_ct = $m_chitiet->where('mact', $congtac->mact);
                 ?>
                 <tr style="font-weight: bold;">
                     <td class="text-center">{{ convert2Roman($i++) }}</td>
@@ -140,14 +141,19 @@
                         <td class="text-right">{{ dinhdangsothapphan($ct->heso, $lamtron) }}</td>
                         <td class="text-right">{{ dinhdangsothapphan($ct->tongphucap, $lamtron) }}</td>
                         @foreach ($a_phucap as $key => $val)
-                            <td class="text-right">{{ dinhdangsothapphan($ct->$key, $lamtron, $lamtron) }}</td>
+                            @if ($a_phanloai_pc[$key] == '1')
+                            <?php $st_pc='st_'.$key ?>
+                                <td class="text-right">{{ dinhdangsothapphan($ct->$st_pc, $lamtron) }}</td>
+                            @else
+                                <td class="text-right">{{ dinhdangsothapphan($ct->$key, $lamtron) }}</td>
+                            @endif
                         @endforeach
                         <td class="text-right">{{ dinhdangsothapphan($ct->tongbh_dv, $lamtron) }}</td>
                         <td class="text-right">{{ dinhdangsothapphan($ct->quyluong, $lamtron) }}</td>
                     </tr>
                     <!-- Thêm số thứ tự vào mảng để khi gặp lại sẽ bỏ qua ko tự động tăng -->
-                    <?php                     
-                    $a_macanbo[] = $ct->macanbo; 
+                    <?php
+                    $a_macanbo[] = $ct->macanbo;
                     ?>
                 @endforeach
             @endif

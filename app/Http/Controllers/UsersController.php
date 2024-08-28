@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\bangluong;
 use App\dmchucvucq;
 use App\dmdonvi;
 use App\dmdonvibaocao;
@@ -309,6 +310,17 @@ class UsersController extends Controller
 
                 dsdonviquanly::insert($a_kq);
                 //dd($a_kq);
+                //chạy 1 lần rồi xóa: cập nhật thời gian tạo đơn vị
+                //  $m_donvi=dmdonvi::all();
+                //  foreach($m_donvi as $ct){
+                //     $m_bangluong=bangluong::where('madv',$ct->madv)->orderby('nam')->orderby('thang')->first();
+                //     if(isset($m_bangluong) && $ct->ngaytao != null){
+                //         $ngay = date("Y-m-d", strtotime($m_bangluong->nam . '-' . $m_bangluong->thang . '-01'));
+                //         $ct->ngaytao=$ngay;
+                //         $ct->save();
+                //     }
+
+                //  }
 
                 //Thau đổi hệ số tỉ lệ đóng bảo hiểm của nhóm cán bộ chưa tuyển: chạy 1 lần rồi xóa
                 // $a_baohiem = [
