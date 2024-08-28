@@ -49,7 +49,6 @@ class dutoanluong_insolieuController extends Controller
                     $col++;
                 }
             }
-            $a_phanloai_pc=array_column($model_pc->toarray(),'phanloai','mapc');
 
             //Xử lý lại mã cán bộ do trong lúc tạo dự toán đã gán hậu tố vào các cán bộ kiêm nhiệm
             //Cán bộ cùng mact + macanbo tính là 01 ng
@@ -73,7 +72,6 @@ class dutoanluong_insolieuController extends Controller
                 ->with('lamtron', session('admin')->lamtron ?? 3)
                 ->with('model_congtac', $model_congtac)
                 ->with('a_phucap', $a_phucap)
-                ->with('a_phanloai_pc', $a_phanloai_pc)
                 ->with('m_donvi', $m_donvi)
                 ->with('m_dutoan', $m_dutoan)
                 ->with('a_phongban', $a_phongban)

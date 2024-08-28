@@ -141,12 +141,7 @@
                         <td class="text-right">{{ dinhdangsothapphan($ct->heso, $lamtron) }}</td>
                         <td class="text-right">{{ dinhdangsothapphan($ct->tongphucap, $lamtron) }}</td>
                         @foreach ($a_phucap as $key => $val)
-                            @if ($a_phanloai_pc[$key] == '1')
-                            <?php $st_pc='st_'.$key ?>
-                                <td class="text-right">{{ dinhdangsothapphan($ct->$st_pc, $lamtron) }}</td>
-                            @else
                                 <td class="text-right">{{ dinhdangsothapphan($ct->$key, $lamtron) }}</td>
-                            @endif
                         @endforeach
                         <td class="text-right">{{ dinhdangsothapphan($ct->tongbh_dv, $lamtron) }}</td>
                         <td class="text-right">{{ dinhdangsothapphan($ct->quyluong, $lamtron) }}</td>
