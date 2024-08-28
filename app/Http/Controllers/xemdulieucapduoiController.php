@@ -78,14 +78,14 @@ class xemdulieucapduoiController extends Controller
                 ->where('thang', $inputs['thang'])
                 ->where('nam', $inputs['nam'])
                 ->where('trangthai', 'DAGUI')->get();
-// dd($model_tonghop);
+        // dd($model_tonghop);
             // dd(array_column($model_tonghop->toarray(),'madv','nguoigui'));
             //
             $model_tonghopkhoi = tonghopluong_khoi::where('macqcq', $madv)
                 ->where('thang', $inputs['thang'])
                 ->where('nam', $inputs['nam'])
                 ->where('trangthai', 'DAGUI')->get();
-// dd($model_tonghopkhoi);
+            // dd($model_tonghopkhoi);
             /*
             if(!isset($inputs['trangthai']) || $inputs['trangthai']=='ALL'){
                 $model_donvi = dmdonvi::select('madv', 'tendv','macqcq','maphanloai')->where('macqcq', $madv)->get();
@@ -265,7 +265,7 @@ class xemdulieucapduoiController extends Controller
                 //Lấy đơn vị tạo theo tháng
                 // dd(getDonviHuyen($inputs['nam'], $madv,$inputs['thang']));
                 $model_donvitamdung = dmdonvi::where('trangthai', 'TD')->wherein('madv',  getDonviHuyen($inputs['nam'], $madv)['a_donvicapduoi'])->get();
-                $a_madv = $this->layDV($inputs['thang'], $inputs['nam'], getDonviHuyen($inputs['nam'], $madv)['a_donvicapduoi'], $model_donvitamdung);
+                $a_madv = $this->layDV($inputs['thang'], $inputs['nam'], getSLDonviHuyen($inputs['thang'],$inputs['nam'], $madv)['a_donvicapduoi'], $model_donvitamdung);
                 $model_donvi = dmdonvi::join('dmphanloaidonvi', 'dmphanloaidonvi.maphanloai', 'dmdonvi.maphanloai')
                     ->select('dmdonvi.madv', 'dmdonvi.tendv', 'phanloaitaikhoan', 'dmdonvi.maphanloai', 'tenphanloai', 'linhvuchoatdong')
                     ->wherein('madv', $a_madv)

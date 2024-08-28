@@ -23,11 +23,14 @@
         jQuery(document).ready(function() {
             TableManaged.init();
         });
-        function confirmStop(id) {
+        function confirmStop(id,ngaytao) {
             document.getElementById("madvstop").value =id;
+            document.getElementById("ngaytao").value =ngaytao;
+
         }
-        function confirmActive(id) {
+        function confirmActive(id,ngaytao) {
             document.getElementById("madvactive").value =id;
+            document.getElementById("ngaytao_hd").value =ngaytao;
         }
     </script>
 @stop
@@ -62,12 +65,12 @@
                                     <td>{{$value->ngaydung}}</td>
                                     <td>
                                         @if($value->trangthai != 'TD')
-                                            <button type="button" class="btn btn-default btn-sm" onclick="confirmStop('{{$value['madv']}}')" data-target="#chuyen-stop" data-toggle="modal"><i class="fa icon-share-alt"></i>&nbsp;
+                                            <button type="button" class="btn btn-default btn-sm"  onclick="confirmStop('{{$value['madv']}}','{{$value['ngaytao']}}')" data-target="#chuyen-stop" data-toggle="modal"><i class="fa icon-share-alt"></i>&nbsp;
                                                 Dừng HĐ</button>
                                         @else
                                             <button class="btn btn-danger btn-xs mbs">
                                                 <i class="fa fa-warning"></i>&nbsp; Đơn vị đã dừng hoạt động</button>
-                                            <button type="button" class="btn btn-default btn-sm" onclick="confirmActive('{{$value['madv']}}')" data-target="#chuyen-active" data-toggle="modal"><i class="fa icon-share-alt"></i>&nbsp;
+                                            <button type="button" class="btn btn-default btn-sm" onclick="confirmActive('{{$value['madv']}}','{{$value['ngaytao']}}')" data-target="#chuyen-active" data-toggle="modal"><i class="fa icon-share-alt"></i>&nbsp;
                                                 Hoạt động</button>
                                         @endif
                                     </td>
@@ -90,6 +93,10 @@
                     <h4 class="modal-title">Đồng ý dừng hoạt động đơn vị</h4>
                 </div>
                 <div class="modal-body">
+                    <div class="form-group">
+                        <label><b>Ngày tạo</b></label>
+                        <input type="date" name="ngaytao" id="ngaytao" class="form-control" />
+                    </div>
                     <div class="form-group" id="tthschuyen">
                     </div>
                     <div class="form-group">
@@ -119,11 +126,15 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
+                        <label><b>Ngày tạo</b></label>
+                        <input type="date" name="ngaytao" id="ngaytao_hd" class="form-control" />
+                    </div>
+                    <div class="form-group">
                         <label><b>Ngày hoạt động</b></label>
                         <input type="date" name="ngaydung" id="ngaydung" class="form-control" />
                     </div>
                 </div>
-                <input type="" name="madvactive" id="madvactive">
+                <input type="hidden" name="madvactive" id="madvactive">
                 <div class="modal-footer">
                     <button type="button" class="btn default" data-dismiss="modal">Hủy</button>
                     <button type="submit" class="btn blue" >Đồng ý</button>
@@ -136,7 +147,12 @@
         <!-- /.modal-dialog -->
     </div>
     <script>
-
+        // function dungdonvi(madv,ngaytao){
+        //     $('#ngaytao').val(ngaytao);
+        // }
+        // function hddonvi(madv,ngaytao){
+        //     $('#ngaytao_hd').val(ngaytao);
+        // }
         function getLink(){
             var thang = $('#thang').val();
             var nam = $('#nam').val();

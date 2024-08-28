@@ -32,7 +32,7 @@ class dutoanluong_huyenController extends Controller
         if (Session::has('admin')) {
             $inputs = $request->all();
             $model = dutoanluong_huyen::where('madv', session('admin')->madv)->get();
-// dd($model);
+            // dd($model);
             $madv = session('admin')->madv;
             // $model_nguon = dutoanluong_huyen::where('macqcq', $madv)->where('trangthai', 'DAGUI')->get();
             // $model_nguon_tinh = dutoanluong_tinh::where('madv', $madv)->get();

@@ -1634,6 +1634,47 @@ function getDonviHuyen($nam, $madv, $chucnang = null)
     return $array;
 }
 
+function getSLDonviHuyen($thang,$nam, $madv, $chucnang = null)
+{
+    //lấy danh sách đơn vị: đơn vị có macqcq = madv (bang dmdonvi) + đơn vị nam=nam && macqcq=madv
+    $ngay = date("Y-m-d", strtotime($nam . '-' . $thang . '-01'));
+    $a_donvicapduoi = [];
+    //đơn vị nam=nam && macqcq=madv
+    $model_dsql = dsdonviquanly::where('nam', $nam)->where('macqcq', $madv)->get();
+    $a_donvicapduoi = array_unique(array_column($model_dsql->toarray(), 'madv'));
+
+    $model_dmdv = dmdonvi::where('macqcq', $madv)
+        ->wherenotin('madv', $a_donvicapduoi) //lọc các đơn vị đã khai báo trong dsdonviquanly
+        ->where('madv', '!=', $madv) //bỏ đơn vị tổng hợp
+        ->where('ngaytao','<=',$ngay)
+        ->get();
+        // dd($model_dmdv);
+    $a_donvicapduoi = array_unique(array_merge(array_column($model_dmdv->toarray(), 'madv'), $a_donvicapduoi));
+    // dd($ngay);
+    //lấy lại madv ở dmdonvi de tranh truong hop có madv o dsdonviquanly nhưng không có ở dmdonvi
+    $model_donvi = dmdonvi::select('madv')->wherein('madv', $a_donvicapduoi)->get();
+    $a_donvicapduoi = array_column($model_donvi->toarray(), 'madv');
+    //  dd($a_donvicapduoi);
+    if ($chucnang == 'DUTOAN') {
+        $model_donvitamdung = dmdonvi::where('trangthai', 'TD')->wherein('madv', $a_donvicapduoi)->where('ngaydung', '<=', $nam . '-07-01')->get();
+    } elseif ($chucnang == 'NKP') {
+        $model_donvitamdung = dmdonvi::where('trangthai', 'TD')->wherein('madv', $a_donvicapduoi)->get();
+        //So sánh ngày gửi dữ liệu nguồn kp với ngày dừng đh để hiện dữ liệu cho đơn vị
+
+
+    } else {
+        $model_donvitamdung = dmdonvi::where('trangthai', 'TD')->wherein('madv', $a_donvicapduoi)->get();
+    }
+
+    $m_donvi = array_diff($a_donvicapduoi, array_column($model_donvitamdung->toarray(), 'madv'));
+    $array = [
+        'm_donvi' => $m_donvi,
+        'model_donvitamdung' => array_column($model_donvitamdung->toarray(), 'madv'),
+        'a_donvicapduoi' => $a_donvicapduoi
+    ];
+    return $array;
+}
+
 function getDanhSachChucNang()
 {
     return [

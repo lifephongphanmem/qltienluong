@@ -344,7 +344,7 @@ class dutoanluongController extends Controller
             // dd($a_pc_dv);
 
             //thêm cán bộ chưa có từ $m_bl1 (phụ) vào $m_bl (chính)
-            // dd($m_bl_ct);
+
             if ($m_bl_ct1 != null) {
                 $i = 1;
                 foreach ($m_bl_ct1 as $key => $val) {
@@ -355,8 +355,6 @@ class dutoanluongController extends Controller
                     }
                 }
             }
-
-            // dd($m_bl_ct1);
             $a_baohiem = dmphanloaicongtac_baohiem::where('madv', session('admin')->madv)->get()->keyBy('mact')->toarray();
             // dd($a_baohiem);
             $model_phucap = dmphucap_donvi::select('mapc', 'phanloai', 'congthuc', 'baohiem', 'tenpc', 'thaisan', 'nghiom', 'dieudong', 'thuetn', 'tapsu')
@@ -364,6 +362,9 @@ class dutoanluongController extends Controller
                 ->wherein('mapc', $a_pc)->get();
             $a_pc_bh = array_column($model_phucap->where('baohiem', 1)->toarray(), 'mapc');
             //dd($m_bl_ct);
+            // dd($a_pc);
+            // dd($m_bl_ct);
+     
             foreach ($m_bl_ct as $key => $value) {
                 if (!in_array($value->mact, $a_plct)) {
                     $m_bl_ct->pull($key);
@@ -378,7 +379,7 @@ class dutoanluongController extends Controller
                         foreach ($a_pc as $mapc) {
                             $mapc_st = 'st_' . $mapc;
                             //chia lại phụ cấp lưu theo số tiền
-                            if ($value->$mapc > 1000) {
+                            if ($value->$mapc > 1000) {                                
                                 $value->$mapc_st = $value->$mapc;
                                 $value->$mapc = round($value->$mapc_st / $value->luongcoban, 10);
                             } else {
@@ -432,6 +433,8 @@ class dutoanluongController extends Controller
                     }
                 }
             }
+            // dd($m_bl_ct->where('macanbo','1539662570_1539831007'));
+            // dd($m_bl_ct);
             // dd($m_bl_ct->toarray());
             //dd($m_bl_ct->where('mact','1506672780'));
             //Tính lại lương theo mức lương cơ bản mới
@@ -465,7 +468,7 @@ class dutoanluongController extends Controller
                 $chitiet->masodv = $masodv;
                 $chitiet->tonghs = 0;
                 $chitiet->ttl = 0;
-
+                // dd($a_pc_dv);
                 foreach ($a_pc as $pc) {
                     $tenpc_st = 'st_' . $pc;
                     $pc_dv = $a_pc_dv->where('mapc', $pc)->first();
@@ -476,7 +479,14 @@ class dutoanluongController extends Controller
                                 break;
                             }
                         case 1: { //số tiền
-                                $chitiet->$pc = round($chitiet->$pc / $inputs['luongcoban'], 10);
+                                //Tính lại hệ số dựa trên số tiền theo lương cơ bản mới
+                                if($chitiet->$pc < 1000){// Trường hợp tính hệ số cho thai sản, không lương, dài ngày ở phía trên
+                                    // dd(12);
+                                    $st_pc='st_'.$pc;
+                                    $chitiet->$pc = round($chitiet->$st_pc / $inputs['luongcoban'], 10);
+                                }else{
+                                    $chitiet->$pc = round($chitiet->$pc / $inputs['luongcoban'], 10);
+                                }
                                 break;
                             }
                         case 2: { //phần trăm

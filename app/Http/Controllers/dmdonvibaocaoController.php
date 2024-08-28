@@ -16,6 +16,7 @@ use App\Users;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 
@@ -248,6 +249,8 @@ class dmdonvibaocaoController extends Controller
             $inputs['password'] = md5($inputs['password']);
             $inputs['status'] = 'active';
             $inputs['sadmin'] = 'NULL';
+            $local_time=Carbon::now('Asia/Ho_Chi_Minh');
+            $inputs['ngaytao']=$local_time->toDateString();
             Users::create($inputs);
             dmdonvi::create($inputs);
 

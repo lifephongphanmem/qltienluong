@@ -23,12 +23,12 @@ class quanlydonviController extends Controller
             $madv = session('admin')->madv;
             if(session('admin')->phamvitonghop == 'KHOI')
             {
-                $model_donvi = dmdonvi::select('dmdonvi.madv', 'dmdonvi.tendv','phanloaitaikhoan','trangthai','ngaydung')
+                $model_donvi = dmdonvi::select('dmdonvi.madv', 'dmdonvi.tendv','phanloaitaikhoan','trangthai','ngaydung','ngaytao')
                     ->where('macqcq',$madv)->where('madv','<>',$madv)->distinct()->get();
             }
             if(session('admin')->phamvitonghop == 'HUYEN')
             {
-                $model_donvi = dmdonvi::select('dmdonvi.madv', 'dmdonvi.tendv','phanloaitaikhoan','trangthai','ngaydung')
+                $model_donvi = dmdonvi::select('dmdonvi.madv', 'dmdonvi.tendv','phanloaitaikhoan','trangthai','ngaydung','ngaytao')
                     ->where('macqcq',$madv)->where('madv','<>',$madv)->distinct()->get();
             }
             return view('manage.taikhoan.index_quanly')
@@ -110,14 +110,18 @@ class quanlydonviController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
-            //dd($inputs);
+            // dd($inputs);
             $model = dmdonvi::where('madv', $inputs['madvstop'])->first();
-            $model->ngaydung = $inputs['ngaydung'];
-            $model->trangthai = 'TD';
+            $model->ngaytao = $inputs['ngaytao'];
+            if($inputs['ngaydung'] != ''){
+                $model->ngaydung = $inputs['ngaydung'];
+                $model->trangthai = 'TD';
+                $modeluser = Users::where('madv',$inputs['madvstop'])->first();
+                $modeluser->status = 'notactive';
+                $modeluser->save();
+            }
             $model->save();
-            $modeluser = Users::where('madv',$inputs['madvstop'])->first();
-            $modeluser->status = 'notactive';
-            $modeluser->save();
+
             return redirect('/he_thong/don_vi/stopdv');
         } else
             return view('errors.notlogin');
