@@ -161,6 +161,39 @@
                                 05/2023/NĐ-CP (Mẫu 2g)</button>
                         </div>
                     </div>
+                @else
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <button type="button"
+                                onclick="ThongTinKetXuat(true,'{{ $inputs['furl'] . 'mau2d_tt62' }}',null)"
+                                style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                data-target="#mautt107-modal" data-toggle="modal">
+                                <i class="fa fa-print"></i>&nbsp;Báo cáo nhu cầu kinh phí tăng thêm chi trả chế độ cho số
+                                biên chế giáo viên tăng thêm năm học 2023-2024 (Mẫu 2d)</button>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <button type="button"
+                                onclick="ThongTinKetXuat(true,'{{ $inputs['furl'] . 'mau2dd_tt62' }}',null)"
+                                style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                data-target="#mautt107-modal" data-toggle="modal">
+                                <i class="fa fa-print"></i>&nbsp;Báo cáo nguồn thực hiện CCTL tiết kiệm từ việc thực
+                                hiện tinh giản biên chế, sáp nhập đơn vị (Mẫu 2đ)</button>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <button type="button"
+                                onclick="ThongTinKetXuat(true,'{{ $inputs['furl'] . 'mau2e_tt62' }}',null)"
+                                style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                data-target="#mautt107-modal" data-toggle="modal">
+                                <i class="fa fa-print"></i>&nbsp;Báo cáo nguồn thực hiện CCTL tiết kiệm do thay đổi mức
+                                tự chủ tài chính trong năm 2024 (Mẫu 2e)</button>
+                        </div>
+                    </div>
                 @endif
             </div>
 
@@ -174,18 +207,17 @@
                             (Mẫu 4a)</button>
                     </div>
                 </div>
-                
-                @if ($inputs['sohieu'] != '732024nd_cp')
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <button type="button"
-                                onclick="ThongTinKetXuat(true,'{{ $inputs['furl'] . 'mau4b' }}',null)"
-                                style="border-width: 0px" class="btn btn-default btn-xs mbs"
-                                data-target="#mautt107-modal" data-toggle="modal">
-                                <i class="fa fa-print"></i>&nbsp;Tổng hợp nhu cầu và nguồn thực hiện (Mẫu 4b)</button>
-                        </div>
+
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <button type="button" onclick="ThongTinKetXuat(true,'{{ $inputs['furl'] . 'mau4b' }}',null)"
+                            style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                            data-target="#mautt107-modal" data-toggle="modal">
+                            <i class="fa fa-print"></i>&nbsp;Tổng hợp nhu cầu và nguồn thực hiện (Mẫu 4b)</button>
                     </div>
-                @endif
+                </div>
+
                 {{-- <div class="col-md-6">
                     <div class="form-group">
                         <button type="button" onclick="intonghopdt('{{ '/nguon_kinh_phi/printf?maso=' }}')"

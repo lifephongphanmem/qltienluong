@@ -49,6 +49,8 @@
                 <th style="width: 6%;text-transform: uppercase" rowspan="3">NHU CẦU</br>KINH PHÍ THỰC HIỆN
                     {{ $m_thongtu->tenttqd }}</th>
                 <th style="width: 6%;text-transform: uppercase" rowspan="3">QUY TIỀN THƯỞNG
+                    01 THÁNG</th>
+                <th style="width: 6%;text-transform: uppercase" rowspan="3">QUY TIỀN THƯỞNG NĂM {{ $m_thongtu->namdt }}
                     THEO</br>{{ $m_thongtu->tenttqd }}</th>
             </tr>
             <tr style="">
@@ -93,7 +95,7 @@
                     <td>26</td>
                     <td>27</td>
                 @else
-                    @for ($j = 1; $j < $col + 5; $j++)
+                    @for ($j = 1; $j < $col + 6; $j++)
                         <td>{{ 18 + $j }}</td>
                     @endfor
                 @endif
@@ -114,6 +116,7 @@
             {{-- Chênh lệch --}}
             <td>{{ dinhdangso($a_Tong['chenhlech01thang'], 0, $inputs['donvitinh']) }}</td>
             <td>{{ dinhdangso($a_Tong['chenhlech06thang'], 0, $inputs['donvitinh']) }}</td>
+            <td>{{ dinhdangso($a_Tong['quythuong01thang'], 0, $inputs['donvitinh']) }}</td>
             <td>{{ dinhdangso($a_Tong['quythuong'], 0, $inputs['donvitinh']) }}</td>
         </tr>
         @foreach ($ar_I as $dulieu)
@@ -139,6 +142,8 @@
                     {{ dinhdangso($dulieu['chenhlech01thang'], 0, $inputs['donvitinh']) }}</td>
                 <td style="text-align: right;{{ $dulieu['style'] }}">
                     {{ dinhdangso($dulieu['chenhlech06thang'], 0, $inputs['donvitinh']) }}</td>
+                <td style="text-align: right;{{ $dulieu['style'] }}">
+                    {{ dinhdangso($dulieu['quythuong01thang'], 0, $inputs['donvitinh']) }}</td>
                 <td style="text-align: right;{{ $dulieu['style'] }}">
                     {{ dinhdangso($dulieu['quythuong'], 0, $inputs['donvitinh']) }}</td>
             </tr>
@@ -168,6 +173,8 @@
                 <td style="text-align: right;{{ $dulieu['style'] }}">
                     {{ dinhdangso($dulieu['chenhlech06thang'], 0, $inputs['donvitinh']) }}</td>
                 <td style="text-align: right;{{ $dulieu['style'] }}">
+                    {{ dinhdangso($dulieu['quythuong01thang'], 0, $inputs['donvitinh']) }}</td>
+                <td style="text-align: right;{{ $dulieu['style'] }}">
                     {{ dinhdangso($dulieu['quythuong'], 0, $inputs['donvitinh']) }}</td>
             </tr>
         @endforeach
@@ -195,6 +202,8 @@
                     {{ dinhdangso($dulieu['chenhlech01thang'], 0, $inputs['donvitinh']) }}</td>
                 <td style="text-align: right;{{ $dulieu['style'] }}">
                     {{ dinhdangso($dulieu['chenhlech06thang'], 0, $inputs['donvitinh']) }}</td>
+                <td style="text-align: right;{{ $dulieu['style'] }}">
+                    {{ dinhdangso($dulieu['quythuong01thang'], 0, $inputs['donvitinh']) }}</td>
                 <td style="text-align: right;{{ $dulieu['style'] }}">
                     {{ dinhdangso($dulieu['quythuong'], 0, $inputs['donvitinh']) }}</td>
             </tr>
@@ -224,34 +233,36 @@
                 <td style="text-align: right;{{ $dulieu['style'] }}">
                     {{ dinhdangso($dulieu['chenhlech06thang'], 0, $inputs['donvitinh']) }}</td>
                 <td style="text-align: right;{{ $dulieu['style'] }}">
+                    {{ dinhdangso($dulieu['quythuong01thang'], 0, $inputs['donvitinh']) }}</td>
+                <td style="text-align: right;{{ $dulieu['style'] }}">
                     {{ dinhdangso($dulieu['quythuong'], 0, $inputs['donvitinh']) }}</td>
             </tr>
         @endforeach
     </table>
-    <!-- 2024.07.26 bỏ chữ ký theo y.c
-        <table id="data_footer" class="header" width="96%" border="0" cellspacing="0" cellpadding="8"
-            style="margin:20px auto; text-align: center;">
-            <tr>
-                <td style="text-align: left;" width="50%"></td>
-                <td style="text-align: center; font-style: italic" width="50%">........,Ngày......tháng.......năm..........
-                </td>
-            </tr>
-            <tr style="font-weight: bold">
-                <td style="text-align: center;" width="50%"></td>
-                <td style="text-align: center;" width="50%">{{ $m_dv->cdlanhdao }}</td>
-            </tr>
-            <tr style="font-style: italic">
-                <td style="text-align: center;" width="50%"></td>
-                <td style="text-align: center;" width="50%">(Ký tên, đóng dấu)</td>
-            </tr>
-            <tr>
-                <td><br><br><br></td>
-            </tr>
 
-            <tr>
-                <td style="text-align: center;" width="50%">{{ '' }}</td>
-                <td style="text-align: center;" width="50%">{{ $m_dv->lanhdao }}</td>
-            </tr>
-        </table>
-    -->
+    <table id="data_footer" class="header" width="96%" border="0" cellspacing="0" cellpadding="8"
+        style="margin:20px auto; text-align: center;">
+        <tr>
+            <td style="text-align: left;" width="50%"></td>
+            <td style="text-align: center; font-style: italic" width="50%">........,Ngày......tháng.......năm..........
+            </td>
+        </tr>
+        <tr style="font-weight: bold">
+            <td style="text-align: center;" width="50%"></td>
+            <td style="text-align: center;" width="50%">{{ $m_dv->cdlanhdao }}</td>
+        </tr>
+        <tr style="font-style: italic">
+            <td style="text-align: center;" width="50%"></td>
+            <td style="text-align: center;" width="50%">(Ký tên, đóng dấu)</td>
+        </tr>
+        <tr>
+            <td><br><br><br></td>
+        </tr>
+
+        <tr>
+            <td style="text-align: center;" width="50%">{{ '' }}</td>
+            <td style="text-align: center;" width="50%">{{ $m_dv->lanhdao }}</td>
+        </tr>
+    </table>
+
 @stop
