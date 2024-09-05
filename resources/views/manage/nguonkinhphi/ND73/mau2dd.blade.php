@@ -5,7 +5,7 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label class="control-label">Phân loại mức độ tự chủ tài chính</label>
-                    {!! Form::select(null, getPhanLoaiNguon(), session('admin')->phanloainguon, [                        
+                    {!! Form::select(null, getPhanLoaiNguon(), session('admin')->phanloainguon, [
                         'class' => 'form-control', 'disabled',
                     ]) !!}
                 </div>

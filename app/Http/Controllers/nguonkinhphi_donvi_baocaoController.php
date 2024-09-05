@@ -904,7 +904,7 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                     $a_solieu = [];
                     $a_solieu_moi = [];
                     //lấy thông tin trường trc
-                    $ar_IV[$key]['canbo_congtac'] = $ar_IV[$key]['canbo_dutoan'] = $ar_IV[$key]['quythuong'] =$ar_IV[$key]['quythuong01thang'] = 0;
+                    $ar_IV[$key]['canbo_congtac'] = $ar_IV[$key]['canbo_dutoan'] = $ar_IV[$key]['quythuong'] = $ar_IV[$key]['quythuong01thang'] = 0;
                     $a_solieu['canbo_congtac'] = $a_solieu['canbo_dutoan'] = $a_solieu['heso'] = $a_solieu['st_heso'] = $a_solieu['tongpc'] = $a_solieu['st_tongpc']
                         = $a_solieu['tongbh_dv'] = $a_solieu['ttbh_dv'] = $a_solieu['tongcong'] = 0;
 
@@ -2448,6 +2448,331 @@ class nguonkinhphi_donvi_baocaoController extends Controller
             return view('errors.notlogin');
     }
 
+    function mau2d_tt62(Request $request)
+    {
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $inputs['donvitinh'] = $inputs['donvitinh'] ?? '1';
+            $m_nguonkp = nguonkinhphi::where('masodv', $inputs['masodv'])->get();
+            $m_thongtu = dmthongtuquyetdinh::where('sohieu', $inputs['sohieu'])->first();
+            // $ar_I[$key]['canbo_congtac'] = $dulieu_chitiet->sum('canbo_congtac');
+            $m_chitiet = nguonkinhphi_01thang::where('masodv', $m_nguonkp->first()->masodv)->where('mact', '1506672780')->get();
+            //dd($m_chitiet);
+            $m_donvi = dmdonvi::where('madv', $m_nguonkp->first()->madv)->first();
+            foreach ($m_nguonkp as $chitiet) {
+                $chitiet->level = $m_donvi->caphanhchinh;
+                $chitiet->maphanloai = $m_donvi->maphanloai;
+            }
+            //chênh lêch = 540.000 * 4.5% = 24300
+            $ar_I = array();
+            $m_solieu = $m_nguonkp->where('maphanloai', 'MAMNON');
+            $ar_I[0] = array(
+                'val' => 'BT',
+                'tt' => '1',
+                'noidung' => 'Mầm non',
+                'bienchebosung' => $m_solieu->sum('soluongdinhbien_2d'),
+                'bienchecomat' => $m_solieu->count() > 0 ? $m_chitiet->sum('canbo_congtac') : 0,
+                'sothang' => $m_solieu->sum('soluongcanbo_2d'),
+                'hesoluong' => $m_solieu->sum('hesoluongbq_2d'),
+                'pckhuvuc' => $m_solieu->sum('hesophucapbq_2d'),
+                'pcudn' => $m_solieu->sum('tyledonggop_2d'),
+                'pcthuhut' => $m_solieu->sum('quyluonggiam_2k'),
+                'pckhac' => $m_solieu->sum('soluonggiam_2k'),
+            );
+            //Tính toán số liệu
+            $ar_I[0]['tongpc'] = round(($ar_I[0]['pckhuvuc'] + $ar_I[0]['pcudn'] + $ar_I[0]['pcthuhut'] + $ar_I[0]['pckhac']) * $ar_I[0]['hesoluong'], 3);
+            $ar_I[0]['donggop'] = round($ar_I[0]['hesoluong'] * 0.235, 3);
+            $ar_I[0]['tongcong'] = round($ar_I[0]['hesoluong'] + $ar_I[0]['tongpc'], 3);
+            $ar_I[0]['nhucau'] = round($ar_I[0]['bienchecomat'] * $ar_I[0]['tongcong'] * 3100000, 3);
+
+            //
+            $m_solieu = $m_nguonkp->where('maphanloai', 'TIEUHOC');
+            $ar_I[1] = array(
+                'val' => 'BT',
+                'tt' => '2',
+                'noidung' => 'Tiểu học',
+                'bienchebosung' => $m_solieu->sum('soluongdinhbien_2d'),
+                'bienchecomat' => $m_solieu->count() > 0 ? $m_chitiet->sum('canbo_congtac') : 0,
+                'sothang' => $m_solieu->sum('soluongcanbo_2d'),
+                'hesoluong' => $m_solieu->sum('hesoluongbq_2d'),
+                'pckhuvuc' => $m_solieu->sum('hesophucapbq_2d'),
+                'pcudn' => $m_solieu->sum('tyledonggop_2d'),
+                'pcthuhut' => $m_solieu->sum('quyluonggiam_2k'),
+                'pckhac' => $m_solieu->sum('soluonggiam_2k'),
+
+            );
+            //Tính toán số liệu
+            $ar_I[1]['tongpc'] = round(($ar_I[1]['pckhuvuc'] + $ar_I[1]['pcudn'] + $ar_I[1]['pcthuhut'] + $ar_I[1]['pckhac']) * $ar_I[1]['hesoluong'], 3);
+            $ar_I[1]['donggop'] = round($ar_I[1]['hesoluong'] * 0.235, 3);
+            $ar_I[1]['tongcong'] = round($ar_I[1]['hesoluong'] + $ar_I[1]['tongpc'], 3);
+            $ar_I[1]['nhucau'] = round($ar_I[1]['bienchecomat'] * $ar_I[1]['tongcong'] * 3100000, 3);
+            //
+            $m_solieu = $m_nguonkp->where('maphanloai', 'THCS');
+            $ar_I[2] = array(
+                'val' => 'BT',
+                'tt' => '3',
+                'noidung' => 'Trung học cơ sở',
+                'bienchebosung' => $m_solieu->sum('soluongdinhbien_2d'),
+                'sothang' => $m_solieu->sum('soluongcanbo_2d'),
+                'bienchecomat' => $m_solieu->count() > 0 ? $m_chitiet->sum('canbo_congtac') : 0,
+                'hesoluong' => $m_solieu->sum('hesoluongbq_2d'),
+                'pckhuvuc' => $m_solieu->sum('hesophucapbq_2d'),
+                'pcudn' => $m_solieu->sum('tyledonggop_2d'),
+                'pcthuhut' => $m_solieu->sum('quyluonggiam_2k'),
+                'pckhac' => $m_solieu->sum('soluonggiam_2k'),
+
+            );
+            //Tính toán số liệu
+            $ar_I[2]['tongpc'] = round(($ar_I[2]['pckhuvuc'] + $ar_I[2]['pcudn'] + $ar_I[2]['pcthuhut'] + $ar_I[2]['pckhac']) * $ar_I[2]['hesoluong'], 3);
+            $ar_I[2]['donggop'] = round($ar_I[2]['hesoluong'] * 0.235, 3);
+            $ar_I[2]['tongcong'] = round($ar_I[2]['hesoluong'] + $ar_I[2]['tongpc'], 3);
+            $ar_I[2]['nhucau'] = round($ar_I[2]['bienchecomat'] * $ar_I[2]['tongcong'] * 3100000, 3);
+            //
+            $m_solieu = $m_nguonkp->where('maphanloai', 'THPT');
+            $ar_I[3] = array(
+                'val' => 'BT',
+                'tt' => '4',
+                'noidung' => 'Trung học phổ thông',
+                'sothang' => $m_solieu->sum('soluongcanbo_2d'),
+                'bienchebosung' => $m_solieu->sum('soluongdinhbien_2d'),
+                'bienchecomat' => $m_solieu->count() > 0 ? $m_chitiet->sum('canbo_congtac') : 0,
+                'hesoluong' => $m_solieu->sum('hesoluongbq_2d'),
+                'pckhuvuc' => $m_solieu->sum('hesophucapbq_2d'),
+                'pcudn' => $m_solieu->sum('tyledonggop_2d'),
+                'pcthuhut' => $m_solieu->sum('quyluonggiam_2k'),
+                'pckhac' => $m_solieu->sum('soluonggiam_2k'),
+            );
+            //Tính toán số liệu
+            $ar_I[3]['tongpc'] = round(($ar_I[3]['pckhuvuc'] + $ar_I[3]['pcudn'] + $ar_I[3]['pcthuhut'] + $ar_I[3]['pckhac']) * $ar_I[3]['hesoluong'], 3);
+            $ar_I[3]['donggop'] = round($ar_I[3]['hesoluong'] * 0.235, 3);
+            $ar_I[3]['tongcong'] = round($ar_I[3]['hesoluong'] + $ar_I[3]['tongpc'], 3);
+            $ar_I[3]['nhucau'] = round($ar_I[3]['bienchecomat'] * $ar_I[3]['tongcong'] * 3100000, 3);
+
+            //Tổng cộng:
+            $ar_Tong = [
+                'bienchebosung' => $ar_I[0]['bienchebosung'] + $ar_I[1]['bienchebosung'] + $ar_I[2]['bienchebosung'] + $ar_I[3]['bienchebosung'],
+                'bienchecomat' => $ar_I[0]['bienchecomat'] + $ar_I[1]['bienchecomat'] + $ar_I[2]['bienchecomat'] + $ar_I[3]['bienchecomat'],
+                'tongcong' => $ar_I[0]['tongcong'] + $ar_I[1]['tongcong'] + $ar_I[2]['tongcong'] + $ar_I[3]['tongcong'],
+                'hesoluong' => $ar_I[0]['hesoluong'] + $ar_I[1]['hesoluong'] + $ar_I[2]['hesoluong'] + $ar_I[3]['hesoluong'],
+                'tongpc' => $ar_I[0]['tongpc'] + $ar_I[1]['tongpc'] + $ar_I[2]['tongpc'] + $ar_I[3]['tongpc'],
+                'pckhuvuc' => $ar_I[0]['pckhuvuc'] + $ar_I[1]['pckhuvuc'] + $ar_I[2]['pckhuvuc'] + $ar_I[3]['pckhuvuc'],
+                'pcudn' => $ar_I[0]['pcudn'] + $ar_I[1]['pcudn'] + $ar_I[2]['pcudn'] + $ar_I[3]['pcudn'],
+                'pcthuhut' => $ar_I[0]['pcthuhut'] + $ar_I[1]['pcthuhut'] + $ar_I[2]['pcthuhut'] + $ar_I[3]['pcthuhut'],
+                'pckhac' => $ar_I[0]['pckhac'] + $ar_I[1]['pckhac'] + $ar_I[2]['pckhac'] + $ar_I[3]['pckhac'],
+                'donggop' => $ar_I[0]['donggop'] + $ar_I[1]['donggop'] + $ar_I[2]['donggop'] + $ar_I[3]['donggop'],
+                'nhucau' => $ar_I[0]['nhucau'] + $ar_I[1]['nhucau'] + $ar_I[2]['nhucau'] + $ar_I[3]['nhucau'],
+            ];
+            //dd($m_donvi);
+            return view('reports.nghidinh73.donvi.mau2d')
+                ->with('ar_I', $ar_I)
+                ->with('ar_Tong', $ar_Tong)
+                ->with('m_dv', $m_donvi)
+                ->with('inputs', $inputs)
+                ->with('m_thongtu', $m_thongtu)
+                ->with('pageTitle', 'Bảng tổng quỹ trợ cấp tăng thêm cho cán bộ đã nghỉ hưu');
+        } else
+            return view('errors.notlogin');
+    }
+
+    function mau2dd_tt62(Request $request)
+    {
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $inputs['donvitinh'] = $inputs['donvitinh'] ?? '1';
+            $m_nguonkp = nguonkinhphi::where('masodv', $inputs['masodv'])->get();
+            $m_thongtu = dmthongtuquyetdinh::where('sohieu', $inputs['sohieu'])->first();
+
+            //dd($m_chitiet);
+            $m_donvi = dmdonvi::where('madv', $m_nguonkp->first()->madv)->first();
+            foreach ($m_nguonkp as $chitiet) {
+                $chitiet->level = $m_donvi->caphanhchinh;
+                $chitiet->maphanloai = $m_donvi->maphanloai;
+                $chitiet->phanloainguon = $m_donvi->phanloainguon;
+            }
+
+            $ar_I = array();
+            $m_solieu = $m_nguonkp->wherein('linhvuchoatdong', ['QLNN', 'DDT']);
+            $ar_I[0] = array(
+                'val' => 'BT',
+                'tt' => 'I',
+                'noidung' => 'Quản lý nhà nước',
+                'bienche2023' => $m_solieu->sum('tongsonguoi2015'),
+                'quyluong2023' => $m_solieu->sum('quyluong'),
+                'bienche2024' => $m_solieu->sum('tongsonguoi2017'),
+                'quyluong2024' => $m_solieu->sum('quyluonghientai_2dd'),
+                'tietkiemkhac' => $m_solieu->sum('kinhphitietkiem_2dd'),
+            );
+            //Tính toán số liệu
+            $ar_I[0]['tietkiem01thang'] = $ar_I[0]['quyluong2024'] - $ar_I[0]['quyluong2023'];
+            $ar_I[0]['tongtietkiem'] = $ar_I[0]['tietkiem01thang'] * 12 + $ar_I[0]['tietkiemkhac'];
+            $ar_I[0]['kinhphigiam'] = round($ar_I[0]['tongtietkiem'] / 2, 3);
+            //           
+            $ar_I[1] = array(
+                'val' => 'BT',
+                'tt' => 'II',
+                'noidung' => 'Sự nghiệp công lập',
+                'bienche2023' => 0,
+                'quyluong2023' => 0,
+                'bienche2024' => 0,
+                'quyluong2024' => 0,
+                'tietkiemkhac' => 0,
+                'tietkiem01thang' => 0,
+                'tongtietkiem' => 0,
+                'kinhphigiam' => 0,
+            );
+            //
+            $m_solieu = $m_nguonkp->wherein('linhvuchoatdong', ['GD', 'DT', 'YTE', 'KHCN', 'VHTT', 'PTTH', 'TDTT', 'DBXH', 'KT', 'MT'])->where('phanloainguon', 'CTXMP');
+            $ar_I[2] = array(
+                'val' => 'BT',
+                'tt' => '1',
+                'noidung' => 'Đơn vị đảm bảo một phần chi thường xuyên',
+                'bienche2023' => $m_solieu->sum('tongsonguoi2015'),
+                'quyluong2023' => $m_solieu->sum('quyluong'),
+                'bienche2024' => $m_solieu->sum('tongsonguoi2017'),
+                'quyluong2024' => $m_solieu->sum('quyluonghientai_2dd'),
+                'tietkiemkhac' => $m_solieu->sum('kinhphitietkiem_2dd'),
+
+            );
+            //Tính toán số liệu
+            $ar_I[2]['tietkiem01thang'] = $ar_I[2]['quyluong2024'] - $ar_I[2]['quyluong2023'];
+            $ar_I[2]['tongtietkiem'] = $ar_I[2]['tietkiem01thang'] * 12 + $ar_I[2]['tietkiemkhac'];
+            $ar_I[2]['kinhphigiam'] = round($ar_I[2]['tongtietkiem'] / 2, 3);
+            //
+            $m_solieu = $m_nguonkp->wherein('linhvuchoatdong', ['GD', 'DT', 'YTE', 'KHCN', 'VHTT', 'PTTH', 'TDTT', 'DBXH', 'KT', 'MT'])->where('phanloainguon', 'CTX');
+            $ar_I[3] = array(
+                'val' => 'BT',
+                'tt' => '2',
+                'noidung' => 'Đơn vị được nhà nước đảm bảo chi thường xuyên',
+                'noidung' => 'Đơn vị đảm bảo một phần chi thường xuyên',
+                'bienche2023' => $m_solieu->sum('tongsonguoi2015'),
+                'quyluong2023' => $m_solieu->sum('quyluong'),
+                'bienche2024' => $m_solieu->sum('tongsonguoi2017'),
+                'quyluong2024' => $m_solieu->sum('quyluonghientai_2dd'),
+                'tietkiemkhac' => $m_solieu->sum('kinhphitietkiem_2dd'),
+            );
+            //Tính toán số liệu
+            $ar_I[3]['tietkiem01thang'] = $ar_I[3]['quyluong2024'] - $ar_I[3]['quyluong2023'];
+            $ar_I[3]['tongtietkiem'] = $ar_I[3]['tietkiem01thang'] * 12 + $ar_I[3]['tietkiemkhac'];
+            $ar_I[3]['kinhphigiam'] = round($ar_I[3]['tongtietkiem'] / 2, 3);
+
+            //Tính phần II
+            $ar_I[1]['bienche2023'] = $ar_I[2]['bienche2023'] + $ar_I[3]['bienche2023'];
+            $ar_I[1]['quyluong2023'] = $ar_I[2]['quyluong2023'] + $ar_I[3]['quyluong2023'];
+            $ar_I[1]['bienche2024'] = $ar_I[2]['bienche2024'] + $ar_I[3]['bienche2024'];
+            $ar_I[1]['quyluong2024'] = $ar_I[2]['quyluong2024'] + $ar_I[3]['quyluong2024'];
+            $ar_I[1]['tietkiemkhac'] = $ar_I[2]['tietkiemkhac'] + $ar_I[3]['tietkiemkhac'];
+            $ar_I[1]['tietkiem01thang'] = $ar_I[2]['tietkiem01thang'] + $ar_I[3]['tietkiem01thang'];
+            $ar_I[1]['tongtietkiem'] = $ar_I[2]['tongtietkiem'] + $ar_I[3]['tongtietkiem'];
+            $ar_I[1]['kinhphigiam'] = $ar_I[2]['kinhphigiam'] + $ar_I[3]['kinhphigiam'];
+            //Tổng cộng:
+            $ar_Tong = [
+                'bienche2023' => $ar_I[0]['bienche2023'] + $ar_I[1]['bienche2023'],
+                'quyluong2023' => $ar_I[0]['quyluong2023'] + $ar_I[1]['quyluong2023'],
+                'bienche2024' => $ar_I[0]['bienche2024'] + $ar_I[1]['bienche2024'],
+                'quyluong2024' => $ar_I[0]['quyluong2024'] + $ar_I[1]['quyluong2024'],
+                'tietkiemkhac' => $ar_I[0]['tietkiemkhac'] + $ar_I[1]['tietkiemkhac'],
+                'tietkiem01thang' => $ar_I[0]['tietkiem01thang'] + $ar_I[1]['tietkiem01thang'],
+                'tongtietkiem' => $ar_I[0]['tongtietkiem'] + $ar_I[1]['tongtietkiem'],
+                'kinhphigiam' => $ar_I[0]['kinhphigiam'] + $ar_I[1]['kinhphigiam'],
+            ];
+            //dd($m_donvi);
+            return view('reports.nghidinh73.donvi.mau2dd')
+                ->with('ar_I', $ar_I)
+                ->with('ar_Tong', $ar_Tong)
+                ->with('m_dv', $m_donvi)
+                ->with('inputs', $inputs)
+                ->with('m_thongtu', $m_thongtu)
+                ->with('pageTitle', 'Bảng tổng quỹ trợ cấp tăng thêm cho cán bộ đã nghỉ hưu');
+        } else
+            return view('errors.notlogin');
+    }
+
+    function mau2e_tt62(Request $request)
+    {
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $inputs['donvitinh'] = $inputs['donvitinh'] ?? '1';
+            $m_nguonkp = nguonkinhphi::where('masodv', $inputs['masodv'])->get();
+            $m_thongtu = dmthongtuquyetdinh::where('sohieu', $inputs['sohieu'])->first();
+
+            //dd($m_chitiet);
+            $m_donvi = dmdonvi::where('madv', $m_nguonkp->first()->madv)->first();
+            foreach ($m_nguonkp as $chitiet) {
+                $chitiet->level = $m_donvi->caphanhchinh;
+                $chitiet->maphanloai = $m_donvi->maphanloai;
+                $chitiet->phanloainguon = $m_donvi->phanloainguon;
+            }
+
+            $ar_I = array();
+            $m_solieu = $m_nguonkp->wherein('linhvuchoatdong', ['GD', 'DT', 'YTE', 'KHCN', 'VHTT', 'PTTH', 'TDTT', 'DBXH', 'KT', 'MT'])->where('phanloainguon', 'CHITXDT');
+            $ar_I[0] = array(
+                'val' => 'BT',
+                'tt' => '1',
+                'noidung' => 'Đơn vị đảm bảo chi thường xuyên và chi đầu tư',
+                'bienche2023' => $m_solieu->sum('tongsodonvi1'),
+                'bienche2024' => $m_solieu->sum('tongsodonvi2'),
+                'tietkiem01thang' => $m_solieu->sum('quy_tuchu'),
+                'tietkiem2024' => $m_solieu->sum('hesoluong_2i'),
+                'kinhphigiam' =>  round($m_solieu->sum('hesoluong_2i') / 2, 3),
+            );
+            // 
+            $m_solieu = $m_nguonkp->wherein('linhvuchoatdong', ['GD', 'DT', 'YTE', 'KHCN', 'VHTT', 'PTTH', 'TDTT', 'DBXH', 'KT', 'MT'])->where('phanloainguon', 'CTX');
+            $ar_I[1] = array(
+                'val' => 'BT',
+                'tt' => '2',
+                'noidung' => 'Đơn vị đảm bảo chi thường xuyên',
+                'bienche2023' => $m_solieu->sum('tongsodonvi1'),
+                'bienche2024' => $m_solieu->sum('tongsodonvi2'),
+                'tietkiem01thang' => $m_solieu->sum('quy_tuchu'),
+                'tietkiem2024' => $m_solieu->sum('hesoluong_2i'),
+                'kinhphigiam' =>  round($m_solieu->sum('hesoluong_2i') / 2, 3),
+            );
+            //
+            $m_solieu = $m_nguonkp->wherein('linhvuchoatdong', ['GD', 'DT', 'YTE', 'KHCN', 'VHTT', 'PTTH', 'TDTT', 'DBXH', 'KT', 'MT'])->where('phanloainguon', 'CTXMP');
+            $ar_I[2] = array(
+                'val' => 'BT',
+                'tt' => '3',
+                'noidung' => 'Đơn vị đảm bảo một phần chi thường xuyên',
+                'bienche2023' => $m_solieu->sum('tongsodonvi1'),
+                'bienche2024' => $m_solieu->sum('tongsodonvi2'),
+                'tietkiem01thang' => $m_solieu->sum('quy_tuchu'),
+                'tietkiem2024' => $m_solieu->sum('hesoluong_2i'),
+                'kinhphigiam' =>  round($m_solieu->sum('hesoluong_2i') / 2, 3),
+
+            );
+            //
+            $m_solieu = $m_nguonkp->wherein('linhvuchoatdong', ['GD', 'DT', 'YTE', 'KHCN', 'VHTT', 'PTTH', 'TDTT', 'DBXH', 'KT', 'MT'])->where('phanloainguon', 'NGANSACH');
+            $ar_I[3] = array(
+                'val' => 'BT',
+                'tt' => '4',
+                'noidung' => 'Đơn vị được nhà nước đảm bảo chi thường xuyên',
+                'bienche2023' => $m_solieu->sum('tongsodonvi1'),
+                'bienche2024' => $m_solieu->sum('tongsodonvi2'),
+                'tietkiem01thang' => $m_solieu->sum('quy_tuchu'),
+                'tietkiem2024' => $m_solieu->sum('hesoluong_2i'),
+                'kinhphigiam' =>  round($m_solieu->sum('hesoluong_2i') / 2, 3),
+            );
+
+            //Tổng cộng:
+            $ar_Tong = [
+                'bienche2023' => $ar_I[0]['bienche2023'] + $ar_I[1]['bienche2023'] + $ar_I[2]['bienche2023'] + $ar_I[3]['bienche2023'],
+                'bienche2024' => $ar_I[0]['bienche2024'] + $ar_I[1]['bienche2024'] + $ar_I[2]['bienche2023'] + $ar_I[3]['bienche2023'],
+                'tietkiem01thang' => $ar_I[0]['tietkiem01thang'] + $ar_I[1]['tietkiem01thang'] + $ar_I[2]['tietkiem01thang'] + $ar_I[3]['tietkiem01thang'],
+                'tietkiem2024' => $ar_I[0]['tietkiem2024'] + $ar_I[1]['tietkiem2024'] + $ar_I[2]['tietkiem2024'] + $ar_I[3]['tietkiem2024'],
+                'kinhphigiam' => $ar_I[0]['kinhphigiam'] + $ar_I[1]['kinhphigiam'] + $ar_I[2]['kinhphigiam'] + $ar_I[3]['kinhphigiam'],
+            ];
+            //dd($m_donvi);
+            return view('reports.nghidinh73.donvi.mau2e')
+                ->with('ar_I', $ar_I)
+                ->with('ar_Tong', $ar_Tong)
+                ->with('m_dv', $m_donvi)
+                ->with('inputs', $inputs)
+                ->with('m_thongtu', $m_thongtu)
+                ->with('pageTitle', 'BÁO CÁO NGUỒN THỰC HIỆN CCTL');
+        } else
+            return view('errors.notlogin');
+    }
+
     function mau2e(Request $request)
     {
         if (Session::has('admin')) {
@@ -3210,7 +3535,7 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                 // $a_BII[5]['sotien'] = $m_nguonkp->sum('nhucau2c');
 
                 $a_TC = array(
-                    'A' => ($a_A[0]['sotien'] + $a_A[1]['sotien'] + $a_A[2]['sotien'] + $a_A[3]['sotien'] + $a_A[7]['sotien'] + $a_A[8]['sotien'] + $a_A[9]['sotien'] + $a_A[10]['sotien']),
+                    'A' => ($a_A[0]['sotien'] + $a_A[1]['sotien'] + $a_A[2]['sotien'] + $a_A[3]['sotien'] + $a_A[4]['sotien'] + $a_A[8]['sotien'] + $a_A[9]['sotien']),
                     'B1' => array_sum(array_column($a_B1, 'sotien')),
                     'B2' => array_sum(array_column($a_B2, 'sotien')),
                     'B3' => array_sum(array_column($a_B3, 'sotien'))
