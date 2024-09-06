@@ -170,6 +170,9 @@ class tonghopnguon_khoiController extends Controller
         if (Session::has('admin')) {
             $inputs = $request->all();
             $model = nguonkinhphi::where('masodv', $inputs['masodv'])->first();
+            if(!isset($model)){
+                $model=nguonkinhphi_khoi::where('masodv', $inputs['masodv'])->first();
+            }
             $model->trangthai = 'TRALAI';
             $model->lydo = $inputs['lydo'];
             $model->save();
