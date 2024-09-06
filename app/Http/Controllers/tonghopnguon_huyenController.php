@@ -6500,8 +6500,8 @@ class tonghopnguon_huyenController extends Controller
             //Tính toán số liệu
             $ar_I[0]['tongpc'] = round(($ar_I[0]['pckhuvuc'] + $ar_I[0]['pcudn'] + $ar_I[0]['pcthuhut'] + $ar_I[0]['pckhac']) / 100 * $ar_I[0]['hesoluong'], 3);
             $ar_I[0]['donggop'] = round($ar_I[0]['hesoluong'] * 0.235, 3);
-            $ar_I[0]['tongcong'] = round($ar_I[0]['hesoluong'] + $ar_I[0]['tongpc'], 3);
-            $ar_I[0]['nhucau'] = round($ar_I[0]['bienchecomat'] * $ar_I[0]['tongcong'] * 310000, 3);
+            $ar_I[0]['tongcong'] = round($ar_I[0]['hesoluong'] + $ar_I[0]['tongpc'] + $ar_I[0]['donggop'], 3);
+            $ar_I[0]['nhucau'] = round($ar_I[0]['bienchecomat'] * $ar_I[0]['tongcong'] * 310000 * $ar_I[0]['sothang'], 3);
 
             //
             $m_solieu = $m_nguonkp->where('maphanloai', 'TIEUHOC');
@@ -6522,8 +6522,8 @@ class tonghopnguon_huyenController extends Controller
             //Tính toán số liệu
             $ar_I[1]['tongpc'] = round(($ar_I[1]['pckhuvuc'] + $ar_I[1]['pcudn'] + $ar_I[1]['pcthuhut'] + $ar_I[1]['pckhac']) / 100 * $ar_I[1]['hesoluong'], 3);
             $ar_I[1]['donggop'] = round($ar_I[1]['hesoluong'] * 0.235, 3);
-            $ar_I[1]['tongcong'] = round($ar_I[1]['hesoluong'] + $ar_I[1]['tongpc'], 3);
-            $ar_I[1]['nhucau'] = round($ar_I[1]['bienchecomat'] * $ar_I[1]['tongcong'] * 310000, 3);
+            $ar_I[1]['tongcong'] = round($ar_I[1]['hesoluong'] + $ar_I[1]['tongpc'] + $ar_I[1]['donggop'], 3);
+            $ar_I[1]['nhucau'] = round($ar_I[1]['bienchecomat'] * $ar_I[1]['tongcong'] * 310000 * $ar_I[1]['sothang'], 3);
             //
             $m_solieu = $m_nguonkp->where('maphanloai', 'THCS');
             $m_solieu_huyen = $m_nguon_solieu->where('maphanloai', 'THCS');
@@ -6543,8 +6543,8 @@ class tonghopnguon_huyenController extends Controller
             //Tính toán số liệu
             $ar_I[2]['tongpc'] = round(($ar_I[2]['pckhuvuc'] + $ar_I[2]['pcudn'] + $ar_I[2]['pcthuhut'] + $ar_I[2]['pckhac']) / 100 * $ar_I[2]['hesoluong'], 3);
             $ar_I[2]['donggop'] = round($ar_I[2]['hesoluong'] * 0.235, 3);
-            $ar_I[2]['tongcong'] = round($ar_I[2]['hesoluong'] + $ar_I[2]['tongpc'], 3);
-            $ar_I[2]['nhucau'] = round($ar_I[2]['bienchecomat'] * $ar_I[2]['tongcong'] * 310000, 3);
+            $ar_I[2]['tongcong'] = round($ar_I[2]['hesoluong'] + $ar_I[2]['tongpc'] + $ar_I[2]['donggop'], 3);
+            $ar_I[2]['nhucau'] = round($ar_I[2]['bienchecomat'] * $ar_I[2]['tongcong'] * 310000 * $ar_I[2]['sothang'], 3);
             //
             $m_solieu = $m_nguonkp->where('maphanloai', 'THPT');
             $m_solieu_huyen = $m_nguon_solieu->where('maphanloai', 'THPT');
@@ -6564,8 +6564,8 @@ class tonghopnguon_huyenController extends Controller
             //Tính toán số liệu
             $ar_I[3]['tongpc'] = round(($ar_I[3]['pckhuvuc'] + $ar_I[3]['pcudn'] + $ar_I[3]['pcthuhut'] + $ar_I[3]['pckhac']) / 100 * $ar_I[3]['hesoluong'], 3);
             $ar_I[3]['donggop'] = round($ar_I[3]['hesoluong'] * 0.235, 3);
-            $ar_I[3]['tongcong'] = round($ar_I[3]['hesoluong'] + $ar_I[3]['tongpc'], 3);
-            $ar_I[3]['nhucau'] = round($ar_I[3]['bienchecomat'] * $ar_I[3]['tongcong'] * 310000, 3);
+            $ar_I[3]['tongcong'] = round($ar_I[3]['hesoluong'] + $ar_I[3]['tongpc'] + $ar_I[3]['donggop'], 3);
+            $ar_I[3]['nhucau'] = round($ar_I[3]['bienchecomat'] * $ar_I[3]['tongcong'] * 310000 * $ar_I[3]['sothang'], 3);
 
             //Tổng cộng:
             $ar_Tong = [
