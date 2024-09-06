@@ -393,7 +393,10 @@ Route::group(['prefix' => 'chuc_nang'], function () {
             //2023.06.20 Dữ liệu đơn vị quản lý nhập
             Route::post('dulieu_dvql', 'tonghopnguon_huyenController@luu_dulieu_dvql');
             Route::get('dulieu_dvql', 'tonghopnguon_huyenController@dulieu_dvql');
-
+            //2024.09.06 thêm chức năng nhập số liệu cho biểu 2d
+            Route::get('del_2d', 'tonghopnguon_huyenController@del_2d');
+            Route::get('get_2d', 'tonghopnguon_huyenController@get_2d');
+            Route::get('solieu_2d', 'tonghopnguon_huyenController@solieu_2d');
         });
 
         Route::group(['prefix' => 'khoi'], function () {
