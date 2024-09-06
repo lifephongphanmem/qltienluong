@@ -172,6 +172,12 @@ class tonghopnguon_khoiController extends Controller
             $model = nguonkinhphi::where('masodv', $inputs['masodv'])->first();
             if(!isset($model)){
                 $model=nguonkinhphi_khoi::where('masodv', $inputs['masodv'])->first();
+                $model_huyen=nguonkinhphi_huyen::where('masodv',$inputs['masodv'])->first();
+                if(isset($model_huyen)){
+                    $model_huyen->trangthai = 'CHUAGUI';
+                    $model_huyen->lydo=$inputs['lydo'];
+                    $model_huyen->save();
+                }
             }
             $model->trangthai = 'TRALAI';
             $model->lydo = $inputs['lydo'];
@@ -402,6 +408,6 @@ class tonghopnguon_khoiController extends Controller
 
         $model = nguonkinhphi_khoi::select('lydo')->where('masodv', $inputs['masodv'])->first();
 
-        die($model);
+        return response()->json($model);
     }
 }
