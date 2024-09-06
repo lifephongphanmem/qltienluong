@@ -60,6 +60,7 @@ class xemdulieu_nguonController extends Controller
             foreach ($model_donvi as $dv) {
                 //kiểm tra xem đã tổng hợp thành dữ liệu khối  gửi lên huyện chưa?
                 $nguon_khoi = $model_nguon_khoi->where('sohieu', $inputs['sohieu'])->first();
+                // dd($nguon_khoi);
                 if ($nguon_khoi != null  && $nguon_khoi->trangthai == 'DAGUI') {
                     $dv->tralai = false;
                 } else {

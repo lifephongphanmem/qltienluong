@@ -583,7 +583,7 @@
         function getLyDo(masodv, sohieu) {
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             $.ajax({
-                url: '{{ $furl_th }}' + 'getlydo',
+                url: '{{ $furl }}' + '/getlydo',
                 type: 'GET',
                 data: {
                     _token: CSRF_TOKEN,
@@ -592,6 +592,7 @@
                 },
                 dataType: 'JSON',
                 success: function(data) {
+                    console.log(data);
                     $('#lydo').val(data.lydo);
                 },
                 error: function(message) {
