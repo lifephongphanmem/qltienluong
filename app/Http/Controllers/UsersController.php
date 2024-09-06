@@ -221,6 +221,7 @@ class UsersController extends Controller
                 $ttuser->nguoilapbieu = $model_donvi->nguoilapbieu;
                 $ttuser->songaycong = $model_donvi->songaycong;
                 $ttuser->dinhmucnguon = $model_donvi->dinhmucnguon;
+                $ttuser->phanloainguon = $model_donvi->phanloainguon;                
 
                 $model_donvibaocao = dmdonvibaocao::where('madvbc', $model_donvi->madvbc)->first();
                 $ttuser->level = $model_donvibaocao->level;
@@ -629,11 +630,22 @@ class UsersController extends Controller
     {
         if (Session::has('admin')) {
             $model_taikhoan = Users::where('username', $username)->first();
-            $model = users_phanquyen::where('username', $username)->get();
-            return view('system.users.perms')                
+            $model_phanquyen = users_phanquyen::where('username', $username)->get();
+            $model = users_phanquyen::where('id', $username)->get();//để láy object rỗng
+            $a_chucnang = getDanhSachChucNang();
+            foreach ($a_chucnang as $key => $chucnang) {
+                $pq = new users_phanquyen();
+                $pq->username = $username;
+                $pq->machucnang = $key;
+                $pq->phanquyen = $model_phanquyen->where('machucnang', $key)->first()->phanquyen ?? 1;
+                $model->add($pq);
+            }
+
+            //dd($model_taikhoan);   
+            return view('system.users.perms')
                 ->with('url', '/danh_muc/tai_khoan/')
                 ->with('model', $model)
-                ->with('a_chucnang', getDanhSachChucNang())
+                ->with('a_chucnang', $a_chucnang)
                 ->with('model_taikhoan', $model_taikhoan)
                 ->with('pageTitle', 'Phân quyền cho tài khoản');
         } else
@@ -645,18 +657,18 @@ class UsersController extends Controller
         if (Session::has('admin')) {
             $update = $request->all();
             //dd($request);
-            //$id = $request['id'];
-
-            $model = Users::where('username', $update['username'])->first();
-            //dd($model);
+            $model = users_phanquyen::where('username', $update['username'])->where('machucnang', $update['machucnang'])->first();
             if (isset($model)) {
-                $update['roles'] = isset($update['roles']) ? $update['roles'] : null;
-                $model->permission = json_encode($update['roles']);
+                $model->phanquyen = $update['phanquyen'];
                 $model->save();
-
-                return redirect('/danh_muc/tai_khoan/list_user?&madv=' . $model->madv);
-            } else
-                dd('Tài khoản không tồn tại');
+            } else {
+                $model = new users_phanquyen();
+                $model->username = $update['username'];
+                $model->machucnang = $update['machucnang'];
+                $model->phanquyen = $update['phanquyen'];
+                $model->save();
+            }
+            return redirect('/danh_muc/tai_khoan/ma_so=' . $update['username'] . '/permission');
         } else
             return view('errors.notlogin');
     }

@@ -112,14 +112,29 @@ class nguonkinhphiController extends Controller
                 //->get()->keyBy('macanbo')->toarray();
                 ->get();
             $a_th = array_merge(array(
-                'stt', 'ngaysinh', 'tencanbo', 'gioitinh', 'msngbac', 'bac', 'bhxh_dv', 'bhyt_dv',
-                'bhtn_dv', 'kpcd_dv', 'ngaybc', 'ngayvao', 'lvhd', 'ngaytu', 'tnntungay', 'tnndenngay', 'mucluongbaohiem'
+                'stt',
+                'ngaysinh',
+                'tencanbo',
+                'gioitinh',
+                'msngbac',
+                'bac',
+                'bhxh_dv',
+                'bhyt_dv',
+                'bhtn_dv',
+                'kpcd_dv',
+                'ngaybc',
+                'ngayvao',
+                'lvhd',
+                'ngaytu',
+                'tnntungay',
+                'tnndenngay',
+                'mucluongbaohiem'
             ), $a_th);
 
             $model = hosocanbo::select($a_th)->where('madv', session('admin')->madv)
                 ->where('theodoi', '<', '9')
                 ->get();
-            $m_cb_kiemtra = $model->keyBy('macanbo')->toarray();//Lấy danh sách cán bộ để kiểm tra cho kiêm nhiệm
+            $m_cb_kiemtra = $model->keyBy('macanbo')->toarray(); //Lấy danh sách cán bộ để kiểm tra cho kiêm nhiệm
 
             $m_thoict = hosothoicongtac::where('madv', session('admin')->madv)
                 ->wherebetween('ngaynghi', [$model_thongtu->ngayapdung, $inputs['namdt'] . '-12-31'])->get();
@@ -343,7 +358,7 @@ class nguonkinhphiController extends Controller
                     $m_cb_kn->forget($key);
                     continue;
                 }
-                $ct->macongtac = $a_congtac[$ct->mact];                
+                $ct->macongtac = $a_congtac[$ct->mact];
                 $canbo = $m_cb_kiemtra[$ct->macanbo];
                 $ct->tencanbo = $canbo['tencanbo'];
                 $ct->stt = $canbo['stt'];
@@ -680,9 +695,32 @@ class nguonkinhphiController extends Controller
 
             //lưu dữ liệu
             $a_col = array(
-                'bac', 'bhxh_dv', 'bhtn_dv', 'kpcd_dv', 'bhyt_dv', 'gioitinh', 'nam_nb', 'nam_ns', 'nam_tnn',
-                'thang_nb', 'thang_ns', 'thang_tnn', 'ngayden', 'ngaytu', 'ngaysinh', 'tnndenngay', 'tnntungay', 'pcctp',
-                'st_pcctp', 'nam_hh', 'thang_hh', 'ngaybc', 'ngayvao', 'lvhd', 'mucluongbaohiem', 'pthuong'
+                'bac',
+                'bhxh_dv',
+                'bhtn_dv',
+                'kpcd_dv',
+                'bhyt_dv',
+                'gioitinh',
+                'nam_nb',
+                'nam_ns',
+                'nam_tnn',
+                'thang_nb',
+                'thang_ns',
+                'thang_tnn',
+                'ngayden',
+                'ngaytu',
+                'ngaysinh',
+                'tnndenngay',
+                'tnntungay',
+                'pcctp',
+                'st_pcctp',
+                'nam_hh',
+                'thang_hh',
+                'ngaybc',
+                'ngayvao',
+                'lvhd',
+                'mucluongbaohiem',
+                'pthuong'
             );
             //dd($m_data_phucap);
             $a_data_nl = unset_key($a_data_nl, $a_col);

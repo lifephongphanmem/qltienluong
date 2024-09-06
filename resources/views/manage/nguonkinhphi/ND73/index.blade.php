@@ -26,7 +26,7 @@
                         </li>
                         <li>
                             <a href="#tab2c" data-toggle="tab" class="step">
-                                <p class="description"><i class="glyphicon glyphicon-check"></i>Mẫu 2c và 2e</p>
+                                <p class="description"><i class="glyphicon glyphicon-check"></i>Mẫu 2c</p>
                             </a>
                         </li>
                         <li>
@@ -34,21 +34,27 @@
                                 <p class="description"><i class="glyphicon glyphicon-check"></i>Mẫu 2d</p>
                             </a>
                         </li>
+
+                        <li>
+                            <a href="#tab2dd" data-toggle="tab" class="step">
+                                <p class="description"><i class="glyphicon glyphicon-check"></i>Mẫu 2đ</p>
+                            </a>
+                        </li>
                        
-                        {{-- <li><a href="#tab2e" data-toggle="tab" class="step">
+                        <li><a href="#tab2e" data-toggle="tab" class="step">
                                 <p class="description"> <i class="glyphicon glyphicon-check"></i> Mẫu 2e</p>
                             </a>
-                        </li> --}}
+                        </li>
                         
                         <li><a href="#tab4a" data-toggle="tab" class="step">
                             <p class="description"><i class="glyphicon glyphicon-check"></i>Mẫu 4a</p>
                         </a>
                     </li>
-                    {{-- <li>
+                    <li>
                         <a href="#tab4b" data-toggle="tab" class="step">
                             <p class="description"><i class="glyphicon glyphicon-check"></i>Mẫu 4b</p>
                         </a>
-                    </li> --}}
+                    </li>
                     </ul>
 
                     <div id="bar" class="progress progress-striped" role="progressbar">
@@ -58,11 +64,12 @@
 
                     <div class="tab-content">
                         @include('manage.nguonkinhphi.ND73.mau4a')
-                        {{-- @include('manage.nguonkinhphi.TT78.mau4b') --}}
+                        @include('manage.nguonkinhphi.ND73.mau4b')
                         @include('manage.nguonkinhphi.ND73.mau2a')
                         @include('manage.nguonkinhphi.ND73.mau2b')
                         @include('manage.nguonkinhphi.ND73.mau2c')
                         @include('manage.nguonkinhphi.ND73.mau2d')
+                        @include('manage.nguonkinhphi.ND73.mau2dd')
                         @include('manage.nguonkinhphi.ND73.mau2e')
                     </div>
                 </div>

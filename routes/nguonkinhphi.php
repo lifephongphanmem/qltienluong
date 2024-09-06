@@ -44,6 +44,9 @@ Route::group(['prefix' => 'nguon_kinh_phi'], function () {
     // Route::post('mau2i', 'nguonkinhphi_donvi_baocaoController@mau2i');
     // Route::post('mau2k', 'nguonkinhphi_donvi_baocaoController@mau2k');
     // Route::post('mau2l', 'nguonkinhphi_donvi_baocaoController@mau2l');
+    Route::post('mau2d_tt62', 'nguonkinhphi_donvi_baocaoController@mau2d_tt62');
+    Route::post('mau2dd_tt62', 'nguonkinhphi_donvi_baocaoController@mau2dd_tt62');
+    Route::post('mau2e_tt62', 'nguonkinhphi_donvi_baocaoController@mau2e_tt62');
     
     Route::post('mau4a', 'nguonkinhphi_donvi_baocaoController@mau4a');
     Route::post('mau4b', 'nguonkinhphi_donvi_baocaoController@mau4b');

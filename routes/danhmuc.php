@@ -99,7 +99,7 @@ Route::group(['prefix' => 'danh_muc'], function () {
         Route::post('add_user', 'UsersController@store');
 
         Route::get('ma_so={taikhoan}/permission', 'UsersController@permission');
-        Route::post('ma_so={taikhoan}/uppermission', 'UsersController@uppermission');
+        Route::post('PhanQuyen', 'UsersController@uppermission');
         Route::get('del_taikhoan/{madv}', 'UsersController@destroy');
     });
 

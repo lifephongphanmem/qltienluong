@@ -41,9 +41,20 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label class="control-label">Số tiết kiệm 10% chi TX năm 2024</label>
-                                            {!! Form::text('tietkiem', null, [
-                                                'id' => 'tietkiem',
+                                            <label class="control-label">Số tiết kiệm 10% chi TX dự toán năm 2023</label>
+                                            {!! Form::text('hesoluong_2h', null, [
+                                                'id' => 'hesoluong_2h',
+                                                'class' => 'form-control nguonkp text-right',
+                                                'data-mask' => 'fdecimal',
+                                            ]) !!}
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="control-label">Số tiết kiệm 10% chi TX tăng thêm dự toán năm 2024</label>
+                                            {!! Form::text('hesophucap_2h', null, [
+                                                'id' => 'hesophucap_2h',
                                                 'class' => 'form-control nguonkp text-right',
                                                 'data-mask' => 'fdecimal',
                                             ]) !!}
@@ -93,7 +104,7 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label class="control-label">50% phần NSNN giảm chi hỗ trợ hoạt động thường xuyên trong lĩnh vực hành chính và các đơn vị sự nghiệp công lập</label>
+                                            <label class="control-label">50% phần NSNN giảm chi hỗ trợ hoạt động TX trong lĩnh vực hành chính và các đơn vị sự nghiệp công lập</label>
                                             {!! Form::text('nsnngiam', null, [
                                                 'id' => 'nsnngiam',
                                                 'class' => 'form-control nguonkp text-right',
@@ -101,6 +112,14 @@
                                             ]) !!}
                                         </div>
                                     </div>
+                                    
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <h4 class="text-capitalize text-danger">Nguồn cải cách tiền lương năm 2023 chuyển sang 2024</h4>
+                                    </div>
+
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label class="control-label">Nguồn Cải cách tiền lương năm 2023 chuyển
@@ -112,10 +131,7 @@
                                             ]) !!}
                                         </div>
                                     </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-md-6">
+                                    {{-- <div class="col-md-6">
                                         <div class="form-group">
                                             <label class="control-label">70% kết dư ngân sách năm 2023</label>
                                             {!! Form::text('nguonketdu_4a', null, [
@@ -124,12 +140,12 @@
                                                 'data-mask' => 'fdecimal',
                                             ]) !!}
                                         </div>
-                                    </div>
+                                    </div> --}}
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label class="control-label">Bố trí trả lại nguồn cải cách tiền lương của các năm trước</label>
-                                            {!! Form::text('nguontralai_4a', null, [
-                                                'id' => 'nguontralai_4a',
+                                            <label class="control-label">Điều chỉnh tăng/giảm nguồn CCTL theo kết luận của Thanh tra, Kiểm toán</label>
+                                            {!! Form::text('tinhgiambc_4a', null, [
+                                                'id' => 'tinhgiambc_4a',
                                                 'class' => 'form-control nguonkp text-right',
                                                 'data-mask' => 'fdecimal',
                                             ]) !!}
@@ -264,7 +280,7 @@
                                         <div class="form-group">
                                             <!-- Dùng thu hút để lưu =>ko pải thêm trường -->
                                             <label class="control-label">Nhu cầu kinh phí trả thực hiện chế độ thù lao
-                                                đối với người đã nghỉ hưu lanh đạo Hội đặc thù</label>
+                                                đối với người đã nghỉ hưu lãnh đạo Hội đặc thù</label>
                                             {!! Form::text('kpuudai', null, [
                                                 'id' => 'kpuudai',
                                                 'class' => 'form-control nhucaupc text-right',
@@ -281,6 +297,19 @@
                                                 cấp lần đầu nhận công tác vùng ĐBKK</label>
                                             {!! Form::text('kinhphigiamxa_4a', null, [
                                                 'id' => 'kinhphigiamxa_4a',
+                                                'class' => 'form-control nhucaupc text-right',
+                                                'data-mask' => 'fdecimal',
+                                            ]) !!}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="control-label">Kinh phí tăng giảm so với số liệu đã tính định mức chi TX theo nghị định 33/2023/NĐ-CP</label>
+                                            {!! Form::text('satnhapdaumoi_4a', null, [
+                                                'id' => 'satnhapdaumoi_4a',
                                                 'class' => 'form-control nhucaupc text-right',
                                                 'data-mask' => 'fdecimal',
                                             ]) !!}

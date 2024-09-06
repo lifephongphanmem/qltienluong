@@ -1449,49 +1449,60 @@ function get4a_NĐ73_A()
 
     $a_A[2] = array(
         'tt' => '3',
-        'noidung' => 'Số tiết kiệm chi 10 chi thường xuyên năm 2024',
+        'noidung' => 'Số tiết kiệm 10% chi thường xuyên dự toán năm 2023',
         'sotien' => '0',
         'phanloai' => '0',
-        'tentruong' => 'tietkiem'
+        'tentruong' => 'hesoluong_2h'
     );
+
     $a_A[3] = array(
         'tt' => '4',
+        'noidung' => 'Số tiết kiệm 10% chi thường xuyên tăng thêm dự toán năm 2024 so dự toán năm 2023',
+        'sotien' => '0',
+        'phanloai' => '0',
+        'tentruong' => 'hesophucap_2h'
+    );
+    
+    $a_A[4] = array(
+        'tt' => '5',
         'noidung' => 'Số thu được huy động từ nguồn để lại đơn vị 2024 ( các đơn vị chưa tự đảm bảo chi thường xuyên )',
         'sotien' => '0',
         'phanloai' => '1',
-        'tentruong' => [4, 5, 6]
+        'tentruong' => [5, 6, 7]
     );
-    $a_A[4] = array('tt' => '', 'noidung' => '+ Học phí', 'sotien' => '0', 'phanloai' => '0', 'tentruong' => 'huydongktx_hocphi_4a');
-    $a_A[5] = array('tt' => '', 'noidung' => '+ Viện phí', 'sotien' => '0', 'phanloai' => '0', 'tentruong' => 'huydongktx_vienphi_4a');
-    $a_A[6] = array('tt' => '', 'noidung' => '+ Nguồn thu khác', 'sotien' => '0', 'phanloai' => '0', 'tentruong' => 'huydongktx_khac_4a');
-    $a_A[7] = array(
-        'tt' => '5',
+    $a_A[5] = array('tt' => '', 'noidung' => '+ Học phí', 'sotien' => '0', 'phanloai' => '0', 'tentruong' => 'huydongktx_hocphi_4a');
+    $a_A[6] = array('tt' => '', 'noidung' => '+ Viện phí', 'sotien' => '0', 'phanloai' => '0', 'tentruong' => 'huydongktx_vienphi_4a');
+    $a_A[7] = array('tt' => '', 'noidung' => '+ Nguồn thu khác', 'sotien' => '0', 'phanloai' => '0', 'tentruong' => 'huydongktx_khac_4a');
+    $a_A[8] = array(
+        'tt' => '6',
         'noidung' => '50% phần NSNN giảm chi hỗ trợ hoạt động thường xuyên trong lĩnh vực hành chính và các đơn vị sự nghiệp công lập',
         'sotien' => '0',
         'phanloai' => '0',
         'tentruong' => 'nsnngiam'
     );
-    $a_A[8] = array(
-        'tt' => '6',
+
+    $a_A[9] = array(
+        'tt' => '7',
         'noidung' => 'Nguồn thực hiện cải cách tiền lương năm 2023 chưa sử dụng hết chuyển sang năm 2024',
+        'sotien' => '0',
+        'phanloai' => '1',
+        'tentruong' => [10, 11]
+    );
+
+    $a_A[10] = array(
+        'tt' => '',
+        'noidung' => '+ Nguồn thực hiện cải cách tiền lương năm 2023 còn dư theo thông báo của Bộ Tài chính',
         'sotien' => '0',
         'phanloai' => '0',
         'tentruong' => 'caicach'
     );
-    $a_A[9] = array(
-        'tt' => '7',
-        'noidung' => '70% kết dư ngân sách năm 2023',
+    $a_A[11] = array(
+        'tt' => '',
+        'noidung' => '+ Điều chỉnh tăng/giảm nguồn cải cách tiền lương theo kết luận của cơ quan Thanh tra, Kiểm toán',
         'sotien' => '0',
         'phanloai' => '0',
-        'tentruong' => 'nguonketdu_4a'
-    );
-    $a_A[10] = array(
-        'tt' => '8',
-        'noidung' => 'Bố trí trả lại nguồn cải cách tiền lương của các năm trước',
-        'sotien' => '0',
-        'phanloai' => '0',
-        'tentruong' => 'nguontralai_4a'
-    );
+        'tentruong' => 'tinhgiambc_4a'
+    );    
 
     return $a_A;
 }

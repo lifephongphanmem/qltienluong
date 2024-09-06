@@ -760,7 +760,7 @@
         <!-- BEGIN CONTENT -->
         <div class="page-content-wrapper">
             <div class="page-content" style="padding-top: 0px;">
-                {{ $pageTitle }}
+                {{-- {{ $pageTitle }} --}}
 
                 <!-- END PAGE BREADCRUMB -->
                 @if (session('admin')->thongbao != '')

@@ -73,8 +73,6 @@
 
         </tr>
 
-
-
         <tr style="font-weight: bold; text-align: center">
             <td>1</td>
             <td>2</td>
