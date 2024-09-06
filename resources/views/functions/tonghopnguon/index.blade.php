@@ -264,7 +264,19 @@
                                 style="border-width: 0px" class="btn btn-default btn-xs mbs"
                                 data-target="#modal-insolieu" data-toggle="modal">
                                 <i class="fa fa-print"></i>&nbsp;Tổng hợp kinh phí tăng thêm để thực hiện chế độ cho cán bộ
-                                không chuyên trách (Mẫu 2c)</button>
+                                không chuyên trách (Mẫu 2c - 1)</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <button type="button" onclick="insolieu('{{ $furl_th . 'mau2c_2' }}',null)"
+                                style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                data-target="#modal-insolieu" data-toggle="modal">
+                                <i class="fa fa-print"></i>&nbsp;Tổng hợp kinh phí tăng thêm để thực hiện chế độ cho cán bộ
+                                không chuyên trách (Mẫu 2c - 2)</button>
                         </div>
                     </div>
                 </div>
