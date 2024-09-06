@@ -151,6 +151,7 @@ class tonghopnguon_khoiController extends Controller
             $inputs['madvbc'] = session('admin')->madvbc;
             $inputs['macqcq'] = session('admin')->madv;
             // dd($model);
+            // dd(session('admin'));
             return view('functions.tonghopnguon.khoi.index')
                 ->with('model', $model)
                 ->with('inputs', $inputs)

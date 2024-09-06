@@ -67,11 +67,15 @@ class xemdulieu_nguonController extends Controller
                 }
 
                 $nguon = $model_nguon->where('sohieu', $inputs['sohieu'])->where('madv', $dv->madv)->first();
-                if(!isset($nguon)){
-                    continue;
-                }
+
+                // if(!isset($nguon)){
+                //     continue;
+                // }
                 // dd($nguon->ngaygui);
                 $khoi = $model_tonghopkhoi->where('sohieu', $inputs['sohieu'])->where('madv', $dv->madv)->first();
+                // if($dv->madv == '1539848115'){
+                //     dd($khoi);
+                // }
                 if ($nguon != null && $nguon->trangthai == 'DAGUI') {
                     $dv->masodv = $nguon->masodv;
                     $dv->trangthai = 'DAGUI';
