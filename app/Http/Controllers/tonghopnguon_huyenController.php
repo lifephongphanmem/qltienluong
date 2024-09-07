@@ -5718,7 +5718,12 @@ class tonghopnguon_huyenController extends Controller
                 //Số liệu chi tiết
                 $a_plct_nhucau = getPLCTNhuCau();
 
-
+                //TÍnh toán biểu 2d
+                $m_chitiet_solieu = nguonkinhphi_solieu::wherein('masodv', array_column($m_nguonkp->toarray(), 'masodv'))->get();
+                foreach ($m_chitiet_solieu as $chitiet) {
+                    $chitiet->tong2d = $chitiet->solieu02 * ($chitiet->solieu03 + round(($chitiet->solieu04 + $chitiet->solieu05 + $chitiet->solieu06 + $chitiet->solieu07) / 100 * $chitiet->solieu03, 3) + round($chitiet->solieu03 * 0.235, 3)) * $chitiet->solieu08 * 310000;
+                }
+                //TÍnh toán chi tiết
                 foreach ($m_chitiet as $key => $chitiet) {
                     if (!in_array($chitiet->mact, $a_plct_nhucau)) { //Lọc các phân loại công tác ko tổng hợp
                         $m_chitiet->forget($key);
@@ -5885,7 +5890,7 @@ class tonghopnguon_huyenController extends Controller
                 $a_B2[4] = array('tt' => '5', 'noidung' => 'Kinh phí tăng thêm để thực hiện chế độ đối với cán bộ không chuyên trách cấp xã, thôn và tổ dân phố', 'sotien' => '0');
                 $a_B2[5] = array('tt' => '6', 'noidung' => 'Kinh phí tăng thêm để thực hiện phụ cấp trách nhiệm đối với cấp ủy viên các cấp theo QĐ số 169-QĐ/TW ngày 24/6/2008', 'sotien' => '0');
                 $a_B2[6] = array('tt' => '7', 'noidung' => 'Kinh phí tăng thêm thực hiện chế độ bồi dưỡng phục vụ hoạt động cấp ủy thuộc cấp tỉnh theo Quy định 09-QĐ/VVPTW ngày 22/9/2017', 'sotien' => '0');
-                $a_B2[7] = array('tt' => '8', 'noidung' => 'Quỹ tiền thưởng theo quy định', 'sotien' => '0');
+                //$a_B2[7] = array('tt' => '8', 'noidung' => 'Quỹ tiền thưởng theo quy định', 'sotien' => '0');
 
                 $a_B2[0]['sotien'] = $m_chitiet->where('nhomnhucau', 'BIENCHE')->where('mact', '1506672780')->sum('tongnhucau');
                 $a_B2[1]['sotien'] = $m_chitiet->where('nhomnhucau', 'CANBOCT')->sum('tongnhucau');
@@ -5895,7 +5900,7 @@ class tonghopnguon_huyenController extends Controller
                 $a_B2[4]['sotien'] =  $m_nguonkp->sum('nhucau2c'); //lấy dữ liệu mẫu 2c
                 $a_B2[5]['sotien'] = $m_chitiet->where('nhomnhucau', 'CAPUY')->wherein('level', ['XA', 'HUYEN'])->sum('tongnhucau');
                 $a_B2[6]['sotien'] = $m_chitiet->where('nhomnhucau', 'CAPUY')->where('level', 'TINH')->sum('tongnhucau');
-                $a_B2[7]['sotien'] = $m_chitiet->sum('quythuong');
+                //$a_B2[7]['sotien'] = $m_chitiet->sum('quythuong');
 
                 // dd($m_chitiet->where('nhomnhucau', 'CAPUY'));
 
@@ -5904,13 +5909,18 @@ class tonghopnguon_huyenController extends Controller
                 $a_B3[1] = array('tt' => '2', 'noidung' => 'Nhu cầu kinh phí thực hiện chính sách nghỉ hưu trước tuổi năm 2024 theo Nghị định số 26/2014/NĐ-CP ngày 09/3/2015 của Chỉnh phủ', 'sotien' => '0');
                 $a_B3[2] = array('tt' => '3', 'noidung' => 'Nhu cầu kinh phí tăng thêm thực hiện chế độ thù lao đối với người đã nghỉ hưu giữ chức danh lãnh đạo Hội đặc thù', 'sotien' => '0');
                 $a_B3[3] = array('tt' => '4', 'noidung' => 'Nhu cầu kinh phí tăng thêm thực hiện chế độ trợ cấp lần đầu đến nhận công tác tại vùng ĐBKK, trợ cấp 1 lần khi chuyển công tác ra khỏi vùng ĐBKK theo Nghị định số 76/2019/NĐ-CP ngày 08/10/2019 của Chính phủ', 'sotien' => '0');
-                $a_B3[4] = array('tt' => '5', 'noidung' => 'Các khoản phụ cấp, trợ cấp khác', 'sotien' => '0');
+                $a_B3[4] = array('tt' => '5', 'noidung' => 'Kinh phí tăng/giảm so với số liệu đã tính định mức chi thường xuyên do thực hiện Nghị định số 33/2023/NĐ-CP ngày 10/6/2023 của Chính phủ', 'sotien' => '0');
+                $a_B3[5] = array('tt' => '6', 'noidung' => 'Kinh phí tăng thêm chi trả chế độ cho biên chế giáo viên được giao năm học 2023-2024 theo Quyết định của Ban Tổ chức Trung ương', 'sotien' => '0');
+                $a_B3[6] = array('tt' => '7', 'noidung' => 'Các khoản phụ cấp, trợ cấp khác', 'sotien' => '0');
 
                 $a_B3[0]['sotien'] = $m_nguonkp->sum('tinhgiam');
                 $a_B3[1]['sotien'] = $m_nguonkp->sum('nghihuusom');
                 $a_B3[2]['sotien'] = $m_nguonkp->sum('kpuudai');
                 $a_B3[3]['sotien'] = $m_nguonkp->sum('kinhphigiamxa_4a');
-                $a_B3[4]['sotien'] = $m_nguonkp->sum('nhucau');
+                $a_B3[4]['sotien'] = $m_nguonkp->sum('satnhapdaumoi_4a');
+                $a_B3[5]['sotien'] = $m_chitiet_solieu->sum('tong2d'); //mẫu 2d
+
+                $a_B3[6]['sotien'] = $m_nguonkp->sum('nhucau');
                 //$a_B3[4]['sotien'] = $m_nguonkp->sum('nhucau_4a');//Lấy 2d + 2e
                 // $a_BII[5]['sotien'] = $m_nguonkp->sum('nhucau2c');
 
@@ -6846,7 +6856,7 @@ class tonghopnguon_huyenController extends Controller
             $ar_I = array();
             $ar_I[0] = array('val' => 'XL1;XL2;XL3', 'tt' => 'I', 'noidung' => 'Xã, phường, thị trấn', 'style' => 'font-weight:bold;',);
             $m_nguon_1 = $m_nguonkp->wherein('phanloaixa', ['XL1', 'PL1']);
-            $ar_I[1] = array('val' => 'XL1', 'tt' => '1', 'noidung' => 'Loại I', 'style' => 'font-weight: bold; font-style: italic;','solieu' => [
+            $ar_I[1] = array('val' => 'XL1', 'tt' => '1', 'noidung' => 'Loại I', 'style' => 'font-weight: bold; font-style: italic;', 'solieu' => [
                 'tdv' => $m_nguon_1->count(),
                 'mk' => 0,
                 'sl' => 0,
@@ -6863,10 +6873,10 @@ class tonghopnguon_huyenController extends Controller
             $ar_I[1]['solieu']['muccu'] = $m_nguon_1->sum('muccu');
             $ar_I[1]['solieu']['mucapdung'] = $m_nguon_1->sum('mucapdung');
             $ar_I[1]['solieu']['chenhlech'] = $m_nguon_1->sum('chenhlech');
-            
+
             //
             $m_nguon_2 = $m_nguonkp->wherein('phanloaixa', ['XL2', 'PL2']);
-            $ar_I[2] = array('val' => 'XL2', 'tt' => '2', 'noidung' => 'Loại II', 'style' => 'font-weight: bold; font-style: italic;','solieu' => [
+            $ar_I[2] = array('val' => 'XL2', 'tt' => '2', 'noidung' => 'Loại II', 'style' => 'font-weight: bold; font-style: italic;', 'solieu' => [
                 'tdv' => $m_nguon_2->count(),
                 'mk' => 0,
                 'sl' => 0,
@@ -6886,7 +6896,7 @@ class tonghopnguon_huyenController extends Controller
 
             //
             $m_nguon_3 = $m_nguonkp->wherein('phanloaixa', ['XL3', 'PL3']);
-            $ar_I[3] = array('val' => 'XL3', 'tt' => '3', 'noidung' => 'Loại III','style' => 'font-weight: bold; font-style: italic;', 'solieu' => [
+            $ar_I[3] = array('val' => 'XL3', 'tt' => '3', 'noidung' => 'Loại III', 'style' => 'font-weight: bold; font-style: italic;', 'solieu' => [
                 'tdv' => $m_nguon_3->count(),
                 'mk' => 0,
                 'sl' => 0,
