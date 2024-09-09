@@ -3791,22 +3791,30 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                 $a_B3[1] = array('tt' => '2', 'noidung' => 'Nhu cầu kinh phí thực hiện chính sách nghỉ hưu trước tuổi năm 2024 theo Nghị định số 26/2014/NĐ-CP ngày 09/3/2015 của Chỉnh phủ', 'sotien' => '0');
                 $a_B3[2] = array('tt' => '3', 'noidung' => 'Nhu cầu kinh phí tăng thêm thực hiện chế độ thù lao đối với người đã nghỉ hưu giữ chức danh lãnh đạo Hội đặc thù', 'sotien' => '0');
                 $a_B3[3] = array('tt' => '4', 'noidung' => 'Nhu cầu kinh phí tăng thêm thực hiện chế độ trợ cấp lần đầu đến nhận công tác tại vùng ĐBKK, trợ cấp 1 lần khi chuyển công tác ra khỏi vùng ĐBKK theo Nghị định số 76/2019/NĐ-CP ngày 08/10/2019 của Chính phủ', 'sotien' => '0');
-                $a_B3[4] = array('tt' => '5', 'noidung' => 'Các khoản phụ cấp, trợ cấp khác', 'sotien' => '0');
+                $a_B3[4] = array('tt' => '5', 'noidung' => 'Kinh phí tăng/giảm so với số liệu đã tính định mức chi thường xuyên do thực hiện Nghị định số 33/2023/NĐ-CP ngày 10/6/2023 của Chính phủ', 'sotien' => '0');
+                $a_B3[5] = array('tt' => '6', 'noidung' => 'Kinh phí tăng thêm chi trả chế độ cho biên chế giáo viên được giao năm học 2023-2024 theo Quyết định của Ban Tổ chức Trung ương', 'sotien' => '0');
+                $a_B3[6] = array('tt' => '7', 'noidung' => 'Các khoản phụ cấp, trợ cấp khác', 'sotien' => '0');
 
                 $a_B3[0]['sotien'] = $m_nguonkp->sum('tinhgiam');
                 $a_B3[1]['sotien'] = $m_nguonkp->sum('nghihuusom');
                 $a_B3[2]['sotien'] = $m_nguonkp->sum('kpuudai');
                 $a_B3[3]['sotien'] = $m_nguonkp->sum('kinhphigiamxa_4a');
-                $a_B3[4]['sotien'] = $m_nguonkp->sum('nhucau');
+                $a_B3[4]['sotien'] = $m_nguonkp->sum('satnhapdaumoi_4a');
+                $a_B3[5]['sotien'] = 0; //do đang lấy của Huyện nhập
+                //$a_B3[5]['sotien'] = $m_chitiet_solieu->sum('tong2d'); //mẫu 2d
+
+                $a_B3[6]['sotien'] = $m_nguonkp->sum('nhucau');
                 //$a_B3[4]['sotien'] = $m_nguonkp->sum('nhucau_4a');//Lấy 2d + 2e
                 // $a_BII[5]['sotien'] = $m_nguonkp->sum('nhucau2c');
 
                 $a_TC = array(
-                    'A' => ($a_A[0]['sotien'] + $a_A[1]['sotien'] + $a_A[2]['sotien'] + $a_A[3]['sotien'] + $a_A[4]['sotien'] + $a_A[8]['sotien'] + $a_A[9]['sotien']),
+                    'A' => ($a_A[0]['sotien'] + $a_A[1]['sotien'] + $a_A[2]['sotien'] + $a_A[3]['sotien'] + $a_A[4]['sotien'] + $a_A[7]['sotien']
+                        + $a_A[8]['sotien'] + $a_A[9]['sotien']),
                     'B1' => array_sum(array_column($a_B1, 'sotien')),
                     'B2' => array_sum(array_column($a_B2, 'sotien')),
                     'B3' => array_sum(array_column($a_B3, 'sotien'))
                 );
+
                 // dd($a_A);
 
                 return view('reports.nghidinh73.donvi.mau4a')
