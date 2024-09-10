@@ -1779,12 +1779,22 @@ class tonghopluong_huyenController extends Controller
         if (Session::has('admin')) {
             $inputs = $request->all();
             $model = tonghopluong_donvi::where('mathdv', $inputs['mathdv'])->first();
-            tonghopluong_huyen::where('mathdv', $model->mathh)->delete();
-            $model->trangthai = 'TRALAI';
-            $model->mathh = null;
-            $model->matht = null;
-            $model->mathk = null;
-            $model->lydo = $inputs['lydo'];
+            if(isset($model)){
+                tonghopluong_huyen::where('mathdv', $model->mathh)->delete();
+                $model->trangthai = 'TRALAI';
+                $model->mathh = null;
+                $model->matht = null;
+                $model->mathk = null;
+                $model->lydo = $inputs['lydo'];
+            }else{// trường hợp tổng hợp khối
+                $model=tonghopluong_khoi::where('mathdv',$inputs['mathdv'])->first();
+                $model->trangthai='TRALAI';
+                $model->lydo=$inputs['lydo'];
+
+                tonghopluong_huyen::where('mathdv',$inputs['mathdv'])
+                ->update(['trangthai' => 'TRALAI', 'nguoilap' => '','ngaylap'=> '']);
+            }
+
             $model->save();
 
             return redirect('/chuc_nang/xem_du_lieu/huyen?thang=' . $model->thang . '&nam=' . $model->nam . '&trangthai=ALL&phanloai=ALL');

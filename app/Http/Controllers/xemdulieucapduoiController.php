@@ -73,12 +73,12 @@ class xemdulieucapduoiController extends Controller
                         ->get();
                 })
                 ->get();
-                // dd($model_donvi);
+            // dd($model_donvi);
             $model_tonghop = tonghopluong_donvi::where('macqcq', $madv)->where('madv', '<>', $madv)
                 ->where('thang', $inputs['thang'])
                 ->where('nam', $inputs['nam'])
                 ->where('trangthai', 'DAGUI')->get();
-        // dd($model_tonghop);
+            // dd($model_tonghop);
             // dd(array_column($model_tonghop->toarray(),'madv','nguoigui'));
             //
             $model_tonghopkhoi = tonghopluong_khoi::where('macqcq', $madv)
@@ -229,7 +229,7 @@ class xemdulieucapduoiController extends Controller
                 //     ->distinct()->get();
                 $model_donvi = dmdonvi::join('dmphanloaidonvi', 'dmphanloaidonvi.maphanloai', 'dmdonvi.maphanloai')
                     ->select('dmdonvi.madv', 'dmdonvi.tendv', 'phanloaitaikhoan', 'dmdonvi.maphanloai', 'tenphanloai')
-                    ->wherein('madv', getDonviHuyen($inputs['nam'], $madv,$inputs['thang'])['m_donvi'])->get();
+                    ->wherein('madv', getDonviHuyen($inputs['nam'], $madv, $inputs['thang'])['m_donvi'])->get();
 
                 $model_nguon = tonghopluong_donvi::wherein('madv', function ($query) use ($madv) {
                     $query->select('madv')->from('dmdonvi')->where('macqcq', $madv)->where('madv', '<>', $madv)->get();
@@ -265,7 +265,8 @@ class xemdulieucapduoiController extends Controller
                 //Lấy đơn vị tạo theo tháng
                 // dd(getDonviHuyen($inputs['nam'], $madv,$inputs['thang']));
                 $model_donvitamdung = dmdonvi::where('trangthai', 'TD')->wherein('madv',  getDonviHuyen($inputs['nam'], $madv)['a_donvicapduoi'])->get();
-                $a_madv = $this->layDV($inputs['thang'], $inputs['nam'], getSLDonviHuyen($inputs['thang'],$inputs['nam'], $madv)['a_donvicapduoi'], $model_donvitamdung);
+                $a_madv = $this->layDV($inputs['thang'], $inputs['nam'], getSLDonviHuyen($inputs['thang'], $inputs['nam'], $madv)['a_donvicapduoi'], $model_donvitamdung);
+
                 $model_donvi = dmdonvi::join('dmphanloaidonvi', 'dmphanloaidonvi.maphanloai', 'dmdonvi.maphanloai')
                     ->select('dmdonvi.madv', 'dmdonvi.tendv', 'phanloaitaikhoan', 'dmdonvi.maphanloai', 'tenphanloai', 'linhvuchoatdong')
                     ->wherein('madv', $a_madv)
@@ -285,8 +286,18 @@ class xemdulieucapduoiController extends Controller
                     ->where('nam', $inputs['nam'])
                     ->where('trangthai', 'DAGUI')
                     ->get();
+
+                //Trường hợp có khối gửi lên huyện, thì tài khoản tổng hợp khối không tạo dữ liệu ở bảng tonghopluong_donvi -> phải lấy thêm ở bảng tonghopluong_khoi
+                $model_nguonkhoi = tonghopluong_khoi::wherein('madv', function ($query) use ($madv) {
+                    $query->select('madv')->from('dmdonvi')->where('macqcq', $madv)->where('madv', '<>', $madv)->get();
+                })->where('thang', $inputs['thang'])
+                    ->where('nam', $inputs['nam'])
+                    ->where('trangthai', 'DAGUI')
+                    ->get();
             }
+            // dd(session('admin'));
             // dd($model_nguon);
+            // dd($model_nguonkhoi);
             //dd($model_nguon->toarray());
             $model_nguon_tinh = tonghopluong_tinh::where('madv', $madv)->where('thang', $inputs['thang'])
                 ->where('nam', $inputs['nam'])->first();
@@ -299,13 +310,26 @@ class xemdulieucapduoiController extends Controller
             //dd(session('admin'));
 
             foreach ($model_donvi as $dv) {
+                // dd($dv);
                 $dv->tralai = $tralai;
                 $nguon = $model_nguon->where('madv', $dv->madv)->first();
-                if (session('admin')->phamvitonghop == 'KHOI')
-                    $nguonkhoi = $model_nguonkhoi->where('madv', $dv->madv)->first();
+                // if (session('admin')->phamvitonghop == 'KHOI')
+                $nguonkhoi = $model_nguonkhoi->where('madv', $dv->madv)->first();
+
+                // dd($nguonkhoi);
                 // if (isset($nguon) && $nguon->trangthai == 'DAGUI' && session('admin')->phamvitonghop == 'HUYEN') {
 
-                if (isset($nguon) && in_array($nguon->trangthai, ['DAGUI', 'TRALAI']) && session('admin')->phamvitonghop == 'HUYEN') {
+                // if (isset($nguon) && in_array($nguon->trangthai, ['DAGUI', 'TRALAI']) && session('admin')->phamvitonghop == 'HUYEN') {
+                if (session('admin')->phamvitonghop == 'HUYEN') {
+                    // dd($nguonkhoi);
+                    if(!isset($nguon) && !isset($nguonkhoi))
+                    {
+                        continue;
+                    }
+
+                    if(!isset($nguon)){
+                        $nguon=$nguonkhoi;
+                    }
                     $dv->mathdv = $nguon->mathdv;
                     $dv->mathh = $nguon->mathdv;
                     $dv->trangthai = $nguon->trangthai;
