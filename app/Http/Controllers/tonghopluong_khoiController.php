@@ -792,6 +792,7 @@ class tonghopluong_khoiController extends Controller
                 //cập nhật cả bảng huyện khi gửi tạo đồng thời 2 bảng
                 tonghopluong_huyen::where('nam', $nam)->where('thang', $thang)->where('madv', $madv)
                     ->update(['trangthai' => 'DAGUI', 'nguoilap' => session('admin')->name,'ngaylap'=> Carbon::now()->toDateTimeString()]);
+
                 tonghopluong_donvi::where('nam', $nam)->where('thang', $thang)->where('macqcq', $madv)
                     ->update(['mathk' => $model->mathdv, 'mathh' => $model->mathdv]);
             } else {
