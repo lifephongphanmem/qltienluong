@@ -264,48 +264,98 @@
                                 style="border-width: 0px" class="btn btn-default btn-xs mbs"
                                 data-target="#modal-insolieu" data-toggle="modal">
                                 <i class="fa fa-print"></i>&nbsp;Tổng hợp kinh phí tăng thêm để thực hiện chế độ cho cán bộ
-                                không chuyên trách (Mẫu 2c)</button>
+                                không chuyên trách (Mẫu 2c - 1)</button>
                         </div>
                     </div>
                 </div>
 
-                <div class="row" id="btnIn2d">
+                <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <button type="button" onclick="insolieu('{{ $furl_th . 'mau2d' }}',null)"
+                            <button type="button" onclick="insolieu('{{ $furl_th . 'mau2c_2' }}',null)"
                                 style="border-width: 0px" class="btn btn-default btn-xs mbs"
                                 data-target="#modal-insolieu" data-toggle="modal">
-                                <i class="fa fa-print"></i>&nbsp;Tổng hợp kinh phí giảm theo nghị định số 33/2023/NĐ-CP
-                                -
-                                cán bộ, công chức cấp xã (Mẫu 2d)</button>
+                                <i class="fa fa-print"></i>&nbsp;Tổng hợp kinh phí tăng thêm để thực hiện chế độ cho cán bộ
+                                không chuyên trách (Mẫu 2c - 2)</button>
                         </div>
                     </div>
                 </div>
 
-                <div class="row" id="btnIn2e">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <button type="button" onclick="insolieu('{{ $furl_th . 'mau2e' }}',null)"
-                                style="border-width: 0px" class="btn btn-default btn-xs mbs"
-                                data-target="#modal-insolieu" data-toggle="modal">
-                                <i class="fa fa-print"></i>&nbsp;Tổng hợp kinh phí tăng theo nghị định 34/2023/NĐ-CP -
-                                người hoạt động không chuyên trách ở cấp xã, ở thôn, tổ dân phố (Mẫu 2e)</button>
+                <div id="btnND24">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <button type="button" onclick="insolieu('{{ $furl_th . 'mau2d' }}',null)"
+                                    style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                    data-target="#modal-insolieu" data-toggle="modal">
+                                    <i class="fa fa-print"></i>&nbsp;Tổng hợp kinh phí giảm theo nghị định số 33/2023/NĐ-CP
+                                    - cán bộ, công chức cấp xã (Mẫu 2d)</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <button type="button" onclick="insolieu('{{ $furl_th . 'mau2e' }}',null)"
+                                    style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                    data-target="#modal-insolieu" data-toggle="modal">
+                                    <i class="fa fa-print"></i>&nbsp;Tổng hợp kinh phí tăng theo nghị định 34/2023/NĐ-CP -
+                                    người hoạt động không chuyên trách ở cấp xã, ở thôn, tổ dân phố (Mẫu 2e)</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <button type="button" onclick="insolieu('{{ $furl_th . 'mau2g' }}',null)"
+                                    style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                    data-target="#modal-insolieu" data-toggle="modal">
+                                    <i class="fa fa-print"></i>&nbsp;Tổng hợp phụ cấp ưu đãi nghề theo nghị định số
+                                    05/2023/NĐ-CP (Mẫu 2g)</button>
+                            </div>
                         </div>
                     </div>
                 </div>
-
-                <div class="row" id="btnIn2g">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <button type="button" onclick="insolieu('{{ $furl_th . 'mau2g' }}',null)"
-                                style="border-width: 0px" class="btn btn-default btn-xs mbs"
-                                data-target="#modal-insolieu" data-toggle="modal">
-                                <i class="fa fa-print"></i>&nbsp;Tổng hợp phụ cấp ưu đãi nghề theo nghị định số
-                                05/2023/NĐ-CP (Mẫu 2g)</button>
+                <div id="btnND73">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <button type="button"
+                                    onclick="insolieu('{{ $furl_th . 'mau2d_tt62' }}',null)"
+                                    style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                    data-target="#modal-insolieu" data-toggle="modal">
+                                    <i class="fa fa-print"></i>&nbsp;Báo cáo nhu cầu kinh phí tăng thêm chi trả chế độ cho
+                                    số biên chế giáo viên tăng thêm năm học 2023-2024 (Mẫu 2d)</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <button type="button"
+                                    onclick="insolieu('{{ $furl_th . 'mau2dd_tt62' }}',null)"
+                                    style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                    data-target="#modal-insolieu" data-toggle="modal">
+                                    <i class="fa fa-print"></i>&nbsp;Báo cáo nguồn thực hiện CCTL tiết kiệm từ việc thực
+                                    hiện tinh giản biên chế, sáp nhập đơn vị (Mẫu 2đ)</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <button type="button"
+                                    onclick="insolieu('{{ $furl_th . 'mau2e_tt62' }}',null)"
+                                    style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                    data-target="#modal-insolieu" data-toggle="modal">
+                                    <i class="fa fa-print"></i>&nbsp;Báo cáo nguồn thực hiện CCTL tiết kiệm do thay đổi mức
+                                    tự chủ tài chính trong năm 2024 (Mẫu 2e)</button>
+                            </div>
                         </div>
                     </div>
                 </div>
-
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
@@ -330,7 +380,7 @@
                     </div>
                 </div>
 
-                <div class="row" id="btnIn4b">
+                <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
                             <button type="button" onclick="insolieu('{{ $furl_th . 'mau4b' }}',null)"
@@ -416,16 +466,12 @@
             $('#sohieu_in').val(sohieu);
             $('#madvbc_in').val(madvbc);
             $('#macqcq_in').val(macqcq);
-            if(sohieu == '732024nd_cp'){
-                document.getElementById('btnIn4b').style.display = 'none';
-                document.getElementById('btnIn2d').style.display = 'none';
-                document.getElementById('btnIn2g').style.display = 'none';
-                document.getElementById('btnIn2e').style.display = 'none';
-            }else{
-                document.getElementById('btnIn4b').style.display = 'block';
-                document.getElementById('btnIn2d').style.display = 'block';
-                document.getElementById('btnIn2g').style.display = 'block';
-                document.getElementById('btnIn2e').style.display = 'block';
+            if (sohieu == '732024nd_cp') {
+                document.getElementById('btnND24').style.display = 'none';
+                document.getElementById('btnND73').style.display = 'block';
+            } else {
+                document.getElementById('btnND24').style.display = 'block';
+                document.getElementById('btnND73').style.display = 'none';
             }
         }
 

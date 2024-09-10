@@ -123,7 +123,17 @@
                             style="border-width: 0px" class="btn btn-default btn-xs mbs"
                             data-target="#mautt107-modal" data-toggle="modal">
                             <i class="fa fa-print"></i>&nbsp;Tổng hợp kinh phí tăng thêm để thực hiện chế độ cho cán bộ
-                            không chuyên trách (Mẫu 2c)</button>
+                            không chuyên trách (Mẫu 2c - 1)</button>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <button type="button" onclick="ThongTinKetXuat(true,'{{ $inputs['furl'] . 'mau2c_2' }}',null)"
+                            style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                            data-target="#mautt107-modal" data-toggle="modal">
+                            <i class="fa fa-print"></i>&nbsp;Tổng hợp kinh phí tăng thêm để thực hiện chế độ cho cán bộ
+                            không chuyên trách (Mẫu 2c - 2)</button>
                     </div>
                 </div>
 

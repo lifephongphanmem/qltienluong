@@ -32,6 +32,7 @@ Route::group(['prefix' => 'nguon_kinh_phi'], function () {
 
     Route::post('mau2b', 'nguonkinhphi_donvi_baocaoController@mau2b');
     Route::post('mau2c', 'nguonkinhphi_donvi_baocaoController@mau2c');
+    Route::post('mau2c_2', 'nguonkinhphi_donvi_baocaoController@mau2c_2');
     Route::post('mau2d', 'nguonkinhphi_donvi_baocaoController@mau2d');
     Route::post('mau2e', 'nguonkinhphi_donvi_baocaoController@mau2e');
     Route::post('mau2g', 'nguonkinhphi_donvi_baocaoController@mau2g');

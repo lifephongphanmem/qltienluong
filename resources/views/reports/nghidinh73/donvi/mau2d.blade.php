@@ -74,15 +74,15 @@
             <td style=" text-align: left;">Tổng cộng</td>
             <td>{{ dinhdangsothapphan($ar_Tong['bienchebosung']) }}</td>
             <td>{{ dinhdangsothapphan($ar_Tong['bienchecomat']) }}</td>
-            <td>{{ dinhdangsothapphan($ar_Tong['tongcong'], $inputs['donvitinh']) }}</td>
-            <td>{{ dinhdangsothapphan($ar_Tong['hesoluong'], $inputs['donvitinh']) }}</td>
-            <td>{{ dinhdangsothapphan($ar_Tong['tongpc'], $inputs['donvitinh']) }}</td>
-            <td>{{ dinhdangsothapphan($ar_Tong['pckhuvuc'], $inputs['donvitinh']) }}</td>
-            <td>{{ dinhdangsothapphan($ar_Tong['pcudn'], $inputs['donvitinh']) }}</td>
-            <td>{{ dinhdangsothapphan($ar_Tong['pcthuhut'], $inputs['donvitinh']) }}</td>
-            <td>{{ dinhdangsothapphan($ar_Tong['pckhac'], $inputs['donvitinh']) }}</td>
-            <td>{{ dinhdangsothapphan($ar_Tong['donggop'], $inputs['donvitinh']) }}</td>
-            <td>{{ dinhdangsothapphan($ar_Tong['nhucau'], $inputs['donvitinh']) }}</td>
+            <td>{{ dinhdangsothapphan($ar_Tong['tongcong'], 3) }}</td>
+            <td>{{ dinhdangsothapphan($ar_Tong['hesoluong'], 3) }}</td>
+            <td>{{ dinhdangsothapphan($ar_Tong['tongpc'], 3) }}</td>
+            <td>{{ dinhdangsothapphan($ar_Tong['pckhuvuc'], 3) }}</td>
+            <td>{{ dinhdangsothapphan($ar_Tong['pcudn'], 3) }}</td>
+            <td>{{ dinhdangsothapphan($ar_Tong['pcthuhut'],3) }}</td>
+            <td>{{ dinhdangsothapphan($ar_Tong['pckhac'], 3) }}</td>
+            <td>{{ dinhdangsothapphan($ar_Tong['donggop'], 3) }}</td>
+            <td>{{ dinhdangsothapphan($ar_Tong['nhucau'], 3) }}</td>
         </tr>
         @foreach ($ar_I as $dulieu)
             <tr style=" text-align: right;">
@@ -90,15 +90,15 @@
                 <td style=" text-align: left;">{{ $dulieu['noidung'] }}</td>
                 <td>{{ dinhdangsothapphan($dulieu['bienchebosung']) }}</td>
                 <td>{{ dinhdangsothapphan($dulieu['bienchecomat']) }}</td>
-                <td>{{ dinhdangsothapphan($dulieu['tongcong'], $inputs['donvitinh']) }}</td>
-                <td>{{ dinhdangsothapphan($dulieu['hesoluong'], $inputs['donvitinh']) }}</td>
-                <td>{{ dinhdangsothapphan($dulieu['tongpc'], $inputs['donvitinh']) }}</td>
-                <td>{{ dinhdangsothapphan($dulieu['pckhuvuc'], $inputs['donvitinh']) }}</td>
-                <td>{{ dinhdangsothapphan($dulieu['pcudn'], $inputs['donvitinh']) }}</td>
-                <td>{{ dinhdangsothapphan($dulieu['pcthuhut'], $inputs['donvitinh']) }}</td>
-                <td>{{ dinhdangsothapphan($dulieu['pckhac'], $inputs['donvitinh']) }}</td>
-                <td>{{ dinhdangsothapphan($dulieu['donggop'], $inputs['donvitinh']) }}</td>
-                <td>{{ dinhdangsothapphan($dulieu['nhucau'], $inputs['donvitinh']) }}</td>
+                <td>{{ dinhdangsothapphan($dulieu['tongcong'], 3) }}</td>
+                <td>{{ dinhdangsothapphan($dulieu['hesoluong'], 3) }}</td>
+                <td>{{ dinhdangsothapphan($dulieu['tongpc'], 3) }}</td>
+                <td>{{ dinhdangsothapphan($dulieu['pckhuvuc'], 3) }}</td>
+                <td>{{ dinhdangsothapphan($dulieu['pcudn'], 3) }}</td>
+                <td>{{ dinhdangsothapphan($dulieu['pcthuhut'], 3) }}</td>
+                <td>{{ dinhdangsothapphan($dulieu['pckhac'], 3) }}</td>
+                <td>{{ dinhdangsothapphan($dulieu['donggop'], 3) }}</td>
+                <td>{{ dinhdangsothapphan($dulieu['nhucau'], 3) }}</td>
             </tr>
         @endforeach
     </table>

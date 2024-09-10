@@ -11,6 +11,16 @@
                     ]) !!}
                 </div>
             </div>
+
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="control-label font-weight-bold">Số lượng cán bộ KCT được giao</label>
+                    {!! Form::text('soluongcanbo_2c', null, [                        
+                        'class' => 'form-control',
+                        'data-mask' => 'fdecimal',
+                    ]) !!}
+                </div>
+            </div>
         </div>
 
         <div class="row">

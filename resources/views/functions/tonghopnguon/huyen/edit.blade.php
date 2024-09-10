@@ -39,7 +39,7 @@
                     'id' => 'create-hscb',
                     'class' => 'horizontal-form form-validate',
                 ]) !!}
-                <input type="hidden" name="masodv" value="{{ $model->masodv }}" />
+                <input type="hidden" name="masodv" value="{{ $model->masodv }}" id="masodv" />
                 <input type="hidden" name="sohieu" value="{{ $model->sohieu }}" />
                 <input type="hidden" name="madv" value="{{ $model->madv }}" />
                 <input type="hidden" name="trangthai" value="{{ $model->trangthai }}" />
@@ -91,7 +91,7 @@
                                         <label class="control-label">Nội dung</label>
                                         {!! Form::textarea('noidung', null, ['id' => 'noidung', 'class' => 'form-control', 'rows' => '3']) !!}
                                     </div>
-                                </div>                                
+                                </div>
                             </div>
                             <!-- END PORTLET-->
                         </div>
@@ -100,7 +100,7 @@
                 @switch($m_thongtu->masobaocao)
                     @case('TT78_2022')
                         @include('functions.tonghopnguon.huyen.edit_chitiet_78')
-                    @break                  
+                    @break
 
                     @case('ND73_2024')
                         @include('functions.tonghopnguon.huyen.edit_chitiet_73')
@@ -114,8 +114,8 @@
                     <button type="submit" class="btn btn-default">Hoàn thành <i class="fa fa-save mlx"></i></button>
                     {{-- <a href="{{ url($furl . 'danh_sach') }}" class="btn btn-default"><i class="fa fa-reply"></i>&nbsp;Quay
                         lại</a> --}}
-                        <a onclick="history.back()" class="btn btn-default"><i class="fa fa-reply"></i>&nbsp;Quay
-                            lại</a>
+                    <a onclick="history.back()" class="btn btn-default"><i class="fa fa-reply"></i>&nbsp;Quay
+                        lại</a>
                 </div>
             </div>
             {!! Form::close() !!}
