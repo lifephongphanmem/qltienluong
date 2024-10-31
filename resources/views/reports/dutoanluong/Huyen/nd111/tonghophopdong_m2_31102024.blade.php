@@ -39,8 +39,6 @@
                 <th style="width: 2%;">S</br>T</br>T</th>
                 <th>NÔI DUNG</th>
                 <th style="width: 5%;">SỐ ĐỐI TƯỢNG</th>
-                <th style="width: 5%;">HỆ SỐ</th>
-                <th style="width: 5%;">LƯƠNG HỢP ĐỒNG, KHOÁN</th>
                 <th style="width: 10%;">MỨC LƯƠNG KÝ HỢP<br>ĐỒNG/THÁNG</th>
                 <th style="width: 5%;">CÁC KHOẢN<br>ĐÓNG GÓP</th>
                 <th style="width: 5%;">TỔNG CỘNG</th>
@@ -54,8 +52,6 @@
             <td></td>
             <td>TỔNG CỘNG</td>
             <td class="text-center">{{ dinhdangso($model->sum('canbo_congtac')) }}</td>
-            <td></td>
-            <td></td>
             <td class="text-right">{{ dinhdangsothapphan($model->sum('luongthang'), $lamtron) }}</td>
             <td class="text-right">{{ dinhdangsothapphan($model->sum('baohiem'), $lamtron) }}</td>
             <td class="text-right">{{ dinhdangsothapphan($model->sum('tongcong'), $lamtron) }}</td>
@@ -74,8 +70,6 @@
                 <td>{{ convert2Roman($i++) }}</td>
                 <td>{{ $phanloai->tenphanloai }}</td>
                 <td class="text-center">{{ dinhdangso($model_pl_donvi->sum('canbo_congtac')) }}</td>
-                <td class="text-center">{{ dinhdangsothapphan($model_pl_donvi->sum('hesoluonghd'), $lamtron) }}</td>
-                <td class="text-right">{{ dinhdangso($model_pl_donvi->sum('luonghd')) }}</td>
                 <td class="text-right">{{ dinhdangsothapphan($model_pl_donvi->sum('luongthang'), $lamtron) }}</td>
                 <td class="text-right">{{ dinhdangsothapphan($model_pl_donvi->sum('baohiem'), $lamtron) }}</td>
                 <td class="text-right">{{ dinhdangsothapphan($model_pl_donvi->sum('tongcong'), $lamtron) }}</td>
@@ -92,8 +86,6 @@
                         <td class="text-center">{{ $j++ }}</td>
                         <td>{{ $donvi->tendv }}</td>
                         <td class="text-center">{{ dinhdangso($model_chitiet->sum('canbo_congtac')) }}</td>
-                        <td class="text-center">{{ dinhdangsothapphan($model_chitiet->sum('hesoluonghd'), $lamtron) }}</td>
-                        <td class="text-right">{{ dinhdangso($model_chitiet->sum('luonghd')) }}</td>
                         <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('luongthang'), $lamtron) }}</td>
                         <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('baohiem'), $lamtron) }}</td>
                         <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('tongcong'), $lamtron) }}</td>
@@ -106,8 +98,6 @@
                             <td class="text-center">-</td>
                             <td>{{ $chitiet->tenct }}</td>
                             <td class="text-center">{{ dinhdangso($chitiet->canbo_dutoan) }}</td>
-                            <td class="text-center">{{ dinhdangsothapphan($chitiet->hesoluonghd, $lamtron) }}</td>
-                            <td class="text-right">{{ dinhdangso($chitiet->luonghd) }}</td>
                             <td class="text-right">{{ dinhdangsothapphan($chitiet->luongthang, $lamtron) }}</td>
                             <td class="text-right">{{ dinhdangsothapphan($chitiet->baohiem, $lamtron) }}</td>
                             <td class="text-right">{{ dinhdangsothapphan($chitiet->tongcong, $lamtron) }}</td>

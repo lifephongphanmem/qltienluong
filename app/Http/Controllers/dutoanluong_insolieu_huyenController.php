@@ -549,6 +549,7 @@ class dutoanluong_insolieu_huyenController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
+            // dd($inputs);
             //Trường hợp được gọi từ chức năng "Báo cáo tổng hợp"
             if (isset($inputs['macqcq']) &&  $inputs['macqcq'] != '') {
                 $m_dutoan_huyen = dutoanluong_huyen::where('madv', $inputs['macqcq'])->where('namns', $inputs['namns'])->first();
@@ -581,23 +582,28 @@ class dutoanluong_insolieu_huyenController extends Controller
             $a_pc = getColDuToan();
 
             foreach ($model as $chitiet) {
+
                 $chitiet->madv = $a_donvi[$chitiet->masodv];
+                $chitiet->luongcoban = $m_dutoan->where('masodv',$chitiet->masodv)->first()->luongcoban;
                 $chitiet->maphanloai = $a_pl_donvi[$chitiet->madv];
                 foreach ($a_pc as $pc) {
                     $chitiet->$pc = $chitiet->$pc / 12;
                 }
                 $chitiet->tenct = $a_plct[$chitiet->mact] ?? '';
-                $chitiet->luongthang = ($chitiet->ttl / 12) / $inputs['donvitinh'];;
-                $chitiet->baohiem = ($chitiet->ttbh_dv / 12) / $inputs['donvitinh'];;
+                $chitiet->luongthang = ($chitiet->ttl / 12) / $inputs['donvitinh'];
+                $chitiet->hesoluonghd = $chitiet->luonghd/$chitiet->luongcoban;
+                $chitiet->baohiem = ($chitiet->ttbh_dv / 12) / $inputs['donvitinh'];
                 $chitiet->tongcong = ($chitiet->luongthang + $chitiet->baohiem) / $inputs['donvitinh'];
                 $chitiet->quyluong = ($chitiet->ttl + $chitiet->ttbh_dv) / $inputs['donvitinh'];
                 $this->getMaNhomPhanLoai($chitiet, $m_phanloai);
+                // dd($chitiet);
             }
             //dd($model->where('maphanloai','KVXP')->toArray());
 
             //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
 
             //$m_donvi = dmdonvi::where('madv', session('admin')->madv)->first();
+            // dd($model);
             if(in_array('1689729806',$inputs['mact'])){
                 $view='reports.dutoanluong.Huyen.nd111.tonghophopdong';
             }else{
@@ -648,20 +654,24 @@ class dutoanluong_insolieu_huyenController extends Controller
             $a_plct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
             $a_pc = getColDuToan();
             foreach ($model as $chitiet) {
+                // dd($chitiet);
                 $chitiet->madv = $a_donvi[$chitiet->masodv];
                 $chitiet->maphanloai = $a_pl_donvi[$chitiet->madv];
+
                 foreach ($a_pc as $pc) {
                     $chitiet->$pc = $chitiet->$pc / 12;
                 }
                 $chitiet->tenct = $a_plct[$chitiet->mact] ?? '';
                 $chitiet->luongthang = ($chitiet->ttl / 12) / $inputs['donvitinh'];;
+                $chitiet->luongcoban = $m_dutoan->where('masodv',$chitiet->masodv)->first()->luongcoban;
+                $chitiet->hesoluonghd = $chitiet->luonghd/$chitiet->luongcoban;
                 $chitiet->baohiem = ($chitiet->ttbh_dv / 12) / $inputs['donvitinh'];;
                 $chitiet->tongcong = ($chitiet->luongthang + $chitiet->baohiem) / $inputs['donvitinh'];
                 $chitiet->quyluong = ($chitiet->ttl + $chitiet->ttbh_dv) / $inputs['donvitinh'];
             }
 
 
-            //dd($model);
+            // dd($model);
             // $m_donvi = dmdonvi::where('madv', session('admin')->madv)->first();
 
             //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
