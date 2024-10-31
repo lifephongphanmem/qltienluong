@@ -985,6 +985,7 @@ class bangluongController extends Controller
         //thuế thu nhập cá nhân
         // dd($model_phucap);
         $m_thue = dmthuetncn::where('ngayapdung', '<=', $ngaylap)->orderby('ngayapdung', 'desc')->first();
+        // dd($m_thue);
         if ($m_thue != null) {
             $banthan = $m_thue->banthan;
             $phuthuoc = $m_thue->phuthuoc;
@@ -993,7 +994,7 @@ class bangluongController extends Controller
             $banthan = $phuthuoc = 0;
             $a_mucthue = [];
         }
-
+// dd($a_mucthue);
         //kiêm nhiệm
         $a_th = array_merge(
             array('macanbo', 'macvcq', 'mapb', 'manguonkp', 'mact', 'baohiem', 'pthuong'),
@@ -1059,6 +1060,7 @@ class bangluongController extends Controller
         $a_ts = array_column($model_phucap->where('thaisan', 1)->toarray(), 'mapc');
         $a_no = array_column($model_phucap->where('nghiom', 1)->toarray(), 'mapc');
         $a_thue = array_column($model_phucap->where('thuetn', 1)->toarray(), 'mapc');
+
         $a_tapsu = array_column($model_phucap->where('tapsu', 1)->toarray(), 'mapc');
         // dd($a_tapsu);
         $a_goc = array_keys(getCongThucTinhPC(false));
@@ -1541,7 +1543,9 @@ class bangluongController extends Controller
                     $mapc = 'st_' . $thue;
                     $tienthue += $m_cb[$key][$mapc];
                 }
-                $tienthue = $tienthue - $banthan - $phuthuoc * $m_cb[$key]['nguoiphuthuoc'];
+                
+                $tienthue = $tienthue - $m_cb[$key]['ttbh'] - $banthan - $phuthuoc * $m_cb[$key]['nguoiphuthuoc'];
+                // dd($tienthue);
                 if ($tienthue <= 0) {
                     goto luuketqua;
                 }
@@ -1549,20 +1553,24 @@ class bangluongController extends Controller
                 //                    dd($tienthue);
                 //                }
 
-                foreach ($a_mucthue as $thue) {
+                foreach ($a_mucthue as $k=>$thue) {
+                    // dd($thue);
+
                     if ($tienthue < $thue['muctu']) {
                         goto luuketqua;
                     }
                     $m_cb[$key]['thuetn'] += round(($tienthue > $thue['mucden'] ? $thue['mucden'] - $thue['muctu'] : $tienthue - $thue['muctu'])
                         * $thue['phantram'] / 100);
+
+
                 }
+                // dd($m_cb[$key]);
             }
             // dd($m_cb[$key]);
             luuketqua:
             $m_cb[$key]['luongtn'] = $m_cb[$key]['ttl'] - $m_cb[$key]['ttbh'] - $m_cb[$key]['giaml'] - $m_cb[$key]['thuetn'];
             $a_data_canbo[] = $m_cb[$key];
         }
-        // dd($m_cb);
         //Mảng chứa các cột bỏ để chạy hàm insert
         $a_col_cb = array(
             'id', 'bac', 'baohiem', 'macongtac', 'pthuong', 'theodoi', 'ngaybc',
