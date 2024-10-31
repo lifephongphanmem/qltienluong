@@ -591,7 +591,8 @@ class dutoanluong_insolieu_huyenController extends Controller
                 }
                 $chitiet->tenct = $a_plct[$chitiet->mact] ?? '';
                 $chitiet->luongthang = ($chitiet->ttl / 12) / $inputs['donvitinh'];
-                $chitiet->hesoluonghd = $chitiet->luonghd/$chitiet->luongcoban;
+                $chitiet->luonghd=$chitiet->luonghd > 1000?$chitiet->luonghd:($chitiet->luonghd * $chitiet->luongcoban);
+                $chitiet->hesoluonghd = $chitiet->luonghd < 1000?$chitiet->luonghd: $chitiet->luonghd/$chitiet->luongcoban;
                 $chitiet->baohiem = ($chitiet->ttbh_dv / 12) / $inputs['donvitinh'];
                 $chitiet->tongcong = ($chitiet->luongthang + $chitiet->baohiem) / $inputs['donvitinh'];
                 $chitiet->quyluong = ($chitiet->ttl + $chitiet->ttbh_dv) / $inputs['donvitinh'];
@@ -664,7 +665,8 @@ class dutoanluong_insolieu_huyenController extends Controller
                 $chitiet->tenct = $a_plct[$chitiet->mact] ?? '';
                 $chitiet->luongthang = ($chitiet->ttl / 12) / $inputs['donvitinh'];;
                 $chitiet->luongcoban = $m_dutoan->where('masodv',$chitiet->masodv)->first()->luongcoban;
-                $chitiet->hesoluonghd = $chitiet->luonghd/$chitiet->luongcoban;
+                $chitiet->luonghd=$chitiet->luonghd > 1000?$chitiet->luonghd:($chitiet->luonghd * $chitiet->luongcoban);
+                $chitiet->hesoluonghd = $chitiet->luonghd < 1000?$chitiet->luonghd: $chitiet->luonghd/$chitiet->luongcoban;
                 $chitiet->baohiem = ($chitiet->ttbh_dv / 12) / $inputs['donvitinh'];;
                 $chitiet->tongcong = ($chitiet->luongthang + $chitiet->baohiem) / $inputs['donvitinh'];
                 $chitiet->quyluong = ($chitiet->ttl + $chitiet->ttbh_dv) / $inputs['donvitinh'];
