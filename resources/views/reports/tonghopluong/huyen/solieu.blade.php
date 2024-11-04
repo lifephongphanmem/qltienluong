@@ -79,6 +79,7 @@
                 $a_dv = a_getelement($a_soluong,array('maphanloai'=>$pl->maphanloai,'madv'=>$dv->madv));
                 $chitiet = $model->where('madv',$dv->madv);
             ?>
+            <?php dd($a_thang); ?>
             @foreach($a_thang as $key=>$val)
                 <tr style="font-weight: bold; font-style:italic ">
                     <td></td>
