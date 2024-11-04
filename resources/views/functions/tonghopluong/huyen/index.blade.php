@@ -97,7 +97,7 @@
                                                         class="btn btn-default btn-sm" TARGET="_blank">
                                                         <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp</a>
                                                     <!--a href="{{ url($inputs['furl'] . 'tonghop_diaban?thang=' . $value['thang'] . '&nam=' . $inputs['nam']) }}" class="btn btn-default btn-xs" target="_blank">
-                                                                                                                                    <i class="fa fa-print"></i>&nbsp; Số liệu địa bàn</a-->
+                                                                                                                                        <i class="fa fa-print"></i>&nbsp; Số liệu địa bàn</a-->
                                                     <a href="{{ url('/chuc_nang/xem_du_lieu/huyen?thang=' . $value['thang'] . '&nam=' . $inputs['nam'] . '&trangthai=ALL&phanloai=ALL') }}"
                                                         class="btn btn-default btn-xs">
                                                         <i class="fa fa-list-alt"></i>&nbsp; Số liệu chi tiết</a>
@@ -288,6 +288,27 @@
                         </div>
                     </div>
                 </div>
+                {{-- <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <button id="in_bl"class="btn btn-default btn-xs mbs"
+                                onclick="insolieu(this,'/chuc_nang/tong_hop_luong/huyen/TongHop_CT','1506672780;1506673604;1637915601;1534990562')"
+                                style="border-width: 0px;" data-target="#modal-insolieu" data-toggle="modal">
+                                <i class="fa fa-print"></i>&nbsp; In số liệu tổng hợp - biên chế</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <button type="button" id="in_bl" class="btn btn-default btn-xs mbs"
+                                onclick="insolieu(this,'/chuc_nang/tong_hop_luong/huyen/TongHop_CT','1689729806')" 
+                                data-target="#modal-insolieu" data-toggle="modal"
+                                style="border-width: 0px;">
+                                <i class="fa fa-print"></i>&nbsp; In số liệu tổng hợp - hợp đồng</button>
+                        </div>
+                    </div>
+                </div> --}}
 
                 <div class="row">
                     <div class="col-md-12">
@@ -305,55 +326,116 @@
                 </div>
             </div>
         </div>
+    </div>
+    <!--Mẫu in số liệu -->
+    {!! Form::open(['url' => '', 'method' => 'post', 'target' => '_blank', 'files' => true, 'id' => 'frm_insolieu']) !!}
+    <div id="modal-insolieu" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+        <div class="modal-dialog modal-content">
+            <div class="modal-header modal-header-primary">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+                <h4 id="header-inbl" class="modal-title">Thông tin kết xuất</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label class="control-label">Phân loại công tác</label>
+                            <select class="form-control select2me" name="mact[]" id="mact" multiple=true>
+                                @foreach ($model_nhomct as $kieuct)
+                                    <optgroup label="{{ $kieuct->tencongtac }}">
+                                        <?php $mode_ct = $model_tenct->where('macongtac', $kieuct->macongtac); ?>
+                                        @foreach ($mode_ct as $ct)
+                                            <option value="{{ $ct->mact }}">{{ $ct->tenct }}</option>
+                                        @endforeach
+                                    </optgroup>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
 
-        @include('includes.modal.delete')
+                    {{-- <div class="row">
+                        <div class="col-md-6">
+                            <label class="control-label">Đơn vị tính</label>
+                            {!! Form::select('donvitinh', getDonViTinh(), null, ['class' => 'form-control select2me']) !!}
+                        </div>
 
-        <script>
-            function confirmChuyen(thang, nam) {
-                document.getElementById("thang").value = thang;
-                document.getElementById("nam").value = nam;
-            }
+                        <div class="col-md-6">
+                            <label class="control-label">Cỡ chữ</label>
+                            {!! Form::select('cochu', getCoChu(), 10, ['id' => 'cochu', 'class' => 'form-control select2me']) !!}
+                        </div>
+                    </div> --}}
+                </div>
 
-            function insolieu(obj, url) {
-                obj.href = url + '?thang=' + $('#thang_bc').val() + '&nam=' + $('#nam_bc').val() + '&macqcq=' + $('#macqcq_bc')
-                    .val();
-            }
+                <input type="hidden" name="macqcq" />
+                <input type="hidden" name="nam" />
+                <input type="hidden" name="thang" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+                <button type="submit" class="btn btn-success">Đồng ý</button>
+            </div>
+        </div>
+    </div>
+    {!! Form::close() !!}
 
-            function confirmTonghop(url) {
-                $('#frm_tonghop').attr('action', url);
-            }
+    @include('includes.modal.delete')
 
-            function getLyDo(madvbc, thang, nam) {
-                var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-                console.log(madvbc);
-                $.ajax({
-                    url: '{{ $inputs['furl'] }}' + 'getlydo',
-                    type: 'GET',
-                    data: {
-                        _token: CSRF_TOKEN,
-                        madvbc: madvbc,
-                        thang: thang,
-                        nam: nam
-                    },
-                    dataType: 'JSON',
-                    success: function(data) {
-                        // console.log(data);
-                        $('#lydo').val(data.lydo);
-                    },
-                    error: function(message) {
-                        toastr.error(message, 'Lỗi!');
-                    }
-                });
+    <script>
+        function confirmChuyen(thang, nam) {
+            document.getElementById("thang").value = thang;
+            document.getElementById("nam").value = nam;
+        }
 
-                //$('#madvbc').val(madvbc);
-                //$('#phongban-modal').modal('show');
-            }
+        function insolieu(obj, url, mact) {
+            obj.href = url + '?thang=' + $('#thang_bc').val() + '&nam=' + $('#nam_bc').val() + '&macqcq=' + $('#macqcq_bc')
+                .val();
+            // if (mact == null) {
+            //     $('#frm_insolieu').find("[name^='mact']").attr('disabled', true);
+            // } else {
+            //     $('#frm_insolieu').find("[name^='mact']").attr('disabled', false);
+            //     $('#frm_insolieu').find("[name^='mact']").val(mact.split(';')).trigger('change');
+            // }
+            // $('#frm_insolieu').attr('action', url);
+            // $('#frm_insolieu').find("[name^='macqcq']").val($('#macqcq_bc').val());
+            // $('#frm_insolieu').find("[name^='nam']").val($('#nam_bc').val());
+            // $('#frm_insolieu').find("[name^='thang']").val($('#thang_bc').val());
+        }
 
-            function indutoan(thang, nam, macqcq) {
-                $('#thang_bc').val(thang);
-                $('#nam_bc').val(nam);
-                $('#macqcq_bc').val(macqcq);
-            }
-        </script>
+        function confirmTonghop(url) {
+            $('#frm_tonghop').attr('action', url);
+        }
 
-    @stop
+        function getLyDo(madvbc, thang, nam) {
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+            // console.log(madvbc);
+            $.ajax({
+                url: '{{ $inputs['furl'] }}' + 'getlydo',
+                type: 'GET',
+                data: {
+                    _token: CSRF_TOKEN,
+                    madvbc: madvbc,
+                    thang: thang,
+                    nam: nam
+                },
+                dataType: 'JSON',
+                success: function(data) {
+                    // console.log(data);
+                    $('#lydo').val(data.lydo);
+                },
+                error: function(message) {
+                    toastr.error(message, 'Lỗi!');
+                }
+            });
+
+            //$('#madvbc').val(madvbc);
+            //$('#phongban-modal').modal('show');
+        }
+
+        function indutoan(thang, nam, macqcq) {
+            $('#thang_bc').val(thang);
+            $('#nam_bc').val(nam);
+            $('#macqcq_bc').val(macqcq);
+        }
+    </script>
+
+@stop

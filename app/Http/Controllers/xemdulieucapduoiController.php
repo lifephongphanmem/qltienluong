@@ -324,6 +324,8 @@ class xemdulieucapduoiController extends Controller
                     // dd($nguonkhoi);
                     if(!isset($nguon) && !isset($nguonkhoi))
                     {
+                        $dv->trangthai = 'CHOGUI';
+                        $dv->mathdv = null;
                         continue;
                     }
 
@@ -353,12 +355,13 @@ class xemdulieucapduoiController extends Controller
             // dd($model_donvi->where('trangthai','TRALAI'));
             //dd($model_donvi->toarray());
             if (!isset($inputs['trangthai']) || $inputs['trangthai'] != 'ALL') {
+                // dd($inputs['trangthai']);
                 $model_donvi = $model_donvi->where('trangthai', $inputs['trangthai']);
             }
             if (!isset($inputs['phanloai']) || $inputs['phanloai'] != 'ALL') {
                 $model_donvi = $model_donvi->where('maphanloai', $inputs['phanloai']);
             }
-
+            // dd($model_donvi->where('trangthai','!=','DAGUI'));
             return view('functions.viewdata.index_huyen')
                 ->with('model', $model_donvi)
                 ->with('thang', $inputs['thang'])

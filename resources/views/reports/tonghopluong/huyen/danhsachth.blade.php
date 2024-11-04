@@ -106,12 +106,15 @@
         @else
             @foreach ($model as $dv)
             <?php $trangthai='thang'.$thang ?>
-                <tr>
-                    <td>{{ $i++ }}</td>
-                    <td>{{ $dv->tendv}}</td>
-                    <td class="{{ $dv->$trangthai == 'DAGUI' ? '' : 'text-danger' }}">{{ $dv->$trangthai == 'DAGUI' ? 'Đã gửi' : 'Chưa gửi' }}</td>
-                    <td></td>
-                </tr>
+            @if ($dv->$trangthai == $inputs['trangthai']  || $inputs['trangthai'] == 'ALL')
+            <tr>
+                <td>{{ $i++ }}</td>
+                <td>{{ $dv->tendv}}</td>
+                <td class="{{ $dv->$trangthai == 'DAGUI' ? '' : 'text-danger' }}">{{ $dv->$trangthai == 'DAGUI' ? 'Đã gửi' : 'Chưa gửi' }}</td>
+                <td></td>
+            </tr>
+            @endif
+
             @endforeach
         @endif
 

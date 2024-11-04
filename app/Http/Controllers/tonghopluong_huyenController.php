@@ -42,7 +42,7 @@ class tonghopluong_huyenController extends Controller
     public function soluongdv($thang, $nam)
     {
         $ngay = date("Y-m-t", strtotime($nam . '-' . $thang . '-01'));
-        $ngaytao=date("Y-m-d", strtotime($nam . '-' . $thang . '-01'));
+        $ngaytao = date("Y-m-d", strtotime($nam . '-' . $thang . '-01'));
         $madv = session('admin')->madv;
         $model_donvi = dmdonvi::select('madv', 'tendv')
             ->where('macqcq', $madv)
@@ -188,7 +188,7 @@ class tonghopluong_huyenController extends Controller
             $madv = session('admin')->madv;
             $madvbc = session('admin')->madvbc;
             $tendb = getTenDb($madvbc);
-            $nam=$inputs['nam'];
+            $nam = $inputs['nam'];
             //lấy danh sách đơn vị: đơn vị có macqcq = madv (bang dmdonvi) + đơn vị nam=nam && macqcq=madv
             // $a_donvicapduoi = [];
             // //đơn vị nam=nam && macqcq=madv
@@ -204,22 +204,22 @@ class tonghopluong_huyenController extends Controller
             //     ->where('madv', '!=', $madv) //bỏ đơn vị tổng hợp
             //     ->get();
             // $a_donvicapduoi = array_unique(array_merge(array_column($model_dmdv->toarray(), 'madv'), $a_donvicapduoi));
-            $model_donvitamdung = dmdonvi::where('trangthai', 'TD')->wherein('madv',  getDonviHuyen($nam,$madv)['a_donvicapduoi'])->get();
+            $model_donvitamdung = dmdonvi::where('trangthai', 'TD')->wherein('madv',  getDonviHuyen($nam, $madv)['a_donvicapduoi'])->get();
 
             // dd(getDonviHuyen($nam,$madv)['a_donvicapduoi']);
             $a_data = array(
-                array('thang' => '01', 'mathdv' => null, 'noidung' => null, 'sldv' => $this->laySoLuongDV('01', $inputs['nam'], getSLDonviHuyen('01',$nam,$madv)['a_donvicapduoi'], $model_donvitamdung), 'dvgui' => 0),
-                array('thang' => '02', 'mathdv' => null, 'noidung' => null, 'sldv' => $this->laySoLuongDV('02', $inputs['nam'], getSLDonviHuyen('02',$nam,$madv)['a_donvicapduoi'], $model_donvitamdung), 'dvgui' => 0),
-                array('thang' => '03', 'mathdv' => null, 'noidung' => null, 'sldv' => $this->laySoLuongDV('03', $inputs['nam'], getSLDonviHuyen('03',$nam,$madv)['a_donvicapduoi'], $model_donvitamdung), 'dvgui' => 0),
-                array('thang' => '04', 'mathdv' => null, 'noidung' => null, 'sldv' => $this->laySoLuongDV('04', $inputs['nam'], getSLDonviHuyen('04',$nam,$madv)['a_donvicapduoi'], $model_donvitamdung), 'dvgui' => 0),
-                array('thang' => '05', 'mathdv' => null, 'noidung' => null, 'sldv' => $this->laySoLuongDV('05', $inputs['nam'], getSLDonviHuyen('05',$nam,$madv)['a_donvicapduoi'], $model_donvitamdung), 'dvgui' => 0),
-                array('thang' => '06', 'mathdv' => null, 'noidung' => null, 'sldv' => $this->laySoLuongDV('06', $inputs['nam'], getSLDonviHuyen('06',$nam,$madv)['a_donvicapduoi'], $model_donvitamdung), 'dvgui' => 0),
-                array('thang' => '07', 'mathdv' => null, 'noidung' => null, 'sldv' => $this->laySoLuongDV('07', $inputs['nam'], getSLDonviHuyen('07',$nam,$madv)['a_donvicapduoi'], $model_donvitamdung), 'dvgui' => 0),
-                array('thang' => '08', 'mathdv' => null, 'noidung' => null, 'sldv' => $this->laySoLuongDV('08', $inputs['nam'], getSLDonviHuyen('08',$nam,$madv)['a_donvicapduoi'], $model_donvitamdung), 'dvgui' => 0),
-                array('thang' => '09', 'mathdv' => null, 'noidung' => null, 'sldv' => $this->laySoLuongDV('09', $inputs['nam'], getSLDonviHuyen('09',$nam,$madv)['a_donvicapduoi'], $model_donvitamdung), 'dvgui' => 0),
-                array('thang' => '10', 'mathdv' => null, 'noidung' => null, 'sldv' => $this->laySoLuongDV('10', $inputs['nam'], getSLDonviHuyen('10',$nam,$madv)['a_donvicapduoi'], $model_donvitamdung), 'dvgui' => 0),
-                array('thang' => '11', 'mathdv' => null, 'noidung' => null, 'sldv' => $this->laySoLuongDV('11', $inputs['nam'], getSLDonviHuyen('11',$nam,$madv)['a_donvicapduoi'], $model_donvitamdung), 'dvgui' => 0),
-                array('thang' => '12', 'mathdv' => null, 'noidung' => null, 'sldv' => $this->laySoLuongDV('12', $inputs['nam'], getSLDonviHuyen('12',$nam,$madv)['a_donvicapduoi'], $model_donvitamdung), 'dvgui' => 0),
+                array('thang' => '01', 'mathdv' => null, 'noidung' => null, 'sldv' => $this->laySoLuongDV('01', $inputs['nam'], getSLDonviHuyen('01', $nam, $madv)['a_donvicapduoi'], $model_donvitamdung), 'dvgui' => 0),
+                array('thang' => '02', 'mathdv' => null, 'noidung' => null, 'sldv' => $this->laySoLuongDV('02', $inputs['nam'], getSLDonviHuyen('02', $nam, $madv)['a_donvicapduoi'], $model_donvitamdung), 'dvgui' => 0),
+                array('thang' => '03', 'mathdv' => null, 'noidung' => null, 'sldv' => $this->laySoLuongDV('03', $inputs['nam'], getSLDonviHuyen('03', $nam, $madv)['a_donvicapduoi'], $model_donvitamdung), 'dvgui' => 0),
+                array('thang' => '04', 'mathdv' => null, 'noidung' => null, 'sldv' => $this->laySoLuongDV('04', $inputs['nam'], getSLDonviHuyen('04', $nam, $madv)['a_donvicapduoi'], $model_donvitamdung), 'dvgui' => 0),
+                array('thang' => '05', 'mathdv' => null, 'noidung' => null, 'sldv' => $this->laySoLuongDV('05', $inputs['nam'], getSLDonviHuyen('05', $nam, $madv)['a_donvicapduoi'], $model_donvitamdung), 'dvgui' => 0),
+                array('thang' => '06', 'mathdv' => null, 'noidung' => null, 'sldv' => $this->laySoLuongDV('06', $inputs['nam'], getSLDonviHuyen('06', $nam, $madv)['a_donvicapduoi'], $model_donvitamdung), 'dvgui' => 0),
+                array('thang' => '07', 'mathdv' => null, 'noidung' => null, 'sldv' => $this->laySoLuongDV('07', $inputs['nam'], getSLDonviHuyen('07', $nam, $madv)['a_donvicapduoi'], $model_donvitamdung), 'dvgui' => 0),
+                array('thang' => '08', 'mathdv' => null, 'noidung' => null, 'sldv' => $this->laySoLuongDV('08', $inputs['nam'], getSLDonviHuyen('08', $nam, $madv)['a_donvicapduoi'], $model_donvitamdung), 'dvgui' => 0),
+                array('thang' => '09', 'mathdv' => null, 'noidung' => null, 'sldv' => $this->laySoLuongDV('09', $inputs['nam'], getSLDonviHuyen('09', $nam, $madv)['a_donvicapduoi'], $model_donvitamdung), 'dvgui' => 0),
+                array('thang' => '10', 'mathdv' => null, 'noidung' => null, 'sldv' => $this->laySoLuongDV('10', $inputs['nam'], getSLDonviHuyen('10', $nam, $madv)['a_donvicapduoi'], $model_donvitamdung), 'dvgui' => 0),
+                array('thang' => '11', 'mathdv' => null, 'noidung' => null, 'sldv' => $this->laySoLuongDV('11', $inputs['nam'], getSLDonviHuyen('11', $nam, $madv)['a_donvicapduoi'], $model_donvitamdung), 'dvgui' => 0),
+                array('thang' => '12', 'mathdv' => null, 'noidung' => null, 'sldv' => $this->laySoLuongDV('12', $inputs['nam'], getSLDonviHuyen('12', $nam, $madv)['a_donvicapduoi'], $model_donvitamdung), 'dvgui' => 0),
                 // array('thang' => '', 'mathdv' => null, 'noidung' => null, 'sldv' => '', 'dvgui' => 0)
             );
 
@@ -229,17 +229,17 @@ class tonghopluong_huyenController extends Controller
                 //     ->where('trangthai', 'DAGUI')
                 //     // ->wherein('trangthai', ['DAGUI', 'TRALAI'])
                 //     ->get();
-                $model_nguon = tonghopluong_donvi::wherein('madv', getDonviHuyen($nam,$madv)['a_donvicapduoi'])
-                ->where('nam', $inputs['nam'])
-                ->where('trangthai', 'DAGUI')
-                // ->wherein('trangthai', ['DAGUI', 'TRALAI'])
-                ->get();
+                $model_nguon = tonghopluong_donvi::wherein('madv', getDonviHuyen($nam, $madv)['a_donvicapduoi'])
+                    ->where('nam', $inputs['nam'])
+                    ->where('trangthai', 'DAGUI')
+                    // ->wherein('trangthai', ['DAGUI', 'TRALAI'])
+                    ->get();
             if (session('admin')->phamvitonghop == 'KHOI') {
-                $model_nguon = tonghopluong_donvi::wherein('madv', getDonviHuyen($nam,$madv)['a_donvicapduoi'])
+                $model_nguon = tonghopluong_donvi::wherein('madv', getDonviHuyen($nam, $madv)['a_donvicapduoi'])
                     ->where('nam', $inputs['nam'])
                     ->wherein('trangthai', ['DAGUI', 'TRALAI'])
                     ->get();
-                $model_nguonkhoi = tonghopluong_khoi::wherein('madv', getDonviHuyen($nam,$madv)['a_donvicapduoi'])
+                $model_nguonkhoi = tonghopluong_khoi::wherein('madv', getDonviHuyen($nam, $madv)['a_donvicapduoi'])
                     ->where('nam', $inputs['nam'])
                     ->wherein('trangthai', ['DAGUI', 'TRALAI'])
                     ->get();
@@ -306,12 +306,16 @@ class tonghopluong_huyenController extends Controller
             }
             $m_dvbc = dmdonvibaocao::where('level', 'T')->get();
             $a_donviql = array_column(dmdonvi::wherein('madvbc', array_column($m_dvbc->toarray(), 'madvbc'))->get()->toarray(), 'tendv', 'madv');
+            $model_tenct = dmphanloaict::wherein('mact', getPLCTDuToan())->get();
+            $model_nhomct = dmphanloaicongtac::wherein('macongtac', array_unique(array_column($model_tenct->toarray(), 'macongtac')))->get();
             //dd($a_data);
             $inputs['furl'] = '/chuc_nang/tong_hop_luong/huyen/';
             return view('functions.tonghopluong.huyen.index')
                 ->with('inputs', $inputs)
                 ->with('model', $a_data)
                 ->with('a_donviql', $a_donviql)
+                ->with('model_nhomct', $model_nhomct)
+                ->with('model_tenct', $model_tenct)
                 ->with('a_trangthai', $a_trangthai)
                 ->with('pageTitle', 'Danh sách tổng hợp lương toàn địa bàn');
         } else
@@ -537,7 +541,8 @@ class tonghopluong_huyenController extends Controller
             $model_diaban = dmdiabandbkk::all();
             $model_thongtin = tonghopluong_huyen::where('mathdv', $mathdv)->first();
             $a_diaban = array(
-                'DBKK' => 'Khu vực KTXH ĐBKK', 'BGHD' => 'Khu vực biên giới, hải đảo',
+                'DBKK' => 'Khu vực KTXH ĐBKK',
+                'BGHD' => 'Khu vực biên giới, hải đảo',
                 'DBTD' => 'Khu vực trọng điểm, phức tạp về an ninh trật tự'
             );
             //$gnr=getGeneralConfigs();
@@ -1663,7 +1668,8 @@ class tonghopluong_huyenController extends Controller
             $model_diaban = dmdiabandbkk::where('madv', session('admin')->madv)->get();
             $model_thongtin = tonghop_huyen::where('mathdv', $mathdv)->first();
             $a_diaban = array(
-                'DBKK' => 'Khu vực KTXH ĐBKK', 'BGHD' => 'Khu vực biên giới, hải đảo',
+                'DBKK' => 'Khu vực KTXH ĐBKK',
+                'BGHD' => 'Khu vực biên giới, hải đảo',
                 'DBTD' => 'Khu vực trọng điểm, phức tạp về an ninh trật tự'
             );
 
@@ -1779,20 +1785,20 @@ class tonghopluong_huyenController extends Controller
         if (Session::has('admin')) {
             $inputs = $request->all();
             $model = tonghopluong_donvi::where('mathdv', $inputs['mathdv'])->first();
-            if(isset($model)){
+            if (isset($model)) {
                 tonghopluong_huyen::where('mathdv', $model->mathh)->delete();
                 $model->trangthai = 'TRALAI';
                 $model->mathh = null;
                 $model->matht = null;
                 $model->mathk = null;
                 $model->lydo = $inputs['lydo'];
-            }else{// trường hợp tổng hợp khối
-                $model=tonghopluong_khoi::where('mathdv',$inputs['mathdv'])->first();
-                $model->trangthai='TRALAI';
-                $model->lydo=$inputs['lydo'];
+            } else { // trường hợp tổng hợp khối
+                $model = tonghopluong_khoi::where('mathdv', $inputs['mathdv'])->first();
+                $model->trangthai = 'TRALAI';
+                $model->lydo = $inputs['lydo'];
 
-                tonghopluong_huyen::where('mathdv',$inputs['mathdv'])
-                ->update(['trangthai' => 'TRALAI', 'nguoilap' => '','ngaylap'=> '']);
+                tonghopluong_huyen::where('mathdv', $inputs['mathdv'])
+                    ->update(['trangthai' => 'TRALAI', 'nguoilap' => '', 'ngaylap' => '']);
             }
 
             $model->save();
@@ -1983,7 +1989,8 @@ class tonghopluong_huyenController extends Controller
                 'nguoilap' => $m_bl->nguoilap,
                 'thang' => $m_bl->thang,
                 'nam' => $m_bl->nam,
-                'ngaylap' => $m_bl->ngaylap, 'phanloai' => $m_bl->phanloai,
+                'ngaylap' => $m_bl->ngaylap,
+                'phanloai' => $m_bl->phanloai,
                 'cochu' => 10
             );
             //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
@@ -2012,6 +2019,9 @@ class tonghopluong_huyenController extends Controller
     public function danhsachth(Request $request)
     {
         $inputs = $request->all();
+        if ($inputs['trangthai'] == 'CHOGUI') {
+            $inputs['trangthai'] = 'CHUAGUI';
+        }
         $madv = session('admin')->madv;
         // $model = dmdonvi::where('madvbc',session('admin')->madvbc)->where('phanloaitaikhoan','SD')->get();
         // $model = dmdonvi::where('macqcq',$madv)->where('madv', '<>', $madv)
@@ -2028,15 +2038,18 @@ class tonghopluong_huyenController extends Controller
                     ->get();
             })
             ->distinct()->get();
-        // dd($model);
+
         $a_madv = array_column($model->toarray(), 'madv');
         $model_th = tonghopluong_donvi::where('nam', $inputs['namth'])->wherein('madv', $a_madv)->get();
 
-        foreach ($model as $dv) {
+        foreach ($model as $key => $dv) {
+            $retainEntry = false;
             if (count($model_th) > 0) {
                 for ($i = 1; $i < 13; $i++) {
                     $thang = 'thang' . $i;
+
                     $m_th = $model_th->where('madv', $dv->madv)->where('thang', $i)->first();
+                    // dd($m_th);
                     // $dv->trangthai=$m_th->trangthai;
                     if (isset($m_th)) {
                         $dv->$thang = $m_th->trangthai;
@@ -2046,8 +2059,11 @@ class tonghopluong_huyenController extends Controller
                 }
             }
         }
+        // dd($model->take(10));
+        // dd($inputs['trangthai']);
         return view('reports.tonghopluong.huyen.danhsachth')
             ->with('model', $model)
+            ->with('inputs', $inputs)
             ->with('nam', $inputs['namth'])
             ->with('thang', $inputs['thang'])
             ->with('pageTitle', 'Danh sách đơn vị gửi tổng hợp lương');
