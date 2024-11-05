@@ -5553,7 +5553,7 @@ class bangluongController extends Controller
             if ($m_truylinh != null) {
                 $model_truylinh = (new data())->getBangluong_ct($m_truylinh->thang, $m_truylinh->mabl);
             }
-
+            // dd($model_truylinh->sortbyDESC('id'));
             if ($m_bl != null && $m_bl->thang == '01') {
                 $thang = '12';
                 $nam = str_pad($m_bl->nam - 1, 4, '0', STR_PAD_LEFT);
@@ -5581,6 +5581,7 @@ class bangluongController extends Controller
                 ->where('madv', $m_bl->madv)
                 ->where('phanloai', 'TRUYLINH')
                 ->first();
+
             if ($m_truylinh_trc != null) {
                 $model_truylinh_trc = (new data())->getBangluong_ct($m_truylinh_trc->thang, $m_truylinh_trc->mabl);
             }
@@ -5657,9 +5658,10 @@ class bangluongController extends Controller
                 $ct->hocbong = 0;
                 $ct->truylinh = 0;
                 if ($m_truylinh != null) { // Nếu tháng đó có bảng lương truy lĩnh
+                    // dd(123);
                     foreach ($model_truylinh as $val) {
                         if ($ct->macanbo == $val->macanbo && $ct->mact == $val->mact) {
-                            $ct->truylinh = $val->luongtn;
+                            $ct->truylinh += $val->luongtn;
                         }
                     }
                 }
