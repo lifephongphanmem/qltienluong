@@ -290,6 +290,7 @@ class dutoanluong_insolieu_huyenController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
+            // dd($inputs);
             //Trường hợp được gọi từ chức năng "Báo cáo tổng hợp"
             if (isset($inputs['macqcq']) &&  $inputs['macqcq'] != '') {
                 $m_dutoan_huyen = dutoanluong_huyen::where('madv', $inputs['macqcq'])->where('namns', $inputs['namns'])->first();
@@ -312,6 +313,7 @@ class dutoanluong_insolieu_huyenController extends Controller
             // dd($m_donvi);
             //$m_phanloai = dmphanloaidonvi_baocao::where('madvbc', $m_donvi->madvbc)->get();
             $m_phanloai = dmphanloaidonvi_baocao::where('madvbc', $m_donvi->madvbc)->get();
+            // dd($m_phanloai);
             // dd($m_phanloai);
             $a_phanloai = array_column(dmphanloaidonvi::all()->toArray(), 'maphanloai');
             // $m_dutoan = dutoanluong::where('masoh', $inputs['masodv'])->where('trangthai', 'DAGUI')->get();
@@ -371,6 +373,7 @@ class dutoanluong_insolieu_huyenController extends Controller
 
                 $this->getMaNhomPhanLoai($chitiet, $m_phanloai);
             }
+            // dd($model->take(10));
             //dd($model->toArray());
             //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
             $a_tenpc = array_column(dmphucap::all()->toArray(), 'tenpc', 'mapc');
