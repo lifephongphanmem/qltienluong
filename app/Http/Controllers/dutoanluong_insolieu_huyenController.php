@@ -373,7 +373,7 @@ class dutoanluong_insolieu_huyenController extends Controller
 
                 $this->getMaNhomPhanLoai($chitiet, $m_phanloai);
             }
-            // dd($model->take(10));
+            // dd($model->where('maphanloai_goc1','KVXP')->where('phanloai','COMAT')->sum('hesotrungbinh'));
             //dd($model->toArray());
             //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
             $a_tenpc = array_column(dmphucap::all()->toArray(), 'tenpc', 'mapc');

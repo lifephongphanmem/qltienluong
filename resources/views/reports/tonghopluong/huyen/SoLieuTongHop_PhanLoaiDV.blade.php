@@ -449,6 +449,7 @@
                                 @foreach ($model_donvi as $donvi)
                                     <?php
                                     $model_chitiet = $model->where('madv', $donvi->madv);
+                                    // dd($model_chitiet);
                                     ?>
                                     <tr class="font-weight-bold font-italic">
                                         <td>{{ $phanloai2->sapxep }}.{{ $phanloai3->sapxep }}.{{ $phanloai4->sapxep }}.{{ $i4++ }}

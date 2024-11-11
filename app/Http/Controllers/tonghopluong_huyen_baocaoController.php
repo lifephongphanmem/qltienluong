@@ -65,11 +65,16 @@ class tonghopluong_huyen_baocaoController extends Controller
             //$a_luongcb = array_column($model_tonghop->toarray(),'luongcoban','mathdv');
             //Cho các trường hợp phụ cấp theo số tiền lấy theo lương cơ bản (đơn vi nào cá biệt pải tổng hợp lại chi trả lương)
             $ngayketxuat = Carbon::create($inputs['nam'], $inputs['thang'], 01)->toDateString();
+            // dd($ngayketxuat);
             $luongcb = 1390000;
             if ($ngayketxuat < '2023-07-01' && $ngayketxuat > '2019-07-01') {
                 $luongcb = 1490000;
-            } else
+            } else if($ngayketxuat > '2023-07-01' && $ngayketxuat < '2024-07-01' ){
                 $luongcb = 1800000;
+            }else{
+                $luongcb = 2340000;
+            }
+            // dd($luongcb);
 
 
             $a_plct_dt = getPLCTDuToan();
@@ -86,7 +91,7 @@ class tonghopluong_huyen_baocaoController extends Controller
             }
             // dd($model);
             foreach ($model as $key=>$chitiet) {
-        // dd($key);
+                // dd($key);
                 $chitiet->madv = $a_donvi[$chitiet->mathdv];
                 $chitiet->maphanloai = $a_pl_donvi[$chitiet->madv];
                 $chitiet->tenct = $a_plct[$chitiet->mact] ?? '';
@@ -145,14 +150,17 @@ class tonghopluong_huyen_baocaoController extends Controller
             }
             // dd($model);
             $model_h=new Collection();
+            // dd($model_h);
             foreach($model as $val){
                 $m_donvi_nkp = $model->where('madv',$val->madv)->where('mact',$val->mact)->where('mathdv', $val->mathdv);
                 if(count($model_h->where('madv',$val->madv)->where('mact',$val->mact)->where('mathdv', $val->mathdv))>0){
                     continue;
                 }
                 if(count($m_donvi_nkp) == 1){
+                    // dd($m_donvi_nkp);
                     $model_h->push($val);
                 }else{
+                    // dd($m_donvi_nkp);
                     // dd($val);
                     // dd($m_donvi_nkp->sum('baohiem'));
                     $val->ttl=$m_donvi_nkp->sum('ttl');
