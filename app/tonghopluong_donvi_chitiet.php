@@ -15,7 +15,7 @@ class tonghopluong_donvi_chitiet extends Model
         'matht',
         'manguonkp',
         'tonghop',
-        'linhvuchoatdong',//Phân loại xã phường ko cần chọn lĩnh vực hoạt động
+        'linhvuchoatdong', //Phân loại xã phường ko cần chọn lĩnh vực hoạt động
         'macongtac',
         'mact',
         'luongcoban',
@@ -111,11 +111,23 @@ class tonghopluong_donvi_chitiet extends Model
         'ttbh_dv',
         'pclaunam',
         'st_pclaunam',
-                        //thêm phụ cấp dân phòng
-                        'pcdp',
-                        'st_pcdp'
+        //thêm phụ cấp dân phòng
+        'pcdp',
+        'st_pcdp',
+        //Thêm hệ số bảo hiểm 13112024
+        'bhxh_dv',
+        'bhyt_dv',
+        'kpcd_dv',
+        'bhtn_dv'
     ];
 }
+    /*13/11/2024
+            ALTER TABLE qlluong_khanhhoa.tonghopluong_donvi_chitiet
+        ADD COLUMN bhxh_dv double AFTER ttbh ,
+        ADD COLUMN bhyt_dv double AFTER bhxh_dv ,
+        ADD COLUMN kpcd_dv double AFTER bhyt_dv ,
+        ADD COLUMN bhtn_dv double AFTER kpcd_dv;
+    */
     //19/02/2018
     //ALTER TABLE `tonghopluong_donvi_chitiet` ADD `tonghop` VARCHAR(50) NULL DEFAULT 'BANGLUONG' AFTER `linhvuchoatdong`;
 
@@ -200,4 +212,8 @@ class tonghopluong_donvi_chitiet extends Model
 
      *
      * */
-
+    /*
+        update cột bhxh_dv
+        UPDATE qlluong_khanhhoa.tonghopluong_donvi_chitiet
+        SET bhxh_dv = FLOOR((stbhxh_dv / luongcoban) * 100000) / 100000
+    */
