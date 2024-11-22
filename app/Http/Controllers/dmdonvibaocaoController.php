@@ -33,6 +33,7 @@ class dmdonvibaocaoController extends Controller
             }
             $kybaotri = ['0' => 'Chưa ký bảo trì', '1' => "Đã ký bảo trì"];
             $a_baocao = ['0' => 'Không báo cáo cấp trên', '1' => 'Có báo cáo cấp trên'];
+            // dd($model);
             return view('system.danhmuc.donvibaocao.index')
                 ->with('model', $model)
                 ->with('kybaotri', $kybaotri)

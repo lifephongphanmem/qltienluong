@@ -115,9 +115,9 @@ class tonghopluong_donviController extends Controller
             // dd($a_data);
             $inputs['macqcq'] = dsdonviquanly::where('nam', $inputs['nam'])->where('madv', session('admin')->madv)->first()->macqcq ?? session('admin')->macqcq;
             $madvbc = dmdonvi::where('madv', session('admin')->madv)->first()->madvbc;
-            $a_donvi = array_column(dmdonvi::join('users','dmdonvi.madv','=','users.madv')->select('dmdonvi.madv', 'tendv')->where('status','active')->where('madvbc', $madvbc)
+            $a_donvi = array_column(dmdonvi::join('users', 'dmdonvi.madv', '=', 'users.madv')->select('dmdonvi.madv', 'tendv')->where('status', 'active')->where('madvbc', $madvbc)
                 ->where('phanloaitaikhoan', 'TH')->get()->toarray(), 'tendv', 'madv');
-                // dd($a_donvi);
+            // dd($a_donvi);
             //dd($inputs);
             return view('functions.tonghopluong.donvi.index')
                 ->with('furl', '/chuc_nang/tong_hop_luong/don_vi/')
@@ -169,9 +169,34 @@ class tonghopluong_donviController extends Controller
                 $col_st[] = 'st_' . $col[$i];
             }
             $a_th = array_merge(array(
-                'stt', 'macanbo', 'tencanbo', 'msngbac', 'mact', 'macvcq', 'mapb', 'mabl', 'manguonkp',
-                'luongcoban', 'thangtl', 'ngaytl', 'congtac', 'stbhxh_dv', 'stbhyt_dv', 'stkpcd_dv', 'stbhtn_dv', 'tonghs',
-                'stbhxh', 'stbhyt', 'stkpcd', 'stbhtn', 'ttbh', 'ttbh_dv', 'ttl', 'giaml', 'ttbh_dv', 'luongtn'
+                'stt',
+                'macanbo',
+                'tencanbo',
+                'msngbac',
+                'mact',
+                'macvcq',
+                'mapb',
+                'mabl',
+                'manguonkp',
+                'luongcoban',
+                'thangtl',
+                'ngaytl',
+                'congtac',
+                'stbhxh_dv',
+                'stbhyt_dv',
+                'stkpcd_dv',
+                'stbhtn_dv',
+                'tonghs',
+                'stbhxh',
+                'stbhyt',
+                'stkpcd',
+                'stbhtn',
+                'ttbh',
+                'ttbh_dv',
+                'ttl',
+                'giaml',
+                'ttbh_dv',
+                'luongtn'
             ), $col);
             $a_th = array_merge($a_th, $col_st);
             $a_ct = (new data())->getBangluong_ct_ar($thang, array_column($a_bangluong, 'mabl'), $a_th)->toarray();
@@ -218,7 +243,7 @@ class tonghopluong_donviController extends Controller
                     //sau đó gán vào phần giảm trừ
                     foreach ($a_pc as $mapc) {
                         $mapc_st = 'st_' . $mapc;
-                        if($a_ct[$i][$mapc] < 1000){
+                        if ($a_ct[$i][$mapc] < 1000) {
                             $tonghs += $a_ct[$i][$mapc];
                         }
                         if ($a_ct[$i][$mapc] > 0 && $a_ct[$i][$mapc_st] == 0) {
@@ -607,7 +632,7 @@ class tonghopluong_donviController extends Controller
     function printf_data($mathdv)
     {
         if (Session::has('admin')) {
-            //dd($mathdv);
+            // dd($mathdv);
             $check = tonghopluong_khoi::join('dmdonvi', 'dmdonvi.madv', 'tonghopluong_khoi.madv')
                 ->where('mathdv', $mathdv)->first();
             if ($check != null) {
@@ -635,6 +660,8 @@ class tonghopluong_donviController extends Controller
             //$gnr = getGeneralConfigs();
             //cho trương hợp đơn vị cấp trên in dữ liệu dv câp dưới mà ko sai tên đơn vị
             foreach ($model as $chitiet) {
+                $bangluong = tonghopluong_donvi_bangluong::where('mathdv', $chitiet->mathdv)->first();
+                $chitiet->luongcoban = $chitiet->luongcoban == 0 ? $bangluong->luongcoban : 0;
                 $chitiet->tennguonkp = isset($model_nguonkp[$chitiet->manguonkp]) ? $model_nguonkp[$chitiet->manguonkp] : '';
                 $chitiet->tencongtac = isset($model_ct[$chitiet->mact]) ? $model_ct[$chitiet->mact] : '';
                 /*
@@ -644,6 +671,18 @@ class tonghopluong_donviController extends Controller
                     $chitiet->tencongtac = isset($model_ct[$chitiet->mact]) ? $model_ct[$chitiet->mact] : '';
                 }
                 */
+                //Tính lại bảo hiểm
+
+                $chitiet->bhxh_dv = round($chitiet->stbhxh_dv / $chitiet->luongcoban, 5);
+                $chitiet->bhyt_dv = round($chitiet->stbhyt_dv / $chitiet->luongcoban, 5);
+                $chitiet->kpcd_dv = round($chitiet->stkpcd_dv / $chitiet->luongcoban, 5);
+                $chitiet->bhtn_dv = round($chitiet->stbhtn_dv / $chitiet->luongcoban, 5);
+
+                $chitiet->stbhxh_dv = $chitiet->bhxh_dv * $chitiet->luongcoban;
+                $chitiet->stbhyt_dv = $chitiet->bhyt_dv * $chitiet->luongcoban;
+                $chitiet->stkpcd_dv = $chitiet->kpcd_dv * $chitiet->luongcoban;
+                $chitiet->stbhtn_dv = $chitiet->bhtn_dv * $chitiet->luongcoban;
+                $chitiet->tongbh = $chitiet->stbhxh_dv + $chitiet->stbhyt_dv + $chitiet->stkpcd_dv + $chitiet->stbhtn_dv;
                 $chitiet->tongtl = $chitiet->luongtn;
                 $chitiet->tongbh = $chitiet->stbhxh_dv + $chitiet->stbhyt_dv + $chitiet->stkpcd_dv + $chitiet->stbhtn_dv;
                 /*
@@ -772,6 +811,7 @@ class tonghopluong_donviController extends Controller
     {
         if (Session::has('admin')) {
             // dd($mathdv);
+            
             //$model = tonghopluong_donvi_chitiet::where('mathdv', $mathdv)->get();
             $model = tonghopluong_donvi_bangluong::where('mathdv', $mathdv)->get();
             $model_thongtin = tonghopluong_donvi::where('mathdv', $mathdv)->first();
@@ -785,6 +825,7 @@ class tonghopluong_donviController extends Controller
             $col = 0;
             $m_pc = array_column(dmphucap_donvi::where('madv', $model_thongtin->madv)->get()->toarray(), 'report', 'mapc');
             foreach ($model as $chitiet) {
+                // dd($chitiet);
                 $chitiet->tennguonkp = isset($model_nguonkp[$chitiet->manguonkp]) ? $model_nguonkp[$chitiet->manguonkp] : '';
                 $chitiet->tenct = isset($model_ct[$chitiet->mact]) ? $model_ct[$chitiet->mact] : '';
                 $thanhtien = 0;
@@ -798,6 +839,21 @@ class tonghopluong_donviController extends Controller
                 } else {
                     $chitiet->tongtl = $chitiet->ttl;
                 }
+                if($chitiet->luongcoban > 0){
+
+                    $chitiet->bhxh_dv=$chitiet->stbhxh_dv/$chitiet->luongcoban;
+                    $chitiet->bhyt_dv=$chitiet->stbhyt_dv/$chitiet->luongcoban;
+                    $chitiet->kpcd_dv=$chitiet->stkpcd_dv/$chitiet->luongcoban;
+                    $chitiet->bhtn_dv=$chitiet->stbhtn_dv/$chitiet->luongcoban;
+                    
+                    $chitiet->stbhxh_dv=$chitiet->bhxh_dv * $chitiet->luongcoban;
+                    $chitiet->stbhyt_dv=$chitiet->bhyt_dv * $chitiet->luongcoban;
+                    $chitiet->stkpcd_dv=$chitiet->kpcd_dv * $chitiet->luongcoban;
+                    $chitiet->stbhtn_dv=$chitiet->bhtn_dv * $chitiet->luongcoban;
+                    $chitiet->ttbh_dv=$chitiet->stbhxh_dv + $chitiet->stbhyt_dv + $chitiet->stkpcd_dv + $chitiet->stbhtn_dv;
+                }
+                dd($chitiet);
+
             }
             //dd($model->toarray());
             // dd($model->take(3));

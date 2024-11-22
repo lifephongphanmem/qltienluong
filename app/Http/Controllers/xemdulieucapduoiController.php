@@ -322,15 +322,14 @@ class xemdulieucapduoiController extends Controller
                 // if (isset($nguon) && in_array($nguon->trangthai, ['DAGUI', 'TRALAI']) && session('admin')->phamvitonghop == 'HUYEN') {
                 if (session('admin')->phamvitonghop == 'HUYEN') {
                     // dd($nguonkhoi);
-                    if(!isset($nguon) && !isset($nguonkhoi))
-                    {
+                    if (!isset($nguon) && !isset($nguonkhoi)) {
                         $dv->trangthai = 'CHOGUI';
                         $dv->mathdv = null;
                         continue;
                     }
 
-                    if(!isset($nguon)){
-                        $nguon=$nguonkhoi;
+                    if (!isset($nguon)) {
+                        $nguon = $nguonkhoi;
                     }
                     $dv->mathdv = $nguon->mathdv;
                     $dv->mathh = $nguon->mathdv;
@@ -397,18 +396,24 @@ class xemdulieucapduoiController extends Controller
             $inputs = $request->all();
             $madvbc = $inputs['madiaban'];
             $model_dvbc = dmdonvibaocao::where('madvbc', $madvbc)->first();
+            // dd($model_dvbc);
             $madvqlkv = $model_dvbc->madvcq;
             $ngay = date("Y-m-t", strtotime($inputs['nam'] . '-' . $inputs['thang'] . '-01'));
-            $model_donvi = dmdonvi::select('madv', 'tendv')
-                ->wherein('madv', function ($query) use ($madvqlkv) {
-                    $query->select('madv')->from('dmdonvi')->where('macqcq', $madvqlkv)->where('madv', '<>', $madvqlkv)->get();
-                })->wherenotin('madv', function ($query) use ($ngay) {
-                    $query->select('madv')->from('dmdonvi')
+            $model_donvi = dmdonvi::select('madv', 'tendv', 'macqcq')
+                ->whereIn('madv', function ($query) use ($madvqlkv) {
+                    $query->from('dmdonvi')
+                        ->select('madv')
+                        ->where('macqcq', $madvqlkv)
+                        ->where('madv', '<>', $madvqlkv);
+                })
+                ->whereNotIn('madv', function ($query) use ($ngay) {
+                    $query->from('dmdonvi')
+                        ->select('madv')
                         ->where('ngaydung', '<=', $ngay)
-                        ->where('trangthai', 'TD')
-                        ->get();
-                })->get();
-            //dd($model_donvi);
+                        ->where('trangthai', 'TD');
+                })
+                ->get();
+            // dd($model_donvi);
             $a_trangthai = array('ALL' => '--Chọn trạng thái dữ liệu--', 'CHUAGUI' => 'Chưa gửi dữ liệu', 'DAGUI' => 'Đã gửi dữ liệu');
             $a_phanloai = array('DONVI' => 'Dữ liệu tổng hợp của đơn vị', 'CAPDUOI' => 'Dữ liệu tổng hợp của các đơn vị cấp dưới');
             //$list_donvi= dmdonvi::select('madv', 'tendv')->where('madvbc', $madvbc)->get();

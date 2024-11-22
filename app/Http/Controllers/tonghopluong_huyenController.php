@@ -345,7 +345,7 @@ class tonghopluong_huyenController extends Controller
             //     $query->select('mathdv')->from('tonghopluong_donvi')->where('madv', $madv)->where('mathh', $mathh)->orwhere('matht', $mathh)->get();
             // })->get();
             $model = tonghopluong_donvi_chitiet::where('mathdv', $mathdv)->get();
-            // dd($model);
+
             $a_bangluong = tonghopluong_donvi_bangluong::wherein('mathdv', function ($query) use ($mathh, $madv) {
                 $query->select('mathdv')->from('tonghopluong_donvi')->where('madv', $madv)->where('mathh', $mathh)->orwhere('matht', $mathh)->get();
             })->get();
@@ -353,6 +353,7 @@ class tonghopluong_huyenController extends Controller
             // $model_thongtin = tonghopluong_donvi::where('madv', $madv)->where('macqcq', session('admin')->madv)->where('thang', $input['thangbc'])->where('nam',$input['nambc'])->first();
             $model_thongtin = tonghopluong_donvi::where('mathdv', $mathdv)->first();
             $model_nguonkp = array_column(dmnguonkinhphi::all()->toArray(), 'tennguonkp', 'manguonkp');
+
             //$model_phanloaict = array_column(dmphanloaicongtac::all()->toArray(), 'tencongtac', 'macongtac');
             $model_ct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
             //$gnr = getGeneralConfigs();
@@ -369,6 +370,9 @@ class tonghopluong_huyenController extends Controller
                     $query->select('mathdv')->from('tonghopluong_donvi')->where('madv', $madv)->where('mathdv', $mathdv)->get();
                 })->distinct()->get()->toArray(), 'tenkhoipb', 'linhvuchoatdong');
             foreach ($model as $chitiet) {
+                //Lấy lương cơ bản để tính hệ số cho trường hợp biên chế để tránh lệch tiền khi lên tổng hợp
+                $bangluong=tonghopluong_donvi_bangluong::where('mathdv',$chitiet->mathdv)->first();
+                $chitiet->luongcoban=$chitiet->luongcoban==0?$bangluong->luongcoban:0;
                 $chitiet->tennguonkp = isset($model_nguonkp[$chitiet->manguonkp]) ? $model_nguonkp[$chitiet->manguonkp] : '';
                 $chitiet->tencongtac = isset($model_ct[$chitiet->mact]) ? $model_ct[$chitiet->mact] : '';
                 /*
@@ -379,7 +383,20 @@ class tonghopluong_huyenController extends Controller
                 }
                 */
                 $chitiet->tongtl = $chitiet->tonghs - $chitiet->giaml;
-                $chitiet->tongbh = $chitiet->stbhxh_dv + $chitiet->stbhyt_dv + $chitiet->stkpcd_dv + $chitiet->stbhtn_dv;
+
+                //Tính lại bảo hiểm
+
+                    $chitiet->bhxh_dv=round($chitiet->stbhxh_dv/$chitiet->luongcoban,5);
+                    $chitiet->bhyt_dv=round($chitiet->stbhyt_dv/$chitiet->luongcoban,5);
+                    $chitiet->kpcd_dv=round($chitiet->stkpcd_dv/$chitiet->luongcoban,5);
+                    $chitiet->bhtn_dv=round($chitiet->stbhtn_dv/$chitiet->luongcoban,5);
+
+                    $chitiet->stbhxh_dv=$chitiet->bhxh_dv * $chitiet->luongcoban;
+                    $chitiet->stbhyt_dv=$chitiet->bhyt_dv * $chitiet->luongcoban;
+                    $chitiet->stkpcd_dv=$chitiet->kpcd_dv * $chitiet->luongcoban;
+                    $chitiet->stbhtn_dv=$chitiet->bhtn_dv * $chitiet->luongcoban;
+                    $chitiet->tongbh=$chitiet->stbhxh_dv + $chitiet->stbhyt_dv + $chitiet->stkpcd_dv + $chitiet->stbhtn_dv;
+
                 $phucap = a_getelement_equal($a_bangluong, array('mact' => $chitiet->mact, 'manguonkp' => $chitiet->manguonkp));
                 foreach (getColTongHop() as $ct) {
                     $ma = 'hs' . $ct;
@@ -408,6 +425,7 @@ class tonghopluong_huyenController extends Controller
                     $col++;
                 }
             }
+            // dd($a_phucap_hs);
             $model_dulieu = $model->map(function ($data) {
                 return collect($data->toArray())
                     ->only(['macongtac', 'manguonkp', 'tennguonkp', 'tencongtac'])
@@ -425,6 +443,7 @@ class tonghopluong_huyenController extends Controller
                     ->all();
             });
             //dd($model->toarray());
+            // dd($model);
             if (isset($input['excelbc'])) {
                 Excel::create('solieuth', function ($excel) use ($model, $thongtin, $m_dv, $model_dulieu, $a_phucap_hs, $a_tonghop, $col, $a_phucap, $a_pl) {
                     $excel->sheet('New sheet', function ($sheet) use ($model, $thongtin, $m_dv, $model_dulieu, $a_phucap_hs, $a_tonghop, $col, $a_phucap, $a_pl) {

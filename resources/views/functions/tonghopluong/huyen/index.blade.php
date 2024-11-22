@@ -277,8 +277,8 @@
                         </div>
                     </div>
                 </div> --}}
-
-                <div class="row">
+                <!-- Bỏ tách ra thành 2 nhóm biên chế và hợp đồng 12112024 -->
+                {{-- <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
                             <a id="in_bl" href="" class="btn btn-default btn-xs mbs"
@@ -287,12 +287,12 @@
                                 <i class="fa fa-print"></i>&nbsp; In số liệu tổng hợp (mẫu 01)</a>
                         </div>
                     </div>
-                </div>
-                {{-- <div class="row">
+                </div> --}}
+                <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
                             <button id="in_bl"class="btn btn-default btn-xs mbs"
-                                onclick="insolieu(this,'/chuc_nang/tong_hop_luong/huyen/TongHop_CT','1506672780;1506673604;1637915601;1534990562')"
+                                onclick="insolieu(this,'/chuc_nang/tong_hop_luong/huyen/TongHop_CT','1506672780;1506673604;1637915601')"
                                 style="border-width: 0px;" data-target="#modal-insolieu" data-toggle="modal">
                                 <i class="fa fa-print"></i>&nbsp; In số liệu tổng hợp - biên chế</button>
                         </div>
@@ -308,9 +308,9 @@
                                 <i class="fa fa-print"></i>&nbsp; In số liệu tổng hợp - hợp đồng</button>
                         </div>
                     </div>
-                </div> --}}
+                </div>
 
-                <div class="row">
+                {{-- <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
                             <a id="in_bl" href="" class="btn btn-default btn-xs mbs"
@@ -319,7 +319,7 @@
                                 <i class="fa fa-print"></i>&nbsp; In số liệu tổng hợp (mẫu 02)</a>
                         </div>
                     </div>
-                </div>
+                </div> --}}
 
                 <div class="modal-footer">
                     <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
@@ -389,16 +389,16 @@
         function insolieu(obj, url, mact) {
             obj.href = url + '?thang=' + $('#thang_bc').val() + '&nam=' + $('#nam_bc').val() + '&macqcq=' + $('#macqcq_bc')
                 .val();
-            // if (mact == null) {
-            //     $('#frm_insolieu').find("[name^='mact']").attr('disabled', true);
-            // } else {
-            //     $('#frm_insolieu').find("[name^='mact']").attr('disabled', false);
-            //     $('#frm_insolieu').find("[name^='mact']").val(mact.split(';')).trigger('change');
-            // }
-            // $('#frm_insolieu').attr('action', url);
-            // $('#frm_insolieu').find("[name^='macqcq']").val($('#macqcq_bc').val());
-            // $('#frm_insolieu').find("[name^='nam']").val($('#nam_bc').val());
-            // $('#frm_insolieu').find("[name^='thang']").val($('#thang_bc').val());
+            if (mact == null) {
+                $('#frm_insolieu').find("[name^='mact']").attr('disabled', true);
+            } else {
+                $('#frm_insolieu').find("[name^='mact']").attr('disabled', false);
+                $('#frm_insolieu').find("[name^='mact']").val(mact.split(';')).trigger('change');
+            }
+            $('#frm_insolieu').attr('action', url);
+            $('#frm_insolieu').find("[name^='macqcq']").val($('#macqcq_bc').val());
+            $('#frm_insolieu').find("[name^='nam']").val($('#nam_bc').val());
+            $('#frm_insolieu').find("[name^='thang']").val($('#thang_bc').val());
         }
 
         function confirmTonghop(url) {
