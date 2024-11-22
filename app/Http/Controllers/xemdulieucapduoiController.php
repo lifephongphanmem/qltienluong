@@ -45,6 +45,7 @@ class xemdulieucapduoiController extends Controller
     }
     public function layDV($thang, $nam, $a_donvicapduoi, $model_donvitamdung)
     {
+        // dd($a_donvicapduoi);
         $model_donvi = $model_donvitamdung->where('ngaydung', '<=', $nam . '-' . $thang . '-01');
         //Lấy danh sách các đon vị tạo từ tháng
         return array_diff($a_donvicapduoi, array_column($model_donvi->toarray(), 'madv'));
@@ -190,8 +191,8 @@ class xemdulieucapduoiController extends Controller
     public function index_huyen(Request $request)
     {
         if (Session::has('admin')) {
-
             //$donvi=dmdonvi::where('madv',session('admin')->madv)->get();
+            // dd(session('admin'));
             $inputs = $request->all();
             $madv = session('admin')->madv;
             $madvbc = session('admin')->madvbc;
@@ -232,13 +233,13 @@ class xemdulieucapduoiController extends Controller
                     ->wherein('madv', getDonviHuyen($inputs['nam'], $madv, $inputs['thang'])['m_donvi'])->get();
 
                 $model_nguon = tonghopluong_donvi::wherein('madv', function ($query) use ($madv) {
-                    $query->select('madv')->from('dmdonvi')->where('macqcq', $madv)->where('madv', '<>', $madv)->get();
+                    $query->select('madv')->from('dmdonvi')->where('macqcq', $madv)->where('madv', '<>', $madv);
                 })->where('thang', $inputs['thang'])
                     ->where('nam', $inputs['nam'])
                     ->where('trangthai', 'DAGUI')
                     ->get();
                 $model_nguonkhoi = tonghopluong_khoi::wherein('madv', function ($query) use ($madv) {
-                    $query->select('madv')->from('dmdonvi')->where('macqcq', $madv)->where('madv', '<>', $madv)->get();
+                    $query->select('madv')->from('dmdonvi')->where('macqcq', $madv)->where('madv', '<>', $madv);
                 })->where('thang', $inputs['thang'])
                     ->where('nam', $inputs['nam'])
                     ->where('trangthai', 'DAGUI')
@@ -263,10 +264,10 @@ class xemdulieucapduoiController extends Controller
                 //     })
                 //     ->distinct()->get();
                 //Lấy đơn vị tạo theo tháng
-                // dd(getDonviHuyen($inputs['nam'], $madv,$inputs['thang']));
+
                 $model_donvitamdung = dmdonvi::where('trangthai', 'TD')->wherein('madv',  getDonviHuyen($inputs['nam'], $madv)['a_donvicapduoi'])->get();
                 $a_madv = $this->layDV($inputs['thang'], $inputs['nam'], getSLDonviHuyen($inputs['thang'], $inputs['nam'], $madv)['a_donvicapduoi'], $model_donvitamdung);
-
+                // dd($a_madv);
                 $model_donvi = dmdonvi::join('dmphanloaidonvi', 'dmphanloaidonvi.maphanloai', 'dmdonvi.maphanloai')
                     ->select('dmdonvi.madv', 'dmdonvi.tendv', 'phanloaitaikhoan', 'dmdonvi.maphanloai', 'tenphanloai', 'linhvuchoatdong')
                     ->wherein('madv', $a_madv)

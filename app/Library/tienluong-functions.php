@@ -1605,6 +1605,7 @@ function getDonviHuyen($nam, $madv, $chucnang = null)
         ->wherenotin('madv', $a_donvicapduoi) //lọc các đơn vị đã khai báo trong dsdonviquanly
         ->where('madv', '!=', $madv) //bỏ đơn vị tổng hợp
         ->get();
+        // dd($model_dmdv);
     // foreach($model_dmdv as $ct)
     // {
     //     if($ct->created_at != null){
@@ -1621,8 +1622,10 @@ function getDonviHuyen($nam, $madv, $chucnang = null)
     // }
     // dd(23);
     $a_donvicapduoi = array_unique(array_merge(array_column($model_dmdv->toarray(), 'madv'), $a_donvicapduoi));
+    // dd($a_donvicapduoi);
     //lấy lại madv ở dmdonvi de tranh truong hop có madv o dsdonviquanly nhưng không có ở dmdonvi
     $model_donvi = dmdonvi::select('madv')->wherein('madv', $a_donvicapduoi)->get();
+    
     $a_donvicapduoi = array_column($model_donvi->toarray(), 'madv');
     //  dd($a_donvicapduoi);
     if ($chucnang == 'DUTOAN') {
@@ -1635,8 +1638,9 @@ function getDonviHuyen($nam, $madv, $chucnang = null)
     } else {
         $model_donvitamdung = dmdonvi::where('trangthai', 'TD')->wherein('madv', $a_donvicapduoi)->get();
     }
-
+    // dd($model_donvitamdung);
     $m_donvi = array_diff($a_donvicapduoi, array_column($model_donvitamdung->toarray(), 'madv'));
+    // dd($m_donvi);
     $array = [
         'm_donvi' => $m_donvi,
         'model_donvitamdung' => array_column($model_donvitamdung->toarray(), 'madv'),
@@ -1653,11 +1657,15 @@ function getSLDonviHuyen($thang,$nam, $madv, $chucnang = null)
     //đơn vị nam=nam && macqcq=madv
     $model_dsql = dsdonviquanly::where('nam', $nam)->where('macqcq', $madv)->get();
     $a_donvicapduoi = array_unique(array_column($model_dsql->toarray(), 'madv'));
-
+    // dd($a_donvicapduoi);
     $model_dmdv = dmdonvi::where('macqcq', $madv)
         ->wherenotin('madv', $a_donvicapduoi) //lọc các đơn vị đã khai báo trong dsdonviquanly
         ->where('madv', '!=', $madv) //bỏ đơn vị tổng hợp
-        ->where('ngaytao','<=',$ngay)
+        // ->where('ngaytao','<=',$ngay)
+        ->where(function($q) use ($ngay) {
+            $q->where('ngaytao','<=',$ngay)
+                ->orwherenull('ngaytao');
+        })
         ->get();
         // dd($model_dmdv);
     $a_donvicapduoi = array_unique(array_merge(array_column($model_dmdv->toarray(), 'madv'), $a_donvicapduoi));
