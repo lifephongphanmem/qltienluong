@@ -60,7 +60,7 @@ class dmdonviController extends Controller
             foreach ($a_lv as $lv) {
                 $model->lvhd .= isset($linhvuchoatdong[$lv]) ? ($linhvuchoatdong[$lv] . ';') : '';
             }
-
+            dd($model);
             return view('system.general.local.index')
                 ->with('model', $model)
                 ->with('url', '/he_thong/don_vi/')
