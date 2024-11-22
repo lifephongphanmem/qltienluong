@@ -318,7 +318,7 @@ class UsersController extends Controller
                  $m_donvi=dmdonvi::all();
                  foreach($m_donvi as $ct){
                     $m_bangluong=bangluong::where('madv',$ct->madv)->orderby('nam')->orderby('thang')->first();
-                    if(isset($m_bangluong) && $ct->ngaytao != null){
+                    if(isset($m_bangluong) && $ct->ngaytao == null){
                         $ngay = date("Y-m-d", strtotime($m_bangluong->nam . '-' . $m_bangluong->thang . '-01'));
                         $ct->ngaytao=$ngay;
                         $ct->save();
