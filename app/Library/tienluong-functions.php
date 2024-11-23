@@ -1620,7 +1620,6 @@ function getDonviHuyen($nam, $madv, $chucnang = null)
     //     }
 
     // }
-    // dd(23);
     $a_donvicapduoi = array_unique(array_merge(array_column($model_dmdv->toarray(), 'madv'), $a_donvicapduoi));
     // dd($a_donvicapduoi);
     //lấy lại madv ở dmdonvi de tranh truong hop có madv o dsdonviquanly nhưng không có ở dmdonvi

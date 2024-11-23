@@ -23,12 +23,12 @@ class quanlydonviController extends Controller
             $madv = session('admin')->madv;
             if(session('admin')->phamvitonghop == 'KHOI')
             {
-                $model_donvi = dmdonvi::select('dmdonvi.madv', 'dmdonvi.tendv','phanloaitaikhoan','trangthai','ngaydung','ngaytao')
+                $model_donvi = dmdonvi::select('dmdonvi.madv', 'dmdonvi.tendv','phanloaitaikhoan','trangthai','ngaydung','ngaytao','ghichu')
                     ->where('macqcq',$madv)->where('madv','<>',$madv)->distinct()->get();
             }
             if(session('admin')->phamvitonghop == 'HUYEN')
             {
-                $model_donvi = dmdonvi::select('dmdonvi.madv', 'dmdonvi.tendv','phanloaitaikhoan','trangthai','ngaydung','ngaytao')
+                $model_donvi = dmdonvi::select('dmdonvi.madv', 'dmdonvi.tendv','phanloaitaikhoan','trangthai','ngaydung','ngaytao','ghichu')
                     ->where('macqcq',$madv)->where('madv','<>',$madv)->distinct()->get();
             }
             return view('manage.taikhoan.index_quanly')
@@ -116,6 +116,7 @@ class quanlydonviController extends Controller
             if($inputs['ngaydung'] != ''){
                 $model->ngaydung = $inputs['ngaydung'];
                 $model->trangthai = 'TD';
+                $model->ghichu = $inputs['ghichu'];
                 $modeluser = Users::where('madv',$inputs['madvstop'])->first();
                 $modeluser->status = 'notactive';
                 $modeluser->save();
@@ -134,6 +135,7 @@ class quanlydonviController extends Controller
             $model = dmdonvi::where('madv', $inputs['madvactive'])->first();
             $model->ngaydung = null;
             $model->trangthai = 'HD';
+            $model->ghichu = $inputs['ghichu'];
             $model->save();
             $modeluser = Users::where('madv',$inputs['madvactive'])->first();
             $modeluser->status = 'active';

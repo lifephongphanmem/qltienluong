@@ -264,7 +264,6 @@ class xemdulieucapduoiController extends Controller
                 //     })
                 //     ->distinct()->get();
                 //Lấy đơn vị tạo theo tháng
-
                 $model_donvitamdung = dmdonvi::where('trangthai', 'TD')->wherein('madv',  getDonviHuyen($inputs['nam'], $madv)['a_donvicapduoi'])->get();
                 $a_madv = $this->layDV($inputs['thang'], $inputs['nam'], getSLDonviHuyen($inputs['thang'], $inputs['nam'], $madv)['a_donvicapduoi'], $model_donvitamdung);
                 // dd($a_madv);
