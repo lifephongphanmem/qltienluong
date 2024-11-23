@@ -154,6 +154,7 @@ class tonghopluong_donviController extends Controller
             //$a_hs = array_column(hosocanbo::where('madv',session('admin')->madv)->where('theodoi','<','9')->get()->toArray(), 'tencanbo', 'macanbo');
 
             //lấy bảng lương
+            // dd(session('admin'));
             if (isset($inputs['tonghop']) && $inputs['tonghop'] == 'TONGHOP') {
                 $a_bangluong = bangluong::where('nam', $nam)->where('thang', $thang)
                     ->where('madv', $madv)->wherein('phanloai', ['BANGLUONG', 'TRUYLINH', 'TRUC'])->get()->keyby('mabl')->toarray();
@@ -852,7 +853,7 @@ class tonghopluong_donviController extends Controller
                     $chitiet->stbhtn_dv=$chitiet->bhtn_dv * $chitiet->luongcoban;
                     $chitiet->ttbh_dv=$chitiet->stbhxh_dv + $chitiet->stbhyt_dv + $chitiet->stkpcd_dv + $chitiet->stbhtn_dv;
                 }
-                dd($chitiet);
+                // dd($chitiet);
 
             }
             //dd($model->toarray());
