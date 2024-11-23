@@ -249,7 +249,6 @@ class UsersController extends Controller
                     dmphanloaicongtac_baohiem::insert($model_dm->toarray());
                 }
                 //phụ cấp
-
                 $model_phucap = dmphucap_donvi::where('madv', $ttuser->madv)->get();
                 if (count($model_phucap) == 0) {
                     $model_dmpc = dmphucap::select(

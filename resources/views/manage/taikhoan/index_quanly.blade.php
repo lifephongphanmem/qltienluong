@@ -52,6 +52,7 @@
                             <th class="text-center" style="width: 5%">STT</th>
                             <th class="text-center">Tên đơn vị</th>
                             <th class="text-center">Ngày tháng dừng HĐ</th>
+                            <th class="text-center">Ghi chú</th>
                             <th class="text-center">Thao tác</th>
                         </tr>
                         </thead>
@@ -63,6 +64,7 @@
                                     <td class="text-center">{{$i++}}</td>
                                     <td>{{$value->tendv}}</td>
                                     <td>{{$value->ngaydung}}</td>
+                                    <td>{{$value->ghichu}}</td>
                                     <td>
                                         @if($value->trangthai != 'TD')
                                             <button type="button" class="btn btn-default btn-sm"  onclick="confirmStop('{{$value['madv']}}','{{$value['ngaytao']}}')" data-target="#chuyen-stop" data-toggle="modal"><i class="fa icon-share-alt"></i>&nbsp;
@@ -74,6 +76,7 @@
                                                 Hoạt động</button>
                                         @endif
                                     </td>
+
                                 </tr>
                             @endforeach
                         @endif
@@ -102,6 +105,10 @@
                     <div class="form-group">
                         <label><b>Ngày dừng hoạt động</b></label>
                         <input type="date" name="ngaydung" id="ngaydung" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label><b>Ghi chú</b></label>
+                        <textarea name="ghichu" id="ghichu" cols="10" rows="5" class="form-control"></textarea>
                     </div>
                 </div>
                 <input type="hidden" name="madvstop" id="madvstop">
@@ -132,6 +139,10 @@
                     <div class="form-group">
                         <label><b>Ngày hoạt động</b></label>
                         <input type="date" name="ngaydung" id="ngaydung" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label><b>Ghi chú</b></label>
+                        <textarea name="ghichu" id="ghichu" cols="10" rows="5" class="form-control"></textarea>
                     </div>
                 </div>
                 <input type="hidden" name="madvactive" id="madvactive">
