@@ -282,7 +282,8 @@ class xemdulieucapduoiController extends Controller
                 // dd($model_nguon);
                 */
                 $model_nguon = tonghopluong_donvi::wherein('madv', function ($query) use ($madv) {
-                    $query->select('madv')->from('dmdonvi')->where('macqcq', $madv)->where('madv', '<>', $madv)->get();
+                    // $query->select('madv')->from('dmdonvi')->where('macqcq', $madv)->where('madv', '<>', $madv)->get();
+                    $query->select('madv')->from('dmdonvi')->where('macqcq', $madv)->where('madv', '<>', $madv);
                 })->where('thang', $inputs['thang'])
                     ->where('nam', $inputs['nam'])
                     ->where('trangthai', 'DAGUI')

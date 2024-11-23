@@ -295,36 +295,36 @@ class UsersController extends Controller
             } else {
 
                 //lấy danh sách donviquanly theo dự toán
-                // $model = dmdonvi::wherein('madv', function ($qr) {
-                //     $qr->select('madv')->from('dutoanluong')->where('namns', '2024');
-                // })->wherenotin('madv', function ($qr) {
-                //     $qr->select('madv')->from('dsdonviquanly')->where('nam', '2024');
-                // })->get();
-                // $a_dvql = array_column(dsdonviquanly::where('nam', '2024')->get()->toarray(), 'madv');
-                // $a_kq = [];
-                // foreach ($model as $donvi) {
-                //     if (in_array($donvi->madv, $a_dvql))
-                //         continue;
-                //     $a_kq[] = [
-                //         'nam' => '2024',
-                //         'madv' => $donvi->madv,
-                //         'macqcq' => $donvi->macqcq,
-                //     ];
-                // }
+                $model = dmdonvi::wherein('madv', function ($qr) {
+                    $qr->select('madv')->from('dutoanluong')->where('namns', '2024');
+                })->wherenotin('madv', function ($qr) {
+                    $qr->select('madv')->from('dsdonviquanly')->where('nam', '2024');
+                })->get();
+                $a_dvql = array_column(dsdonviquanly::where('nam', '2024')->get()->toarray(), 'madv');
+                $a_kq = [];
+                foreach ($model as $donvi) {
+                    if (in_array($donvi->madv, $a_dvql))
+                        continue;
+                    $a_kq[] = [
+                        'nam' => '2024',
+                        'madv' => $donvi->madv,
+                        'macqcq' => $donvi->macqcq,
+                    ];
+                }
 
-                // dsdonviquanly::insert($a_kq);
+                dsdonviquanly::insert($a_kq);
                 //dd($a_kq);
                 //chạy 1 lần rồi xóa: cập nhật thời gian tạo đơn vị
-                 $m_donvi=dmdonvi::all();
-                 foreach($m_donvi as $ct){
-                    $m_bangluong=bangluong::where('madv',$ct->madv)->orderby('nam')->orderby('thang')->first();
-                    if(isset($m_bangluong) && $ct->ngaytao == null){
-                        $ngay = date("Y-m-d", strtotime($m_bangluong->nam . '-' . $m_bangluong->thang . '-01'));
-                        $ct->ngaytao=$ngay;
-                        $ct->save();
-                    }
+                //  $m_donvi=dmdonvi::all();
+                //  foreach($m_donvi as $ct){
+                //     $m_bangluong=bangluong::where('madv',$ct->madv)->orderby('nam')->orderby('thang')->first();
+                //     if(isset($m_bangluong) && $ct->ngaytao == null){
+                //         $ngay = date("Y-m-d", strtotime($m_bangluong->nam . '-' . $m_bangluong->thang . '-01'));
+                //         $ct->ngaytao=$ngay;
+                //         $ct->save();
+                //     }
 
-                 }
+                //  }
 
                 //Thau đổi hệ số tỉ lệ đóng bảo hiểm của nhóm cán bộ chưa tuyển: chạy 1 lần rồi xóa
                 // $a_baohiem = [
