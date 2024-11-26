@@ -280,10 +280,14 @@ class tonghopluong_huyen_baocaoController extends Controller
                 $chitiet->ttl = 0; //do trong bảng tonghopluong_donvi_chitiet khong có ttl
 
                 //Quy ra hệ số bảo hiểm do biên chế cần hiển thị bằng hệ số
-                $chitiet->bhxh_dv=round($chitiet->stbhxh_dv/($m_phanloaicongtac->bhxh_dv/100 * $chitiet->luongcoban),5);
-                $chitiet->bhyt_dv=round($chitiet->stbhyt_dv/($m_phanloaicongtac->bhyt_dv/100 * $chitiet->luongcoban),5);
-                $chitiet->bhtn_dv=round($chitiet->stbhtn_dv/($m_phanloaicongtac->bhtn_dv/100 * $chitiet->luongcoban),5);
-                $chitiet->kpcd_dv=round($chitiet->stkpcd_dv/($m_phanloaicongtac->kpcd_dv/100 * $chitiet->luongcoban),5);
+                // $chitiet->bhxh_dv=round($chitiet->stbhxh_dv/($m_phanloaicongtac->bhxh_dv/100 * $chitiet->luongcoban),5);
+                // $chitiet->bhyt_dv=round($chitiet->stbhyt_dv/($m_phanloaicongtac->bhyt_dv/100 * $chitiet->luongcoban),5);
+                // $chitiet->bhtn_dv=round($chitiet->stbhtn_dv/($m_phanloaicongtac->bhtn_dv/100 * $chitiet->luongcoban),5);
+                // $chitiet->kpcd_dv=round($chitiet->stkpcd_dv/($m_phanloaicongtac->kpcd_dv/100 * $chitiet->luongcoban),5);
+                $chitiet->bhxh_dv=round($chitiet->stbhxh_dv/$chitiet->luongcoban,5);
+                $chitiet->bhyt_dv=round($chitiet->stbhyt_dv/$chitiet->luongcoban,5);
+                $chitiet->kpcd_dv=round($chitiet->stkpcd_dv/$chitiet->luongcoban,5);
+                $chitiet->bhtn_dv=round($chitiet->stbhtn_dv/$chitiet->luongcoban,5);
                 // $chitiet->bhtn_dv = round($chitiet->stbhtn_dv / $chitiet->luongcoban,5);
                 // dd($chitiet);
                 if (!empty(array_intersect($inputs['mact'], ['1689729806', '1506673585']))) {
@@ -298,10 +302,14 @@ class tonghopluong_huyen_baocaoController extends Controller
                     $chitiet->ttl = $chitiet->luongtn;
                     // $chitiet->quyluong = $chitiet->ttl + $chitiet->ttbh_dv;
                     //Từ tiền quy ra hệ số rồi nhân lại để khớp với đơn vị
-                        $chitiet->stbhtn_dv = $chitiet->bhtn_dv * $m_phanloaicongtac->bhtn_dv/100 * $chitiet->luongcoban;
-                        $chitiet->stbhxh_dv = $chitiet->bhxh_dv * $m_phanloaicongtac->bhxh_dv/100 * $chitiet->luongcoban;
-                        $chitiet->stbhyt_dv = $chitiet->bhyt_dv * $m_phanloaicongtac->bhyt_dv/100 * $chitiet->luongcoban;
-                        $chitiet->stkpcd_dv = $chitiet->kpcd_dv * $m_phanloaicongtac->kpcd_dv/100 * $chitiet->luongcoban;
+                        // $chitiet->stbhtn_dv = $chitiet->bhtn_dv * $m_phanloaicongtac->bhtn_dv/100 * $chitiet->luongcoban;
+                        // $chitiet->stbhxh_dv = $chitiet->bhxh_dv * $m_phanloaicongtac->bhxh_dv/100 * $chitiet->luongcoban;
+                        // $chitiet->stbhyt_dv = $chitiet->bhyt_dv * $m_phanloaicongtac->bhyt_dv/100 * $chitiet->luongcoban;
+                        // $chitiet->stkpcd_dv = $chitiet->kpcd_dv * $m_phanloaicongtac->kpcd_dv/100 * $chitiet->luongcoban;
+                        $chitiet->stbhxh_dv=$chitiet->bhxh_dv * $chitiet->luongcoban;
+                        $chitiet->stbhyt_dv=$chitiet->bhyt_dv * $chitiet->luongcoban;
+                        $chitiet->stkpcd_dv=$chitiet->kpcd_dv * $chitiet->luongcoban;
+                        $chitiet->stbhtn_dv=$chitiet->bhtn_dv * $chitiet->luongcoban;
                         $chitiet->ttbh_dv =$chitiet->stbhtn_dv + $chitiet->stbhxh_dv + $chitiet->stbhyt_dv + $chitiet->stkpcd_dv;
                         $chitiet->baohiem = $chitiet->stbhxh_dv +  $chitiet->stbhyt_dv + $chitiet->stkpcd_dv;
                         $chitiet->quyluong = $chitiet->ttl + $chitiet->ttbh_dv;
@@ -314,10 +322,14 @@ class tonghopluong_huyen_baocaoController extends Controller
                         }
                     }
                     $chitiet->tongphucap = $chitiet->tonghs - $chitiet->heso;
-                    $chitiet->stbhtn_dv = $chitiet->bhtn_dv * $m_phanloaicongtac->bhtn_dv/100 * $chitiet->luongcoban;
-                    $chitiet->stbhxh_dv = $chitiet->bhxh_dv * $m_phanloaicongtac->bhxh_dv/100 * $chitiet->luongcoban;
-                    $chitiet->stbhyt_dv = $chitiet->bhyt_dv * $m_phanloaicongtac->bhyt_dv/100 * $chitiet->luongcoban;
-                    $chitiet->stkpcd_dv = $chitiet->kpcd_dv * $m_phanloaicongtac->kpcd_dv/100 * $chitiet->luongcoban;
+                    // $chitiet->stbhtn_dv = $chitiet->bhtn_dv * $m_phanloaicongtac->bhtn_dv/100 * $chitiet->luongcoban;
+                    // $chitiet->stbhxh_dv = $chitiet->bhxh_dv * $m_phanloaicongtac->bhxh_dv/100 * $chitiet->luongcoban;
+                    // $chitiet->stbhyt_dv = $chitiet->bhyt_dv * $m_phanloaicongtac->bhyt_dv/100 * $chitiet->luongcoban;
+                    // $chitiet->stkpcd_dv = $chitiet->kpcd_dv * $m_phanloaicongtac->kpcd_dv/100 * $chitiet->luongcoban;
+                    $chitiet->stbhxh_dv=$chitiet->bhxh_dv * $chitiet->luongcoban;
+                    $chitiet->stbhyt_dv=$chitiet->bhyt_dv * $chitiet->luongcoban;
+                    $chitiet->stkpcd_dv=$chitiet->kpcd_dv * $chitiet->luongcoban;
+                    $chitiet->stbhtn_dv=$chitiet->bhtn_dv * $chitiet->luongcoban;
                     $chitiet->ttbh_dv =$chitiet->stbhtn_dv + $chitiet->stbhxh_dv + $chitiet->stbhyt_dv + $chitiet->stkpcd_dv;
                     $chitiet->baohiem = $chitiet->bhxh_dv +  $chitiet->bhyt_dv + $chitiet->kpcd_dv;
                     $chitiet->tongcong = round($chitiet->tonghs + $chitiet->baohiem + $chitiet->bhtn_dv, 5);
@@ -325,7 +337,8 @@ class tonghopluong_huyen_baocaoController extends Controller
                     //Không thể cộng hệ số bảo hiểm đơn vị vào hệ số lương để tính tổng được
 
 
-                    $chitiet->quyluong = $chitiet->tonghs * $chitiet->luongcoban + $chitiet->ttbh_dv;
+                    // $chitiet->quyluong = $chitiet->tonghs * $chitiet->luongcoban + $chitiet->ttbh_dv;
+                    $chitiet->quyluong = $chitiet->tongcong * $chitiet->luongcoban;
                 }
                 $this->getMaNhomPhanLoai($chitiet, $m_phanloai);
                 //Tính số lượng biên chế có mặt
@@ -338,7 +351,7 @@ class tonghopluong_huyen_baocaoController extends Controller
                 }
             }
             // dd($model->take(10));
-            dd($model);
+            // dd($model);
             $model_h = new Collection();
             foreach ($model as $val) {
                 $m_donvi_nkp = $model->where('madv', $val->madv)->where('mact', $val->mact)->where('mathdv', $val->mathdv);

@@ -286,10 +286,10 @@ class xemdulieu_nguonController extends Controller
                     ->where('macqcq', $madvqlkv)
                     ->where('madv', '<>', $madvqlkv);
             })
-            ->whereNotIn('madv', function ($query) use ($madvqlkv) {
+            ->whereNotIn('madv', function ($query) use ($nam) {
                 $query->from('dmdonvi')
                     ->select('madv')
-                    ->where('ngaydung', '<=', $madvqlkv)
+                    ->whereRaw('YEAR(ngaydung) <= ?', [$nam])
                     ->where('trangthai', 'TD');
             })
             ->get();

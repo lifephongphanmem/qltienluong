@@ -181,6 +181,7 @@ class xemdulieu_dutoanController extends Controller
             $m_dvbc = dmdonvibaocao::where('level', 'H')->orderby('sapxep')->get();
             $inputs['madvbc'] = $inputs['madvbc'] ?? $m_dvbc->first()->madvbc;
             // dd($inputs['madvbc']);
+            // dd($inputs);
             $m_dutoan_huyen = dutoanluong_huyen::where('madvbc', $inputs['madvbc'])
                 ->where('namns', $inputs['namns'])
                 ->where('trangthai', 'DAGUI')->first();
@@ -221,9 +222,9 @@ class xemdulieu_dutoanController extends Controller
                 $dv->namns = $nam;
             }
 
-            // if (!isset($inputs['trangthai']) || $inputs['trangthai'] != 'ALL') {
-            //     $model_donvi = $model_donvi->where('trangthai', $inputs['trangthai']);
-            // }
+            if (!isset($inputs['trangthai']) || $inputs['trangthai'] != 'ALL') {
+                $model_donvi = $model_donvi->where('trangthai', $inputs['trangthai']);
+            }
             if (!isset($inputs['phanloai']) || $inputs['phanloai'] != 'ALL') {
                 $model_donvi = $model_donvi->where('maphanloai', $inputs['phanloai']);
             }

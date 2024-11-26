@@ -230,7 +230,8 @@ class xemdulieucapduoiController extends Controller
                 //     ->distinct()->get();
                 $model_donvi = dmdonvi::join('dmphanloaidonvi', 'dmphanloaidonvi.maphanloai', 'dmdonvi.maphanloai')
                     ->select('dmdonvi.madv', 'dmdonvi.tendv', 'phanloaitaikhoan', 'dmdonvi.maphanloai', 'tenphanloai')
-                    ->wherein('madv', getDonviHuyen($inputs['nam'], $madv, $inputs['thang'])['m_donvi'])->get();
+                    ->wherein('madv', getDonviHuyen($inputs['nam'], $madv, $inputs['thang'])['m_donvi'])
+                    ->get();
 
                 $model_nguon = tonghopluong_donvi::wherein('madv', function ($query) use ($madv) {
                     $query->select('madv')->from('dmdonvi')->where('macqcq', $madv)->where('madv', '<>', $madv);
@@ -352,6 +353,7 @@ class xemdulieucapduoiController extends Controller
                     $dv->mathdv = null;
                 }
             }
+            // dd($model_donvi);
             // dd($model_donvi->where('trangthai','TRALAI'));
             //dd($model_donvi->toarray());
             if (!isset($inputs['trangthai']) || $inputs['trangthai'] != 'ALL') {
@@ -361,7 +363,7 @@ class xemdulieucapduoiController extends Controller
             if (!isset($inputs['phanloai']) || $inputs['phanloai'] != 'ALL') {
                 $model_donvi = $model_donvi->where('maphanloai', $inputs['phanloai']);
             }
-            // dd($model_donvi->where('trangthai','!=','DAGUI'));
+
             return view('functions.viewdata.index_huyen')
                 ->with('model', $model_donvi)
                 ->with('thang', $inputs['thang'])
@@ -424,25 +426,50 @@ class xemdulieucapduoiController extends Controller
                 ->where('trangthai', 'DAGUI')
                 ->where('macqcq', $madvqlkv)
                 ->get();
-
+            //Trường hợp có khối gửi lên huyện, thì tài khoản tổng hợp khối không tạo dữ liệu ở bảng tonghopluong_donvi -> phải lấy thêm ở bảng tonghopluong_khoi
+            $model_dulieukhoi = tonghopluong_khoi::where('thang', $inputs['thang'])
+                ->where('nam', $inputs['nam'])
+                ->where('trangthai', 'DAGUI')
+                ->where('macqcq', $madvqlkv)
+                ->get();
+                // dd($model_dulieukhoi);
             foreach ($model_donvi as $dv) {
                 $dv->trangthai = 'CHUAGUI';
-                $dulieu = $model_dulieu->where('madv', $dv->madv)->first();
-
-                if (isset($dulieu)) {
-                    $dv->phanloai = $dulieu->phanloai;
-                    $dv->trangthai = $dulieu->trangthai;
-                    $dv->mathdv = $dulieu->mathdv;
-                    $dv->thang = $dulieu->thang;
-                    $dv->nam = $dulieu->nam;
-                } else {
-                    $dv->mathdv = NULL;
+                $model_nguon_tinh = tonghopluong_tinh::where('madv', $dv->macqcq)->where('thang', $inputs['thang'])
+                    ->where('nam', $inputs['nam'])->first();
+                if(!isset($model_nguon_tinh)){
+                    $dv->mathdv = null;
+                    continue;
                 }
+                $dulieu = $model_dulieu->where('madv', $dv->madv)->first();
+                $dulieukhoi=$model_dulieukhoi->where('madv',$dv->madv)->first();
+                if (!isset($dulieu) && !isset($dulieukhoi)) {
+                    $dv->trangthai = 'CHUAGUI';
+                    $dv->mathdv = null;
+                    continue;
+                }
+                if (!isset($dulieu)) {
+                    $dulieu = $dulieukhoi;
+                }
+                $dv->mathdv = $dulieu->mathdv;
+                $dv->mathh = $dulieu->mathdv;
+                $dv->trangthai = $dulieu->trangthai;
+                $dv->thang = $dulieu->thang;
+                $dv->nam = $dulieu->nam;
+                // if (isset($dulieu)) {
+                //     $dv->phanloai = $dulieu->phanloai;
+                //     $dv->trangthai = $dulieu->trangthai;
+                //     $dv->mathdv = $dulieu->mathdv;
+                //     $dv->thang = $dulieu->thang;
+                //     $dv->nam = $dulieu->nam;
+                // } else {
+                //     $dv->mathdv = NULL;
+                // }
                 $dv->tenphanloai = isset($a_phanloai[$dv->phanloai]) ? $a_phanloai[$dv->phanloai] : '';
             }
 
             //$model_donvi = $model_donvi->sortby('madv');
-            $soluong = $model_dulieu->count('madv') . '/' . $model_donvi->count('madv');
+            $soluong = $model_dulieu->count('madv') + $model_dulieukhoi->count('madv') . '/' . $model_donvi->count('madv');
             if (!isset($inputs['trangthai']) || $inputs['trangthai'] != 'ALL') {
                 $model_donvi = $model_donvi->where('trangthai', $inputs['trangthai']);
             }
