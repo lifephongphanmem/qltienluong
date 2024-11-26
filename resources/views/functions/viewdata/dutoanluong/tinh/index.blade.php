@@ -71,8 +71,18 @@
                                         'class' => 'form-control',
                                     ]) !!}
                                 </div>
-                            </div>                            
+                            </div> 
+                            <div class="col-md-6">
+                                <label class="control-label col-md-3" style="text-align: right">Trạng thái </label>
+                                <div class="col-md-8">
+                                    {!! Form::select('trangthai', $a_trangthai, $inputs['trangthai'], [
+                                        'id' => 'trangthai',
+                                        'class' => 'form-control',
+                                    ]) !!}
+                                </div>
+                            </div>                           
                         </div>
+
                     </div>
 
                     <table id="sample_3" class="table table-hover table-striped table-bordered" style="min-height: 230px">

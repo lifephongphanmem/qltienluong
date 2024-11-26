@@ -842,10 +842,14 @@ class tonghopluong_donviController extends Controller
                 }
                 if($chitiet->luongcoban > 0){
 
-                    $chitiet->bhxh_dv=$chitiet->stbhxh_dv/$chitiet->luongcoban;
-                    $chitiet->bhyt_dv=$chitiet->stbhyt_dv/$chitiet->luongcoban;
-                    $chitiet->kpcd_dv=$chitiet->stkpcd_dv/$chitiet->luongcoban;
-                    $chitiet->bhtn_dv=$chitiet->stbhtn_dv/$chitiet->luongcoban;
+                    // $chitiet->bhxh_dv=$chitiet->stbhxh_dv/$chitiet->luongcoban;
+                    // $chitiet->bhyt_dv=$chitiet->stbhyt_dv/$chitiet->luongcoban;
+                    // $chitiet->kpcd_dv=$chitiet->stkpcd_dv/$chitiet->luongcoban;
+                    // $chitiet->bhtn_dv=$chitiet->stbhtn_dv/$chitiet->luongcoban;
+                    $chitiet->bhxh_dv=round($chitiet->stbhxh_dv/$chitiet->luongcoban,5);
+                    $chitiet->bhyt_dv=round($chitiet->stbhyt_dv/$chitiet->luongcoban,5);
+                    $chitiet->kpcd_dv=round($chitiet->stkpcd_dv/$chitiet->luongcoban,5);
+                    $chitiet->bhtn_dv=round($chitiet->stbhtn_dv/$chitiet->luongcoban,5);
                     
                     $chitiet->stbhxh_dv=$chitiet->bhxh_dv * $chitiet->luongcoban;
                     $chitiet->stbhyt_dv=$chitiet->bhyt_dv * $chitiet->luongcoban;

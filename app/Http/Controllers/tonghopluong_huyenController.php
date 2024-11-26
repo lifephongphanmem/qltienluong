@@ -234,6 +234,10 @@ class tonghopluong_huyenController extends Controller
                     ->where('trangthai', 'DAGUI')
                     // ->wherein('trangthai', ['DAGUI', 'TRALAI'])
                     ->get();
+                    $model_nguonkhoi = tonghopluong_khoi::wherein('madv', getDonviHuyen($nam, $madv)['a_donvicapduoi'])
+                    ->where('nam', $inputs['nam'])
+                    ->wherein('trangthai', ['DAGUI', 'TRALAI'])
+                    ->get();
             if (session('admin')->phamvitonghop == 'KHOI') {
                 $model_nguon = tonghopluong_donvi::wherein('madv', getDonviHuyen($nam, $madv)['a_donvicapduoi'])
                     ->where('nam', $inputs['nam'])
@@ -253,11 +257,12 @@ class tonghopluong_huyenController extends Controller
                 $tonghop = $model_tonghop->where('thang', $a_data[$i]['thang'])->first();
                 if (session('admin')->phamvitonghop == 'HUYEN')
                     $dulieu = $model_nguon->where('thang', $a_data[$i]['thang']);
+                    $dulieukhoi = $model_nguonkhoi->where('thang', $a_data[$i]['thang']);
                 if (session('admin')->phamvitonghop == 'KHOI') {
                     $dulieu = $model_nguon->where('thang', $a_data[$i]['thang']);
                     $dulieukhoi = $model_nguonkhoi->where('thang', $a_data[$i]['thang']);
                 }
-                // dd($dulieu);
+
                 //Kiểm tra xem đơn vị đã tổng hợp dữ liệu khối chưa
                 if (isset($tonghop)) { //lấy dữ liệu đã tổng hợp đưa ra kết quản
                     $a_data[$i]['noidung'] = $tonghop->noidung;
@@ -272,19 +277,32 @@ class tonghopluong_huyenController extends Controller
                     $a_data[$i]['noidung'] = 'Dữ liệu tổng hợp trên địa bàn ' . $tendb . ' tháng ' . $a_data[$i]['thang'] . ' năm ' . $inputs['nam'];
                     $a_data[$i]['mathdv'] = null;
                     $a_data[$i]['madvbc'] = $madvbc;
-
+                    $sldv_gui=count($dulieu) + count($dulieukhoi);
                     //Kiểm tra xem đơn vị cấp dưới đã gửi dữ liệu khối chưa
-                    if (count($dulieu) == 0) { //chưa gửi
+                    // if (count($dulieu) == 0) { //chưa gửi
+                    //     $a_data[$i]['trangthai'] = 'CHUADL';
+
+                    //     //} elseif (count($dulieu) == $sldv) {
+                    // } elseif (count($dulieu) == $a_data[$i]['sldv']) {
+                    //     //kiểm tra xem có bao nhiêu đơn vị gửi / tổng số các đơn vị
+                    //     $a_data[$i]['trangthai'] = 'CHUAGUI';
+                    //     $a_data[$i]['dvgui'] = $a_data[$i]['sldv'];
+                    // } else {
+                    //     $a_data[$i]['trangthai'] = 'CHUADAYDU';
+                    //     $a_data[$i]['dvgui'] = count($dulieu);
+                    // }
+
+                    if ($sldv_gui == 0) { //chưa gửi
                         $a_data[$i]['trangthai'] = 'CHUADL';
 
                         //} elseif (count($dulieu) == $sldv) {
-                    } elseif (count($dulieu) == $a_data[$i]['sldv']) {
+                    } elseif ($sldv_gui == $a_data[$i]['sldv']) {
                         //kiểm tra xem có bao nhiêu đơn vị gửi / tổng số các đơn vị
                         $a_data[$i]['trangthai'] = 'CHUAGUI';
                         $a_data[$i]['dvgui'] = $a_data[$i]['sldv'];
                     } else {
                         $a_data[$i]['trangthai'] = 'CHUADAYDU';
-                        $a_data[$i]['dvgui'] = count($dulieu);
+                        $a_data[$i]['dvgui'] = $sldv_gui;
                     }
 
                     foreach ($dulieu as $val) {
@@ -369,10 +387,12 @@ class tonghopluong_huyenController extends Controller
                 ->select('linhvuchoatdong', 'tenkhoipb')->wherein('mathdv', function ($query) use ($mathh, $madv, $mathdv) {
                     $query->select('mathdv')->from('tonghopluong_donvi')->where('madv', $madv)->where('mathdv', $mathdv)->get();
                 })->distinct()->get()->toArray(), 'tenkhoipb', 'linhvuchoatdong');
+            $model_phanloaicongtac = dmphanloaicongtac::all();
             foreach ($model as $chitiet) {
+                $m_phanloaicongtac = $model_phanloaicongtac->where('macongtac', $chitiet->macongtac)->first();
                 //Lấy lương cơ bản để tính hệ số cho trường hợp biên chế để tránh lệch tiền khi lên tổng hợp
-                $bangluong=tonghopluong_donvi_bangluong::where('mathdv',$chitiet->mathdv)->first();
-                $chitiet->luongcoban=$chitiet->luongcoban==0?$bangluong->luongcoban:0;
+                $bangluong = tonghopluong_donvi_bangluong::where('mathdv', $chitiet->mathdv)->first();
+                $chitiet->luongcoban = $chitiet->luongcoban == 0 ? $bangluong->luongcoban : 0;
                 $chitiet->tennguonkp = isset($model_nguonkp[$chitiet->manguonkp]) ? $model_nguonkp[$chitiet->manguonkp] : '';
                 $chitiet->tencongtac = isset($model_ct[$chitiet->mact]) ? $model_ct[$chitiet->mact] : '';
                 /*
@@ -386,16 +406,26 @@ class tonghopluong_huyenController extends Controller
 
                 //Tính lại bảo hiểm
 
-                    $chitiet->bhxh_dv=round($chitiet->stbhxh_dv/$chitiet->luongcoban,5);
-                    $chitiet->bhyt_dv=round($chitiet->stbhyt_dv/$chitiet->luongcoban,5);
-                    $chitiet->kpcd_dv=round($chitiet->stkpcd_dv/$chitiet->luongcoban,5);
-                    $chitiet->bhtn_dv=round($chitiet->stbhtn_dv/$chitiet->luongcoban,5);
+                $chitiet->bhxh_dv=round($chitiet->stbhxh_dv/$chitiet->luongcoban,5);
+                $chitiet->bhyt_dv=round($chitiet->stbhyt_dv/$chitiet->luongcoban,5);
+                $chitiet->kpcd_dv=round($chitiet->stkpcd_dv/$chitiet->luongcoban,5);
+                $chitiet->bhtn_dv=round($chitiet->stbhtn_dv/$chitiet->luongcoban,5);
 
-                    $chitiet->stbhxh_dv=$chitiet->bhxh_dv * $chitiet->luongcoban;
-                    $chitiet->stbhyt_dv=$chitiet->bhyt_dv * $chitiet->luongcoban;
-                    $chitiet->stkpcd_dv=$chitiet->kpcd_dv * $chitiet->luongcoban;
-                    $chitiet->stbhtn_dv=$chitiet->bhtn_dv * $chitiet->luongcoban;
-                    $chitiet->tongbh=$chitiet->stbhxh_dv + $chitiet->stbhyt_dv + $chitiet->stkpcd_dv + $chitiet->stbhtn_dv;
+                //Quy ra hệ số bảo hiểm do biên chế cần hiển thị bằng hệ số
+                // $chitiet->bhxh_dv = round($chitiet->stbhxh_dv / ($m_phanloaicongtac->bhxh_dv / 100 * $chitiet->luongcoban), 5);
+                // $chitiet->bhyt_dv = round($chitiet->stbhyt_dv / ($m_phanloaicongtac->bhyt_dv / 100 * $chitiet->luongcoban), 5);
+                // $chitiet->bhtn_dv = round($chitiet->stbhtn_dv / ($m_phanloaicongtac->bhtn_dv / 100 * $chitiet->luongcoban), 5);
+                // $chitiet->kpcd_dv = round($chitiet->stkpcd_dv / ($m_phanloaicongtac->kpcd_dv / 100 * $chitiet->luongcoban), 5);
+
+                $chitiet->stbhxh_dv=$chitiet->bhxh_dv * $chitiet->luongcoban;
+                $chitiet->stbhyt_dv=$chitiet->bhyt_dv * $chitiet->luongcoban;
+                $chitiet->stkpcd_dv=$chitiet->kpcd_dv * $chitiet->luongcoban;
+                $chitiet->stbhtn_dv=$chitiet->bhtn_dv * $chitiet->luongcoban;
+                // $chitiet->stbhtn_dv = $chitiet->bhtn_dv * $m_phanloaicongtac->bhtn_dv / 100 * $chitiet->luongcoban;
+                // $chitiet->stbhxh_dv = $chitiet->bhxh_dv * $m_phanloaicongtac->bhxh_dv / 100 * $chitiet->luongcoban;
+                // $chitiet->stbhyt_dv = $chitiet->bhyt_dv * $m_phanloaicongtac->bhyt_dv / 100 * $chitiet->luongcoban;
+                // $chitiet->stkpcd_dv = $chitiet->kpcd_dv * $m_phanloaicongtac->kpcd_dv / 100 * $chitiet->luongcoban;
+                $chitiet->tongbh = $chitiet->stbhxh_dv + $chitiet->stbhyt_dv + $chitiet->stkpcd_dv + $chitiet->stbhtn_dv;
 
                 $phucap = a_getelement_equal($a_bangluong, array('mact' => $chitiet->mact, 'manguonkp' => $chitiet->manguonkp));
                 foreach (getColTongHop() as $ct) {
