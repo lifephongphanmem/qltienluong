@@ -470,7 +470,7 @@
                                     <span class="arrow "></span>
                                 </a>
                                 <ul class="sub-menu">
-                                    @if (session('admin')->phamvitonghop == 'HUYEN')
+                                    @if (session('admin')->phamvitonghop == 'HUYEN' || session('admin')->phamvitonghop == 'KHOI')
                                         <li>
                                             <a href="{{ url('nghiep_vu/ho_so/danh_sach_th?sunghiep=ALL&madv=ALL') }}"><i
                                                     class="fa fa-caret-right"></i>Danh sách cán bộ</a>
