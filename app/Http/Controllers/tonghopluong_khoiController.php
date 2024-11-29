@@ -130,7 +130,7 @@ class tonghopluong_khoiController extends Controller
                     $a_data[$i]['trangthai'] = $tonghop->trangthai;
                     //$a_data[$i]['dvgui'] = $sldvcapduoi;
                     //if(session('admin')->phamvitonghop == 'KHOI')
-                    $a_data[$i]['dvgui'] = count($dulieu) + count($dulieu_khoi);
+                    $a_data[$i]['dvgui'] = count($dulieu) + count($dulieu_khoi) > $a_data[$i]['sldv'] ? $a_data[$i]['sldv'] : count($dulieu) + count($dulieu_khoi);
                     //$a_data[$i]['dvgui'] = count($dulieu); 2024.11.29
                     $a_data[$i]['ngaylap'] = $tonghop->ngaylap;
                 } else { //chưa tổng hợp dữ liệu
