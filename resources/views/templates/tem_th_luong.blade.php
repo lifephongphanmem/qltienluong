@@ -46,11 +46,11 @@
 
         <div id="tl_intl" class="col-md-offset-3 col-md-8">
             <input type="checkbox" name="in_truylinh" id="in_truylinh" />
-            <label for="in_truylinh" class="control-label">Bao gồm cả bảng truy lĩnh lương</label>
+            <label for="in_truylinh" class="control-label">Bao gồm bảng truy lĩnh lương</label>
         </div>
         <div id="tl_intruc" class="col-md-offset-3 col-md-8">
             <input type="checkbox" name="in_bltruc" id="in_bltruc" />
-            <label for="in_bltruc" class="control-label">Bao gồm cả bảng phụ cấp độc hại</label>
+            <label for="in_bltruc" class="control-label">Bao gồm bảng phụ cấp độc hại và trích nộp lương</label>
         </div>
     </div>
     <input type="hidden" id="thang_th" name="thang_th" value="{{$inputs['thang']}}"/>

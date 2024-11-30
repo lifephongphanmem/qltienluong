@@ -389,7 +389,7 @@
                                                         {!!Form::text('giaml', null, array('id' => 'giaml','class' => 'form-control tienluong text-right', 'data-mask'=>'fdecimal'))!!}
                                                     </div>
                                                 </div>
-                                                <input type="hidden" id="mabl" name="mabl"/>
+                                                <input type="hidden" name="mabl"/>
                                             </div>
                                         </div>
                                         <div class="form-actions">

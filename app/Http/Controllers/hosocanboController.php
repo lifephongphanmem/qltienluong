@@ -124,6 +124,12 @@ class hosocanboController extends Controller
                 return redirect('nghiep_vu/ho_so/danh_sach');
             }
 
+            //Kiểm tra số thứ tự
+            $chkSTT = hosocanbo::where('madv', $madv)->where('stt', $insert['stt'])->first();
+            if ($chkSTT != null) {
+                return  view('errors.data_error')
+                    ->with('message', 'Số thứ tự đã tồn tại.');
+            }
             //Xử lý file ảnh
             //dd($request->file('anh'));
             $img = $request->file('anh');
@@ -270,6 +276,12 @@ class hosocanboController extends Controller
             $insert = $request->all();
             //dd($insert);
             $model = hosocanbo::find($id);
+            //Kiểm tra số thứ tự
+            $chkSTT = hosocanbo::where('madv', $model->madv)->where('stt', $insert['stt'])->where('macanbo', '<>', $model->macanbo)->first();
+            if ($chkSTT != null) {
+                return  view('errors.data_error')
+                    ->with('message', 'Số thứ tự đã tồn tại.');
+            }
             //Xử lý file ảnh
             $img = $request->file('anh');
             if ($insert['bl_xoaanh'] == 'true') { //dùng chức năng xóa ảnh đại diện
