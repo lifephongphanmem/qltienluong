@@ -322,7 +322,7 @@ class tonghopluong_huyenController extends Controller
             if (session('admin')->phamvitonghop == 'KHOI') {
                 $model_nguon = tonghopluong_donvi::wherein('madv', getDonviHuyen($nam, $madv)['a_donvicapduoi'])
                     ->where('nam', $inputs['nam'])
-                    ->wherein('trangthai', ['DAGUI', 'TRALAI'])
+                    ->wherein('trangthai', ['DAGUI'])
                     ->get();
                 // $model_nguonkhoi = tonghopluong_khoi::wherein('madv', getDonviHuyen($nam, $madv)['a_donvicapduoi'])
                 //     ->where('nam', $inputs['nam'])
@@ -349,7 +349,10 @@ class tonghopluong_huyenController extends Controller
                     $dulieu = $model_nguon->where('thang', $a_data[$i]['thang']);
                     $dulieukhoi = $model_nguonkhoi->where('thang', $a_data[$i]['thang']);
                 }
-
+                if($a_data[$i]['thang'] == '02'){
+                    //dd($dulieukhoi);
+                }
+                
                 //Kiểm tra xem đơn vị đã tổng hợp dữ liệu khối chưa
                 if (isset($tonghop)) { //lấy dữ liệu đã tổng hợp đưa ra kết quản
                     $a_data[$i]['noidung'] = $tonghop->noidung;

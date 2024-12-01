@@ -98,6 +98,18 @@
 
                                                 <div class="col-md-3">
                                                     <div class="form-group">
+                                                        <label class="control-label">Lương hợp đồng, lương khoán</label>
+                                                        <div class="input-group bootstrap-touchspin">
+                                                            {!!Form::text('luonghd', null, array('id' =>'luonghd', 'class' => 'form-control', 'data-mask'=>'fdecimal'))!!}                                                            
+                                                            <span class="input-group-addon bootstrap-touchspin-postfix">VNĐ</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
                                                         <label class="control-label">Từ ngày <span class="require">*</span></label>
                                                         {!! Form::input('date','ngaytu',null,array('id' => 'ngaytu', 'class' => 'form-control'))!!}
                                                     </div>

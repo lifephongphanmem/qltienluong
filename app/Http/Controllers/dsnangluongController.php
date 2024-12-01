@@ -231,7 +231,7 @@ class dsnangluongController extends Controller
             $inputs = $request->all();
             $model = dsnangluong_chitiet::where('manl', $inputs['maso'])->where('macanbo', $inputs['canbo'])->first();
             $model_nkp = dsnangluong_nguon::where('manl', $inputs['maso'])->where('macanbo', $inputs['canbo'])->get();
-            //dd($model);
+           // dd($model);
             $m_plnb = nhomngachluong::select('manhom', 'tennhom')->distinct()->get();
             $m_pln = ngachluong::select('tenngachluong', 'manhom', 'msngbac')->distinct()->get();
             $model_canbo = hosocanbo::select('macanbo', 'macvcq', 'tencanbo')->where('macanbo', $model->macanbo)->first();
@@ -258,7 +258,7 @@ class dsnangluongController extends Controller
         if (Session::has('admin')) {
             $inputs = $request->all();
             $model_nangluong = dsnangluong::where('manl', $inputs['manl'])->first();
-            $model_canbo = hosocanbo::select('macanbo', 'msngbac', 'bac', 'ngaytu', 'ngayden', 'msngbac', 'heso', 'vuotkhung')
+            $model_canbo = hosocanbo::select('macanbo', 'msngbac', 'bac', 'ngaytu', 'ngayden', 'msngbac', 'heso', 'vuotkhung', 'luonghd')
                 ->where('macanbo', $inputs['macanbo'])->first();
             $a_nb = ngachluong::where('msngbac', $model_canbo->msngbac)->first();
             if ($a_nb == null) {
@@ -344,7 +344,7 @@ class dsnangluongController extends Controller
                 $hoso->vuotkhung = $canbo->vuotkhung;
                 $hoso->ngaytu = $canbo->ngaytu;
                 $hoso->ngayden = $canbo->ngayden;
-
+                $hoso->luonghd = $canbo->luonghd;
                 $a_tl = array();
                 $a_tl['maso'] = session('admin')->madv . '_' . $ma;
                 //lưu truy lĩnh
@@ -367,6 +367,7 @@ class dsnangluongController extends Controller
                     $a_tl['madv'] = session('admin')->madv;
                     $a_tl['noidung'] = 'Truy lĩnh nâng lương ngạch bậc';
                     $a_tl['msngbac'] = $canbo->msngbac;
+                    $a_tl['luonghd'] = $canbo->luonghd;
                     $a_tl['heso'] = $canbo->hesott; //hệ số truy lĩnh đều đưa vào hệ số
                     $a_tl['maphanloai'] = 'MSNGBAC'; //hệ số truy lĩnh đều đưa vào hệ số
                     $a_truylinh[] = $a_tl;
