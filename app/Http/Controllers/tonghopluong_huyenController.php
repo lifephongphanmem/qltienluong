@@ -208,18 +208,102 @@ class tonghopluong_huyenController extends Controller
 
             // dd(getDonviHuyen($nam,$madv)['a_donvicapduoi']);
             $a_data = array(
-                array('thang' => '01', 'mathdv' => null, 'noidung' => null, 'sldv' => $this->laySoLuongDV('01', $inputs['nam'], getSLDonviHuyen('01', $nam, $madv)['a_donvicapduoi'], $model_donvitamdung), 'dvgui' => 0),
-                array('thang' => '02', 'mathdv' => null, 'noidung' => null, 'sldv' => $this->laySoLuongDV('02', $inputs['nam'], getSLDonviHuyen('02', $nam, $madv)['a_donvicapduoi'], $model_donvitamdung), 'dvgui' => 0),
-                array('thang' => '03', 'mathdv' => null, 'noidung' => null, 'sldv' => $this->laySoLuongDV('03', $inputs['nam'], getSLDonviHuyen('03', $nam, $madv)['a_donvicapduoi'], $model_donvitamdung), 'dvgui' => 0),
-                array('thang' => '04', 'mathdv' => null, 'noidung' => null, 'sldv' => $this->laySoLuongDV('04', $inputs['nam'], getSLDonviHuyen('04', $nam, $madv)['a_donvicapduoi'], $model_donvitamdung), 'dvgui' => 0),
-                array('thang' => '05', 'mathdv' => null, 'noidung' => null, 'sldv' => $this->laySoLuongDV('05', $inputs['nam'], getSLDonviHuyen('05', $nam, $madv)['a_donvicapduoi'], $model_donvitamdung), 'dvgui' => 0),
-                array('thang' => '06', 'mathdv' => null, 'noidung' => null, 'sldv' => $this->laySoLuongDV('06', $inputs['nam'], getSLDonviHuyen('06', $nam, $madv)['a_donvicapduoi'], $model_donvitamdung), 'dvgui' => 0),
-                array('thang' => '07', 'mathdv' => null, 'noidung' => null, 'sldv' => $this->laySoLuongDV('07', $inputs['nam'], getSLDonviHuyen('07', $nam, $madv)['a_donvicapduoi'], $model_donvitamdung), 'dvgui' => 0),
-                array('thang' => '08', 'mathdv' => null, 'noidung' => null, 'sldv' => $this->laySoLuongDV('08', $inputs['nam'], getSLDonviHuyen('08', $nam, $madv)['a_donvicapduoi'], $model_donvitamdung), 'dvgui' => 0),
-                array('thang' => '09', 'mathdv' => null, 'noidung' => null, 'sldv' => $this->laySoLuongDV('09', $inputs['nam'], getSLDonviHuyen('09', $nam, $madv)['a_donvicapduoi'], $model_donvitamdung), 'dvgui' => 0),
-                array('thang' => '10', 'mathdv' => null, 'noidung' => null, 'sldv' => $this->laySoLuongDV('10', $inputs['nam'], getSLDonviHuyen('10', $nam, $madv)['a_donvicapduoi'], $model_donvitamdung), 'dvgui' => 0),
-                array('thang' => '11', 'mathdv' => null, 'noidung' => null, 'sldv' => $this->laySoLuongDV('11', $inputs['nam'], getSLDonviHuyen('11', $nam, $madv)['a_donvicapduoi'], $model_donvitamdung), 'dvgui' => 0),
-                array('thang' => '12', 'mathdv' => null, 'noidung' => null, 'sldv' => $this->laySoLuongDV('12', $inputs['nam'], getSLDonviHuyen('12', $nam, $madv)['a_donvicapduoi'], $model_donvitamdung), 'dvgui' => 0),
+                array(
+                    'thang' => '01',
+                    'mathdv' => null,
+                    'noidung' => null,
+                    'sldv' => $this->laySoLuongDV('01', $inputs['nam'], getSLDonviHuyen('01', $nam, $madv)['a_donvicapduoi'], $model_donvitamdung),
+                    'a_donvicapduoi' => getSLDonviHuyen('01', $nam, $madv)['a_donvicapduoi'],
+                    'dvgui' => 0
+                ),
+                array(
+                    'thang' => '02',
+                    'mathdv' => null,
+                    'noidung' => null,
+                    'sldv' => $this->laySoLuongDV('02', $inputs['nam'], getSLDonviHuyen('02', $nam, $madv)['a_donvicapduoi'], $model_donvitamdung),
+                    'a_donvicapduoi' => getSLDonviHuyen('01', $nam, $madv)['a_donvicapduoi'],
+                    'dvgui' => 0
+                ),
+                array(
+                    'thang' => '03',
+                    'mathdv' => null,
+                    'noidung' => null,
+                    'sldv' => $this->laySoLuongDV('03', $inputs['nam'], getSLDonviHuyen('03', $nam, $madv)['a_donvicapduoi'], $model_donvitamdung),
+                    'a_donvicapduoi' => getSLDonviHuyen('01', $nam, $madv)['a_donvicapduoi'],
+                    'dvgui' => 0
+                ),
+                array(
+                    'thang' => '04',
+                    'mathdv' => null,
+                    'noidung' => null,
+                    'sldv' => $this->laySoLuongDV('04', $inputs['nam'], getSLDonviHuyen('04', $nam, $madv)['a_donvicapduoi'], $model_donvitamdung),
+                    'a_donvicapduoi' => getSLDonviHuyen('01', $nam, $madv)['a_donvicapduoi'],
+                    'dvgui' => 0
+                ),
+                array(
+                    'thang' => '05',
+                    'mathdv' => null,
+                    'noidung' => null,
+                    'sldv' => $this->laySoLuongDV('05', $inputs['nam'], getSLDonviHuyen('05', $nam, $madv)['a_donvicapduoi'], $model_donvitamdung),
+                    'a_donvicapduoi' => getSLDonviHuyen('01', $nam, $madv)['a_donvicapduoi'],
+                    'dvgui' => 0
+                ),
+                array(
+                    'thang' => '06',
+                    'mathdv' => null,
+                    'noidung' => null,
+                    'sldv' => $this->laySoLuongDV('06', $inputs['nam'], getSLDonviHuyen('06', $nam, $madv)['a_donvicapduoi'], $model_donvitamdung),
+                    'a_donvicapduoi' => getSLDonviHuyen('01', $nam, $madv)['a_donvicapduoi'],
+                    'dvgui' => 0
+                ),
+                array(
+                    'thang' => '07',
+                    'mathdv' => null,
+                    'noidung' => null,
+                    'sldv' => $this->laySoLuongDV('07', $inputs['nam'], getSLDonviHuyen('07', $nam, $madv)['a_donvicapduoi'], $model_donvitamdung),
+                    'a_donvicapduoi' => getSLDonviHuyen('01', $nam, $madv)['a_donvicapduoi'],
+                    'dvgui' => 0
+                ),
+                array(
+                    'thang' => '08',
+                    'mathdv' => null,
+                    'noidung' => null,
+                    'sldv' => $this->laySoLuongDV('08', $inputs['nam'], getSLDonviHuyen('08', $nam, $madv)['a_donvicapduoi'], $model_donvitamdung),
+                    'a_donvicapduoi' => getSLDonviHuyen('01', $nam, $madv)['a_donvicapduoi'],
+                    'dvgui' => 0
+                ),
+                array(
+                    'thang' => '09',
+                    'mathdv' => null,
+                    'noidung' => null,
+                    'sldv' => $this->laySoLuongDV('09', $inputs['nam'], getSLDonviHuyen('09', $nam, $madv)['a_donvicapduoi'], $model_donvitamdung),
+                    'a_donvicapduoi' => getSLDonviHuyen('01', $nam, $madv)['a_donvicapduoi'],
+                    'dvgui' => 0
+                ),
+                array(
+                    'thang' => '10',
+                    'mathdv' => null,
+                    'noidung' => null,
+                    'sldv' => $this->laySoLuongDV('10', $inputs['nam'], getSLDonviHuyen('10', $nam, $madv)['a_donvicapduoi'], $model_donvitamdung),
+                    'a_donvicapduoi' => getSLDonviHuyen('01', $nam, $madv)['a_donvicapduoi'],
+                    'dvgui' => 0
+                ),
+                array(
+                    'thang' => '11',
+                    'mathdv' => null,
+                    'noidung' => null,
+                    'sldv' => $this->laySoLuongDV('11', $inputs['nam'], getSLDonviHuyen('11', $nam, $madv)['a_donvicapduoi'], $model_donvitamdung),
+                    'a_donvicapduoi' => getSLDonviHuyen('01', $nam, $madv)['a_donvicapduoi'],
+                    'dvgui' => 0
+                ),
+                array(
+                    'thang' => '12',
+                    'mathdv' => null,
+                    'noidung' => null,
+                    'sldv' => $this->laySoLuongDV('12', $inputs['nam'], getSLDonviHuyen('12', $nam, $madv)['a_donvicapduoi'], $model_donvitamdung),
+                    'a_donvicapduoi' => getSLDonviHuyen('01', $nam, $madv)['a_donvicapduoi'],
+                    'dvgui' => 0
+                ),
                 // array('thang' => '', 'mathdv' => null, 'noidung' => null, 'sldv' => '', 'dvgui' => 0)
             );
 
@@ -234,20 +318,23 @@ class tonghopluong_huyenController extends Controller
                     ->where('trangthai', 'DAGUI')
                     // ->wherein('trangthai', ['DAGUI', 'TRALAI'])
                     ->get();
-            $model_nguonkhoi = tonghopluong_khoi::wherein('madv', getDonviHuyen($nam, $madv)['a_donvicapduoi'])
-                ->where('nam', $inputs['nam'])
-                ->wherein('trangthai', ['DAGUI', 'TRALAI'])
-                ->get();
+
             if (session('admin')->phamvitonghop == 'KHOI') {
                 $model_nguon = tonghopluong_donvi::wherein('madv', getDonviHuyen($nam, $madv)['a_donvicapduoi'])
                     ->where('nam', $inputs['nam'])
                     ->wherein('trangthai', ['DAGUI', 'TRALAI'])
                     ->get();
-                $model_nguonkhoi = tonghopluong_khoi::wherein('madv', getDonviHuyen($nam, $madv)['a_donvicapduoi'])
-                    ->where('nam', $inputs['nam'])
-                    ->wherein('trangthai', ['DAGUI', 'TRALAI'])
-                    ->get();
+                // $model_nguonkhoi = tonghopluong_khoi::wherein('madv', getDonviHuyen($nam, $madv)['a_donvicapduoi'])
+                //     ->where('nam', $inputs['nam'])
+                //     ->wherein('trangthai', ['DAGUI', 'TRALAI'])
+                //     ->get();
             }
+
+            $model_nguonkhoi = tonghopluong_khoi::wherein('madv', getDonviHuyen($nam, $madv)['a_donvicapduoi'])
+                ->where('nam', $inputs['nam'])
+                ->where('trangthai', 'DAGUI')
+                //->wherein('trangthai', ['DAGUI', 'TRALAI'])
+                ->get();
             // dd($model_nguon);
             //Lấy danh sách các dữ liệu đã tổng hợp theo huyện
             $model_tonghop = tonghopluong_tinh::where('madvbc', $madvbc)->where('nam', $inputs['nam'])->get();

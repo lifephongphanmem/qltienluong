@@ -364,6 +364,12 @@
                             {!! Form::select('cochu', getCoChu(), 10, ['id' => 'cochu', 'class' => 'form-control select2me']) !!}
                         </div>
                     </div> --}}
+                    <div class="row">
+                        <div class="col-md-offset-3 col-md-9" style="padding-top: 10px">
+                            <input name="ipInSoTienBaoHiem" id="ipInSoTienBaoHiem" type="checkbox">
+                            <label for="ipInSoTienBaoHiem">Các khoản đóng góp in theo hệ số</label>
+                        </div>
+                    </div>
                 </div>
 
                 <input type="hidden" name="macqcq" />

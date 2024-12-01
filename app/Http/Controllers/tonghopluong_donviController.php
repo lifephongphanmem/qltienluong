@@ -286,7 +286,7 @@ class tonghopluong_donviController extends Controller
             }
             // dd($a_data);
             //Lấy dữ liệu để lập
-            $model_data = a_split($a_data, array('congtac', 'mact', 'linhvuchoatdong', 'manguonkp', 'macongtac'));
+            $model_data = a_split($a_data, array('congtac', 'mact', 'linhvuchoatdong', 'manguonkp', 'macongtac','luongcoban'));
             $model_data = a_unique($model_data);
             //dd($a_data);
             for ($i = 0; $i < count($model_data); $i++) {
