@@ -125,7 +125,7 @@ class hosocanboController extends Controller
             }
 
             //Kiểm tra số thứ tự
-            $chkSTT = hosocanbo::where('madv', $madv)->where('stt', $insert['stt'])->first();
+            $chkSTT = hosocanbo::where('madv', $madv)->where('theodoi', '<', '9')->where('stt', $insert['stt'])->first();
             if ($chkSTT != null) {
                 return  view('errors.data_error')
                     ->with('message', 'Số thứ tự đã tồn tại.');
@@ -277,7 +277,7 @@ class hosocanboController extends Controller
             //dd($insert);
             $model = hosocanbo::find($id);
             //Kiểm tra số thứ tự
-            $chkSTT = hosocanbo::where('madv', $model->madv)->where('stt', $insert['stt'])->where('macanbo', '<>', $model->macanbo)->first();
+            $chkSTT = hosocanbo::where('madv', $model->madv)->where('stt', $insert['stt'])->where('theodoi', '<', '9')->where('macanbo', '<>', $model->macanbo)->first();
             if ($chkSTT != null) {
                 return  view('errors.data_error')
                     ->with('message', 'Số thứ tự đã tồn tại.');
