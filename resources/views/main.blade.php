@@ -472,7 +472,7 @@
                                 <ul class="sub-menu">
                                     @if (session('admin')->phamvitonghop == 'HUYEN')
                                         <li>
-                                            <a href="{{ url('nghiep_vu/ho_so/danh_sach_th?sunghiep=ALL&madv=ALL') }}"><i
+                                            <a href="{{ url('nghiep_vu/ho_so/danh_sach_th?sunghiep=ALL') }}"><i
                                                     class="fa fa-caret-right"></i>Danh sách cán bộ</a>
                                         </li>
 

@@ -59,6 +59,7 @@ Route::group(['prefix' => 'nghiep_vu'], function () {
         Route::get('temp/store_tn', 'hosocanboController@store_tn_temp');
         Route::get('temp/getinfor_kn', 'hosocanboController@getinfor_kn_temp');
         Route::get('temp/delete_kn', 'hosocanboController@delete_kn_temp_temp');
+        
         // Quản lý hồ sơ khối huyện
         Route::get('danh_sach_th', 'quanlyhosoController@index');
         Route::get('nang_luong_th', 'quanlyhosoController@index_nangluong');

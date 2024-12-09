@@ -52,7 +52,7 @@
                     </div>
                     <div class="col-md-8">
                         <select class="form-control select2me" id="madv" name="madv">
-                            <option value="ALL">--Chọn tất cả--</option>
+                            {{-- <option value="ALL">--Chọn tất cả--</option> --}}
                             @foreach ($m_donvi as $donvi)
                                 <option value="{{ $donvi->madv }} " @if ($madv == $donvi->madv) selected @endif>
                                     {{ $donvi->tendv }}</option>
@@ -76,9 +76,9 @@
                         </thead>
 
                         <tbody>
-                            @foreach ($model as $hs)
+                            @foreach ($model as $key=>$hs)
                                 <tr>
-                                    <td class="text-center">{{ $hs->stt }}</td>
+                                    <td class="text-center">{{ ++$key }}</td>
                                     <td name="anh">
                                         <a href="{{ url($url . 'maso=' . $hs->id . '') }}">
                                             @if ($hs->anh != '')

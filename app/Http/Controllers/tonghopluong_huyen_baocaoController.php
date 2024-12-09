@@ -17,6 +17,7 @@ use App\Http\Controllers\Controller;
 use App\tonghopluong_donvi;
 use App\tonghopluong_donvi_bangluong;
 use App\tonghopluong_donvi_chitiet;
+use App\tonghopluong_khoi;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Session;
 
@@ -217,7 +218,9 @@ class tonghopluong_huyen_baocaoController extends Controller
             }
             $model_tonghop = tonghopluong_donvi::where('thang', $inputs['thang'])->where('nam', $inputs['nam'])->where('macqcq', $inputs['macqcq'])
                 ->where('trangthai', 'DAGUI')->get();
-            // dd($model_tonghop);
+                $model_tonghopkhoi = tonghopluong_khoi::where('thang', $inputs['thang'])->where('nam', $inputs['nam'])->where('macqcq', $inputs['macqcq'])
+                ->where('trangthai', 'DAGUI')->get();
+            // dd($model_tonghopkhoi);
             // $m_dutoan_huyen = dutoanluong_huyen::where('masodv', $inputs['masodv'])->first();
 
             if ($model_tonghop->count() == 0) {
@@ -227,13 +230,17 @@ class tonghopluong_huyen_baocaoController extends Controller
             }
 
             $m_donvi = dmdonvi::where('madv', $inputs['macqcq'])->first();
-
+            // dd($m_donvi);
             $m_phanloai = dmphanloaidonvi_baocao::where('madvbc', $m_donvi->madvbc)->get();
             $a_phanloai = array_column(dmphanloaidonvi::all()->toArray(), 'maphanloai');
 
-            $m_donvi_baocao = dmdonvi::wherein('madv', array_column($model_tonghop->toarray(), 'madv'))->get();
-            //dd($m_donvi_baocao);
-            $a_donvi = array_column($model_tonghop->toarray(), 'madv', 'mathdv');
+            $m_donvi_baocao = dmdonvi::wherein('madv', array_column($model_tonghop->toarray(), 'madv'));
+            if(count($model_tonghopkhoi) > 0){
+                $m_donvi_baocao=$m_donvi_baocao->orwherein('madv', array_column($model_tonghopkhoi->toarray(), 'madv'));
+            }
+            $m_donvi_baocao=$m_donvi_baocao->get();
+            // dd($m_donvi_baocao);
+            $a_donvi = array_column($model_tonghop->toarray(), 'madv', 'mathdv') + array_column($model_tonghopkhoi->toarray(), 'madv', 'mathdv');
             $a_pl_donvi = array_column($m_donvi_baocao->toarray(), 'maphanloai', 'madv');
             $model = tonghopluong_donvi_chitiet::where(function ($q) use ($inputs) {
                 if (isset($inputs['mact'])) {
@@ -243,7 +250,21 @@ class tonghopluong_huyen_baocaoController extends Controller
                     $q->wherein('linhvuchoatdong', $inputs['linhvuchoatdong']);
                 }
             })
-                ->wherein('mathdv', array_column($model_tonghop->toarray(), 'mathdv'))->get();
+            ->where(function ($q) use ($model_tonghop, $model_tonghopkhoi) {
+                $q->whereIn('mathdv', array_column($model_tonghop->toarray(), 'mathdv'))
+                  ->orWhereIn('mathk', array_column($model_tonghopkhoi->toarray(), 'mathdv'));
+            })
+                ->get();
+                // $model_khoi = tonghopluong_donvi_chitiet::where(function ($q) use ($inputs) {
+                //     if (isset($inputs['mact'])) {
+                //         $q->wherein('mact', $inputs['mact']);
+                //     }
+                //     if (isset($inputs['linhvuchoatdong'])) {
+                //         $q->wherein('linhvuchoatdong', $inputs['linhvuchoatdong']);
+                //     }
+                // })
+                //     ->wherein('mathk', array_column($model_tonghopkhoi->toarray(), 'mathdv'))->get();
+                // dd($model);
             $a_plct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
             $a_pc = getColTongHop();
             //$a_luongcb = array_column($model_tonghop->toarray(),'luongcoban','mathdv');
@@ -268,12 +289,16 @@ class tonghopluong_huyen_baocaoController extends Controller
             foreach ($model as $key => $val) {
                 $a_key[$val->id] = $key;
             }
-            $model_phanloaicongtac=dmphanloaicongtac::all();
+            // $model_phanloaicongtac=dmphanloaicongtac::all();
             // dd($model);
             foreach ($model as $key => $chitiet) {
+                // if($chitiet->mathk){
+                //     dd($a_donvi);
+                //     dd($a_donvi[$chitiet->mathk]);
+                // }
                 // dd($key);
-                $m_phanloaicongtac=$model_phanloaicongtac->where('macongtac',$chitiet->macongtac)->first();
-                $chitiet->madv = $a_donvi[$chitiet->mathdv];
+                // $m_phanloaicongtac=$model_phanloaicongtac->where('macongtac',$chitiet->macongtac)->first();
+                $chitiet->madv = $a_donvi[$chitiet->mathdv]??$a_donvi[$chitiet->mathk];
                 $chitiet->maphanloai = $a_pl_donvi[$chitiet->madv];
                 $chitiet->tenct = $a_plct[$chitiet->mact] ?? '';
                 $chitiet->luongcoban = $luongcb;
@@ -351,11 +376,11 @@ class tonghopluong_huyen_baocaoController extends Controller
                 }
             }
             // dd($model->take(10));
-            // dd($model);
             $model_h = new Collection();
             foreach ($model as $val) {
-                $m_donvi_nkp = $model->where('madv', $val->madv)->where('mact', $val->mact)->where('mathdv', $val->mathdv);
-                if (count($model_h->where('madv', $val->madv)->where('mact', $val->mact)->where('mathdv', $val->mathdv)) > 0) {
+                $m_donvi_nkp = $model->where('madv', $val->madv)->where('mact', $val->mact);
+                // dd($m_donvi_nkp);
+                if (count($model_h->where('madv', $val->madv)->where('mact', $val->mact)) > 0) {
                     continue;
                 }
                 if (count($m_donvi_nkp) == 1) {
@@ -364,6 +389,7 @@ class tonghopluong_huyen_baocaoController extends Controller
                     // dd($val);
                     // dd($m_donvi_nkp->sum('baohiem'));
                     $val->ttl = $m_donvi_nkp->sum('ttl');
+                    $val->soluongbienche = $m_donvi_nkp->sum('soluongbienche');
                     $val->bhtn_dv = $m_donvi_nkp->sum('bhtn_dv');
                     $val->baohiem = $m_donvi_nkp->sum('baohiem');
                     $val->quyluong = $m_donvi_nkp->sum('quyluong');

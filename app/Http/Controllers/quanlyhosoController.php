@@ -19,92 +19,130 @@ class quanlyhosoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    function index(Request $requests){
+    function index(Request $requests)
+    {
         if (Session::has('admin')) {
             $inputs = $requests->all();
-            $a_sunghiep=array('ALL'=>'--Chọn sự nghiệp cán bộ--','Công chức'=>'Công chức','Viên chức'=>'Viên chức','Khác'=>'Khác');
+            // dd($inputs);
+            $a_sunghiep = array('ALL' => '--Chọn sự nghiệp cán bộ--', 'Công chức' => 'Công chức', 'Viên chức' => 'Viên chức', 'Khác' => 'Khác');
             //$a_plcanbo=array('ALL'=>'','Tập sự'=>'Tập sự, thử việc','Chính thức'=>'Chính thức');
             $sunghiep = $inputs['sunghiep'];
-            $madv = $inputs['madv'];
-            $m_dv = dmdonvi::where('dmdonvi.macqcq', session('admin')->madv)->get();
+
+            // $m_dv = dmdonvi::where('dmdonvi.macqcq', session('admin')->madv)->get();
+            $m_dv = dmdonvi::where('macqcq', session('admin')->madv)->where('madv', '<>', session('admin')->madv)
+                ->wherenotin('madv', function ($query) {
+                    $query->select('madv')->from('dmdonvi')
+                        ->where('trangthai', 'TD')
+                        ->get();
+                })
+                ->get();
+                $inputs['madv']=$inputs['madv']??$m_dv->first()->madv;
+                $madv = $inputs['madv'];
+            if ($inputs['madv'] != 'ALL') {
+                $m_dvth = dmdonvi::where('macqcq', $madv)->where('madv', '<>', $madv)
+                    ->wherenotin('madv', function ($query) use ($madv) {
+                        $query->select('madv')->from('dmdonvi')
+                            ->where('trangthai', 'TD')
+                            ->get();
+                    })
+                    ->get();
+            }
+            $a_dvth = isset($m_dvth)?array_column($m_dvth->toarray(), 'madv'):array_column($m_dv->toarray(), 'madv');
+            // dd($a_dvth);
+            $m_dv_con = dmdonvi::select('madv','tendv')->wherein('madv', $a_dvth)
+                ->wherenotin('madv', function ($query) use ($madv) {
+                    $query->select('madv')->from('dmdonvi')
+                        ->where('trangthai', 'TD')
+                        ->get();
+                })
+                ->get();
+            $a_dv = array_column($m_dv_con->toarray(), 'madv');
+            // dd($m_dv_con->take(20));
+            //Lấy mã đơn vị của các đơn vị cấp dưới của các đơn vị tổng hợp con
+
             //$m_hs=hosocanbo::where('madv',session('admin')->maxa)->get();
-            $m_hs = hosocanbo::join('dmdonvi','hosocanbo.madv','dmdonvi.madv')
-                ->select('macanbo', 'tencanbo', 'msngbac', 'sunghiep', 'gioitinh', 'tnndenngay', 'ngaytu', 'ngayden','ngaysinh','mact','tendv','dmdonvi.madv')
-                ->where('theodoi','<' ,'9')
-                ->where('sunghiep','like',$inputs['sunghiep'].'%')
-                ->where('dmdonvi.macqcq', session('admin')->madv)
+            $m_hs = hosocanbo::join('dmdonvi', 'hosocanbo.madv', 'dmdonvi.madv')
+                ->select('macanbo', 'tencanbo', 'msngbac', 'sunghiep', 'gioitinh', 'tnndenngay', 'ngaytu', 'ngayden', 'ngaysinh', 'mact', 'tendv', 'dmdonvi.madv')
+                ->where('theodoi', '<', '9')
+                ->where('sunghiep', 'like', $inputs['sunghiep'] . '%')
+                // ->where('dmdonvi.macqcq', session('admin')->madv)
+                ->wherein('dmdonvi.madv', $a_dv)
                 ->orderby('tendv')
                 ->get();
-            if($inputs['sunghiep'] == 'ALL')
-            $m_hs = hosocanbo::join('dmdonvi','hosocanbo.madv','dmdonvi.madv')
-                ->select('macanbo', 'tencanbo', 'msngbac', 'sunghiep', 'gioitinh', 'tnndenngay', 'ngaytu', 'ngayden','ngaysinh','mact','tendv','dmdonvi.madv')
-                ->where('theodoi','<' ,'9')
-                ->where('dmdonvi.macqcq', session('admin')->madv)
-                ->orderby('tendv')
-                ->get();
+                // dd($m_hs);
+            if ($inputs['sunghiep'] == 'ALL')
+                $m_hs = hosocanbo::join('dmdonvi', 'hosocanbo.madv', 'dmdonvi.madv')
+                    ->select('macanbo', 'tencanbo', 'msngbac', 'sunghiep', 'gioitinh', 'tnndenngay', 'ngaytu', 'ngayden', 'ngaysinh', 'mact', 'tendv', 'dmdonvi.madv')
+                    ->where('theodoi', '<', '9')
+                    // ->where('dmdonvi.macqcq', session('admin')->madv)
+                    ->wherein('dmdonvi.madv', $a_dv)
+                    ->orderby('tendv')
+                    ->get();
+            // dd($m_hs->take(10));
             $a_ct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
             $a_pb = getPhongBan(false);
             $a_cv = getChucVuCQ(false);
-            foreach($m_hs as $hs){
-                $hs->tenpb = isset($a_pb[$hs->mapb])?$a_pb[$hs->mapb] : '';
-                $hs->tencvcq = isset($a_cv[$hs->macvcq])?$a_cv[$hs->macvcq] : '';
-                $hs->tenct = isset($a_ct[$hs->mact])?$a_ct[$hs->mact] : '';
+            foreach ($m_hs as $hs) {
+                $hs->tenpb = isset($a_pb[$hs->mapb]) ? $a_pb[$hs->mapb] : '';
+                $hs->tencvcq = isset($a_cv[$hs->macvcq]) ? $a_cv[$hs->macvcq] : '';
+                $hs->tenct = isset($a_ct[$hs->mact]) ? $a_ct[$hs->mact] : '';
             }
             $model_nhomct = dmphanloaicongtac::select('macongtac', 'tencongtac')->get();
             $model_tenct = dmphanloaict::select('tenct', 'macongtac', 'mact')->get();
 
             $model = $m_hs;
-            if($inputs['madv'] != 'ALL')
-                $model = $model->where('madv',$inputs['madv']);
+            // if ($inputs['madv'] != 'ALL')
+            //     $model = $model->where('madv', $inputs['madv']);
             return view('manage.danhsachhoso.index')
-                ->with('model',$model)
-                ->with('url','/nghiep_vu/ho_so/')
-                ->with('tendv',getTenDV(session('admin')->madv))
+                ->with('model', $model)
+                ->with('url', '/nghiep_vu/ho_so/')
+                ->with('tendv', getTenDV(session('admin')->madv))
                 ->with('model_nhomct', $model_nhomct)
                 ->with('model_tenct', $model_tenct)
-                ->with('a_sunghiep',$a_sunghiep)
-                ->with('sunghiep',$sunghiep)
-                ->with('madv',$madv)
-                ->with('m_donvi',$m_dv)
-                ->with('pageTitle','Danh sách cán bộ');
+                ->with('a_sunghiep', $a_sunghiep)
+                ->with('sunghiep', $sunghiep)
+                ->with('madv', $madv)
+                ->with('m_donvi', $m_dv)
+                ->with('pageTitle', 'Danh sách cán bộ');
         } else
             return view('errors.notlogin');
     }
-    function index_nangluong(Request $requests){
+    function index_nangluong(Request $requests)
+    {
         if (Session::has('admin')) {
             $inputs = $requests->all();
-            $a_nangluong=array('NB'=>'Nâng lương ngạch bậc','TNN'=>'Nâng lương thâm niên nghề');
-            $a_donvi=dmdonvi::select('madv','tendv','phanloaitaikhoan')
+            $a_nangluong = array('NB' => 'Nâng lương ngạch bậc', 'TNN' => 'Nâng lương thâm niên nghề');
+            $a_donvi = dmdonvi::select('madv', 'tendv', 'phanloaitaikhoan')
                 ->where('macqcq', session('admin')->madv)
                 ->get();
             $nangluong = $inputs['nangluong'];
 
             $donvi = $inputs['madv'];
 
-            $model = hosocanbo::join('dmdonvi','hosocanbo.madv','dmdonvi.madv')
-                ->select('macanbo', 'tencanbo', 'msngbac', 'sunghiep', 'gioitinh', 'tnndenngay', 'ngaytu', 'ngayden','ngaysinh','mact','tendv','heso')
-                ->where('theodoi','<' ,'9')
-                ->where('hosocanbo.madv',$inputs['madv'])
+            $model = hosocanbo::join('dmdonvi', 'hosocanbo.madv', 'dmdonvi.madv')
+                ->select('macanbo', 'tencanbo', 'msngbac', 'sunghiep', 'gioitinh', 'tnndenngay', 'ngaytu', 'ngayden', 'ngaysinh', 'mact', 'tendv', 'heso')
+                ->where('theodoi', '<', '9')
+                ->where('hosocanbo.madv', $inputs['madv'])
                 ->where('dmdonvi.macqcq', session('admin')->madv)
                 ->orderby('tendv')
                 ->get();
 
-            $check = $a_donvi->where('madv',$donvi)->first();
-            if(isset($check) && $check->phanloaitaikhoan == 'TH'){
-                $model = hosocanbo::join('dmdonvi','hosocanbo.madv','dmdonvi.madv')
-                    ->select('macanbo', 'tencanbo', 'msngbac', 'sunghiep', 'gioitinh', 'tnndenngay', 'ngaytu', 'ngayden','ngaysinh','mact','tendv','heso')
-                    ->where('theodoi','<' ,'9')
-                    ->where('dmdonvi.macqcq',$inputs['madv'])
+            $check = $a_donvi->where('madv', $donvi)->first();
+            if (isset($check) && $check->phanloaitaikhoan == 'TH') {
+                $model = hosocanbo::join('dmdonvi', 'hosocanbo.madv', 'dmdonvi.madv')
+                    ->select('macanbo', 'tencanbo', 'msngbac', 'sunghiep', 'gioitinh', 'tnndenngay', 'ngaytu', 'ngayden', 'ngaysinh', 'mact', 'tendv', 'heso')
+                    ->where('theodoi', '<', '9')
+                    ->where('dmdonvi.macqcq', $inputs['madv'])
                     ->orderby('tendv')
                     ->get();
             }
-                if($inputs['madv'] == 'ALL')
-                    $model = hosocanbo::join('dmdonvi','hosocanbo.madv','dmdonvi.madv')
-                        ->select('macanbo', 'tencanbo', 'msngbac', 'sunghiep', 'gioitinh', 'tnndenngay', 'ngaytu', 'ngayden','ngaysinh','mact','tendv','heso')
-                        ->where('theodoi','<' ,'9')
-                        ->where('dmdonvi.macqcq', session('admin')->madv)
-                        ->orderby('tendv')
-                        ->get();
+            if ($inputs['madv'] == 'ALL')
+                $model = hosocanbo::join('dmdonvi', 'hosocanbo.madv', 'dmdonvi.madv')
+                    ->select('macanbo', 'tencanbo', 'msngbac', 'sunghiep', 'gioitinh', 'tnndenngay', 'ngaytu', 'ngayden', 'ngaysinh', 'mact', 'tendv', 'heso')
+                    ->where('theodoi', '<', '9')
+                    ->where('dmdonvi.macqcq', session('admin')->madv)
+                    ->orderby('tendv')
+                    ->get();
             $date = getdate();
             foreach ($model as $ct) {
                 if (isset($ct->ngayden)) {
@@ -126,41 +164,42 @@ class quanlyhosoController extends Controller
                 }
             }
 
-            if($nangluong == 'NB')
+            if ($nangluong == 'NB')
                 $m_hs = $model->where('nam_luong', $date['year']);
-            if($nangluong == 'TNN')
+            if ($nangluong == 'TNN')
                 $m_hs = $model->where('nam_nghe', $date['year']);
 
             return view('manage.danhsachhoso.index_nangluong')
-                ->with('m_hs',$m_hs)
-                ->with('url','/nghiep_vu/ho_so/')
-                ->with('tendv',getTenDV(session('admin')->madv))
-                ->with('a_donvi',$a_donvi)
-                ->with('donvi',$donvi)
-                ->with('nangluong',$nangluong)
-                ->with('a_nangluong',$a_nangluong)
-                ->with('pageTitle','Danh sách cán bộ');
+                ->with('m_hs', $m_hs)
+                ->with('url', '/nghiep_vu/ho_so/')
+                ->with('tendv', getTenDV(session('admin')->madv))
+                ->with('a_donvi', $a_donvi)
+                ->with('donvi', $donvi)
+                ->with('nangluong', $nangluong)
+                ->with('a_nangluong', $a_nangluong)
+                ->with('pageTitle', 'Danh sách cán bộ');
         } else
             return view('errors.notlogin');
     }
-    function index_nghihuu(Request $requests){
+    function index_nghihuu(Request $requests)
+    {
         if (Session::has('admin')) {
             $inputs = $requests->all();
-            $a_donvi=dmdonvi::select('madv','tendv')
+            $a_donvi = dmdonvi::select('madv', 'tendv')
                 ->where('macqcq', session('admin')->madv)
                 ->get();
             $donvi = $inputs['madv'];
-            $model = hosocanbo::join('dmdonvi','hosocanbo.madv','dmdonvi.madv')
-                ->select('macanbo', 'tencanbo', 'msngbac', 'sunghiep', 'gioitinh', 'tnndenngay', 'ngaytu', 'ngayden','ngaysinh','mact','tendv')
-                ->where('theodoi','<' ,'9')
-                ->where('hosocanbo.madv',$inputs['madv'])
+            $model = hosocanbo::join('dmdonvi', 'hosocanbo.madv', 'dmdonvi.madv')
+                ->select('macanbo', 'tencanbo', 'msngbac', 'sunghiep', 'gioitinh', 'tnndenngay', 'ngaytu', 'ngayden', 'ngaysinh', 'mact', 'tendv')
+                ->where('theodoi', '<', '9')
+                ->where('hosocanbo.madv', $inputs['madv'])
                 ->where('dmdonvi.macqcq', session('admin')->madv)
                 ->orderby('tendv')
                 ->get();
-            if($inputs['madv'] == 'ALL')
-                $model = hosocanbo::join('dmdonvi','hosocanbo.madv','dmdonvi.madv')
-                    ->select('macanbo', 'tencanbo', 'msngbac', 'sunghiep', 'gioitinh', 'tnndenngay', 'ngaytu', 'ngayden','ngaysinh','mact','tendv')
-                    ->where('theodoi','<' ,'9')
+            if ($inputs['madv'] == 'ALL')
+                $model = hosocanbo::join('dmdonvi', 'hosocanbo.madv', 'dmdonvi.madv')
+                    ->select('macanbo', 'tencanbo', 'msngbac', 'sunghiep', 'gioitinh', 'tnndenngay', 'ngaytu', 'ngayden', 'ngaysinh', 'mact', 'tendv')
+                    ->where('theodoi', '<', '9')
                     ->where('dmdonvi.macqcq', session('admin')->madv)
                     ->orderby('tendv')
                     ->get();
@@ -171,51 +210,52 @@ class quanlyhosoController extends Controller
 
                 $ct->thang = date_format($dt, 'm');
                 $ct->nam = $ct->gioitinh == 'Nam' ? date_format($dt, 'Y') + $gen['tuoinam'] : date_format($dt, 'Y') + $gen['tuoinu'];
-                if(isset($ct->ngaysinh)){
-                    $ct->ngaynghi = $dt->modify(' +'.($ct->gioitinh == 'Nam' ?$gen['tuoinam']: $gen['tuoinu'] ).' year')->format('Y-m-d');;
+                if (isset($ct->ngaysinh)) {
+                    $ct->ngaynghi = $dt->modify(' +' . ($ct->gioitinh == 'Nam' ? $gen['tuoinam'] : $gen['tuoinu']) . ' year')->format('Y-m-d');;
                 }
             }
-            $m_hs = $model->where('nam','<=' ,$date['year']);
+            $m_hs = $model->where('nam', '<=', $date['year']);
             return view('manage.danhsachhoso.index_nghihuu')
-                ->with('m_hs',$m_hs)
-                ->with('url','/nghiep_vu/ho_so/')
-                ->with('tendv',getTenDV(session('admin')->madv))
-                ->with('a_donvi',$a_donvi)
-                ->with('donvi',$donvi)
-                ->with('pageTitle','Danh sách cán bộ');
+                ->with('m_hs', $m_hs)
+                ->with('url', '/nghiep_vu/ho_so/')
+                ->with('tendv', getTenDV(session('admin')->madv))
+                ->with('a_donvi', $a_donvi)
+                ->with('donvi', $donvi)
+                ->with('pageTitle', 'Danh sách cán bộ');
         } else
             return view('errors.notlogin');
     }
-    function innangluong_th(Request $requests){
+    function innangluong_th(Request $requests)
+    {
         if (Session::has('admin')) {
             $inputs = $requests->all();
-            $a_nangluong=array('NB'=>'Nâng lương ngạch bậc','TNN'=>'Nâng lương thâm niên nghề');
-            $a_donvi=dmdonvi::select('madv','tendv','phanloaitaikhoan')
+            $a_nangluong = array('NB' => 'Nâng lương ngạch bậc', 'TNN' => 'Nâng lương thâm niên nghề');
+            $a_donvi = dmdonvi::select('madv', 'tendv', 'phanloaitaikhoan')
                 ->where('macqcq', session('admin')->madv)
                 ->get();
             $nangluong = $inputs['nangluong'];
 
             $donvi = $inputs['madv'];
-            $model = hosocanbo::join('dmdonvi','hosocanbo.madv','dmdonvi.madv')
-                ->select('macanbo', 'tencanbo', 'msngbac', 'sunghiep', 'gioitinh', 'tnndenngay', 'ngaytu', 'ngayden','ngaysinh','mact','tendv')
-                ->where('theodoi','<' ,'9')
-                ->where('hosocanbo.madv',$inputs['madv'])
+            $model = hosocanbo::join('dmdonvi', 'hosocanbo.madv', 'dmdonvi.madv')
+                ->select('macanbo', 'tencanbo', 'msngbac', 'sunghiep', 'gioitinh', 'tnndenngay', 'ngaytu', 'ngayden', 'ngaysinh', 'mact', 'tendv')
+                ->where('theodoi', '<', '9')
+                ->where('hosocanbo.madv', $inputs['madv'])
                 ->where('dmdonvi.macqcq', session('admin')->madv)
                 ->orderby('tendv')
                 ->get();
-            $check = $a_donvi->where('madv',$donvi)->first();
-            if(isset($check) && $check->phanloaitaikhoan == 'TH'){
-                $model = hosocanbo::join('dmdonvi','hosocanbo.madv','dmdonvi.madv')
-                    ->select('macanbo', 'tencanbo', 'msngbac', 'sunghiep', 'gioitinh', 'tnndenngay', 'ngaytu', 'ngayden','ngaysinh','mact','tendv','heso')
-                    ->where('theodoi','<' ,'9')
-                    ->where('dmdonvi.macqcq',$inputs['madv'])
+            $check = $a_donvi->where('madv', $donvi)->first();
+            if (isset($check) && $check->phanloaitaikhoan == 'TH') {
+                $model = hosocanbo::join('dmdonvi', 'hosocanbo.madv', 'dmdonvi.madv')
+                    ->select('macanbo', 'tencanbo', 'msngbac', 'sunghiep', 'gioitinh', 'tnndenngay', 'ngaytu', 'ngayden', 'ngaysinh', 'mact', 'tendv', 'heso')
+                    ->where('theodoi', '<', '9')
+                    ->where('dmdonvi.macqcq', $inputs['madv'])
                     ->orderby('tendv')
                     ->get();
             }
-            if($inputs['madv'] == 'ALL')
-                $model = hosocanbo::join('dmdonvi','hosocanbo.madv','dmdonvi.madv')
-                    ->select('macanbo', 'tencanbo', 'msngbac', 'sunghiep', 'gioitinh', 'tnndenngay', 'ngaytu', 'ngayden','ngaysinh','mact','tendv')
-                    ->where('theodoi','<' ,'9')
+            if ($inputs['madv'] == 'ALL')
+                $model = hosocanbo::join('dmdonvi', 'hosocanbo.madv', 'dmdonvi.madv')
+                    ->select('macanbo', 'tencanbo', 'msngbac', 'sunghiep', 'gioitinh', 'tnndenngay', 'ngaytu', 'ngayden', 'ngaysinh', 'mact', 'tendv')
+                    ->where('theodoi', '<', '9')
                     ->where('dmdonvi.macqcq', session('admin')->madv)
                     ->orderby('tendv')
                     ->get();
@@ -240,46 +280,47 @@ class quanlyhosoController extends Controller
                 }
             }
             $phanloai = "";
-            if($nangluong == 'NB'){
+            if ($nangluong == 'NB') {
                 $m_hs = $model->where('nam_luong', $date['year']);
                 $phanloai = "NGẠCH BẬC";
             }
-            if($nangluong == 'TNN'){
+            if ($nangluong == 'TNN') {
                 $m_hs = $model->where('nam_nghe', $date['year']);
                 $phanloai = "THÂM NIÊN NGHỀ";
             }
-            $m_dv = dmdonvi::where('madv',session('admin')->madv)->first();
+            $m_dv = dmdonvi::where('madv', session('admin')->madv)->first();
             return view('reports.quanlyhoso.danhsach')
-                ->with('m_hs',$m_hs)
-                ->with('m_dv',$m_dv)
-                ->with('tendv',getTenDV(session('admin')->madv))
-                ->with('a_donvi',$a_donvi)
-                ->with('donvi',$donvi)
-                ->with('nangluong',$nangluong)
-                ->with('phanloai',$phanloai)
-                ->with('a_nangluong',$a_nangluong)
-                ->with('pageTitle','Danh sách cán bộ');
+                ->with('m_hs', $m_hs)
+                ->with('m_dv', $m_dv)
+                ->with('tendv', getTenDV(session('admin')->madv))
+                ->with('a_donvi', $a_donvi)
+                ->with('donvi', $donvi)
+                ->with('nangluong', $nangluong)
+                ->with('phanloai', $phanloai)
+                ->with('a_nangluong', $a_nangluong)
+                ->with('pageTitle', 'Danh sách cán bộ');
         } else
             return view('errors.notlogin');
     }
-    function innghihuu_th(Request $requests){
+    function innghihuu_th(Request $requests)
+    {
         if (Session::has('admin')) {
             $inputs = $requests->all();
-            $a_donvi=dmdonvi::select('madv','tendv')
+            $a_donvi = dmdonvi::select('madv', 'tendv')
                 ->where('macqcq', session('admin')->madv)
                 ->get();
             $donvi = $inputs['madv'];
-            $model = hosocanbo::join('dmdonvi','hosocanbo.madv','dmdonvi.madv')
-                ->select('macanbo', 'tencanbo', 'msngbac', 'sunghiep', 'gioitinh', 'tnndenngay', 'ngaytu', 'ngayden','ngaysinh','mact','tendv')
-                ->where('theodoi','<' ,'9')
-                ->where('hosocanbo.madv',$inputs['madv'])
+            $model = hosocanbo::join('dmdonvi', 'hosocanbo.madv', 'dmdonvi.madv')
+                ->select('macanbo', 'tencanbo', 'msngbac', 'sunghiep', 'gioitinh', 'tnndenngay', 'ngaytu', 'ngayden', 'ngaysinh', 'mact', 'tendv')
+                ->where('theodoi', '<', '9')
+                ->where('hosocanbo.madv', $inputs['madv'])
                 ->where('dmdonvi.macqcq', session('admin')->madv)
                 ->orderby('tendv')
                 ->get();
-            if($inputs['madv'] == 'ALL')
-                $model = hosocanbo::join('dmdonvi','hosocanbo.madv','dmdonvi.madv')
-                    ->select('macanbo', 'tencanbo', 'msngbac', 'sunghiep', 'gioitinh', 'tnndenngay', 'ngaytu', 'ngayden','ngaysinh','mact','tendv')
-                    ->where('theodoi','<' ,'9')
+            if ($inputs['madv'] == 'ALL')
+                $model = hosocanbo::join('dmdonvi', 'hosocanbo.madv', 'dmdonvi.madv')
+                    ->select('macanbo', 'tencanbo', 'msngbac', 'sunghiep', 'gioitinh', 'tnndenngay', 'ngaytu', 'ngayden', 'ngaysinh', 'mact', 'tendv')
+                    ->where('theodoi', '<', '9')
                     ->where('dmdonvi.macqcq', session('admin')->madv)
                     ->orderby('tendv')
                     ->get();
@@ -290,19 +331,19 @@ class quanlyhosoController extends Controller
 
                 $ct->thang = date_format($dt, 'm');
                 $ct->nam = $ct->gioitinh == 'Nam' ? date_format($dt, 'Y') + $gen['tuoinam'] : date_format($dt, 'Y') + $gen['tuoinu'];
-                if(isset($ct->ngaysinh)){
-                    $ct->ngaynghi = $dt->modify(' +'.($ct->gioitinh == 'Nam' ?$gen['tuoinam']: $gen['tuoinu'] ).' year')->format('Y-m-d');;
+                if (isset($ct->ngaysinh)) {
+                    $ct->ngaynghi = $dt->modify(' +' . ($ct->gioitinh == 'Nam' ? $gen['tuoinam'] : $gen['tuoinu']) . ' year')->format('Y-m-d');;
                 }
             }
-            $m_hs = $model->where('nam','<=' ,$date['year']);
-            $m_dv = dmdonvi::where('madv',session('admin')->madv)->first();
+            $m_hs = $model->where('nam', '<=', $date['year']);
+            $m_dv = dmdonvi::where('madv', session('admin')->madv)->first();
             return view('reports.quanlyhoso.nghihuu')
-                ->with('m_hs',$m_hs)
-                ->with('m_dv',$m_dv)
-                ->with('tendv',getTenDV(session('admin')->madv))
-                ->with('a_donvi',$a_donvi)
-                ->with('donvi',$donvi)
-                ->with('pageTitle','Danh sách cán bộ');
+                ->with('m_hs', $m_hs)
+                ->with('m_dv', $m_dv)
+                ->with('tendv', getTenDV(session('admin')->madv))
+                ->with('a_donvi', $a_donvi)
+                ->with('donvi', $donvi)
+                ->with('pageTitle', 'Danh sách cán bộ');
         } else
             return view('errors.notlogin');
     }
