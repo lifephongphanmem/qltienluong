@@ -76,9 +76,9 @@
                         </thead>
 
                         <tbody>
-                            @foreach ($model as $hs)
+                            @foreach ($model as $key=>$hs)
                                 <tr>
-                                    <td class="text-center">{{ $hs->stt }}</td>
+                                    <td class="text-center">{{ ++$key }}</td>
                                     <td name="anh">
                                         <a href="{{ url($url . 'maso=' . $hs->id . '') }}">
                                             @if ($hs->anh != '')

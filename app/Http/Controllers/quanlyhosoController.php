@@ -83,6 +83,11 @@ class quanlyhosoController extends Controller
             $model_nhomct = dmphanloaicongtac::select('macongtac', 'tencongtac')->get();
             $model_tenct = dmphanloaict::select('tenct', 'macongtac', 'mact')->get();
 
+
+            // $model = $m_hs;
+            // if ($inputs['madv'] != 'ALL')
+            //     $model = $model->where('madv', $inputs['madv']);
+
             return view('manage.danhsachhoso.index')
                 ->with('model', $model)
                 ->with('url', '/nghiep_vu/ho_so/')
