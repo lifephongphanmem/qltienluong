@@ -249,7 +249,7 @@ class xemdulieu_nguonController extends Controller
             // dd($madv);
             // dd($dv_th);
             // dd($inputs);
-            $madvqlkv = dmdonvibaocao::where('madvbc',$madvbc)->first()->madvcq;
+            $madvqlkv = dmdonvibaocao::where('madvbc', $madvbc)->first()->madvcq;
             $model_dvbc = dmdonvibaocao::where('level', 'H')->get();
             $a_trangthai_dl = array('ALL' => '--Chọn trạng thái dữ liệu--', 'CHOGUI' => 'Chưa gửi dữ liệu', 'DAGUI' => 'Đã gửi dữ liệu');
             $model_nguon = nguonkinhphi::where('sohieu', $inputs['sohieu'])
@@ -280,19 +280,19 @@ class xemdulieu_nguonController extends Controller
             // $m_donvi = array_diff($a_donvicapduoi, array_column($model_donvitamdung->toarray(), 'madv'));
             // $model_donvi = dmdonvi::select('madv', 'tendv', 'maphanloai')->wherein('madv', $m_donvi)->get();
             $model_donvi = dmdonvi::select('madv', 'tendv', 'maphanloai')
-            ->whereIn('madv', function ($query) use ($madvqlkv) {
-                $query->from('dmdonvi')
-                    ->select('madv')
-                    ->where('macqcq', $madvqlkv)
-                    ->where('madv', '<>', $madvqlkv);
-            })
-            ->whereNotIn('madv', function ($query) use ($nam) {
-                $query->from('dmdonvi')
-                    ->select('madv')
-                    ->whereRaw('YEAR(ngaydung) <= ?', [$nam])
-                    ->where('trangthai', 'TD');
-            })
-            ->get();
+                ->whereIn('madv', function ($query) use ($madvqlkv) {
+                    $query->from('dmdonvi')
+                        ->select('madv')
+                        ->where('macqcq', $madvqlkv)
+                        ->where('madv', '<>', $madvqlkv);
+                })
+                ->whereNotIn('madv', function ($query) use ($nam) {
+                    $query->from('dmdonvi')
+                        ->select('madv')
+                        ->whereRaw('YEAR(ngaydung) <= ?', [$nam])
+                        ->where('trangthai', 'TD');
+                })
+                ->get();
             // dd($model_donvi);
             foreach ($model_donvi as $dv) {
                 $nguon = $model_nguon->where('madv', $dv->madv)->first();

@@ -23,76 +23,71 @@ class quanlyhosoController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $requests->all();
-            // dd($inputs);
             $a_sunghiep = array('ALL' => '--Chọn sự nghiệp cán bộ--', 'Công chức' => 'Công chức', 'Viên chức' => 'Viên chức', 'Khác' => 'Khác');
-            //$a_plcanbo=array('ALL'=>'','Tập sự'=>'Tập sự, thử việc','Chính thức'=>'Chính thức');
-            $sunghiep = $inputs['sunghiep'];
 
-            // $m_dv = dmdonvi::where('dmdonvi.macqcq', session('admin')->madv)->get();
-            $m_dv = dmdonvi::where('macqcq', session('admin')->madv)->where('madv', '<>', session('admin')->madv)
-                ->wherenotin('madv', function ($query) {
-                    $query->select('madv')->from('dmdonvi')
-                        ->where('trangthai', 'TD')
-                        ->get();
-                })
-                ->get();
-                $inputs['madv']=$inputs['madv']??$m_dv->first()->madv;
-                $madv = $inputs['madv'];
-            if ($inputs['madv'] != 'ALL') {
-                $m_dvth = dmdonvi::where('macqcq', $madv)->where('madv', '<>', $madv)
-                    ->wherenotin('madv', function ($query) use ($madv) {
-                        $query->select('madv')->from('dmdonvi')
-                            ->where('trangthai', 'TD')
-                            ->get();
-                    })
-                    ->get();
+            $a_donvi = [];
+            if ($inputs['madv'] == 'ALL') {
+                $macqcq = session('admin')->madv;
+                $donvicapduoi = dmdonvi::where('macqcq', $macqcq)->get();
+                foreach ($donvicapduoi as $dv) {
+                    if ($dv->phanloaitaikhoan == 'SD') {
+                        //Đơn vị nhập liệu
+                        $a_donvi[] = $dv->madv;
+                    } else {
+                        //Đơn vị tổng hợp
+                        foreach (dmdonvi::where('macqcq', $dv->madv)->get() as $dv_khoi) {
+                            $a_donvi[] = $dv_khoi->madv;
+                        }
+                    }
+                }
+            } else {
+                $macqcq = $inputs['madv'];
+                $donvicapduoi = dmdonvi::where('macqcq', $macqcq)->get();
+                foreach ($donvicapduoi as $dv) {
+                    if ($dv->phanloaitaikhoan == 'SD') {
+                        //Đơn vị nhập liệu
+                        $a_donvi[] = $dv->madv;
+                    } else {
+                        //Đơn vị tổng hợp
+                        foreach (dmdonvi::where('macqcq', $dv->madv)->get() as $dv_khoi) {
+                            $a_donvi[] = $dv_khoi->madv;
+                        }
+                    }
+                }
             }
-            $a_dvth = isset($m_dvth)?array_column($m_dvth->toarray(), 'madv'):array_column($m_dv->toarray(), 'madv');
-            // dd($a_dvth);
-            $m_dv_con = dmdonvi::select('madv','tendv')->wherein('madv', $a_dvth)
-                ->wherenotin('madv', function ($query) use ($madv) {
-                    $query->select('madv')->from('dmdonvi')
-                        ->where('trangthai', 'TD')
-                        ->get();
-                })
-                ->get();
-            $a_dv = array_column($m_dv_con->toarray(), 'madv');
-            // dd($m_dv_con->take(20));
-            //Lấy mã đơn vị của các đơn vị cấp dưới của các đơn vị tổng hợp con
 
-            //$m_hs=hosocanbo::where('madv',session('admin')->maxa)->get();
-            $m_hs = hosocanbo::join('dmdonvi', 'hosocanbo.madv', 'dmdonvi.madv')
-                ->select('macanbo', 'tencanbo', 'msngbac', 'sunghiep', 'gioitinh', 'tnndenngay', 'ngaytu', 'ngayden', 'ngaysinh', 'mact', 'tendv', 'dmdonvi.madv')
+            $sunghiep = $inputs['sunghiep'];
+            $madv = $inputs['madv'];
+            $m_dv = dmdonvi::where('macqcq', session('admin')->madv)->get();
+
+            $model = hosocanbo::select('macanbo', 'tencanbo', 'msngbac', 'sunghiep', 'gioitinh', 'tnndenngay', 'ngaytu', 'ngayden', 'ngaysinh', 'mact', 'madv')
                 ->where('theodoi', '<', '9')
-                ->where('sunghiep', 'like', $inputs['sunghiep'] . '%')
-                // ->where('dmdonvi.macqcq', session('admin')->madv)
-                ->wherein('dmdonvi.madv', $a_dv)
-                ->orderby('tendv')
+                //->where('sunghiep', 'like', $inputs['sunghiep'] . '%')
+                ->wherein('madv', $a_donvi)
+                ->orderby('madv')
                 ->get();
-                // dd($m_hs);
-            if ($inputs['sunghiep'] == 'ALL')
-                $m_hs = hosocanbo::join('dmdonvi', 'hosocanbo.madv', 'dmdonvi.madv')
-                    ->select('macanbo', 'tencanbo', 'msngbac', 'sunghiep', 'gioitinh', 'tnndenngay', 'ngaytu', 'ngayden', 'ngaysinh', 'mact', 'tendv', 'dmdonvi.madv')
-                    ->where('theodoi', '<', '9')
-                    // ->where('dmdonvi.macqcq', session('admin')->madv)
-                    ->wherein('dmdonvi.madv', $a_dv)
-                    ->orderby('tendv')
-                    ->get();
-            // dd($m_hs->take(10));
+
+            if ($inputs['sunghiep'] != 'ALL')
+                $model = $model->where('sunghiep',  $inputs['sunghiep']);
+            //  dd($model);
             $a_ct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
             $a_pb = getPhongBan(false);
             $a_cv = getChucVuCQ(false);
-            foreach ($m_hs as $hs) {
+            $a_dv = array_column(dmdonvi::all()->toArray(), 'tendv', 'madv');
+            foreach ($model as $hs) {
                 $hs->tenpb = isset($a_pb[$hs->mapb]) ? $a_pb[$hs->mapb] : '';
                 $hs->tencvcq = isset($a_cv[$hs->macvcq]) ? $a_cv[$hs->macvcq] : '';
                 $hs->tenct = isset($a_ct[$hs->mact]) ? $a_ct[$hs->mact] : '';
+                $hs->tendv = $a_dv[$hs->madv] ?? '';
             }
             $model_nhomct = dmphanloaicongtac::select('macongtac', 'tencongtac')->get();
             $model_tenct = dmphanloaict::select('tenct', 'macongtac', 'mact')->get();
 
-            $model = $m_hs;
+
+            // $model = $m_hs;
             // if ($inputs['madv'] != 'ALL')
             //     $model = $model->where('madv', $inputs['madv']);
+
             return view('manage.danhsachhoso.index')
                 ->with('model', $model)
                 ->with('url', '/nghiep_vu/ho_so/')

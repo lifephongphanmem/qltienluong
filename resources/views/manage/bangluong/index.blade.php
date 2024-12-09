@@ -167,12 +167,12 @@
                                                                 <i class="fa fa-caret-right"></i>Khen thưởng / Giảm trừ
                                                                 lương</button>
                                                         </li>
-                                                        <li>
+                                                        {{-- <li>
                                                             <a href="{{ url($inputs['furl'] . 'ThuyetMinhChiTiet?mabl=' . $value->mabl) }}"
                                                                 style="border: none;padding-top: 0px;padding-bottom: 0px;"
                                                                 class="btn-default">
                                                                 <i class="fa fa-caret-right"></i>Thuyết minh chi tiết</a>
-                                                        </li>
+                                                        </li> --}}
                                                         {{-- <li>
                                                             <a href="{{ url($inputs['furl'] . 'ThemCanBo?mabl=' . $value->mabl) }}"
                                                                 style="border: none;padding-top: 0px;padding-bottom: 0px;"

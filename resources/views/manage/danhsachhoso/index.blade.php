@@ -52,7 +52,7 @@
                     </div>
                     <div class="col-md-8">
                         <select class="form-control select2me" id="madv" name="madv">
-                            {{-- <option value="ALL">--Chọn tất cả--</option> --}}
+                            <option value="ALL">--Chọn tất cả--</option>
                             @foreach ($m_donvi as $donvi)
                                 <option value="{{ $donvi->madv }} " @if ($madv == $donvi->madv) selected @endif>
                                     {{ $donvi->tendv }}</option>

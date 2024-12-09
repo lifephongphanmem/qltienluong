@@ -84,6 +84,7 @@ class bangluong_inController extends Controller
             $inputs = $request->all();
             $inputs['madv'] = session('admin')->madv;
             list($m_canbo, $a_pc) = $this->getData($inputs);
+
             $a_canbo = $m_canbo->toarray();
 
             $m_dv = dmdonvi::where('madv', $inputs['madv'])->first();
@@ -304,8 +305,27 @@ class bangluong_inController extends Controller
             //dd($m_canbo_trc);
 
             $a_luong = [
-                'heso', 'vuotkhung', 'pccv', 'pckv', 'pcth', 'pclade', 'pcdh', 'pcdbqh', 'pcudn', 'pcdbn',
-                'pcud61', 'pctnn', 'pcthni', 'pclt', 'pcdang', 'pccovu', 'pcct', 'pctn', 'pckn', 'pcdd', 'pcvk'
+                'heso',
+                'vuotkhung',
+                'pccv',
+                'pckv',
+                'pcth',
+                'pclade',
+                'pcdh',
+                'pcdbqh',
+                'pcudn',
+                'pcdbn',
+                'pcud61',
+                'pctnn',
+                'pcthni',
+                'pclt',
+                'pcdang',
+                'pccovu',
+                'pcct',
+                'pctn',
+                'pckn',
+                'pcdd',
+                'pcvk'
             ];
             $a_hopdong = ['luonghd'];
             $a_tangthem = [];
@@ -445,8 +465,28 @@ class bangluong_inController extends Controller
             //dd($m_canbo_trc);
 
             $a_luong = [
-                'heso', 'vuotkhung', 'pccv', 'pckv', 'pcth', 'pclade', 'pcdh', 'pcdbqh', 'pcudn', 'pcdbn',
-                'pcud61', 'pctnn', 'pcthni', 'pclt', 'pcdang', 'pccovu', 'pcct', 'pctn', 'pckn', 'pcdd', 'pcvk', 'hesopc'
+                'heso',
+                'vuotkhung',
+                'pccv',
+                'pckv',
+                'pcth',
+                'pclade',
+                'pcdh',
+                'pcdbqh',
+                'pcudn',
+                'pcdbn',
+                'pcud61',
+                'pctnn',
+                'pcthni',
+                'pclt',
+                'pcdang',
+                'pccovu',
+                'pcct',
+                'pctn',
+                'pckn',
+                'pcdd',
+                'pcvk',
+                'hesopc'
             ];
             $a_hopdong = ['luonghd'];
             $a_tangthem = [];
@@ -711,7 +751,8 @@ class bangluong_inController extends Controller
                 'nguoilap' => $m_bl->nguoilap,
                 'thang' => $m_bl->thang,
                 'nam' => $m_bl->nam,
-                'ngaylap' => $m_bl->ngaylap, 'phanloai' => $m_bl->phanloai,
+                'ngaylap' => $m_bl->ngaylap,
+                'phanloai' => $m_bl->phanloai,
                 'cochu' => $inputs['cochu'],
                 'innoidung' => isset($inputs['innoidung']),
                 'noidung' => $m_bl->noidung,
@@ -781,7 +822,8 @@ class bangluong_inController extends Controller
                 'nguoilap' => $m_bl->nguoilap,
                 'thang' => $m_bl->thang,
                 'nam' => $m_bl->nam,
-                'ngaylap' => $m_bl->ngaylap, 'phanloai' => $m_bl->phanloai,
+                'ngaylap' => $m_bl->ngaylap,
+                'phanloai' => $m_bl->phanloai,
                 'cochu' => $inputs['cochu'],
                 'innoidung' => isset($inputs['innoidung']),
                 'noidung' => $m_bl->noidung,
@@ -838,7 +880,8 @@ class bangluong_inController extends Controller
                 'nguoilap' => $m_bl->nguoilap,
                 'thang' => $m_bl->thang,
                 'nam' => $m_bl->nam,
-                'ngaylap' => $m_bl->ngaylap, 'phanloai' => $m_bl->phanloai,
+                'ngaylap' => $m_bl->ngaylap,
+                'phanloai' => $m_bl->phanloai,
                 'cochu' => $inputs['cochu'],
                 'innoidung' => isset($inputs['innoidung']),
                 'noidung' => $m_bl->noidung,
@@ -1034,7 +1077,8 @@ class bangluong_inController extends Controller
                 'nguoilap' => $m_bl->nguoilap,
                 'thang' => $m_bl->thang,
                 'nam' => $m_bl->nam,
-                'ngaylap' => $m_bl->ngaylap, 'phanloai' => $m_bl->phanloai,
+                'ngaylap' => $m_bl->ngaylap,
+                'phanloai' => $m_bl->phanloai,
                 'cochu' => $inputs['cochu']
             );
             //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
@@ -1135,7 +1179,8 @@ class bangluong_inController extends Controller
                 'nguoilap' => $m_bl->nguoilap,
                 'thang' => $m_bl->thang,
                 'nam' => $m_bl->nam,
-                'ngaylap' => $m_bl->ngaylap, 'phanloai' => $m_bl->phanloai,
+                'ngaylap' => $m_bl->ngaylap,
+                'phanloai' => $m_bl->phanloai,
                 'cochu' => $inputs['cochu']
             );
             //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
@@ -1193,8 +1238,27 @@ class bangluong_inController extends Controller
 
 
             $a_luong = [
-                'heso', 'vuotkhung', 'pccv', 'pckv', 'pcth', 'pclade', 'pcdh', 'pcdbqh', 'pcudn', 'pcdbn',
-                'pcud61', 'pctnn', 'pcthni', 'pclt', 'pcdang', 'pccovu', 'pcct', 'pctn', 'pckn', 'pcdd', 'pcvk'
+                'heso',
+                'vuotkhung',
+                'pccv',
+                'pckv',
+                'pcth',
+                'pclade',
+                'pcdh',
+                'pcdbqh',
+                'pcudn',
+                'pcdbn',
+                'pcud61',
+                'pctnn',
+                'pcthni',
+                'pclt',
+                'pcdang',
+                'pccovu',
+                'pcct',
+                'pctn',
+                'pckn',
+                'pcdd',
+                'pcvk'
             ];
             $a_hopdong = ['luonghd'];
             $a_tangthem = [];
@@ -1329,11 +1393,11 @@ class bangluong_inController extends Controller
                 if ($model_trc != null) {
                     $ct->chenhlech = $ct->luongtn;
                     $canbo = $model_trc->where('macanbo', $ct->macanbo)->where('mact', $ct->mact)->first();
-                    $cb_chuyenplct=$model_trc->where('macanbo',$ct->macanbo)->first();
-                    if(isset($cb_chuyenplct) && !isset($canbo)){
+                    $cb_chuyenplct = $model_trc->where('macanbo', $ct->macanbo)->first();
+                    if (isset($cb_chuyenplct) && !isset($canbo)) {
                         //trường hợp chuyển plct
                         $ct->chenhlech = $ct->luongtn - $cb_chuyenplct->luongtn;
-                    }elseif ($canbo != null) {
+                    } elseif ($canbo != null) {
                         $ct->chenhlech = $ct->luongtn - $canbo->luongtn;
                     }
                 }
@@ -1343,7 +1407,8 @@ class bangluong_inController extends Controller
                 'nguoilap' => $m_bl->nguoilap,
                 'thang' => $m_bl->thang,
                 'nam' => $m_bl->nam,
-                'ngaylap' => $m_bl->ngaylap, 'phanloai' => $m_bl->phanloai,
+                'ngaylap' => $m_bl->ngaylap,
+                'phanloai' => $m_bl->phanloai,
                 'cochu' => $inputs['cochu']
             );
 
@@ -1394,7 +1459,8 @@ class bangluong_inController extends Controller
                 'nguoilap' => $m_bl->nguoilap,
                 'thang' => $m_bl->thang,
                 'nam' => $m_bl->nam,
-                'ngaylap' => $m_bl->ngaylap, 'phanloai' => $m_bl->phanloai,
+                'ngaylap' => $m_bl->ngaylap,
+                'phanloai' => $m_bl->phanloai,
                 'cochu' => $inputs['cochu'],
                 'innoidung' => isset($inputs['innoidung']),
                 'noidung' => $m_bl->noidung,
@@ -1446,7 +1512,8 @@ class bangluong_inController extends Controller
                 'nguoilap' => $m_bl->nguoilap,
                 'thang' => $m_bl->thang,
                 'nam' => $m_bl->nam,
-                'ngaylap' => $m_bl->ngaylap, 'phanloai' => $m_bl->phanloai,
+                'ngaylap' => $m_bl->ngaylap,
+                'phanloai' => $m_bl->phanloai,
                 'cochu' => $inputs['cochu'],
                 'innoidung' => isset($inputs['innoidung']),
                 'noidung' => $m_bl->noidung,
@@ -1512,7 +1579,8 @@ class bangluong_inController extends Controller
                 'nguoilap' => $m_bl->nguoilap,
                 'thang' => $m_bl->thang,
                 'nam' => $m_bl->nam,
-                'ngaylap' => $m_bl->ngaylap, 'phanloai' => $m_bl->phanloai,
+                'ngaylap' => $m_bl->ngaylap,
+                'phanloai' => $m_bl->phanloai,
                 'cochu' => $inputs['cochu'],
                 'innoidung' => isset($inputs['innoidung']),
                 'noidung' => $m_bl->noidung,
@@ -1567,7 +1635,8 @@ class bangluong_inController extends Controller
                 'nguoilap' => $m_bl->nguoilap,
                 'thang' => $m_bl->thang,
                 'nam' => $m_bl->nam,
-                'ngaylap' => $m_bl->ngaylap, 'phanloai' => $m_bl->phanloai,
+                'ngaylap' => $m_bl->ngaylap,
+                'phanloai' => $m_bl->phanloai,
                 'cochu' => $inputs['cochu'],
                 'innoidung' => isset($inputs['innoidung']),
                 'noidung' => $m_bl->noidung,
@@ -1788,7 +1857,8 @@ class bangluong_inController extends Controller
                 'nguoilap' => $m_bl->nguoilap,
                 'thang' => $m_bl->thang,
                 'nam' => $m_bl->nam,
-                'ngaylap' => $m_bl->ngaylap, 'phanloai' => $m_bl->phanloai,
+                'ngaylap' => $m_bl->ngaylap,
+                'phanloai' => $m_bl->phanloai,
                 'cochu' => $inputs['cochu'],
                 'innoidung' => isset($inputs['innoidung']),
                 'noidung' => $m_bl->noidung,
@@ -1897,8 +1967,27 @@ class bangluong_inController extends Controller
             $a_tencanbo = array_column($m_hs->toarray(), 'tencanbo', 'macanbo');
 
             $a_luong = [
-                'heso', 'vuotkhung', 'pccv', 'pckv', 'pcth', 'pclade', 'pcdh', 'pcdbqh', 'pcudn', 'pcdbn',
-                'pcud61', 'pctnn', 'pcthni', 'pclt', 'pcdang', 'pccovu', 'pcct', 'pctn', 'pckn', 'pcdd', 'pcvk'
+                'heso',
+                'vuotkhung',
+                'pccv',
+                'pckv',
+                'pcth',
+                'pclade',
+                'pcdh',
+                'pcdbqh',
+                'pcudn',
+                'pcdbn',
+                'pcud61',
+                'pctnn',
+                'pcthni',
+                'pclt',
+                'pcdang',
+                'pccovu',
+                'pcct',
+                'pctn',
+                'pckn',
+                'pcdd',
+                'pcvk'
             ];
             $a_tangthem = [];
             $a_tienthuong = [];
@@ -2007,7 +2096,8 @@ class bangluong_inController extends Controller
                 'nguoilap' => $m_bl->nguoilap,
                 'thang' => $m_bl->thang,
                 'nam' => $m_bl->nam,
-                'ngaylap' => $m_bl->ngaylap, 'phanloai' => $m_bl->phanloai,
+                'ngaylap' => $m_bl->ngaylap,
+                'phanloai' => $m_bl->phanloai,
                 'cochu' => $inputs['cochu'],
                 'mapb' => $inputs['mapb'],
                 'tenpb' => $a_pb[$inputs['mapb']],
@@ -2071,8 +2161,27 @@ class bangluong_inController extends Controller
             $a_tencanbo = array_column($m_hs->toarray(), 'tencanbo', 'macanbo');
 
             $a_luong = [
-                'heso', 'vuotkhung', 'pccv', 'pckv', 'pcth', 'pclade', 'pcdh', 'pcdbqh', 'pcudn', 'pcdbn',
-                'pcud61', 'pctnn', 'pcthni', 'pclt', 'pcdang', 'pccovu', 'pcct', 'pctn', 'pckn', 'pcdd', 'pcvk'
+                'heso',
+                'vuotkhung',
+                'pccv',
+                'pckv',
+                'pcth',
+                'pclade',
+                'pcdh',
+                'pcdbqh',
+                'pcudn',
+                'pcdbn',
+                'pcud61',
+                'pctnn',
+                'pcthni',
+                'pclt',
+                'pcdang',
+                'pccovu',
+                'pcct',
+                'pctn',
+                'pckn',
+                'pcdd',
+                'pcvk'
             ];
             $a_tangthem = [];
             $a_tienthuong = [];
@@ -2175,7 +2284,8 @@ class bangluong_inController extends Controller
                 'nguoilap' => $m_bl->nguoilap,
                 'thang' => $m_bl->thang,
                 'nam' => $m_bl->nam,
-                'ngaylap' => $m_bl->ngaylap, 'phanloai' => $m_bl->phanloai,
+                'ngaylap' => $m_bl->ngaylap,
+                'phanloai' => $m_bl->phanloai,
                 'cochu' => $inputs['cochu'],
                 'mapb' => $inputs['mapb'],
                 'tenpb' => $a_pb[$inputs['mapb']],
@@ -2208,6 +2318,7 @@ class bangluong_inController extends Controller
     public function getData($inputs)
     {
         $getData = new data();
+        //Thông tin bảng lương
         $model = $getData->getBangluong_ct_th(
             $inputs['thang_th'],
             $inputs['nam_th'],
@@ -2216,6 +2327,7 @@ class bangluong_inController extends Controller
             'BANGLUONG'
         );
 
+        //Thông tin bảng truy lĩnh
         $model_tl = array();
         if (isset($inputs['in_truylinh'])) {
             $model_tl = $getData->getBangluong_ct_th(
@@ -2239,6 +2351,27 @@ class bangluong_inController extends Controller
             $model_tl = $model_tl->where('mact', $inputs['mact']);
         }
 
+        //THông tin bảng trích nộp lương
+        $model_trichnop = array();
+        if (isset($inputs['in_bltruc'])) {
+            $model_trichnop = $getData->getBangluong_ct_th(
+                $inputs['thang_th'],
+                $inputs['nam_th'],
+                $inputs['madv'],
+                null,
+                'TRICHNOP'
+            );
+            //
+            $a_bltrichnop = bangluong::select('mabl')
+                ->where('thang', $inputs['thang_th'])
+                ->where('nam', $inputs['nam_th'])
+                ->where('madv', $inputs['madv'])
+                ->where('phanloai', 'TRICHNOP')->get()->toarray();
+            $model_trichnop = bangluong_truc::wherein('mabl', $a_bltrichnop)->get();
+        }
+
+
+        //Danh sách cán bộ
         $model_canbo = $model->unique('macanbo');
         //dd($model_canbo);
 
@@ -2279,7 +2412,14 @@ class bangluong_inController extends Controller
                     $cb->tonghs += $cb->$k;
                 }
             }
+            //Tính trích nộp lương
+            if (count($model_trichnop) > 0) {
+                $trichnop = $model_trichnop->where('macanbo', $cb->macanbo);
+                $cb->giaml += $trichnop->sum('ttl');
+                $cb->luongtn -= $trichnop->sum('ttl');
+            }
 
+            //Tính truy lĩnh
             $cb->ttl_tl = 0; //lưu tiền lương truy lĩnh để sau cộng cùng bảng lương
             if (count($model_tl) > 0) {
                 //nếu chỉ lấy mã can bo => chưa tính trường hợp kiêm nhiệm

@@ -18,6 +18,7 @@ class dsnangluong_chitiet extends Model
         'bac',
         'heso',
         'vuotkhung',
+        'luonghd',
         'pthuong',
         'hesott',
         'truylinhtungay',
