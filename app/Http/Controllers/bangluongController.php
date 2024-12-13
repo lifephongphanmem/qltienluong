@@ -2302,7 +2302,7 @@ class bangluongController extends Controller
     function store_trichnop(Request $request)
     {
         if (Session::has('admin')) {
-            $inputs = $request->all();            
+            $inputs = $request->all();
             $model = bangluong::where('mabl', $inputs['mabl'])->first();
             if ($model != null) {
                 $model->update($inputs);
@@ -2959,22 +2959,21 @@ class bangluongController extends Controller
             $m_bangluong = bangluong::where('mabl', $inputs['mabl'])->first();
             $model = (new data())->getBangluong_ct($m_bangluong->thang, $m_bangluong->mabl);
             //$m_cb[$key]['luongtn'] = $m_cb[$key]['ttl'] - $m_cb[$key]['ttbh'] - $m_cb[$key]['giaml'] - $m_cb[$key]['thuetn'];
-           
+
             foreach ($model as $chitiet) {
-                if ($mact == 'ALL'){
+                if ($mact == 'ALL') {
                     $chitiet->giaml += $inputs['giaml'];
                     $chitiet->tienthuong += $inputs['tienthuong'];
                     $chitiet->luongtn = $chitiet->luongtn + $chitiet->tienthuong - $chitiet->giaml;
                     $chitiet->save();
-                }else{
+                } else {
                     if (in_array($chitiet->mact, $inputs['mact'])) {
                         $chitiet->giaml += $inputs['giaml'];
                         $chitiet->tienthuong += $inputs['tienthuong'];
                         $chitiet->luongtn = $chitiet->luongtn + $chitiet->tienthuong - $chitiet->giaml;
                         $chitiet->save();
-                    }  
+                    }
                 }
-                              
             }
             //            dd($model);
             //            $model->heso = chkDbl($inputs['heso']);
@@ -5665,7 +5664,10 @@ class bangluongController extends Controller
                 ->first();
             if ($m_truylinh != null) {
                 $model_truylinh = (new data())->getBangluong_ct($m_truylinh->thang, $m_truylinh->mabl);
+                if (count($model_truylinh_trc) > 0)
+                    $model_truylinh = $model_truylinh->where('manguonkp', $m_bl->manguonkp);
             }
+            //2024.12.13 Lấy nguồn chi tiết trong truy lĩnh theo đúng nguồn của mã bảng lương (do truy lĩnh chứa tất cả các nguồn)
             // dd($model_truylinh->sortbyDESC('id'));
             if ($m_bl != null && $m_bl->thang == '01') {
                 $thang = '12';
@@ -5690,13 +5692,15 @@ class bangluongController extends Controller
             //bảng lương truy lĩnh tháng trước
             $m_truylinh_trc = bangluong::select('madv', 'thang', 'mabl', 'manguonkp', 'nam')
                 ->where('thang', $thang)->where('nam', $nam)
-                ->where('manguonkp', $m_bl->manguonkp)
+                //->where('manguonkp', $m_bl->manguonkp)
                 ->where('madv', $m_bl->madv)
                 ->where('phanloai', 'TRUYLINH')
                 ->first();
 
             if ($m_truylinh_trc != null) {
                 $model_truylinh_trc = (new data())->getBangluong_ct($m_truylinh_trc->thang, $m_truylinh_trc->mabl);
+                if (count($model_truylinh_trc) > 0)
+                    $model_truylinh_trc = $model_truylinh_trc->where('manguonkp', $m_bl->manguonkp);
             }
             $model = $this->getBangLuong($inputs);
 
