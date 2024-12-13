@@ -5664,7 +5664,7 @@ class bangluongController extends Controller
                 ->first();
             if ($m_truylinh != null) {
                 $model_truylinh = (new data())->getBangluong_ct($m_truylinh->thang, $m_truylinh->mabl);
-                if (count($model_truylinh_trc) > 0)
+                if (count($model_truylinh) > 0)
                     $model_truylinh = $model_truylinh->where('manguonkp', $m_bl->manguonkp);
             }
             //2024.12.13 Lấy nguồn chi tiết trong truy lĩnh theo đúng nguồn của mã bảng lương (do truy lĩnh chứa tất cả các nguồn)
