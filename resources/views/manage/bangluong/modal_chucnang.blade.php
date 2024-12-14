@@ -631,3 +631,84 @@
     </div>
 </div>
 {!! Form::close() !!}
+
+{!! Form::open(['url'=>'/chuc_nang/bang_luong/store_thuetncn','method'=>'post' , 'files'=>true, 'id' => 'create_bangluong_thuetncn']) !!}
+<div id="thuetncn-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+    <div class="modal-dialog modal-content modal-lg">
+        <div class="modal-header modal-header-primary">
+            <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+            <h4 id="modal-header-primary-label" class="modal-title">Thông tin bảng lương thuế TNCN</h4>
+        </div>
+        <div class="modal-body">
+            <div class="form-horizontal">
+                <div class="row">
+                    <div class="col-md-12">
+                        <label class="control-label"> Nội dung</label>
+                        {!! Form::textarea('noidung_thuetncn',null,array('id' => 'noidung_thuetncn', 'class' => 'form-control','rows'=>'3'))!!}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <label class="control-label">Không bao gồm các phụ cấp</label>
+                        {!! Form::select('phucaploaitru_thuetncn[]',$a_phucap,null,array('id' => 'phucaploaitru_thuetncn','class' => 'form-control select2me','multiple'=>'multiple')) !!}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="control-label">Ngày lập bảng lương</label>
+                        <input type="date" name="ngaylap_thuetncn" id="ngaylap_thuetncn" class="form-control" value="{{date('Y-m-d')}}"/>
+
+                    </div>
+                    <div class="col-md-6">
+                        <label class="control-label">Người lập bảng lương</label>
+                        {!!Form::text('nguoilap_thuetncn', session('admin')->nguoilapbieu, array('id' => 'nguoilap_thuetncn','class' => 'form-control'))!!}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12" style="margin-top:15px">
+                        <table  class="table table-hover table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th class="text-center" style="width: 5%">STT</th>
+                                    <th class="text-center">Tháng</th>
+                                    <th class="text-center">Năm</th>
+                                    <th class="text-center">Nguồn kinh phí</th>
+                                    {{-- <th class="text-center">Nội dung<br>bảng lương</th> --}}
+                                    <th class="text-center">Thao tác</th>
+                                </tr>
+                        </thead>
+                        <?php $i = 1; ?>
+                        <tbody>
+                            @foreach ($model_bangluong as $key => $value)
+                                <tr>
+                                    <td class="text-center">{{ $i++ }}</td>
+                                    <td class="text-center">{{ $value->thang }}</td>
+                                    <td class="text-center">{{ $value->nam }}</td>
+                                    <td>{{ isset($m_nguonkp[$value->manguonkp]) ? $m_nguonkp[$value->manguonkp] : '' }}
+                                    </td>
+                                    {{-- <td>{{ $value->noidung }}</td> --}}
+                                    <td class="text-center">
+
+                                        <input type="checkbox" name="{{'mabangluong['.$value->mabl.']'}}">
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+                </div>
+                <input type="hidden" id="thang_thuetncn" name="thang_thuetncn" value="{{$inputs['thang']}}"/>
+                <input type="hidden" id="nam_thuetncn" name="nam_thuetncn" value="{{$inputs['nam']}}"/>
+                <input type="hidden" id="mabl_thuetncn" name="mabl_thuetncn"/>
+                <input type="hidden" id="phanloai_thuetncn" name="phanloai_thuetncn"/>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+            <button type="submit" id="submit" name="submit" value="submit" onclick="disable_btn(this)" class="btn btn-primary">Đồng ý</button>
+        </div>
+    </div>
+</div>
+{!! Form::close() !!}

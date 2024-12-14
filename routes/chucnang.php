@@ -21,6 +21,7 @@ Route::group(['prefix' => 'chuc_nang'], function () {
         Route::post('store_truc', 'bangluongController@store_truc');
         Route::post('store_ctp', 'bangluongController@store_ctp');
         Route::post('store_trichnop', 'bangluongController@store_trichnop');
+        Route::post('store_thuetncn', 'bangluongController@store_thuetncn');
 
         Route::get('store_mau', 'bangluongController@store_mau');
 
@@ -323,6 +324,8 @@ Route::group(['prefix' => 'chuc_nang'], function () {
         Route::post('danhsach', 'xemdulieucapduoiController@danhsach');
         Route::post('danhsachth', 'tonghopluong_tinhController@danhsachdv');
         Route::post('danhsach_thh', 'tonghopluong_huyenController@danhsachth');
+        Route::get('getDVKhoi',[xemdulieucapduoiController::class,'getDV']);
+        Route::get('getMathdv',[xemdulieucapduoiController::class,'getMathdv']);
 
         Route::group(['prefix' => 'nguon'], function () {
             Route::get('khoi', 'xemdulieu_nguonController@index_khoi');

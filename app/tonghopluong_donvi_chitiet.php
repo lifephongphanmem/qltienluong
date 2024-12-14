@@ -217,3 +217,7 @@ class tonghopluong_donvi_chitiet extends Model
         UPDATE qlluong_khanhhoa.tonghopluong_donvi_chitiet
         SET bhxh_dv = FLOOR((stbhxh_dv / luongcoban) * 100000) / 100000
     */
+    /*
+            Cập nhật lương cơ bản: Sử dụng limit để tránh phải cập nhật quá nhiều bản ghi sql k chạy
+            update qlluong_khanhhoa.tonghopluong_donvi_chitiet SET luongcoban = ROUND(st_heso/heso) where heso <> 0 and st_heso <> 0 and luongcoban = 0 LIMIT 100000
+    */

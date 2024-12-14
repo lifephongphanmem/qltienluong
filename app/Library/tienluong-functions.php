@@ -797,6 +797,7 @@ function getPhanLoaiBangLuong()
         'TRICHNOP' => 'Bảng trích nộp lương',
         'KHAC' => 'Bảng chi trả khác',
         'THUYETMINH' => 'Thuyết minh chi tiết',
+        'THUETNCN' => 'Bảng thuế thu nhập cá nhân',
     );
 }
 
@@ -1704,4 +1705,14 @@ function getDanhSachChucNang()
         'baocaotonghop'=>'Báo cáo tổng hợp',
         'thongtinhethong'=>'Thông tin hệ thống đơn vị',
     ];
+}
+function getMonth($thang)
+{
+    $a_quy= array(
+        '1'=>['10','11','12'],
+        '4'=>['1','2','3'],
+        '7'=>['4','5','6'],
+        '10'=>['7','8','9']
+    );
+    return $a_quy[$thang];
 }

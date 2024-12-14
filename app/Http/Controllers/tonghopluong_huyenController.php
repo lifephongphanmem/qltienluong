@@ -1289,9 +1289,17 @@ class tonghopluong_huyenController extends Controller
             $nam = $inputs['nambc'];
             $madv = $inputs['madv'];
             $madvbc = session('admin')->madvbc;
+            $ngay = date("Y-m-t", strtotime($nam . '-' . $thang . '-01'));
             $model_donvi = dmdonvi::join('tonghopluong_donvi', 'tonghopluong_donvi.madv', 'dmdonvi.madv')
                 ->select('dmdonvi.*')
-                ->where('tonghopluong_donvi.macqcq', $madv)->distinct()->get();
+                ->where('tonghopluong_donvi.macqcq', $madv)->distinct()
+                ->whereNotIn('dmdonvi.madv', function ($query) use ($ngay) {
+                    $query->from('dmdonvi')
+                        ->select('dmdonvi.madv')
+                        ->where('ngaydung', '<=', $ngay)
+                        ->where('trangthai', 'TD');
+                })
+                ->get();
             //dd($model_donvi->toarray());
             $model_phanloai = dmphanloaidonvi::wherein('maphanloai', array_column($model_donvi->toarray(), 'maphanloai'))->get();
             $m_pc = array_column(dmphucap::all()->toarray(), 'report', 'mapc');
@@ -1349,6 +1357,7 @@ class tonghopluong_huyenController extends Controller
             }
             $a_thang = array($thang => $thang);
             //dd($model->toarray());
+            // dd($model_donvi);
             if (isset($inputs['excelbc'])) {
                 Excel::create('solieuth', function ($excel) use ($model, $thongtin, $m_dv, $inputs, $model_tonghop, $model_phanloai, $model_donvi, $a_soluong, $col, $a_phucap, $a_thang) {
                     $excel->sheet('New sheet', function ($sheet) use ($model, $thongtin, $m_dv, $inputs, $model_tonghop, $model_phanloai, $model_donvi, $a_soluong, $col, $a_phucap, $a_thang) {
