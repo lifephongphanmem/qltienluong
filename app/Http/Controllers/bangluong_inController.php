@@ -2340,15 +2340,18 @@ class bangluong_inController extends Controller
         }
         if (isset($inputs['mapb']) && $inputs['mapb'] != '') {
             $model = $model->where('mapb', $inputs['mapb']);
-            $model_tl = $model_tl->where('mapb', $inputs['mapb']);
+            if (isset($inputs['in_truylinh']))
+                $model_tl = $model_tl->where('mapb', $inputs['mapb']);
         }
         if (isset($inputs['macvcq']) && $inputs['macvcq'] != '') {
             $model = $model->where('macvcq', $inputs['macvcq']);
-            $model_tl = $model_tl->where('macvcq', $inputs['macvcq']);
+            if (isset($inputs['in_truylinh']))
+                $model_tl = $model_tl->where('macvcq', $inputs['macvcq']);
         }
         if (isset($inputs['mact']) && $inputs['mact'] != '') {
             $model = $model->where('mact', $inputs['mact']);
-            $model_tl = $model_tl->where('mact', $inputs['mact']);
+            if (isset($inputs['in_truylinh']))
+                $model_tl = $model_tl->where('mact', $inputs['mact']);
         }
 
         //THông tin bảng trích nộp lương
@@ -2369,7 +2372,6 @@ class bangluong_inController extends Controller
                 ->where('phanloai', 'TRICHNOP')->get()->toarray();
             $model_trichnop = bangluong_truc::wherein('mabl', $a_bltrichnop)->get();
         }
-
 
         //Danh sách cán bộ
         $model_canbo = $model->unique('macanbo');
