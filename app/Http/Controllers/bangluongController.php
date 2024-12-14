@@ -9,6 +9,7 @@ use App\hosophucap;
 use App\hosothoicongtac;
 use App\Http\Controllers\dataController as data;
 use App\bangluong_truc;
+use App\bangluong_thuetncn;
 use App\bangthuyetminh;
 use App\bangthuyetminh_chitiet;
 use App\dmchucvucq;
@@ -106,10 +107,14 @@ class bangluongController extends Controller
                 $thuyetminh->phanloai = 'THUYETMINH';
                 $model->add($thuyetminh);
             }
+            //Lấy bảng lương của các tháng để chạy chức năng tính thuế thu nhập theo quý
+            $model_bangluong=bangluong::wherein('nam',[$inputs['nam'],$inputs['nam']-1])->where('madv',session('admin')->madv)->where('phanloai','BANGLUONG')->orderby('nam','desc')->get();
+            // dd($model);
             return view('manage.bangluong.index')
                 //->with('furl', '/chuc_nang/bang_luong/')
                 //->with('furl_ajax', '/ajax/bang_luong/')
                 ->with('model', $model)
+                ->with('model_bangluong', $model_bangluong)
                 ->with('model_bl', $model_bl)
                 ->with('inputs', $inputs)
                 ->with('m_linhvuc', $m_linhvuc)
@@ -997,6 +1002,7 @@ class bangluongController extends Controller
 
     function tinhluong_khongdinhmuc($inputs)
     {
+        // dd($inputs);
         $ngaylap = Carbon::create($inputs['nam'], $inputs['thang'], '01');
         //dd($ngaylap);
         $m_tamngung = hosotamngungtheodoi::wherein('maphanloai', ['THAISAN', 'KHONGLUONG', 'DAINGAY', 'KYLUAT'])
@@ -1589,7 +1595,7 @@ class bangluongController extends Controller
             $m_cb[$key]['tonghs'] = $tonghs;
             $m_cb[$key]['ttl'] = $tien;
 
-            // dd($m_cb[$key]);
+            // dd($inputs);
             //tính thuế thu nhập
             $m_cb[$key]['thuetn'] = 0;
             if (isset($inputs['thuetncn'])) {
@@ -1619,7 +1625,7 @@ class bangluongController extends Controller
                 }
                 // dd($m_cb[$key]);
             }
-            // dd($m_cb[$key]);
+            // dd($m_cb[$key]['madv']);
             luuketqua:
             $m_cb[$key]['luongtn'] = $m_cb[$key]['ttl'] - $m_cb[$key]['ttbh'] - $m_cb[$key]['giaml'] - $m_cb[$key]['thuetn'];
             $a_data_canbo[] = $m_cb[$key];
@@ -2470,6 +2476,110 @@ class bangluongController extends Controller
             return view('errors.notlogin');
     }
 
+    //13122024
+    function store_thuetncn(Request $request)
+    {
+        $inputs=$request->all();
+        // dd($inputs);
+        $inputs['mabl'] = $inputs['mabl_thuetncn'];
+        $inputs['thang'] = $inputs['thang_thuetncn'];
+        $inputs['nam'] = $inputs['nam_thuetncn'];
+        $inputs['noidung'] = $inputs['noidung_thuetncn'];
+        // $inputs['luongcoban'] = chkDbl($inputs['luongcoban_truc']);
+        $inputs['phanloai'] = $inputs['phanloai_thuetncn'];
+        $inputs['nguoilap'] = $inputs['nguoilap_thuetncn'];
+        $inputs['ngaylap'] = $inputs['ngaylap_thuetncn'];
+        $inputs['phucaploaitru_thuetncn'] = $inputs['phucaploaitru_thuetncn']??'';
+        // dd($inputs);
+        $a_mabl=array_keys($inputs['mabangluong']);
+        $model_phucap = dmphucap_donvi::select('mapc', 'phanloai', 'congthuc', 'baohiem', 'tenpc', 'thaisan', 'nghiom', 'dieudong', 'thuetn', 'tapsu', 'baohiem_plct', 'pccoso')
+        ->where('madv', session('admin')->madv)->where('phanloai', '<', '3')
+        ->wherenotin('mapc', array_merge(['hesott'], explode(',', $inputs['phucaploaitru_thuetncn'])))->get();
+        $a_thue = array_column($model_phucap->where('thuetn', 1)->toarray(), 'mapc');
+        $ngaylap = Carbon::create($inputs['nam'], $inputs['thang'], '01');
+        $m_thue = dmthuetncn::where('ngayapdung', '<=', $ngaylap)->orderby('ngayapdung', 'desc')->first();
+        // dd($m_thue);
+        if ($m_thue != null) {
+            $banthan = $m_thue->banthan;
+            $phuthuoc = $m_thue->phuthuoc;
+            $a_mucthue = dmthuetncn_ct::where('sohieu', $m_thue->sohieu)->orderby('muctu')->get()->toarray();
+        } else {
+            $banthan = $phuthuoc = 0;
+            $a_mucthue = [];
+        }
+
+        // dd($a_thue);
+        $model = bangluong::where('mabl', $inputs['mabl'])->first();
+        if(isset($model)){
+
+        }else{
+            $madv = session('admin')->madv;
+            $inputs['mabl'] = $madv . '_' . getdate()[0];
+            $inputs['madv'] = $madv;
+            //Lấy bảng lương của mỗi tháng, rồi lại foreach thêm 1 vòng nữa để tính tiền thuế cho từng cán bộ
+            //Lấy dữ liệu bảng lương
+            $model_bangluong=bangluong::wherein('mabl',$a_mabl)->get();
+            $data=array();
+            
+            foreach($model_bangluong as $ct){
+               $m_bangluong_ct= (new data())->getBangluong_ct($ct->thang,$ct->mabl);
+                foreach($m_bangluong_ct as $val){
+                    // dd($val);
+                    $canbo=hosocanbo::where('macanbo',$val->macanbo)->first();
+                    //Tính lại thuetncn
+                    $tienthue = 0;
+                    foreach ($a_thue as $thue) {
+                        $mapc = 'st_' . $thue;
+                        $tienthue += $val->$mapc;
+                    }
+                    // dd($tienthue);
+                    $tienthue = $tienthue - $val->ttbh - $banthan - $phuthuoc * $canbo->nguoiphuthuoc;
+                    // dd($val->ttbh);
+                    if ($tienthue <= 0) {
+                        goto luuketqua;
+                    }
+    
+                    foreach ($a_mucthue as $k => $thue) {
+                        // dd($thue);
+    
+                        if ($tienthue < $thue['muctu']) {
+                            goto luuketqua;
+                        }
+                        $val->thuetn += round(($tienthue > $thue['mucden'] ? $thue['mucden'] - $thue['muctu'] : $tienthue - $thue['muctu'])
+                            * $thue['phantram'] / 100);
+                    }
+                    // dd($m_cb[$key]);
+                    // dd($val);
+                    luuketqua:
+                    $val->luongtn = $val->ttl - $val->ttbh - $val->giaml - $val->thuetn;
+                    $column_thang='thang'.$ct->thang;
+                    $val->$column_thang=$val->thuetn;
+                    //Đẩy kết quả vào mảng sau đó kiểm tra xem tháng sau có cán bộ đó không
+                    if(!isset($data[$val->macanbo])){
+                        $data[$val->macanbo]['mabl']=$inputs['mabl'];
+                        $data[$val->macanbo]['macanbo']=$val->macanbo;
+                        $data[$val->macanbo]['tencanbo']=$canbo->tencanbo;
+                        $data[$val->macanbo][$column_thang]=$val->$column_thang;
+                        $data[$val->macanbo]['tongthuetncn'] = 0;
+
+                    }else{
+                        $data[$val->macanbo][$column_thang]=$val->$column_thang;
+                        $data[$val->macanbo]['tongthuetncn']+=$val->$column_thang;
+                    }                    
+                }
+            }
+            //insert vào bảng lương
+                bangluong::create($inputs);
+            //insert vào bảng bangluong_thuetncn
+            foreach (array_chunk($data, 100) as $ct) {
+              bangluong_thuetncn::insert($ct);
+                
+            }
+        }
+        return redirect('/chuc_nang/bang_luong/chi_tra?thang=' . $inputs['thang'] . '&nam=' . $inputs['nam']);
+        // dd($m_bangluong_ct->take(10));
+
+    }
     function show(Request $request)
     {
         if (Session::has('admin')) {

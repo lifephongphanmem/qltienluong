@@ -110,6 +110,12 @@
                                                         onclick="baocao('{{ '/chuc_nang/tong_hop_luong/huyen/chitiet_khoi' }}','{{ $value['thang'] }}','{{ $nam }}','{{ $value['tendv'] }}','{{ $value['madv'] }}','') "
                                                         class="btn btn-default btn-sm" TARGET="_blank">
                                                         <i class="fa fa-print"></i>&nbsp; Số liệu chi tiết khối</a>
+                                                    @if ($value->phamvitonghop == 'KHOI')
+                                                        <button type="button" class="btn  btn-default btn-sm"
+                                                            data-target="#thkhoi-chitiet-modal" data-toggle="modal"
+                                                            onclick="getDVKhoi('{{ $value['mathdv'] }}','{{ $value['madv'] }}','{{ $value['thang'] }}','{{ $nam }}')"><i
+                                                                class="fa fa-print"></i>&nbsp;Chi tiết</button>
+                                                    @endif
                                                 @else
                                                     <a href="#" data-target="#thkhoi-modal" data-toggle="modal"
                                                         onclick="baocao('{{ '/chuc_nang/tong_hop_luong/huyen/printf_data_huyen' }}','{{ $value['thang'] }}','{{ $nam }}','{{ $value['tendv'] }}','{{ $value['madv'] }}','{{ $value['mathdv'] }}') "
@@ -121,7 +127,7 @@
                                                         class="btn btn-default btn-xs mbs">
                                                         <i class="fa fa-print"></i>&nbsp; Số liệu chi tiết</button>
                                                 @endif
-                                               
+
                                                 @if ($value->tralai)
                                                     @if (session('admin')->phamvitonghop == 'KHOI')
                                                         <button type="button" class="btn btn-default btn-sm"
@@ -309,12 +315,12 @@
                                             <div class="col-md-6">
                                                 <label class="col-md-3" style="text-align: right">Tháng</label>
                                                 <div class="col-md-9">
-                                                   <select name="thang" id="" class="form-control">
-                                                    <option value="all">Tất cả các tháng</option>
-                                                    @for ($i=1;$i<13;$i++)
-                                                        <option value={{$i}}>{{$i}}</option>
-                                                    @endfor
-                                                   </select>
+                                                    <select name="thang" id="" class="form-control">
+                                                        <option value="all">Tất cả các tháng</option>
+                                                        @for ($i = 1; $i < 13; $i++)
+                                                            <option value={{ $i }}>{{ $i }}</option>
+                                                        @endfor
+                                                    </select>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
@@ -466,6 +472,59 @@
         </div>
         {!! Form::close() !!}
     </div>
+
+    <div id="thkhoi-chitiet-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+        {!! Form::open([
+            'url' => '#',
+            'target' => '_blank',
+            'method' => 'get',
+            'id' => 'frm_donvi',
+            'class' => 'form-horizontal form-validate',
+        ]) !!}
+        <div class="modal-dialog modal-content">
+            <div class="modal-header modal-header-primary">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+                <h4 id="modal-header-primary-label" class="modal-title">Thông tin kết xuất</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="modal-body">
+                        <div class="form-horizontal">
+                            <div class="row">
+                                <div class="col-md-12" style="margin: 3px 0">
+                                    <label class="col-md-3" style="text-align: right">Tháng: </label>
+                                    <div class="col-md-9">
+                                        <input class="form-control" id="thangbc_ct" name="thangbc" readonly />
+                                    </div>
+                                </div>
+                                <div class="col-md-12" style="margin: 3px 0">
+                                    <label class="col-md-3" style="text-align: right">Năm: </label>
+                                    <div class="col-md-9">
+                                        <input class="form-control" id="nambc_ct" name="nambc" readonly />
+                                    </div>
+                                </div>
+                                <div class="col-md-12" style="margin: 3px 0">
+                                    <label class="col-md-3" style="text-align: right">Tên đơn vị: </label>
+                                    <div class="col-md-9" id='donvi'>
+
+                                    </div>
+                                </div>
+                                <input type="hidden" name="mathdv" id="mathdv_ct" value="">
+                                <input type="hidden" name="mathdv_cq" id="mathdv_cq" value="">
+                            </div>
+                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+                <button type="submit" id="submit" name="submit" value="submit" class="btn btn-primary">Đồng
+                    ý</button>
+            </div>
+        </div>
+        {!! Form::close() !!}
+    </div>
     <script>
         function baocao(url, thang, nam, tendv, madv, mathdv) {
             $('#urlbc').val(url);
@@ -474,6 +533,62 @@
             $('#madv').val(madv);
             $('#mathdvbc').val(mathdv);
             $('#tendvbc').val(tendv);
+        }
+
+        function getDVKhoi(mathdv, madv, thang, nam) {
+            $('#thangbc_ct').val(thang);
+            $('#nambc_ct').val(nam);
+            // $('#madv_ct').val(madv);
+            $('#mathdv_cq').val(mathdv);
+
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+            // console.log(madvbc);
+            $.ajax({
+                url: '/chuc_nang/xem_du_lieu/getDVKhoi',
+                type: 'GET',
+                data: {
+                    _token: CSRF_TOKEN,
+                    madv: madv,
+                    mathdv:mathdv,
+                    thang:thang,
+                    nam:nam
+                },
+                dataType: 'JSON',
+                success: function(data) {
+                    // console.log(data);
+                    $('#donvi').replaceWith(data.html);
+                    $('#mathdv_ct').val(data.mathdv)
+                    $('#frm_donvi').attr('action',data.url);
+                },
+                error: function(message) {
+                    toastr.error(message, 'Lỗi!');
+                }
+            });
+
+        }
+        function ChangeDV()
+        {
+            var mathdv=$('#mathdv_cq').val();
+            var madv=$('#donvi').find('option:selected').val();
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+            // console.log(madvbc);
+            $.ajax({
+                url: '/chuc_nang/xem_du_lieu/getMathdv',
+                type: 'GET',
+                data: {
+                    _token: CSRF_TOKEN,
+                    madv: madv,
+                    mathdv:mathdv
+                },
+                dataType: 'JSON',
+                success: function(data) {
+                    // console.log(data);
+                    $('#mathdv_ct').val(data)
+                },
+                error: function(message) {
+                    toastr.error(message, 'Lỗi!');
+                }
+            });
         }
         window.onsubmit = function() {
             document.thoaibc.action = get_action();

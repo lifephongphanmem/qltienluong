@@ -56,6 +56,9 @@
                             <button type="button" class="btn btn-default btn-xs" onclick="add_truylinh()"><i
                                     class="fa fa-plus"></i>&nbsp;Truy lĩnh
                             </button>
+                            <button type="button" class="btn btn-default btn-xs" onclick="add_thuetncn()"><i
+                                class="fa fa-plus"></i>&nbsp;Thuế TNCN
+                        </button>
 
                             <button type="button" class="btn btn-default btn-xs" data-target="#modal-TaoThuyetMinh"
                                 data-toggle="modal"><i class="fa fa-plus"></i>&nbsp;Thuyết minh
@@ -350,6 +353,14 @@
             $('#noidung_truc').val('');
             $('#mabl_truc').val('');
             $('#truc-modal').modal('show');
+        }
+        function add_thuetncn()
+        {
+            $('#phucaploaitru_thuetncn').prop('disabled', false);
+            $('#phanloai_thuetncn').val('THUETNCN');
+            $('#noidung_thuetncn').val('');
+            $('#mabl_thuetncn').val('');
+            $('#thuetncn-modal').modal('show');
         }
 
         function add_ctp() {
