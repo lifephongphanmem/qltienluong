@@ -144,9 +144,7 @@ Route::group(['prefix' => 'bao_cao'], function () {
 
             //Tạm cho huyện Vạn Ninh
             Route::post('tonghopluong_th', 'baocaobangluongController@tonghopluong_huyen_th');
-            Route::post('tonghopluong_vn', 'baocaobangluongController@tonghopluong_vn');   
-            //2024.12.16 Báo cáo tổng hợp từng khối theo y.c STC (lấy báo cáo cả tỉnh thay mã cqcq là đơn vị quany khối)
-            Route::post('TongHop_Khoi', 'baocaobangluongController@TongHop_PhanLoaiDV');         
+            Route::post('tonghopluong_vn', 'baocaobangluongController@tonghopluong_vn');
         });
 
         Route::group(['prefix' => 'tinh'], function () {
