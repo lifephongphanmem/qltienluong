@@ -231,7 +231,7 @@ class tonghopluong_huyen_baocaoController extends Controller
                     $col++;
                 }
             }
-            dd($model_h);
+            //dd($model_h);
             return view('reports.tonghopluong.huyen.SoLieuTongHop_PhanLoaiDV')
                 // ->with('model', $model)
                 ->with('model', $model_h)
