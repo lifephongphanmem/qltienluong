@@ -11,9 +11,7 @@ use App\dmphanloaidonvi_baocao;
 use App\dmphucap;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-
-use App\Http\Requests;
-use App\Http\Controllers\Controller;
+//use App\Http\Controllers\Controller;
 use App\tonghopluong_donvi;
 use App\tonghopluong_donvi_bangluong;
 use App\tonghopluong_donvi_chitiet;
@@ -27,19 +25,22 @@ class tonghopluong_huyen_baocaoController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
-            // dd($inputs);
+            //dd($inputs);
             $inputs['donvitinh'] = $inputs['donvitinh'] ?? 1;
             //lấy mã đơn vị quản lý trong trường hợp gọi từ "Báo cáo tổng hợp" giao diện Tỉnh
             if (!isset($inputs['macqcq'])) {
                 $inputs['macqcq'] = dmdonvibaocao::where('madvbc', $inputs['madvbc'])->first()->madvcq;
             }
-
             //Lấy dữ liệu
-            $model_tonghop = tonghopluong_donvi::where('thang', $inputs['thang'])->where('nam', $inputs['nam'])->where('macqcq', $inputs['macqcq'])
+            $model_tonghop = tonghopluong_donvi::where('nam', $inputs['nam'])->where('macqcq', $inputs['macqcq'])
                 ->where('trangthai', 'DAGUI')->get();
-            $model_tonghop_khoi = tonghopluong_khoi::where('thang', $inputs['thang'])->where('nam', $inputs['nam'])->where('macqcq', $inputs['macqcq'])
+            $model_tonghop_khoi = tonghopluong_khoi::where('nam', $inputs['nam'])->where('macqcq', $inputs['macqcq'])
                 ->where('trangthai', 'DAGUI')->get();
-            //dd($model_tonghop_khoi);
+
+            if ($inputs['thang'] != 'ALL') {
+                $model_tonghop = $model_tonghop->where('thang', $inputs['thang']);
+                $model_tonghop_khoi = $model_tonghop_khoi->where('thang', $inputs['thang']);
+            }
 
             if ($model_tonghop->count() == 0 && $model_tonghop_khoi->count()) {
                 return view('errors.nodata')
@@ -76,34 +77,33 @@ class tonghopluong_huyen_baocaoController extends Controller
 
             $a_plct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
             $a_pc = getColTongHop();
-            //$a_luongcb = array_column($model_tonghop->toarray(),'luongcoban','mathdv');
-            //Cho các trường hợp phụ cấp theo số tiền lấy theo lương cơ bản (đơn vi nào cá biệt pải tổng hợp lại chi trả lương)
-            $ngayketxuat = Carbon::create($inputs['nam'], $inputs['thang'], 01)->toDateString();
-            // dd($ngayketxuat);
-            $luongcb = 1390000;
-            if ($ngayketxuat < '2023-07-01' && $ngayketxuat > '2019-07-01') {
-                $luongcb = 1490000;
-            } else if ($ngayketxuat > '2023-07-01' && $ngayketxuat < '2024-07-01') {
-                $luongcb = 1800000;
-            } else {
-                $luongcb = 2340000;
-            }
 
-            // //lấy mảng key->id của model để xét 
-            // //bỏ 2024.11.29
-            // $a_key = array();
-            // foreach ($model as $key => $val) {
-            //     $a_key[$val->id] = $key;
-            // }
-
-            // dd($model);
+            //dd($model);
             //Xử lý dữ liệu bảng tông hợp đơn vị
             foreach ($model as $key => $chitiet) {
                 // dd($key);
+                if ($chitiet->luongcoban == 0) {
+                    $tonghop = $model_tonghop->where('mathdv', $chitiet->mathdv)->first();
+                    //Hàm sử lý khi tổng hợp ko có trường lương cơ bản
+                    $luongcb = 1;
+                    try {
+                        $ngayketxuat = Carbon::create($tonghop->nam, $tonghop->thang, 01)->toDateString();
+                        if ($ngayketxuat < '2023-07-01' && $ngayketxuat > '2019-07-01') {
+                            $luongcb = 1490000;
+                        } else if ($ngayketxuat > '2023-07-01' && $ngayketxuat < '2024-07-01') {
+                            $luongcb = 1800000;
+                        } else {
+                            $luongcb = 2340000;
+                        }
+                    } catch (\Exception $e) {
+                        $luongcb = 1390000;
+                    }
+                    $chitiet->luongcoban = $luongcb;
+                }
                 $chitiet->madv = $a_donvi[$chitiet->mathdv];
                 $chitiet->maphanloai = $a_pl_donvi[$chitiet->madv];
                 $chitiet->tenct = $a_plct[$chitiet->mact] ?? '';
-                $chitiet->luongcoban = $luongcb;
+                //$chitiet->luongcoban = $luongcb;
                 $chitiet->ttl = 0; //do trong bảng tonghopluong_donvi_chitiet khong có ttl
                 foreach ($a_pc as $pc) {
                     if ($chitiet->$pc > 10000) {
@@ -124,12 +124,33 @@ class tonghopluong_huyen_baocaoController extends Controller
                 $chitiet->soluongbienche = $chitiet->soluong;
             }
             //Đối tượng để dải dữ liệu
-            $model_h = new Collection();
-            //Xử lý dữ liệu bảng tông hợp khối
-            //$model_khoi = new Collection();
-            //dd();
-            foreach ($model_tonghop_khoi as $chitiet) {
-                $dulieu_khoi = $model_dulieukhoi->where('mathk', $chitiet->mathdv);
+            $model_h = new Collection();          
+            //Chạy trc dữ liệu khối để cập nhật lương cơ bản
+            foreach ($model_dulieukhoi as $chitiet) {
+                if ($chitiet->luongcoban == 0) {
+                    $tonghop = $model_tonghop_khoi->where('mathdv', $chitiet->mathdv)->first();
+                    //Hàm sử lý khi tổng hợp ko có trường lương cơ bản
+                    $luongcb = 1;
+                    try {
+                        $ngayketxuat = Carbon::create($tonghop->nam, $tonghop->thang, 01)->toDateString();
+                        if ($ngayketxuat < '2023-07-01' && $ngayketxuat > '2019-07-01') {
+                            $luongcb = 1490000;
+                        } else if ($ngayketxuat > '2023-07-01' && $ngayketxuat < '2024-07-01') {
+                            $luongcb = 1800000;
+                        } else {
+                            $luongcb = 2340000;
+                        }
+                    } catch (\Exception $e) {
+                        $luongcb = 1390000;
+                    }
+                    $chitiet->luongcoban = $luongcb;
+                }
+            }
+            //Tính toán dữ liêu            
+            foreach (a_unique(array_column($model_tonghop_khoi->toarray(), 'madv')) as $dv) {
+                $m_dulieukhoi = $model_tonghop_khoi->where('madv', $dv);
+                $dulieu_khoi = $model_dulieukhoi->wherein('mathk', array_column($m_dulieukhoi->toarray(), 'mathdv'));
+                //dd($dulieu_khoi);
                 if ($dulieu_khoi->count() > 0) {
                     $a_mact = a_unique(array_column($dulieu_khoi->toarray(), 'mact'));
                     //dd($a_mact);
@@ -137,11 +158,10 @@ class tonghopluong_huyen_baocaoController extends Controller
                         $dulieu = $dulieu_khoi->where('mact', $maCT);
                         $donvi = new tonghopluong_donvi_chitiet();
                         $donvi->luongcoban = $luongcb;
-                        $donvi->madv = $chitiet->madv;
+                        $donvi->madv = $dv;
                         $donvi->mact = $maCT;
                         $donvi->maphanloai = $a_pl_donvi[$donvi->madv];
                         $donvi->tenct = $a_plct[$maCT] ?? '';
-                        $donvi->luongcoban = $luongcb;
                         $donvi->ttl = 0;
                         $donvi->soluongbienche = $dulieu->sum('soluong');
                         $this->getMaNhomPhanLoai($donvi, $m_phanloai);
@@ -156,13 +176,12 @@ class tonghopluong_huyen_baocaoController extends Controller
                             // }
                         }
                         $donvi->ttl = $dulieu->sum('luongtn');
-                        $donvi->bhtn_dv = round($dulieu->sum('stbhtn_dv') / $luongcb, 7);
-                        $donvi->baohiem = round(($dulieu->sum('ttbh_dv') - $dulieu->sum('stbhtn_dv')) / $luongcb, 7);
+                        $donvi->bhtn_dv = round($dulieu->sum('stbhtn_dv') / $donvi->luongcoban, 7);
+                        $donvi->baohiem = round(($dulieu->sum('ttbh_dv') - $dulieu->sum('stbhtn_dv')) / $donvi->luongcoban, 7);
 
                         $donvi->quyluong = $dulieu->sum('luongtn') + $dulieu->sum('ttbh_dv');
                         $donvi->tongphucap = $donvi->tonghs - $donvi->heso;
                         $donvi->tongcong = $donvi->tonghs + $donvi->baohiem + $donvi->bhtn_dv;
-
                         //
                         $model_h->push($donvi);
                     }
@@ -170,26 +189,38 @@ class tonghopluong_huyen_baocaoController extends Controller
             }
 
             //
+            foreach (a_unique(array_column($model->toarray(), 'madv')) as $dv) {
+                $m_dulieu = $model->where('madv', $dv);
+                if ($m_dulieu->count() > 0) {
+                    $a_mact = a_unique(array_column($m_dulieu->toarray(), 'mact'));
+                    foreach ($a_mact as $maCT) {
+                        $dulieu = $m_dulieu->where('mact', $maCT);
+                        $donvi = new tonghopluong_donvi_chitiet();
+                        $donvi->luongcoban = $luongcb;
+                        $donvi->madv = $dv;
+                        $donvi->mact = $maCT;
+                        $donvi->maphanloai = $a_pl_donvi[$donvi->madv];
+                        $donvi->tenct = $a_plct[$maCT] ?? '';
+                        $donvi->ttl = 0;
+                        $donvi->soluongbienche = $dulieu->sum('soluong');
+                        $this->getMaNhomPhanLoai($donvi, $m_phanloai);
 
-            // dd($model_h);
-            foreach ($model as $val) {
-                $m_donvi_nkp = $model->where('madv', $val->madv)->where('mact', $val->mact)->where('mathdv', $val->mathdv);
-                if (count($model_h->where('madv', $val->madv)->where('mact', $val->mact)->where('mathdv', $val->mathdv)) > 0) {
-                    continue;
+                        $donvi->tonghs = $dulieu->sum('tonghs');
+                        foreach ($a_pc as $pc) {
+                            $donvi->$pc = $dulieu->sum($pc);
+                        }
+                        $donvi->ttl = $dulieu->sum('luongtn');
+                        $donvi->bhtn_dv = round($dulieu->sum('stbhtn_dv') / $donvi->luongcoban, 7);
+                        $donvi->baohiem = round(($dulieu->sum('ttbh_dv') - $dulieu->sum('stbhtn_dv')) / $donvi->luongcoban, 7);
+
+                        $donvi->quyluong = $dulieu->sum('luongtn') + $dulieu->sum('ttbh_dv');
+                        $donvi->tongphucap = $donvi->tonghs - $donvi->heso;
+                        $donvi->tongcong = $donvi->tonghs + $donvi->baohiem + $donvi->bhtn_dv;
+                        //
+                        $model_h->push($donvi);
+                    }
                 }
-                if (count($m_donvi_nkp) == 1) {
-                    // dd($m_donvi_nkp);
-                    $model_h->push($val);
-                } else {
-                    // dd($m_donvi_nkp->sum('baohiem'));
-                    $val->ttl = $m_donvi_nkp->sum('ttl');
-                    $val->bhtn_dv = $m_donvi_nkp->sum('bhtn_dv');
-                    $val->baohiem = $m_donvi_nkp->sum('baohiem');
-                    $val->quyluong = $m_donvi_nkp->sum('quyluong');
-                    $model_h->push($val);
-                }
-            }
-            // dd($model_h);
+            }           
             //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
             $a_tenpc = array_column(dmphucap::all()->toArray(), 'tenpc', 'mapc');
             $a_phucap = array();
@@ -200,13 +231,7 @@ class tonghopluong_huyen_baocaoController extends Controller
                     $col++;
                 }
             }
-
-            //dd($model->where('maphanloai','KVXP')->toArray());
-
-            //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
-
-            //$m_donvi = dmdonvi::where('madv', session('admin')->madv)->first();
-            //dd($model);
+           
             return view('reports.tonghopluong.huyen.SoLieuTongHop_PhanLoaiDV')
                 // ->with('model', $model)
                 ->with('model', $model_h)
@@ -658,7 +683,7 @@ class tonghopluong_huyen_baocaoController extends Controller
             }
             $model_tonghop = tonghopluong_donvi::where('thang', $inputs['thang'])->where('nam', $inputs['nam'])->where('macqcq', $inputs['macqcq'])
                 ->where('trangthai', 'DAGUI')->get();
-                $model_tonghopkhoi = tonghopluong_khoi::where('thang', $inputs['thang'])->where('nam', $inputs['nam'])->where('macqcq', $inputs['macqcq'])
+            $model_tonghopkhoi = tonghopluong_khoi::where('thang', $inputs['thang'])->where('nam', $inputs['nam'])->where('macqcq', $inputs['macqcq'])
                 ->where('trangthai', 'DAGUI')->get();
             // dd($model_tonghopkhoi);
             // $m_dutoan_huyen = dutoanluong_huyen::where('masodv', $inputs['masodv'])->first();
@@ -675,10 +700,10 @@ class tonghopluong_huyen_baocaoController extends Controller
             $a_phanloai = array_column(dmphanloaidonvi::all()->toArray(), 'maphanloai');
 
             $m_donvi_baocao = dmdonvi::wherein('madv', array_column($model_tonghop->toarray(), 'madv'));
-            if(count($model_tonghopkhoi) > 0){
-                $m_donvi_baocao=$m_donvi_baocao->orwherein('madv', array_column($model_tonghopkhoi->toarray(), 'madv'));
+            if (count($model_tonghopkhoi) > 0) {
+                $m_donvi_baocao = $m_donvi_baocao->orwherein('madv', array_column($model_tonghopkhoi->toarray(), 'madv'));
             }
-            $m_donvi_baocao=$m_donvi_baocao->get();
+            $m_donvi_baocao = $m_donvi_baocao->get();
             // dd($m_donvi_baocao);
             $a_donvi = array_column($model_tonghop->toarray(), 'madv', 'mathdv') + array_column($model_tonghopkhoi->toarray(), 'madv', 'mathdv');
             $a_pl_donvi = array_column($m_donvi_baocao->toarray(), 'maphanloai', 'madv');
@@ -690,21 +715,21 @@ class tonghopluong_huyen_baocaoController extends Controller
                     $q->wherein('linhvuchoatdong', $inputs['linhvuchoatdong']);
                 }
             })
-            ->where(function ($q) use ($model_tonghop, $model_tonghopkhoi) {
-                $q->whereIn('mathdv', array_column($model_tonghop->toarray(), 'mathdv'))
-                  ->orWhereIn('mathk', array_column($model_tonghopkhoi->toarray(), 'mathdv'));
-            })
+                ->where(function ($q) use ($model_tonghop, $model_tonghopkhoi) {
+                    $q->whereIn('mathdv', array_column($model_tonghop->toarray(), 'mathdv'))
+                        ->orWhereIn('mathk', array_column($model_tonghopkhoi->toarray(), 'mathdv'));
+                })
                 ->get();
-                // $model_khoi = tonghopluong_donvi_chitiet::where(function ($q) use ($inputs) {
-                //     if (isset($inputs['mact'])) {
-                //         $q->wherein('mact', $inputs['mact']);
-                //     }
-                //     if (isset($inputs['linhvuchoatdong'])) {
-                //         $q->wherein('linhvuchoatdong', $inputs['linhvuchoatdong']);
-                //     }
-                // })
-                //     ->wherein('mathk', array_column($model_tonghopkhoi->toarray(), 'mathdv'))->get();
-                // dd($model);
+            // $model_khoi = tonghopluong_donvi_chitiet::where(function ($q) use ($inputs) {
+            //     if (isset($inputs['mact'])) {
+            //         $q->wherein('mact', $inputs['mact']);
+            //     }
+            //     if (isset($inputs['linhvuchoatdong'])) {
+            //         $q->wherein('linhvuchoatdong', $inputs['linhvuchoatdong']);
+            //     }
+            // })
+            //     ->wherein('mathk', array_column($model_tonghopkhoi->toarray(), 'mathdv'))->get();
+            // dd($model);
             $a_plct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
             $a_pc = getColTongHop();
             //$a_luongcb = array_column($model_tonghop->toarray(),'luongcoban','mathdv');

@@ -104,7 +104,7 @@ class baocaobangluongController extends Controller
             $a_thongtuqd = array_column(dmthongtuquyetdinh::orderby('ngayapdung', 'desc')->get()->toarray(), 'tenttqd', 'sohieu');
             // dd(session('admin'));
             // dd($model_donvi);
-            $a_linhvuchd=array_column(dmkhoipb::all()->toarray(),'tenkhoipb','makhoipb');
+            $a_linhvuchd = array_column(dmkhoipb::all()->toarray(), 'tenkhoipb', 'makhoipb');
             $inputs['madv'] = session('admin')->madv;
             $inputs['furl'] = '/bao_cao/bang_luong/';
             $inputs['furl_th'] = '/chuc_nang/du_toan_luong/huyen/';
@@ -113,6 +113,8 @@ class baocaobangluongController extends Controller
             //$inputs['sohieu'] =   array_key_first($a_thongtuqd);
             $inputs['madvbc'] =   session('admin')->madvbc;
             //dd($inputs);
+
+            $model_donvi = dmdonvi::where('macqcq', session('admin')->madv)->get();
             $model_thongtu = dmthongtuquyetdinh::all();
             return view('reports.index_th')
                 ->with('inputs', $inputs)
@@ -121,6 +123,7 @@ class baocaobangluongController extends Controller
                 ->with('a_linhvuchd', $a_linhvuchd)
                 ->with('a_phanloai', $a_phanloai)
                 ->with('model_dv', $model_donvi)
+                ->with('model_dvkhoi', dmdonvi::where('macqcq', session('admin')->madv)->where('phanloaitaikhoan', 'TH')->get()) //2024.12.16 lấy các đơn vị tổng hợp khối trực thuộc
                 ->with('model_phanloaict', $model_phanloaict)
                 ->with('model_thongtu', $model_thongtu)
                 ->with('model_tenct', $model_tenct)
