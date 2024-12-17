@@ -287,6 +287,8 @@ Route::group(['prefix' => 'chuc_nang'], function () {
             //2023.07.14 Mẫu theo yêu STC
             Route::get('TongHop', 'tonghopluong_huyen_baocaoController@TongHop_PhanLoaiDV');
             Route::post('TongHop_CT', 'tonghopluong_huyen_baocaoController@TongHop_PhanLoaiCT');
+            //2024.12.16 Báo cáo tổng hợp từng khối theo y.c STC (lấy báo cáo cả tỉnh thay mã cqcq là đơn vị quany khối)
+            Route::post('TongHop_Khoi', 'tonghopluong_huyen_baocaoController@TongHop_PhanLoaiDV'); 
             //Báo cáo khác
             Route::post('DSDonVi', 'baocaobangluongController@DSDonVi');
         });
