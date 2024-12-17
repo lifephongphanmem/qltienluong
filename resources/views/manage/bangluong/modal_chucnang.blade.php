@@ -667,7 +667,7 @@
                 </div>
                 <div class="row">
                     <div class="col-md-12" style="margin-top:15px">
-                        <table  class="table table-hover table-striped table-bordered">
+                        <table id='sample_3'  class="table table-hover table-striped table-bordered">
                             <thead>
                                 <tr>
                                     <th class="text-center" style="width: 5%">STT</th>

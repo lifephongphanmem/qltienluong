@@ -108,7 +108,7 @@ class bangluongController extends Controller
                 $model->add($thuyetminh);
             }
             //Lấy bảng lương của các tháng để chạy chức năng tính thuế thu nhập theo quý
-            $model_bangluong=bangluong::wherein('nam',[$inputs['nam'],$inputs['nam']-1])->where('madv',session('admin')->madv)->where('phanloai','BANGLUONG')->orderby('nam','desc')->get();
+            $model_bangluong = bangluong::wherein('nam', [$inputs['nam'], $inputs['nam'] - 1])->where('madv', session('admin')->madv)->where('phanloai', 'BANGLUONG')->orderby('nam', 'desc')->get();
             // dd($model);
             return view('manage.bangluong.index')
                 //->with('furl', '/chuc_nang/bang_luong/')
@@ -2479,7 +2479,7 @@ class bangluongController extends Controller
     //13122024
     function store_thuetncn(Request $request)
     {
-        $inputs=$request->all();
+        $inputs = $request->all();
         // dd($inputs);
         $inputs['mabl'] = $inputs['mabl_thuetncn'];
         $inputs['thang'] = $inputs['thang_thuetncn'];
@@ -2489,12 +2489,15 @@ class bangluongController extends Controller
         $inputs['phanloai'] = $inputs['phanloai_thuetncn'];
         $inputs['nguoilap'] = $inputs['nguoilap_thuetncn'];
         $inputs['ngaylap'] = $inputs['ngaylap_thuetncn'];
-        $inputs['phucaploaitru_thuetncn'] = $inputs['phucaploaitru_thuetncn']??'';
+        $inputs['phucaploaitru_thuetncn'] = $inputs['phucaploaitru_thuetncn'] ?? '';
+        if (isset($inputs['mabangluong'])) {
+            $a_mabl = array_keys($inputs['mabangluong']);
+        }
         // dd($inputs);
-        $a_mabl=array_keys($inputs['mabangluong']);
+        // $a_mabl=array_keys($inputs['mabangluong']);
         $model_phucap = dmphucap_donvi::select('mapc', 'phanloai', 'congthuc', 'baohiem', 'tenpc', 'thaisan', 'nghiom', 'dieudong', 'thuetn', 'tapsu', 'baohiem_plct', 'pccoso')
-        ->where('madv', session('admin')->madv)->where('phanloai', '<', '3')
-        ->wherenotin('mapc', array_merge(['hesott'], explode(',', $inputs['phucaploaitru_thuetncn'])))->get();
+            ->where('madv', session('admin')->madv)->where('phanloai', '<', '3')
+            ->wherenotin('mapc', array_merge(['hesott'], explode(',', $inputs['phucaploaitru_thuetncn'])))->get();
         $a_thue = array_column($model_phucap->where('thuetn', 1)->toarray(), 'mapc');
         $ngaylap = Carbon::create($inputs['nam'], $inputs['thang'], '01');
         $m_thue = dmthuetncn::where('ngayapdung', '<=', $ngaylap)->orderby('ngayapdung', 'desc')->first();
@@ -2510,22 +2513,84 @@ class bangluongController extends Controller
 
         // dd($a_thue);
         $model = bangluong::where('mabl', $inputs['mabl'])->first();
-        if(isset($model)){
+        // dd($model);
+        if (isset($model)) {
 
-        }else{
+            //Cập nhật lại bảng bangluong_thuetncn
+            if (isset($inputs['mabangluong'])) {
+                //Xóa bang thuetncn
+                bangluong_thuetncn::where('mabl', $model->mabl)->delete();
+                //Tạo lại bảng lương thuetncn mới từ chọn tháng mới
+                $model_bangluong = bangluong::wherein('mabl', $a_mabl)->get();
+                $data = array();
+                foreach ($model_bangluong as $ct) {
+                    $m_bangluong_ct = (new data())->getBangluong_ct($ct->thang, $ct->mabl);
+                    foreach ($m_bangluong_ct as $val) {
+                        // dd($val);
+                        $canbo = hosocanbo::where('macanbo', $val->macanbo)->first();
+                        //Tính lại thuetncn
+                        $tienthue = 0;
+                        foreach ($a_thue as $thue) {
+                            $mapc = 'st_' . $thue;
+                            $tienthue += $val->$mapc;
+                        }
+                        // dd($tienthue);
+                        $tienthue = $tienthue - $val->ttbh - $banthan - $phuthuoc * $canbo->nguoiphuthuoc;
+                        // dd($val->ttbh);
+                        if ($tienthue <= 0) {
+                            goto luuketqua_capnhat;
+                        }
+
+                        foreach ($a_mucthue as $k => $thue) {
+                            // dd($thue);
+
+                            if ($tienthue < $thue['muctu']) {
+                                goto luuketqua_capnhat;
+                            }
+                            $val->thuetn += round(($tienthue > $thue['mucden'] ? $thue['mucden'] - $thue['muctu'] : $tienthue - $thue['muctu'])
+                                * $thue['phantram'] / 100);
+                        }
+                        // dd($m_cb[$key]);
+                        // dd($val);
+                        luuketqua_capnhat:
+                        $val->luongtn = $val->ttl - $val->ttbh - $val->giaml - $val->thuetn;
+                        $column_thang = 'thang' . $ct->thang;
+                        $val->$column_thang = $val->thuetn;
+                        //Đẩy kết quả vào mảng sau đó kiểm tra xem tháng sau có cán bộ đó không
+                        if (!isset($data[$val->macanbo])) {
+                            $data[$val->macanbo]['mabl'] = $inputs['mabl'];
+                            $data[$val->macanbo]['macanbo'] = $val->macanbo;
+                            $data[$val->macanbo]['tencanbo'] = $canbo->tencanbo;
+                            $data[$val->macanbo][$column_thang] = $val->$column_thang;
+                            $data[$val->macanbo]['tongthuetncn'] = 0;
+                        } else {
+                            $data[$val->macanbo][$column_thang] = $val->$column_thang;
+                            $data[$val->macanbo]['tongthuetncn'] += $val->$column_thang;
+                        }
+                    }
+                }
+                // //insert vào bảng bangluong_thuetncn
+                foreach (array_chunk($data, 100) as $ct) {
+                    bangluong_thuetncn::insert($ct);
+                }
+            }
+            //Cập nhật
+            $model->update($inputs);
+        } else {
             $madv = session('admin')->madv;
             $inputs['mabl'] = $madv . '_' . getdate()[0];
             $inputs['madv'] = $madv;
+            // $a_mabl=array_keys($inputs['mabangluong']);
             //Lấy bảng lương của mỗi tháng, rồi lại foreach thêm 1 vòng nữa để tính tiền thuế cho từng cán bộ
             //Lấy dữ liệu bảng lương
-            $model_bangluong=bangluong::wherein('mabl',$a_mabl)->get();
-            $data=array();
-            
-            foreach($model_bangluong as $ct){
-               $m_bangluong_ct= (new data())->getBangluong_ct($ct->thang,$ct->mabl);
-                foreach($m_bangluong_ct as $val){
+            $model_bangluong = bangluong::wherein('mabl', $a_mabl)->get();
+            $data = array();
+
+            foreach ($model_bangluong as $ct) {
+                $m_bangluong_ct = (new data())->getBangluong_ct($ct->thang, $ct->mabl);
+                foreach ($m_bangluong_ct as $val) {
                     // dd($val);
-                    $canbo=hosocanbo::where('macanbo',$val->macanbo)->first();
+                    $canbo = hosocanbo::where('macanbo', $val->macanbo)->first();
                     //Tính lại thuetncn
                     $tienthue = 0;
                     foreach ($a_thue as $thue) {
@@ -2538,10 +2603,10 @@ class bangluongController extends Controller
                     if ($tienthue <= 0) {
                         goto luuketqua;
                     }
-    
+
                     foreach ($a_mucthue as $k => $thue) {
                         // dd($thue);
-    
+
                         if ($tienthue < $thue['muctu']) {
                             goto luuketqua;
                         }
@@ -2552,20 +2617,19 @@ class bangluongController extends Controller
                     // dd($val);
                     luuketqua:
                     $val->luongtn = $val->ttl - $val->ttbh - $val->giaml - $val->thuetn;
-                    $column_thang='thang'.$ct->thang;
-                    $val->$column_thang=$val->thuetn;
+                    $column_thang = 'thang' . $ct->thang;
+                    $val->$column_thang = $val->thuetn;
                     //Đẩy kết quả vào mảng sau đó kiểm tra xem tháng sau có cán bộ đó không
-                    if(!isset($data[$val->macanbo])){
-                        $data[$val->macanbo]['mabl']=$inputs['mabl'];
-                        $data[$val->macanbo]['macanbo']=$val->macanbo;
-                        $data[$val->macanbo]['tencanbo']=$canbo->tencanbo;
-                        $data[$val->macanbo][$column_thang]=$val->$column_thang;
+                    if (!isset($data[$val->macanbo])) {
+                        $data[$val->macanbo]['mabl'] = $inputs['mabl'];
+                        $data[$val->macanbo]['macanbo'] = $val->macanbo;
+                        $data[$val->macanbo]['tencanbo'] = $canbo->tencanbo;
+                        $data[$val->macanbo][$column_thang] = $val->$column_thang;
                         $data[$val->macanbo]['tongthuetncn'] = 0;
-
-                    }else{
-                        $data[$val->macanbo][$column_thang]=$val->$column_thang;
-                        $data[$val->macanbo]['tongthuetncn']+=$val->$column_thang;
-                    }                    
+                    } else {
+                        $data[$val->macanbo][$column_thang] = $val->$column_thang;
+                        $data[$val->macanbo]['tongthuetncn'] += $val->$column_thang;
+                    }
                 }
             }
             //insert vào bảng lương
@@ -2573,7 +2637,7 @@ class bangluongController extends Controller
             //insert vào bảng bangluong_thuetncn
             foreach (array_chunk($data, 100) as $ct) {
               bangluong_thuetncn::insert($ct);
-                
+
             }
         }
         return redirect('/chuc_nang/bang_luong/chi_tra?thang=' . $inputs['thang'] . '&nam=' . $inputs['nam']);
@@ -2584,7 +2648,7 @@ class bangluongController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
-            $m_bl = bangluong::select('thang', 'nam', 'mabl', 'phanloai')->where('mabl', $inputs['mabl'])->first();
+            $m_bl = bangluong::select('madv', 'thang', 'nam', 'mabl', 'phanloai')->where('mabl', $inputs['mabl'])->first();
             $model_nhomct = dmphanloaicongtac::select('macongtac', 'tencongtac')->get();
             $model_tenct = dmphanloaict::select('tenct', 'macongtac', 'mact')->get();
 
@@ -2598,12 +2662,28 @@ class bangluongController extends Controller
                     ->with('m_bl', $m_bl)
                     ->with('pageTitle', 'Bảng lương chi tiết');
             }
-            $model = (new data())->getBangluong_ct($m_bl->thang, $m_bl->mabl);
+            if ($m_bl->phanloai == 'THUETNCN') {
+                $m_canbo = hosocanbo::where('madv', $m_bl->madv)->get();
+                $model = bangluong_thuetncn::where('mabl', $m_bl->mabl)->get();
+                foreach ($model as $ct) {
+                    $canbo = $m_canbo->where('macanbo', $ct->macanbo)->first();
+                    $ct->macvcq = $canbo->macvcq;
+                    $ct->mact = $canbo->mact;
+                    $ct->msngbac = $canbo->msngbac;
+                }
+                $view = 'manage.bangluong.bangluong_thuetncn';
+            } else {
+                $view = 'manage.bangluong.bangluong';
+                $model = (new data())->getBangluong_ct($m_bl->thang, $m_bl->mabl);
+            }
+
             if (isset($inputs['mapb']) && $inputs['mapb'] != '') {
                 $model = $model->where('mapb', $inputs['mapb']);
             }
+            // dd($model->take(10));
 
-            return view('manage.bangluong.bangluong')
+            // return view('manage.bangluong.bangluong')
+            return view($view)
                 ->with('furl', '/chuc_nang/bang_luong/')
                 ->with('model', $model)
                 ->with('m_bl', $m_bl)
@@ -2629,6 +2709,7 @@ class bangluongController extends Controller
             (new data())->destroyBangluong_ct($model->thang, $model->mabl);
             //bangluong_phucap::where('mabl', $model->mabl)->delete();
             //bangluong_truc::where('mabl', $model->mabl)->delete();
+            bangluong_thuetncn::where('mabl', $model->mabl)->delete();
             $model->delete();
             return redirect('/chuc_nang/bang_luong/chi_tra?thang=' . $model->thang . '&nam=' . $model->nam);
         } else

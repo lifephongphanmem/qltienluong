@@ -65,14 +65,14 @@
                                         Tổng hợp tình hình chi trả lương theo phân loại công tác</a>
                                 </li>
                                 <li>
-                                    <a href="#" data-target="#thoaichitra-modal" data-toggle="modal"
+                                    <a href="#" data-target="#thoaichitra-nguonkp-modal" data-toggle="modal"
                                         title="Dữ liệu chi trả theo tổng hợp lương tại đơn vị"
                                         onclick="chitraluong('{{ $inputs['furl_th'] . 'don_vi/chitratheonkp' }}')">
                                         Tổng hợp tình hình chi trả lương theo nguồn kinh phí</a>
 
                                 </li>
                                 <li>
-                                    <a href="#" data-target="#thoaichitra-modal" data-toggle="modal"
+                                    <a href="#" data-target="#thoaichitra-canbo-modal" data-toggle="modal"
                                         title="Dữ liệu chi trả theo tổng hợp lương tại đơn vị"
                                         onclick="chitraluong('{{ $inputs['furl_th'] . 'don_vi/chitratheocb' }}')">Tổng hợp
                                         tình hình chi trả lương theo cán bộ</a>
@@ -148,6 +148,125 @@
     </div>
 
     <div id="thoaichitra-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+        {!! Form::open([
+            'url' => '#',
+            'target' => '_blank',
+            'method' => 'post',
+            'id' => 'thoaichitra',
+            'class' => 'form-horizontal form-validate',
+        ]) !!}
+        <div class="modal-dialog modal-content">
+            <div class="modal-header modal-header-primary">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+                <h4 id="modal-header-primary-label" class="modal-title">Thông tin kết xuất</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-md-4 control-label"> Từ tháng<span class="require">*</span></label>
+                        <div class="col-md-8">
+                            {!! Form::select('tuthang', getThang(), '01', ['id' => 'tuthang', 'class' => 'form-control select2me']) !!}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-4 control-label"> Đến tháng<span class="require">*</span></label>
+                        <div class="col-md-8">
+                            {!! Form::select('denthang', getThang(), '12', ['id' => 'denthang', 'class' => 'form-control select2me']) !!}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-4 control-label"> Năm<span class="require">*</span></label>
+                        <div class="col-md-8">
+                            {!! Form::select('tunam', getNam(), date('Y'), ['id' => 'tunam', 'class' => 'form-control select2me']) !!}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label"> Phân loại công tác<span class="require">*</span></label>
+                        <div class="col-md-8">
+                            <select class="form-control select2me" name="mact" id="mact">
+                                <option value="">-- Tất cả các phân loại công tác --</option>
+                                @foreach ($model_nhomct as $kieuct)
+                                    <optgroup label="{{ $kieuct->tencongtac }}">
+                                        <?php $mode_ct = $model_tenct->where('macongtac', $kieuct->macongtac); ?>
+                                        @foreach ($mode_ct as $ct)
+                                            <option value="{{ $ct->mact }}">{{ $ct->tenct }}</option>
+                                        @endforeach
+                                    </optgroup>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+                <button type="submit" id="submit" name="submit" value="submit" class="btn btn-primary">Đồng
+                    ý</button>
+            </div>
+        </div>
+        {!! Form::close() !!}
+    </div>
+    <div id="thoaichitra-nguonkp-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+        {!! Form::open([
+            'url' => '#',
+            'target' => '_blank',
+            'method' => 'post',
+            'id' => 'thoaichitra',
+            'class' => 'form-horizontal form-validate',
+        ]) !!}
+        <div class="modal-dialog modal-content">
+            <div class="modal-header modal-header-primary">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+                <h4 id="modal-header-primary-label" class="modal-title">Thông tin kết xuất</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-md-4 control-label"> Từ tháng<span class="require">*</span></label>
+                        <div class="col-md-8">
+                            {!! Form::select('tuthang', getThang(), '01', ['id' => 'tuthang', 'class' => 'form-control select2me']) !!}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-4 control-label"> Đến tháng<span class="require">*</span></label>
+                        <div class="col-md-8">
+                            {!! Form::select('denthang', getThang(), '12', ['id' => 'denthang', 'class' => 'form-control select2me']) !!}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-4 control-label"> Năm<span class="require">*</span></label>
+                        <div class="col-md-8">
+                            {!! Form::select('tunam', getNam(), date('Y'), ['id' => 'tunam', 'class' => 'form-control select2me']) !!}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Nguồn kinh phí<span class="require">*</span></label>
+                        <div class="col-md-8">
+                            <select class="form-control select2me" name="mact" id="mact">
+                                <option value="">-- Tất cả các nguồn kinh phí --</option>
+                                @foreach ($model_nguonkp as $nkp)
+
+                                            <option value="{{ $nkp->manguonkp }}">{{ $nkp->tennguonkp }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+                <button type="submit" id="submit" name="submit" value="submit" class="btn btn-primary">Đồng
+                    ý</button>
+            </div>
+        </div>
+        {!! Form::close() !!}
+    </div>
+    <div id="thoaichitra-canbo-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
         {!! Form::open([
             'url' => '#',
             'target' => '_blank',
