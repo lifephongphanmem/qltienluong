@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\dmphanloaidonvi_baocaoController;
 use App\Http\Controllers\dsdonviquanlyController;
 use Illuminate\Support\Facades\Route;
 
@@ -88,6 +89,10 @@ Route::group(['prefix' => 'he_thong'], function () {
         Route::get('inbaocao', 'dmphanloaidonvi_baocaoController@inbaocao');
         Route::post('store', 'dmphanloaidonvi_baocaoController@store');
         Route::get('del/{id}', 'dmphanloaidonvi_baocaoController@destroy');
+
+        Route::get('don_vi',[dmphanloaidonvi_baocaoController::class,'donvi']);
+        Route::post('sua',[dmphanloaidonvi_baocaoController::class,'sua']);
+        Route::get('getDV',[dmphanloaidonvi_baocaoController::class,'getDV']);
     });
 });
 ?>

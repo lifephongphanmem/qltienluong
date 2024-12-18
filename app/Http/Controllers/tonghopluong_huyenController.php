@@ -1299,8 +1299,9 @@ class tonghopluong_huyenController extends Controller
                         ->where('ngaydung', '<=', $ngay)
                         ->where('trangthai', 'TD');
                 })
+                ->orderBy('stt')
                 ->get();
-            //dd($model_donvi->toarray());
+            // dd($model_donvi->toarray());
             $model_phanloai = dmphanloaidonvi::wherein('maphanloai', array_column($model_donvi->toarray(), 'maphanloai'))->orderBy('stt')->get();
             $m_pc = array_column(dmphucap::all()->toarray(), 'report', 'mapc');
             $a_phucap = array();
