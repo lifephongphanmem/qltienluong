@@ -6,6 +6,7 @@ use App\bangluong;
 use App\bangluong_ct;
 use App\bangluong_ct_01;
 use App\bangluong_truc;
+use App\bangluong_thuetncn;
 use App\bangthuyetminh;
 use App\bangthuyetminh_chitiet;
 use App\dmchucvucq;
@@ -33,11 +34,12 @@ class bangluong_inController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
-            //dd($inputs);
+            // dd($inputs);
             $inputs['madv'] = session('admin')->madv;
             list($m_canbo, $a_pc) = $this->getData($inputs);
             $a_canbo = $m_canbo->toarray();
-            //dd($a_canbo);
+            
+            // dd($a_canbo);
             $m_dv = dmdonvi::where('madv', $inputs['madv'])->first();
 
             $m_bl = bangluong::select('thang', 'nam', 'mabl', 'madv', 'ngaylap')
@@ -45,7 +47,7 @@ class bangluong_inController extends Controller
                 ->where('nam', $inputs['nam_th'])
                 ->where('madv', $inputs['madv'])
                 ->where('phanloai', 'BANGLUONG')->first();
-
+            // dd($m_bl);
             $thongtin = array(
                 'nguoilap' => $m_bl->nguoilap,
                 'thang' => $m_bl->thang,
@@ -64,7 +66,21 @@ class bangluong_inController extends Controller
                     $col++;
                 }
             }
-
+            $model_thuetncn=bangluong::select('thang', 'nam', 'mabl', 'madv', 'ngaylap')
+            ->where('thang', $inputs['thang_th'])
+            ->where('nam', $inputs['nam_th'])
+            ->where('madv', $inputs['madv'])
+            ->where('phanloai', 'THUETNCN')->first();
+            if(isset($model_thuetncn)){
+                $m_thuetncn=bangluong_thuetncn::where('mabl',$model_thuetncn->mabl)->get();
+                foreach($a_canbo as &$ct){
+                    $canbo_thuetncn=$m_thuetncn->where('macanbo',$ct['macanbo'])->first();
+                    $ct['thuetn']=$canbo_thuetncn->tongthuetncn;
+                    $ct['luongtn']=$ct['luongtn']-$ct['thuetn'];
+                    // dd($ct);
+                }
+            }
+            // dd($a_canbo);
             return view('reports.bangluong.tonghopbangluong.mautt107')
                 ->with('a_canbo', $a_canbo)
                 ->with('m_dv', $m_dv)
@@ -113,7 +129,19 @@ class bangluong_inController extends Controller
                 }
             }
             $a_chucvu = array_column(dmchucvucq::all('tenvt', 'macvcq')->toArray(), 'tenvt', 'macvcq');
-
+            $model_thuetncn=bangluong::select('thang', 'nam', 'mabl', 'madv', 'ngaylap')
+            ->where('thang', $inputs['thang_th'])
+            ->where('nam', $inputs['nam_th'])
+            ->where('madv', $inputs['madv'])
+            ->where('phanloai', 'THUETNCN')->first();
+            if(isset($model_thuetncn)){
+                $m_thuetncn=bangluong_thuetncn::where('mabl',$model_thuetncn->mabl)->get();
+                foreach($a_canbo as &$ct){
+                    $canbo_thuetncn=$m_thuetncn->where('macanbo',$ct['macanbo'])->first();
+                    $ct['giaml']=$canbo_thuetncn->tongthuetncn;
+                    $ct['luongtn']=$ct['luongtn']-$ct['giaml'];
+                }
+            }
             return view('reports.bangluong.tonghopbangluong.mautt107_m2')
                 ->with('a_canbo', $a_canbo)
                 ->with('m_dv', $m_dv)

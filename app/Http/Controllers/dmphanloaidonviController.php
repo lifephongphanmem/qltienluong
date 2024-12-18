@@ -17,9 +17,11 @@ class dmphanloaidonviController extends Controller
     public function index()
     {
         if (Session::has('admin')) {
-            $model = dmphanloaidonvi::all();
+            $model = dmphanloaidonvi::orderBy('stt')->get();
+            $stt=$model->max('stt')??1;
             return view('system.danhmuc.phanloaidonvi.index')
                 ->with('model', $model)
+                ->with('stt', $stt)
                 ->with('furl', '/danh_muc/pl_don_vi/')
                 ->with('pageTitle', 'Danh mục phân loại đơn vị');
         } else
@@ -84,6 +86,7 @@ class dmphanloaidonviController extends Controller
         }
 
         $inputs = $request->all();
+        dd($inputs);
         $model = dmphanloaidonvi::where('maphanloai', $inputs['maphanloai'])->first();
         $model->update($inputs);
 

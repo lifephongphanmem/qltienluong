@@ -56,12 +56,13 @@
                             @if (isset($model))
                                 @foreach ($model as $key => $value)
                                     <tr>
-                                        <td class="text-center">{{ $key + 1 }}</td>
+                                        {{-- <td class="text-center">{{ $key + 1 }}</td> --}}
+                                        <td class="text-center">{{ $value->stt }}</td>
                                         <td name="tencv">{{ $value->maphanloai }}</td>
                                         <td name="ghichu">{{ $value->tenphanloai }}</td>
                                         <td>
                                             <button type="button"
-                                                onclick="editCV('{{ $value->id }}','{{ $value->maphanloai }}', '{{ $value->tenphanloai }}')"
+                                                onclick="editCV('{{ $value->id }}','{{ $value->maphanloai }}', '{{ $value->tenphanloai }}','{{ $value->stt }}','{{$stt}}')"
                                                 class="btn btn-info btn-xs mbs">
                                                 <i class="fa fa-edit"></i>&nbsp; Chỉnh sửa</button>
                                             <button type="button"
@@ -98,7 +99,8 @@
                         'class' => 'form-control',
                         'required' => 'required',
                     ]) !!}
-
+                    <label class="form-control-label">Số thứ tự<span class="require">*</span></label>
+                    {!! Form::text('stt', $stt, ['id' => 'stt', 'class' => 'form-control']) !!}
 
                     <input id="id_cv" type="hidden" />
                 </div>
@@ -117,16 +119,21 @@
             $('#chucvu-modal').modal('show');
         }
 
-        function editCV(id, maphanloai, tenphanloai) {
+        function editCV(id, maphanloai, tenphanloai,stt,maxstt) {
             // var tr = $(e).closest('tr');
             // $('#tencv').val($(tr).find('td[name=tencv]').text());
             // $('#ghichu').val($(tr).find('td[name=ghichu]').text());
             // $('#sapxep').attr('value',$(tr).find('td[name=sapxep]').text());
             // $('#macvcq').val(macv);
             // $('#id_cv').val(id);
+            if(stt == ''){
+                stt=++maxstt;
+            }
+            
             $('#id_cv').val(id);
             $('#maphanloai').val(maphanloai);
             $('#tenphanloai').val(tenphanloai);
+            $('#stt').val(stt);
             $('#chucvu-modal').modal('show');
         }
 
@@ -137,6 +144,7 @@
             var maphanloai = $('#maphanloai').val();
             var tenphanloai = $('#tenphanloai').val();
             var id = $('#id_cv').val();
+            var stt = $('#stt').val();
 
             if (tenphanloai == '') {
                 valid = false;
@@ -152,7 +160,8 @@
                         _token: CSRF_TOKEN,
                         maphanloai: maphanloai,
                         tenphanloai: tenphanloai,
-                        id: id
+                        id: id,
+                        stt: stt
                     },
                     dataType: 'JSON',
                     success: function(data) {

@@ -207,7 +207,7 @@
                                                     data-toggle="modal">
                                                     <i class="fa fa-trash-o"></i>&nbsp;Xóa
                                                 </button>
-                                            @else
+                                            @elseif($value->phanloai !="THUETNCN")
                                                 <button type="button"
                                                     onclick="inbl_khac('{{ $value->mabl }}','{{ $value->thang }}','{{ $value->nam }}')"
                                                     class="btn btn-default btn-xs mbs">
@@ -452,7 +452,32 @@
                     $('#truylinh-modal').modal('show');
                     break;
                 }
-
+                case 'THUETNCN': {
+                    $.ajax({
+                        url: '{{ $inputs['furl_ajax'] }}' + 'get',
+                        type: 'GET',
+                        data: {
+                            _token: CSRF_TOKEN,
+                            mabl: mabl
+                        },
+                        dataType: 'JSON',
+                        success: function(data) {
+                            $('#thang_thuetncn').val(data.thang);
+                            $('#nam_thuetncn').val(data.nam);
+                            $('#noidung_thuetncn').val(data.noidung);
+                            // $('#linhvuchoatdong_truylinh').val(data.linhvuchoatdong).trigger('change');
+                            $('#mabl_thuetncn').val(data.mabl);
+                            $('#phanloai_thuetncn').val(data.phanloai);
+                            $('#ngaylap_thuetncn').val(data.ngaylap);
+                            $('#nguoilap_thuetncn').val(data.nguoilap);
+                        },
+                        error: function(message) {
+                            toastr.error(message, 'Lỗi!');
+                        }
+                    });
+                    $('#thuetncn-modal').modal('show');
+                    break;
+                }
                 case 'TRICHNOP': {
                     var form_ctp = $('#create_trichnop');
                     $.ajax({

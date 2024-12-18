@@ -56,14 +56,19 @@ class baocaobangluongController extends Controller
         if (Session::has('admin')) {
             $model_nhomct = dmphanloaicongtac::select('macongtac', 'tencongtac')->get();
             $model_tenct = dmphanloaict::select('tenct', 'macongtac', 'mact')->get();
+            $model_nguonkp=dmnguonkinhphi::select('manguonkp','tennguonkp')->get();
             $inputs['furl_th'] = '/bao_cao/bang_luong/';
             $inputs['furl_dutoan'] = '/chuc_nang/du_toan_luong/huyen/';
             $inputs['furl_nhucaukp'] = '/chuc_nang/tong_hop_nguon/huyen/';
+            //Lấy cán bộ của đơn vị
+            $a_canbo=array_column(hosocanbo::where('madv',session('admin')->madv)->get()->toarray(),'tencanbo','macanbo');
             return view('reports.index')
                 ->with('furl', '/bao_cao/bang_luong/')
                 ->with('inputs', $inputs)
+                ->with('a_canbo', $a_canbo)
                 ->with('model_nhomct', $model_nhomct)
                 ->with('model_tenct', $model_tenct)
+                ->with('model_nguonkp', $model_nguonkp)
                 ->with('pageTitle', 'Báo cáo chi trả lương');
         } else
             return view('errors.notlogin');
@@ -116,6 +121,16 @@ class baocaobangluongController extends Controller
 
             $model_donvi = dmdonvi::where('macqcq', session('admin')->madv)->get();
             $model_thongtu = dmthongtuquyetdinh::all();
+            $model_dvkhoi=dmdonvi::where('macqcq', session('admin')->madv)->where('phanloaitaikhoan', 'TH')->get();//2024.12.16 lấy các đơn vị tổng hợp khối trực thuộc
+            $model_dvcapduoi=dmdonvi::where('macqcq',$model_dvkhoi->first()->madv)
+            // ->whereNotIn('madv', function ($query) use ($ngay) {
+            //     $query->from('dmdonvi')
+            //         ->select('madv')
+            //         ->where('ngaydung', '<=', $ngay)
+            //         ->where('trangthai', 'TD');
+            // })
+                ->get();
+            // dd($model_dvcapduoi);
             return view('reports.index_th')
                 ->with('inputs', $inputs)
                 ->with('model_phanloai', $model_phanloai)
@@ -123,7 +138,8 @@ class baocaobangluongController extends Controller
                 ->with('a_linhvuchd', $a_linhvuchd)
                 ->with('a_phanloai', $a_phanloai)
                 ->with('model_dv', $model_donvi)
-                ->with('model_dvkhoi', dmdonvi::where('macqcq', session('admin')->madv)->where('phanloaitaikhoan', 'TH')->get()) //2024.12.16 lấy các đơn vị tổng hợp khối trực thuộc
+                ->with('model_dvkhoi', $model_dvkhoi) 
+                ->with('model_dvcapduoi', $model_dvcapduoi) 
                 ->with('model_phanloaict', $model_phanloaict)
                 ->with('model_thongtu', $model_thongtu)
                 ->with('model_tenct', $model_tenct)
@@ -439,24 +455,44 @@ class baocaobangluongController extends Controller
         if (Session::has('admin')) {
             $inputs = $request->all();
             $inputs['cochu'] = 11;
-            $tuthang = $inputs['tuthang'];
-            $tunam = $inputs['tunam'];
-            $denthang = $inputs['denthang'];
+            $tuthang = $inputs['tuthang']??'';
+            $tunam = $inputs['tunam']??'';
+            $denthang = $inputs['denthang']??'';
+            
             //$dennam = $inputs['dennam'];
-            //dd($inputs);
+            // dd($inputs['mact']);
+            if(isset($inputs['madv'])){
+                $inputs['macanbo']=$inputs['macanbo']??'';
+                $inputs['mact'] =$inputs['mact']?? '';
+                $m_tonghop = tonghopluong_donvi::where(function($q) use($inputs){
+                    if($inputs['thang'] != 'ALL'){
+                        $q->where('thang',$inputs['thang']);
+                    }
+                })
+                ->where('nam', $inputs['nam'])
+                ->where('madv', $inputs['madv'])
+                ->orderby('thang')->get();
 
-            $m_tonghop = tonghopluong_donvi::whereBetween('thang', array($tuthang, $denthang))
+            }else{
+                $m_tonghop = tonghopluong_donvi::whereBetween('thang', array($tuthang, $denthang))
                 ->where('nam', $tunam)
                 ->where('madv', session('admin')->madv)
                 ->orderby('thang')->get();
+            }
+
 
             $m_chitiet = tonghopluong_donvi_bangluong::wherein('mathdv', a_unique(array_column($m_tonghop->toarray(), 'mathdv')))
+                ->where(function($q) use ($inputs){
+                    if($inputs['macanbo'] != ''){
+                        $q->where('macanbo',$inputs['macanbo']);
+                    }
+                })
                 ->orderby('stt')->get();
             $model = $m_chitiet->unique(function ($ct) {
                 return $ct['macanbo'] . $ct['mact'];
             });
 
-
+            // dd($model);
             $m_dv = dmdonvi::where('madv', \session('admin')->madv)->first();
             $a_phucap = array();
             $col = 0;
@@ -470,7 +506,11 @@ class baocaobangluongController extends Controller
             }
 
             foreach ($model as $key => $ct) {
-                if ($inputs['mact'] != '' && $ct->mact != $inputs['mact']) {
+                // if ($inputs['mact'] != '' && $ct->mact != $inputs['mact']) {
+                //     $model->forget($key);
+                //     continue;
+                // }
+                if ($inputs['mact'] != '' && !in_array($ct->mact, $inputs['mact'])) {
                     $model->forget($key);
                     continue;
                 }
@@ -5762,5 +5802,25 @@ class baocaobangluongController extends Controller
         } else {
             return view('errors.notlogin');
         }
+    }
+
+    function getDV(Request $request)
+    {
+        $inputs=$request->all();
+        $model=dmdonvi::where('macqcq',$inputs['macqcq'])->get();
+        $result=array(
+            'html'=>'',
+            'status'=>'fail'
+        );
+        $result['html'].='<div class="col-md-12" id="donvi_capduoi">';
+        $result['html'].='<label class="control-label"> Đơn vị cấp dưới</label>';
+        $result['html'].='<select class="form-control select2me" name="madv" id="donvi_capduoi" >';
+        foreach($model as $ct){
+           $result['html'].=' <option value="'.$ct->madv.'">'.$ct->tendv.'</option>';
+        }
+        $result['html'].='</select>';
+        $result['html'].='</div>';
+        $result['status']='success';
+        return response()->json($result);
     }
 }
