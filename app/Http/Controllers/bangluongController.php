@@ -3481,8 +3481,10 @@ class bangluongController extends Controller
                 }
             }
             // dd($model);
+
             return view('reports.bangluong.donvi.mautt107')
                 ->with('model', $model)
+                ->with('inputs', $inputs)
                 ->with('model_pb', getPhongBan())
                 ->with('m_dv', $m_dv)
                 ->with('thongtin', $thongtin)
