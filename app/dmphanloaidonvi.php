@@ -11,6 +11,7 @@ class dmphanloaidonvi extends Model
         'id',
         'maphanloai',
         'tenphanloai',
-        'ghichu'
+        'ghichu',
+        'stt'
     ];
 }

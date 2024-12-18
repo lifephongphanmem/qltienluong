@@ -3448,6 +3448,7 @@ class bangluongController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
+            // dd($inputs);
             //$model = $this->getBangLuong($inputs)->wherein('phanloai', ['CVCHINH','KHONGCT']);
             $model = $this->getBangLuong($inputs);
             $mabl = $inputs['mabl'];
@@ -3480,8 +3481,10 @@ class bangluongController extends Controller
                 }
             }
             // dd($model);
+
             return view('reports.bangluong.donvi.mautt107')
                 ->with('model', $model)
+                ->with('inputs', $inputs)
                 ->with('model_pb', getPhongBan())
                 ->with('m_dv', $m_dv)
                 ->with('thongtin', $thongtin)

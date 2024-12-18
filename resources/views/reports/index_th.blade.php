@@ -137,6 +137,12 @@
                                         </a>
                                     </li>
                                     <li>
+                                        <a href="#" data-target="#modal-chitraluong-chitiet" data-toggle="modal"
+                                            onclick="inchitraluong('/chuc_nang/tong_hop_luong/huyen/TongHop')">
+                                            Tổng hợp tình hình chi trả lương (Chi tiết)
+                                        </a>
+                                    </li>
+                                    <li>
                                         <a href="#" data-target="#modal-chitraluong-khoi" data-toggle="modal"
                                             onclick="inchitraluongkhoi('/chuc_nang/tong_hop_luong/huyen/TongHop_Khoi')">
                                             Tổng hợp tình hình chi trả lương (Dữ liệu khối)
@@ -621,6 +627,106 @@
         {!! Form::close() !!}
     </div>
 
+    <div id="modal-chitraluong-chitiet" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+        {!! Form::open([
+            'url' => '/bao_cao/bang_luong/don_vi/chitratheocb',
+            'target' => '_blank',
+            'method' => 'post',
+            'id' => 'frm_chitraluong_chitiet',
+            'class' => 'form-horizontal form-validate',
+        ]) !!}
+        {{-- Các trường dữ liệu ẩn --}}
+        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+        <div class="modal-dialog modal-content">
+            <div class="modal-header modal-header-primary">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+                <h4 id="modal-header-primary-label" class="modal-title">Thông tin kết xuất tổng hợp chi trả bảng lương
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label class="control-label">Phân loại công tác</label>
+                            <select class="form-control select2me" name="mact[]" id="mact" multiple=true>
+                                @foreach ($model_nhomct as $kieuct)
+                                    <optgroup label="{{ $kieuct->tencongtac }}">
+                                        <?php $mode_ct = $model_tenct->where('macongtac', $kieuct->macongtac); ?>
+                                        @foreach ($mode_ct as $ct)
+                                            <option value="{{ $ct->mact }}">{{ $ct->tenct }}</option>
+                                        @endforeach
+                                    </optgroup>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    {{-- <div class="row">
+                        <div class="col-md-12">
+                            <label class="control-label">Lĩnh vực hoạt động</label>
+                            <select class="form-control select2me" name="linhvuchoatdong[]" id="mact" multiple=true>
+                                @foreach ($a_linhvuchd as $key => $ct)
+                                    <option value="{{ $key }}">{{ $ct }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div> --}}
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label class="control-label"> Tháng</label>
+                            <select class="form-control select2me" name="thang">
+                                <option value="ALL">--Tất cả các tháng--</option>
+                                @foreach (getThang() as $key => $ct)
+                                    <option value="{{ $key }}">{{ $ct }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label class="control-label"> Năm</label>
+                            {!! Form::select('nam', getNam(), date('Y'), ['class' => 'form-control']) !!}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label class="control-label"> Đơn vị quản lý khối</label>
+                            <select class="form-control select2me" name="macqcq" onchange="ChangeDV(event)">
+                                @foreach ($model_dvkhoi as $dv)
+                                    <option value="{{ $dv->madv }}">{{ $dv->tendv }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12" id="donvi_capduoi">
+                            <label class="control-label"> Đơn vị cấp dưới</label>
+                            <select class="form-control select2me" name="madv"  >
+                                @foreach ($model_dvcapduoi as $dv)
+                                    <option value="{{ $dv->madv }}">{{ $dv->tendv }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    {{-- @endif --}}
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label class="control-label"> Đơn vị tính</label>
+                            {!! Form::select('donvitinh', getDonViTinh(), '1', ['id' => 'donvitinh', 'class' => 'form-control']) !!}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+                <button type="submit" class="btn btn-primary">Đồng ý</button>
+            </div>
+        </div>
+        {!! Form::close() !!}
+    </div>
+
     <!--Mẫu in số liệu nhu cầu kinh phí -->
     {!! Form::open([
         'url' => '',
@@ -730,6 +836,28 @@
 
         function inkhac(url) {
             $('#frm_khac').attr('action', url);
+        }
+        function ChangeDV(e)
+        {
+           var macqcq=e.target.value;
+           var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+            $.ajax({
+                url: '/bao_cao/bang_luong/getDV',
+                type: 'GET',
+                data: {
+                    _token: CSRF_TOKEN,
+                    macqcq: macqcq
+                },
+                dataType: 'JSON',
+                success: function (data) {
+                    if(data.status == 'success'){
+                        $('#donvi_capduoi').replaceWith(data.html)
+                    }
+                },
+                error: function (message) {
+                    toastr.error(message, 'Lỗi!');
+                }
+            });
         }
     </script>
 @stop

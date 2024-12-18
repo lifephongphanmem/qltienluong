@@ -98,6 +98,7 @@ Route::group(['prefix' => 'bao_cao'], function () {
     Route::group(['prefix' => 'bang_luong'], function () {
         Route::get('tong_hop', [baocaobangluongController::class, 'index_th']);
         Route::get('', 'baocaobangluongController@index'); //Form chung
+        Route::get('/getDV',[baocaobangluongController::class,'getDV']);
         //Các mẫu báo cáo tại đơn vị
         Route::group(['prefix' => 'don_vi'], function () {
             Route::post('mauc02ahd', 'baocaobangluongController@mauc02ahd');
