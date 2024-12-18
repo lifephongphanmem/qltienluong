@@ -184,7 +184,8 @@
             <td></td>
         </tr>
     </table>
-
+    <p id='data_body1' style="text-align: left;font-size: 12px;font-weight:bold;">Tổng số tiền bằng chữ:
+        {{ Dbl2Str($model->sum('luongtn')) }}</p>
     <table id="data_footer1" class="header" width="96%" border="0" cellspacing="0" cellpadding="8" style="margin:20px auto; text-align: center;">
         <tr>
             <td style="text-align: left;" width="25%"></td>

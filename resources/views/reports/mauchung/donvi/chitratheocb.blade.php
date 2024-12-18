@@ -36,7 +36,16 @@
 
         <tr>
             <td colspan="2" style="text-align: center; font-style: italic">
+                @if (isset($inputs['madv']))
+                    @if ($inputs['thang'] == 'ALL')
+                    Năm {{$inputs['nam']}}
+                    @else
+                     Tháng {{$inputs['thang']}}  - Năm {{$inputs['nam']}}
+                    @endif
+                @else
                 Từ tháng {{$inputs['tuthang']}} đến tháng {{$inputs['denthang']}} - Năm {{$inputs['tunam']}}
+                @endif
+               
             </td>
         </tr>
 

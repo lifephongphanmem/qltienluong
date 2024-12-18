@@ -3448,6 +3448,7 @@ class bangluongController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
+            // dd($inputs);
             //$model = $this->getBangLuong($inputs)->wherein('phanloai', ['CVCHINH','KHONGCT']);
             $model = $this->getBangLuong($inputs);
             $mabl = $inputs['mabl'];

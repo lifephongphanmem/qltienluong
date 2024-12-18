@@ -1131,8 +1131,8 @@ class tonghopluong_khoiController extends Controller
             $a_phucap = array();
             $col = 0;
             //$m_pc = array_column(dmphucap_donvi::where('madv', $model_thongtin->madv)->get()->toarray(),'report','mapc');
-            $m_pc = getColTongHop();
-
+            // $m_pc = getColTongHop();
+            // dd($m_pc);
             foreach ($model as $chitiet) {
                 if (!isset($model_nguonkp[$chitiet->manguonkp]))
                     $chitiet->manguonkp = 12;
@@ -1150,15 +1150,22 @@ class tonghopluong_khoiController extends Controller
                     $chitiet->tongtl = $chitiet->ttl;
                 }
             }
-            //dd($model->toarray());
-
-            foreach (getColTongHop() as $ct) {
-                if ($model->sum($ct) > 0) {
-                    $a_phucap[$ct] = isset($m_pc[$ct]) ? $m_pc[$ct] : '';
+            $model_pc = dmphucap_donvi::where('madv', $madv)->where('phanloai', '<', '3')->get();
+            foreach ($model_pc as $ct) {
+                if ($model->sum($ct->mapc) > 0) {
+                    $a_phucap[$ct->mapc] = $ct->report;
                     $col++;
                 }
             }
-            //dd($a_phucap);
+            //dd($model->toarray());
+            // foreach (getColTongHop() as $ct) {
+            //     if ($model->sum($ct) > 0) {
+            //         // $a_phucap[$ct] = isset($m_pc[$ct]) ? $m_pc[$ct] : '';
+            //         $a_phucap[$ct] = $ct;
+            //         $col++;
+            //     }
+            // }
+            // dd($a_phucap);
             $thongtin = array(
                 'nguoilap' => session('admin')->name,
                 'thang' => $model_thongtin->thang,

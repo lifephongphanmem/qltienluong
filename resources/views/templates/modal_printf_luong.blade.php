@@ -162,6 +162,12 @@
                         <label>In chức vụ/chức danh viết tắt</label>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-md-offset-3 col-md-9">
+                        <input name="inchutongst" id="inchutongst" type="checkbox">
+                        <label>In tổng số tiền bằng chữ </label>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="modal-footer">

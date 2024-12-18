@@ -213,7 +213,7 @@
             'url' => '#',
             'target' => '_blank',
             'method' => 'post',
-            'id' => 'thoaichitra',
+            'id' => 'thoaichitra_nkp',
             'class' => 'form-horizontal form-validate',
         ]) !!}
         <div class="modal-dialog modal-content">
@@ -249,8 +249,7 @@
                             <select class="form-control select2me" name="mact" id="mact">
                                 <option value="">-- Tất cả các nguồn kinh phí --</option>
                                 @foreach ($model_nguonkp as $nkp)
-
-                                            <option value="{{ $nkp->manguonkp }}">{{ $nkp->tennguonkp }}</option>
+                                    <option value="{{ $nkp->manguonkp }}">{{ $nkp->tennguonkp }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -271,7 +270,7 @@
             'url' => '#',
             'target' => '_blank',
             'method' => 'post',
-            'id' => 'thoaichitra',
+            'id' => 'thoaichitra_cb',
             'class' => 'form-horizontal form-validate',
         ]) !!}
         <div class="modal-dialog modal-content">
@@ -314,6 +313,17 @@
                                             <option value="{{ $ct->mact }}">{{ $ct->tenct }}</option>
                                         @endforeach
                                     </optgroup>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label"> Cán bộ <span class="require">*</span></label>
+                        <div class="col-md-8">
+                            <select class="form-control select2me" name="macanbo" id="macanbo">
+                                <option value="">-- Tất cả cán bộ --</option>
+                                @foreach ($a_canbo as $key=>$cb)
+                                    <option value="{{ $key }}">{{ $cb }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -821,6 +831,8 @@
 
         function chitraluong(url) {
             $('#thoaichitra').attr('action', url);
+            $('#thoaichitra_nkp').attr('action', url);
+            $('#thoaichitra_cb').attr('action', url);
         }
 
         function dutoanluong(url) {
