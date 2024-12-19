@@ -954,7 +954,7 @@ class nguonkinhphiController extends Controller
                 $inputs['quyluonggiam_2k'] = round(($inputs['soluongdinhbien_2d'] - getSoLuongCanBoDinhMuc($a_solieu['2d_nd33'], session('admin')->phanloaixa))
                     * ($inputs['hesoluongbq_2d'] + $inputs['hesophucapbq_2d'] + $inputs['tyledonggop_2d']) * $a_solieu['2d']);
             }
-                dd($inputs);
+                // dd($inputs);
             $model->update($inputs);
             if ($inputs['huyen'] == 1) {
                 return redirect('chuc_nang/xem_du_lieu/nguon/huyen?sohieu=' . $model->sohieu . '&trangthai=ALL&phanloai=ALL');

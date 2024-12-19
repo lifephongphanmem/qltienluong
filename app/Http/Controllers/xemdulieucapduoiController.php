@@ -60,6 +60,7 @@ class xemdulieucapduoiController extends Controller
             $thang = $inputs['thang'];
             $nam = $inputs['nam'];
             $ngay = date("Y-m-t", strtotime($nam . '-' . $thang . '-01'));
+            // dd($ngay);
             $a_trangthai = array('ALL' => 'Tất cả dữ liệu', 'CHOGUI' => 'Chưa gửi dữ liệu', 'DAGUI' => 'Đã gửi dữ liệu');
             $a_phanloai = getPhanLoaiDonVi();
             $a_phanloai['ALL'] = 'Tất cả các đơn vị';
@@ -68,11 +69,11 @@ class xemdulieucapduoiController extends Controller
             $model_donvi = dmdonvi::select('madv', 'tendv', 'macqcq', 'maphanloai', 'phanloaitaikhoan')->where('macqcq', $madv)->where('madv', '<>', $madv)
                 ->wherenotin('madv', function ($query) use ($madv, $thang, $nam, $ngay) {
                     $query->select('madv')->from('dmdonvi')
-                        // ->where('ngaydung', '<=', $ngay)
-                        ->whereMonth('ngaydung', '<=', $ngay)
-                        ->whereYear('ngaydung', '<=', $ngay)
-                        ->where('trangthai', 'TD')
-                        ->get();
+                        ->where('ngaydung', '<=', $ngay)
+                        // ->whereMonth('ngaydung', '<=', $ngay)
+                        // ->whereYear('ngaydung', '<=', $ngay)
+                        ->where('trangthai', 'TD');
+                        // ->get();
                 })
                 ->get();
             // dd($model_donvi);

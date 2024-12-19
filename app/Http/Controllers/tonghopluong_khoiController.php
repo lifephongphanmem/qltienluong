@@ -42,9 +42,7 @@ class tonghopluong_khoiController extends Controller
             ->where('madv', '<>', $madv)
             ->wherenotin('madv', function ($query) use ($madv, $thang, $nam, $ngay) {
                 $query->select('madv')->from('dmdonvi')
-                    // ->where('ngaydung', '<=', $ngay)
-                    ->whereMonth('ngaydung', '<=', $ngay)
-                    ->whereYear('ngaydung', '<=', $ngay)
+                    ->where('ngaydung', '<=', $ngay)
                     ->where('trangthai', 'TD')
                     ->get();
             })
@@ -109,7 +107,7 @@ class tonghopluong_khoiController extends Controller
                 })->where('trangthai', 'DAGUI')
                     ->where('thang', $a_data[$i]['thang'])->where('nam', $inputs['nam'])
                     ->get();
-
+                // dd($dulieu);
                 $dulieu_khoi =  tonghopluong_khoi::where('macqcq', $madv)->where('trangthai', 'DAGUI')
                     ->where('thang', $a_data[$i]['thang'])->where('nam', $inputs['nam'])
                     ->get();
@@ -150,6 +148,8 @@ class tonghopluong_khoiController extends Controller
                         $a_data[$i]['trangthai'] = 'CHUADAYDU';
                     }
                 }
+                // dd( $a_data[$i]['dvgui']);
+
             }
            
             return view('functions.tonghopluong.khoi.index')

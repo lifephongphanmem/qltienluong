@@ -35,7 +35,7 @@
             <div class="portlet light bordered">
                 <div class="portlet-title">
                     <div class="caption">
-                        THÔNG TIN THIẾT LẬP BÁO CÁO 123
+                        THÔNG TIN THIẾT LẬP BÁO CÁO
                     </div>
                     <div class="actions">
                         {{-- @if (can('dmphanloaidonvi_baocao', 'create')) --}}

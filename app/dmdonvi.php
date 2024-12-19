@@ -47,6 +47,7 @@ class dmdonvi extends Model
         'machuong',
         'maloaikhoan',
         'ngaytao',
-        'chichu'
+        'chichu',
+        'stt'
     ];
 }

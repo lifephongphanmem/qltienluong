@@ -688,6 +688,9 @@
                                         <li><a
                                                 href="{{ url('/he_thong/bao_cao/danh_sach?madvbc=' . session('admin')->madvbc) }}"><i
                                                     class="fa fa-caret-right"></i>Thiết lập báo cáo</a></li>
+                                                    <li><a
+                                                        href="{{ url('/he_thong/bao_cao/don_vi?macqcq=' . session('admin')->madv) }}"><i
+                                                            class="fa fa-caret-right"></i>Thiết lập đơn vị</a></li>
                                         <li><a href="{{ url('/he_thong/don_vi/stopdv') }}"><i
                                                     class="fa fa-caret-right"></i>Dừng hoạt động đơn vị</a></li>
                                     </ul>
