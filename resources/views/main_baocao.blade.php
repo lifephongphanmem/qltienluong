@@ -303,31 +303,31 @@
 
                         const excelCell = worksheet.getCell(currentRow, excelCol);
                         let cellValue = cell.innerText.trim();
-                        if (maNgach.includes(String(cellValue))) {
-                            excelCell.value = cellValue;
-                        } else {
-                            // Chuyển đổi giá trị nếu là chuỗi
-                            const numericValue = parseFormattedStringToNumber(cellValue);
-                            if (!isNaN(numericValue)) {
-                                excelCell.value = numericValue; // Gán giá trị số
+                        // if (maNgach.includes(String(cellValue))) {
+                        //     excelCell.value = cellValue;
+                        // } else {
+                        // Chuyển đổi giá trị nếu là chuỗi
+                        const numericValue = parseFormattedStringToNumber(cellValue);
+                        if (!isNaN(numericValue)) {
+                            excelCell.value = numericValue; // Gán giá trị số
 
-                                // Kiểm tra nếu là số nguyên thì không cần định dạng phần thập phân
-                                if (Number.isInteger(numericValue)) {
-                                    excelCell.numFmt = "#,##0"; // Định dạng số nguyên
-                                } else {
-                                    const decimalPart = numericValue.toString().split('.')[1];
-                                    if (decimalPart && decimalPart.length === 1) {
-                                        excelCell.numFmt =
-                                            "#,##0.00"; // Định dạng số với 2 chữ số thập phân
-                                    } else {
-                                        excelCell.numFmt =
-                                            "#,##0.00"; // Định dạng số với 2 chữ số thập phân
-                                    }
-                                }
+                            // Kiểm tra nếu là số nguyên thì không cần định dạng phần thập phân
+                            if (Number.isInteger(numericValue)) {
+                                excelCell.numFmt = "#,##0"; // Định dạng số nguyên
                             } else {
-                                // Nếu không phải số, gán giá trị ban đầu
-                                excelCell.value = cellValue;
+                                const decimalPart = numericValue.toString().split('.')[1];
+                                if (decimalPart && decimalPart.length === 1) {
+                                    excelCell.numFmt =
+                                    "#,##0.00"; // Định dạng số với 2 chữ số thập phân
+                                } else {
+                                    excelCell.numFmt =
+                                    "#,##0.00"; // Định dạng số với 2 chữ số thập phân
+                                }
                             }
+                            // } else {
+                            //     // Nếu không phải số, gán giá trị ban đầu
+                            //     excelCell.value = cellValue;
+                            // }
                         }
 
                         columnWidths[excelCol - 1] = Math.max(
