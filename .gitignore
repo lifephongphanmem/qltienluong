@@ -3,3 +3,4 @@
 .gitignore
 web.config
 /vendor/
+/public/web.config

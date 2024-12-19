@@ -1,20 +1,18 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html lang="vi">
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name='viewport' content='width=device-width, initial-scale=1' />
     <title>{{ $pageTitle }}</title>
-    <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet"
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet"
         type="text/css" />
     <link href="{{ url('assets/global/plugins/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet"
         type="text/css" />
     <link href="{{ url('assets/global/plugins/simple-line-icons/simple-line-icons.min.css') }}" rel="stylesheet"
         type="text/css" />
-    <link href="{{ url('assets/global/plugins/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet"
-        type="text/css" />
-    <link href="{{ url('assets/global/plugins/uniform/css/uniform.default.css') }}" rel="stylesheet"
-        type="text/css" />
+    <link href="{{ url('assets/global/plugins/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ url('assets/global/plugins/uniform/css/uniform.default.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ url('assets/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css') }}" rel="stylesheet"
         type="text/css" />
     <!-- BEGIN PAGE LEVEL PLUGIN STYLES -->
@@ -38,13 +36,13 @@
     <link href="{{ url('assets/admin/layout4/css/layout.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ url('assets/admin/layout4/css/themes/light.css') }}" rel="stylesheet" type="text/css"
         id="style_color" />
-    <link href="{{ url('assets/global/plugins/bootstrap-toastr/toastr.min.css') }}" rel="stylesheet"
-        type="text/css" />
+    <link href="{{ url('assets/global/plugins/bootstrap-toastr/toastr.min.css') }}" rel="stylesheet" type="text/css" />
 
     {{-- <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script> --}}
     {{-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" /> --}}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/exceljs/dist/exceljs.min.js"></script>
 
     <!-- END THEME STYLES -->
     <link rel="shortcut icon" href="{{ url('images/LIFESOFT.png') }}" type="image/x-icon">
@@ -75,7 +73,8 @@
         }
 
         tr {
-            padding-left: 2px;padding-right: 2px
+            padding-left: 2px;
+            padding-right: 2px
         }
 
         p {
@@ -237,6 +236,278 @@
                 downloadLink.click();
             }
         }
+
+        async function exportTableToExcel2() {
+            const workbook = new ExcelJS.Workbook();
+            const worksheet = workbook.addWorksheet('Sheet1');
+            const processedCells = new Set();
+            const columnWidths = [];
+            let currentRow = 1; // Dòng hiện tại trong sheet Excel
+
+            // Hàm chuyển đổi chuỗi định dạng "#.##0,00" thành số
+            function parseFormattedStringToNumber(value) {
+                if (typeof value === "string") {
+                    // Loại bỏ dấu chấm phân cách nghìn và thay dấu phẩy bằng dấu chấm
+                    return parseFloat(value.replace(/\./g, "").replace(",", "."));
+                }
+                return value;
+            }
+
+            // Hàm xử lý dữ liệu từ bảng HTML
+            function processTable(table) {
+                Array.from(table.rows).forEach((row) => {
+                    let colOffset = 0; // Bù cột khi ô bị trộn ngang
+                    Array.from(row.cells).forEach((cell, cellIndex) => {
+                        let excelCol = cellIndex + 1 + colOffset;
+
+                        while (processedCells.has(`${currentRow}:${excelCol}`)) {
+                            excelCol++;
+                            colOffset++;
+                        }
+
+                        const rowSpan = parseInt(cell.rowSpan, 10) || 1;
+                        const colSpan = parseInt(cell.colSpan, 10) || 1;
+
+                        const excelCell = worksheet.getCell(currentRow, excelCol);
+                        let cellValue = cell.innerText.trim();
+
+                        // Chuyển đổi giá trị nếu là chuỗi
+                        const numericValue = parseFormattedStringToNumber(cellValue);
+
+                        if (!isNaN(numericValue)) {
+                            excelCell.value = numericValue; // Gán giá trị số
+
+                            // Kiểm tra nếu là số nguyên thì không cần định dạng phần thập phân
+                            if (Number.isInteger(numericValue)) {
+                                excelCell.numFmt = "#,##0"; // Định dạng số nguyên
+                            } else {
+                                const decimalPart = numericValue.toString().split('.')[1];
+                                if (decimalPart && decimalPart.length === 1) {
+                                    excelCell.numFmt =
+                                        "#,##0.00"; // Định dạng số với 2 chữ số thập phân
+                                } else {
+                                    excelCell.numFmt =
+                                        "#,##0.00"; // Định dạng số với 2 chữ số thập phân
+                                }
+                            }
+                        } else {
+                            // Nếu không phải số, gán giá trị ban đầu
+                            excelCell.value = cellValue;
+                        }
+
+                        columnWidths[excelCol - 1] = Math.max(
+                            columnWidths[excelCol - 1] || 0,
+                            cellValue.length
+                        );
+
+                        const computedStyle = window.getComputedStyle(cell);
+                        const textAlign = computedStyle.textAlign || 'left';
+                        const verticalAlign = computedStyle.verticalAlign || 'middle';
+
+                        excelCell.alignment = {
+                            horizontal: textAlign === 'start' ? 'left' : textAlign === 'end' ?
+                                'right' : textAlign,
+                            vertical: verticalAlign === 'baseline' ? 'middle' : verticalAlign,
+                            wrapText: true,
+                        };
+
+                        excelCell.font = {
+                            name: 'Times New Roman',
+                            size: 12,
+                        };
+
+                        const hasBorder = computedStyle.borderStyle !== 'none' && computedStyle
+                            .borderWidth !== '0px';
+                        if (hasBorder) {
+                            excelCell.border = {
+                                top: {
+                                    style: 'thin'
+                                },
+                                left: {
+                                    style: 'thin'
+                                },
+                                bottom: {
+                                    style: 'thin'
+                                },
+                                right: {
+                                    style: 'thin'
+                                },
+                            };
+                        }
+
+                        if (rowSpan > 1 || colSpan > 1) {
+                            const endRow = currentRow + rowSpan - 1;
+                            const endCol = excelCol + colSpan - 1;
+
+                            worksheet.mergeCells(currentRow, excelCol, endRow, endCol);
+
+                            for (let r = currentRow; r <= endRow; r++) {
+                                for (let c = excelCol; c <= endCol; c++) {
+                                    processedCells.add(`${r}:${c}`);
+                                }
+                            }
+                        } else {
+                            processedCells.add(`${currentRow}:${excelCol}`);
+                        }
+                    });
+                    currentRow++; // Chuyển sang dòng tiếp theo sau mỗi hàng
+                });
+            }
+
+            // Hàm xử lý dữ liệu từ bảng HTML
+            function processTableHeader(table) {
+                Array.from(table.rows).forEach((row) => {
+                    let colOffset = 0; // Bù cột khi ô bị trộn ngang
+                    Array.from(row.cells).forEach((cell, cellIndex) => {
+                        let excelCol = cellIndex + 1 + colOffset;
+
+                        while (processedCells.has(`${currentRow}:${excelCol}`)) {
+                            excelCol++;
+                            colOffset++;
+                        }
+
+                        const rowSpan = parseInt(cell.rowSpan, 10) || 1;
+                        //const colSpan = parseInt(cell.colSpan, 10) || 1;
+                        const colSpan = 3;
+                        const excelCell = worksheet.getCell(currentRow, excelCol);
+                        let cellValue = cell.innerText.trim();
+
+                        // Chuyển đổi giá trị nếu là chuỗi
+                        const numericValue = parseFormattedStringToNumber(cellValue);
+
+                        if (!isNaN(numericValue)) {
+                            excelCell.value = numericValue; // Gán giá trị số
+
+                            // Kiểm tra nếu là số nguyên thì không cần định dạng phần thập phân
+                            if (Number.isInteger(numericValue)) {
+                                excelCell.numFmt = "#,##0"; // Định dạng số nguyên
+                            } else {
+                                const decimalPart = numericValue.toString().split('.')[1];
+                                if (decimalPart && decimalPart.length === 1) {
+                                    excelCell.numFmt =
+                                        "#,##0.00"; // Định dạng số với 2 chữ số thập phân
+                                } else {
+                                    excelCell.numFmt =
+                                        "#,##0.00"; // Định dạng số với 2 chữ số thập phân
+                                }
+                            }
+                        } else {
+                            // Nếu không phải số, gán giá trị ban đầu
+                            excelCell.value = cellValue;
+                        }
+
+                        columnWidths[excelCol - 1] = Math.max(
+                            columnWidths[excelCol - 1] || 0,
+                            cellValue.length
+                        );
+
+                        const computedStyle = window.getComputedStyle(cell);
+                        const textAlign = computedStyle.textAlign || 'left';
+                        const verticalAlign = computedStyle.verticalAlign || 'middle';
+
+                        excelCell.alignment = {
+                            horizontal: textAlign === 'start' ? 'left' : textAlign === 'end' ?
+                                'right' : textAlign,
+                            vertical: verticalAlign === 'baseline' ? 'middle' : verticalAlign,
+                            wrapText: true,
+                        };
+
+                        excelCell.font = {
+                            name: 'Times New Roman',
+                            size: 12,
+                        };
+
+                        const hasBorder = computedStyle.borderStyle !== 'none' && computedStyle
+                            .borderWidth !== '0px';
+                        if (hasBorder) {
+                            excelCell.border = {
+                                top: {
+                                    style: 'thin'
+                                },
+                                left: {
+                                    style: 'thin'
+                                },
+                                bottom: {
+                                    style: 'thin'
+                                },
+                                right: {
+                                    style: 'thin'
+                                },
+                            };
+                        }
+
+                        if (rowSpan > 1 || colSpan > 1) {
+                            const endRow = currentRow + rowSpan - 1;
+                            const endCol = excelCol + colSpan - 1;
+
+                            worksheet.mergeCells(currentRow, excelCol, endRow, endCol);
+
+                            for (let r = currentRow; r <= endRow; r++) {
+                                for (let c = excelCol; c <= endCol; c++) {
+                                    processedCells.add(`${r}:${c}`);
+                                }
+                            }
+                        } else {
+                            processedCells.add(`${currentRow}:${excelCol}`);
+                        }
+                    });
+                    currentRow++; // Chuyển sang dòng tiếp theo sau mỗi hàng
+                });
+            }
+
+            //Xử lý Header
+            const table1 = document.getElementById('data_header');
+            if (table1) {
+                processTableHeader(table1);
+            }
+
+            // Thêm một khoảng trống giữa hai bảng
+            currentRow++;
+            //Xử lý bảng dữ liệu
+
+            const table2 = document.getElementById('data_body');
+            // Xử lý dữ liệu từ bảng 2           
+            if (table2) {
+                processTable(table2);
+            }
+            //Nội dung 2
+            const table3 = document.getElementById('data_body1');
+            if (table3) {
+                processTable(table3);
+            }
+            //Nội dung 3
+            const table4 = document.getElementById('data_body2');
+            if (table4) {
+                processTable(table4);
+            }
+
+            // Thêm một khoảng trống giữa hai bảng
+            currentRow++;
+            //Chữ ký
+            const table5 = document.getElementById('data_footer');
+            if (table5) {
+                processTableHeader(table5);
+            }
+            //Xác nhận
+            const table6 = document.getElementById('data_footer1');
+            if (table6) {
+                processTableHeader(table6);
+            }
+
+            //Xuất dữ liệu
+            const title = 'Xuất dữ liệu Excel';
+            const buffer = await workbook.xlsx.writeBuffer();
+            const blob = new Blob([buffer], {
+                type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+            });
+
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${title}.xlsx`;
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
     </script>
 </head>
 
@@ -259,6 +530,12 @@
                 <li>
                     <button type="button" class="btn btn-info btn-xs" style="border-radius: 20px;"
                         onclick="exportTableToExcel()">
+                        <i class="fa fa-file-excel-o"></i> File Excel
+                    </button>
+                </li>
+                <li>
+                    <button type="button" class="btn btn-info btn-xs" style="border-radius: 20px;"
+                        onclick="exportTableToExcel2()">
                         <i class="fa fa-file-excel-o"></i> File Excel
                     </button>
                 </li>

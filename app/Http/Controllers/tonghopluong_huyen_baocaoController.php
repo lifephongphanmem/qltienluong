@@ -235,7 +235,7 @@ class tonghopluong_huyen_baocaoController extends Controller
             return view('reports.tonghopluong.huyen.SoLieuTongHop_PhanLoaiDV')
                 // ->with('model', $model)
                 ->with('model', $model_h)
-                ->with('lamtron', 10)
+                ->with('lamtron', 3)
                 ->with('m_donvi', $m_donvi)
                 ->with('col', $col)
                 ->with('a_phucap', $a_phucap)
