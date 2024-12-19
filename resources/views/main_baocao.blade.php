@@ -243,7 +243,71 @@
             const processedCells = new Set();
             const columnWidths = [];
             let currentRow = 1; // Dòng hiện tại trong sheet Excel
-
+            const maNgach = ['01.001',
+                '04.023', '06.041',
+                '07.044', '08.049',
+                '12.084', '21.187',
+                '23.261', '13.280',
+                '03.299', '03.232',
+                '06.036', '06.029',
+                '09.066', '01.002',
+                '04.024', '06.037',
+                '06.042', '07.045',
+                '08.050', '12.085',
+                '21.188', '23.262',
+                '13.281', '03.300',
+                '03.231', '06.037',
+                '10.225', '06.030', '09.067',
+                '11.081', '01.003', '03.019',
+                '04.025', '06.031', '06.038',
+                '06.043', '07.046',
+                '08.051', '09.068',
+                '10.078', '11.082',
+                '12.086', '21.189',
+                '23.263', '13.282',
+                '19.221', '03.301',
+                '03.230', '03.302',
+                '06.038', '06.032',
+                '06.039', '07.048',
+                '08.052', '09.069',
+                '10.079', '11.083',
+                '19.183', '21.190',
+                '23.265', '13.283',
+                '03.303', '06.039',
+                '19.222', '19.223',
+                '06.034', '07.047', '08.053',
+                '19.184', '19.185', '19.186',
+                '19.224', '06.035', '06.040',
+                '06.033', '01.006',
+                '01.010', '01.007',
+                '01.008', '15.113',
+                '16.119', '13.095',
+                '17.171', '13.096',
+                '02.008', '10.226',
+                '03.290', '03.289',
+                '16.118', '16.130',
+                '17.147', '17.178',
+                '10.228', '17.177', '17.175',
+                '16.138', '16.136',
+                '16.122', '14.108',
+                '17.163', '17.153',
+                '16.137', '16.121', '14.107',
+                '17.162', '17.152', '17.150',
+                '17.144', '17.141', '16.120',
+                '14.106', '14.105',
+                '13.102', '13.099',
+                '13.092', '12.089',
+                '17.173', '17.161',
+                '10.229', '15.115',
+                '01.011', '01.009',
+                '15.114', '02.007',
+                '16.112', '18.182', '02.006',
+                '01.004', '01.005', '13.090',
+                '13.093', '15.109',
+                '13.091', '13.094',
+                '15.110', '15.112',
+                '17.169', '15.111', '17.170',
+            ];
             // Hàm chuyển đổi chuỗi định dạng "#.##0,00" thành số
             function parseFormattedStringToNumber(value) {
                 if (typeof value === "string") {
@@ -270,29 +334,31 @@
 
                         const excelCell = worksheet.getCell(currentRow, excelCol);
                         let cellValue = cell.innerText.trim();
-
-                        // Chuyển đổi giá trị nếu là chuỗi
-                        const numericValue = parseFormattedStringToNumber(cellValue);
-
-                        if (!isNaN(numericValue)) {
-                            excelCell.value = numericValue; // Gán giá trị số
-
-                            // Kiểm tra nếu là số nguyên thì không cần định dạng phần thập phân
-                            if (Number.isInteger(numericValue)) {
-                                excelCell.numFmt = "#,##0"; // Định dạng số nguyên
-                            } else {
-                                const decimalPart = numericValue.toString().split('.')[1];
-                                if (decimalPart && decimalPart.length === 1) {
-                                    excelCell.numFmt =
-                                        "#,##0.00"; // Định dạng số với 2 chữ số thập phân
-                                } else {
-                                    excelCell.numFmt =
-                                        "#,##0.00"; // Định dạng số với 2 chữ số thập phân
-                                }
-                            }
-                        } else {
-                            // Nếu không phải số, gán giá trị ban đầu
+                        if (maNgach.some(item => item === cellValue)) {
                             excelCell.value = cellValue;
+                        } else {
+                             // Chuyển đổi giá trị nếu là chuỗi
+                        const numericValue = parseFormattedStringToNumber(cellValue);
+                            if (!isNaN(numericValue)) {
+                                excelCell.value = numericValue; // Gán giá trị số
+
+                                // Kiểm tra nếu là số nguyên thì không cần định dạng phần thập phân
+                                if (Number.isInteger(numericValue)) {
+                                    excelCell.numFmt = "#,##0"; // Định dạng số nguyên
+                                } else {
+                                    const decimalPart = numericValue.toString().split('.')[1];
+                                    if (decimalPart && decimalPart.length === 1) {
+                                        excelCell.numFmt =
+                                            "#,##0.00"; // Định dạng số với 2 chữ số thập phân
+                                    } else {
+                                        excelCell.numFmt =
+                                            "#,##0.00"; // Định dạng số với 2 chữ số thập phân
+                                    }
+                                }
+                            } else {
+                                // Nếu không phải số, gán giá trị ban đầu
+                                excelCell.value = cellValue;
+                            }
                         }
 
                         columnWidths[excelCol - 1] = Math.max(
