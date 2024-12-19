@@ -303,7 +303,7 @@
 
                         const excelCell = worksheet.getCell(currentRow, excelCol);
                         let cellValue = cell.innerText.trim();
-                        if (maNgach.some(item => item === cellValue)) {
+                        if (maNgach.some(item => item == cellValue)) {
                             excelCell.value = cellValue;
                         } else {
                             // Chuyển đổi giá trị nếu là chuỗi
