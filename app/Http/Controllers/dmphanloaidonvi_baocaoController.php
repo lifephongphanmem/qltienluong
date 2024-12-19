@@ -26,6 +26,7 @@ class dmphanloaidonvi_baocaoController extends Controller
             // dd($model);
             $a_phanloai = array_column(dmphanloaidonvi::wherenotin('maphanloai', array_column($model->toarray(), 'maphanloai_nhom'))->get()->toArray(), 'tenphanloai', 'maphanloai');
             $a_goc = array_column(dmphanloaidonvi_baocao::wherenotin('maphanloai_nhom', array_keys($a_phanloai))->get()->toArray(), 'tenphanloai_nhom', 'maphanloai_nhom');
+            // dd($a_phanloai);
             $a_goc[''] = 'Chọn mã phân loại gốc';
             return view('system.danhmuc.baocao.index')
                 ->with('model', $model)
@@ -142,12 +143,15 @@ class dmphanloaidonvi_baocaoController extends Controller
                 $model_parent->stt=$inputs['stt_parent'];
                 $model_parent->save();
             }
-            foreach ($inputs['stt'] as $k => $ct) {
-                // dd($ct);
-                $model = dmdonvi::where('madv', $k)->first();
-                $model->stt = $ct;
-                $model->save();
-            };
+            if(isset($inputs['stt'])){
+
+                foreach ($inputs['stt'] as $k => $ct) {
+                    // dd($ct);
+                    $model = dmdonvi::where('madv', $k)->first();
+                    $model->stt = $ct;
+                    $model->save();
+                };
+            }
 
 
             return redirect('he_thong/bao_cao/don_vi')

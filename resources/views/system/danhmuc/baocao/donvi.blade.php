@@ -107,15 +107,12 @@
                         <div class="col-md-10">
                             <div class="form-group">
                                 <label class="form-control-label">Đơn vị cấp dưới</label>
-                                {{-- {!! Form::text('maphanloai_nhom', null, ['class' => 'form-control']) !!} --}}
                             </div>
                         </div>
 
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label class="form-control-label">Số thứ tự</label>
-                                {{-- <button type="button" class="btn btn-default" data-target="#maphanloai-modal"
-                                    data-toggle="modal"><i class="fa fa-plus"></i>&nbsp;</button> --}}
                             </div>
                         </div>
                     </div>
@@ -139,7 +136,7 @@
                 stt=maxstt;
             }
             // console.log(maxstt);
-            $('#frm_them').find("[name^='stt']").val(stt);
+            $('#frm_them').find("[name^='stt_parent']").val(stt);
             $('#frm_them').find("[name^='madv']").val(madv);
             // $('#frm_them').find("[name^='capdo_nhom']").val(capdo_nhom).trigger('change');
             // $('#frm_them').find("[name^='maphanloai_goc']").val(maphanloai_goc).trigger('change');
