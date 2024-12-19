@@ -527,12 +527,12 @@
                         <i class="fa fa-file-word-o"></i> File Word
                     </button>
                 </li>
-                <li>
+                {{-- <li>
                     <button type="button" class="btn btn-info btn-xs" style="border-radius: 20px;"
                         onclick="exportTableToExcel()">
                         <i class="fa fa-file-excel-o"></i> File Excel
                     </button>
-                </li>
+                </li> --}}
                 <li>
                     <button type="button" class="btn btn-info btn-xs" style="border-radius: 20px;"
                         onclick="exportTableToExcel2()">
