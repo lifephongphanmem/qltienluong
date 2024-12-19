@@ -69,7 +69,7 @@ class dmphanloaidonvi_baocaoController extends Controller
         if (Session::has('admin')) {
             $model = dmphanloaidonvi_baocao::findOrFail($id);
             //Xoá mã gốc tự động xoá các mã con
-            dmphanloaidonvi_baocao::where('maphanloai_goc', $model->maphanloai_nhom)->delete();
+            dmphanloaidonvi_baocao::where('maphanloai_goc', $model->maphanloai_nhom)->where('madvbc',$model->madvbc)->delete();
             $model->delete();
             return redirect('/he_thong/bao_cao/danh_sach?madvbc=' . $model->madvbc);
         } else
