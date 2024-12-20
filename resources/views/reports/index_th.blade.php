@@ -132,7 +132,7 @@
                                 <ol>
                                     <li>
                                         <a href="#" data-target="#modal-chitraluong" data-toggle="modal"
-                                            onclick="inchitraluong('/chuc_nang/tong_hop_luong/huyen/TongHop')">
+                                            onclick="inchitraluong('/chuc_nang/tong_hop_luong/huyen/TongHop_Khoi')">
                                             Tổng hợp tình hình chi trả lương
                                         </a>
                                     </li>
@@ -449,7 +449,7 @@
         {!! Form::open([
             'url' => '#',
             'target' => '_blank',
-            'method' => 'get',
+            'method' => 'post',
             'id' => 'frm_chitraluong',
             'class' => 'form-horizontal form-validate',
         ]) !!}
