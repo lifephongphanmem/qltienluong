@@ -123,6 +123,7 @@ class tonghopluong_huyen_baocaoController extends Controller
                 $this->getMaNhomPhanLoai($chitiet, $m_phanloai);
                 $chitiet->soluongbienche = $chitiet->soluong;
             }
+            // dd(123);
             //Đối tượng để dải dữ liệu
             $model_h = new Collection();          
             //Chạy trc dữ liệu khối để cập nhật lương cơ bản
@@ -146,6 +147,7 @@ class tonghopluong_huyen_baocaoController extends Controller
                     $chitiet->luongcoban = $luongcb;
                 }
             }
+            // dd($model);
             //Tính toán dữ liêu            
             foreach (a_unique(array_column($model_tonghop_khoi->toarray(), 'madv')) as $dv) {
                 $m_dulieukhoi = $model_tonghop_khoi->where('madv', $dv);
@@ -157,7 +159,7 @@ class tonghopluong_huyen_baocaoController extends Controller
                     foreach ($a_mact as $maCT) {
                         $dulieu = $dulieu_khoi->where('mact', $maCT);
                         $donvi = new tonghopluong_donvi_chitiet();
-                        $donvi->luongcoban = $luongcb;
+                        $donvi->luongcoban = $luongcb??1;//Gán tạm bằng 1 để chạy khỏi lỗi mẫu 20122024
                         $donvi->madv = $dv;
                         $donvi->mact = $maCT;
                         $donvi->maphanloai = $a_pl_donvi[$donvi->madv];
@@ -196,7 +198,7 @@ class tonghopluong_huyen_baocaoController extends Controller
                     foreach ($a_mact as $maCT) {
                         $dulieu = $m_dulieu->where('mact', $maCT);
                         $donvi = new tonghopluong_donvi_chitiet();
-                        $donvi->luongcoban = $luongcb;
+                        $donvi->luongcoban = $luongcb??1;//Gán tạm bằng 1 để chạy khỏi lỗi mẫu 20122024
                         $donvi->madv = $dv;
                         $donvi->mact = $maCT;
                         $donvi->maphanloai = $a_pl_donvi[$donvi->madv];

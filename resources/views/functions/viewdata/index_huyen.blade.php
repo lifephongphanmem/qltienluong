@@ -450,11 +450,11 @@
                                         <input class="form-control" id="tendvbc" name="tendvbc" readonly />
                                     </div>
                                 </div>
-                                <div class="col-md-12">
+                                {{-- <div class="col-md-12">
                                     <label class="control-label col-md-3" style="text-align: right"></label>
                                     <input type="checkbox" name="excelbc" id="excelbc" />
                                     Xuất dữ liệu ra file excel
-                                </div>
+                                </div> --}}
                                 <input type="hidden" id="madv" name="madv" />
                                 <input type="hidden" id="mathdvbc" name="mathdvbc" />
                                 <input type="hidden" name="urlbc" id="urlbc" value="">
