@@ -132,7 +132,7 @@
                                 <ol>
                                     <li>
                                         <a href="#" data-target="#modal-chitraluong" data-toggle="modal"
-                                            onclick="inchitraluong('/chuc_nang/tong_hop_luong/huyen/TongHop_Khoi')">
+                                            onclick="inchitraluong('/chuc_nang/tong_hop_luong/huyen/TongHop')">
                                             Tổng hợp tình hình chi trả lương
                                         </a>
                                     </li>
@@ -449,7 +449,7 @@
         {!! Form::open([
             'url' => '#',
             'target' => '_blank',
-            'method' => 'post',
+            'method' => 'get',
             'id' => 'frm_chitraluong',
             'class' => 'form-horizontal form-validate',
         ]) !!}
@@ -494,7 +494,7 @@
                         <div class="col-md-12">
                             <label class="control-label"> Tháng</label>
                             <select class="form-control select2me" name="thang">
-                                <option value="ALL">--Tất cả các tháng--</option>
+                                {{-- <option value="ALL">--Tất cả các tháng--</option> --}}
                                 @foreach (getThang() as $key => $ct)
                                     <option value="{{ $key }}">{{ $ct }}</option>
                                 @endforeach
