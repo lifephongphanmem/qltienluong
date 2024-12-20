@@ -5740,17 +5740,17 @@ class bangluongController extends Controller
         }
 
         //sắp xếp 
-        $sort = []; //mảng để sắp xếp
-        $sapxep = isset($inputs['sapxep']) ? $inputs['sapxep'] : '';
-        if ($sapxep == 'stt') {
-            $sort = [[$sapxep, 'asc']];
-        }
-        if ($sapxep == 'pccv') {
-            $sort = [
-                ['pccv', 'desc'],
-                ['heso', 'asc']
-            ];
-        }
+        // $sort = []; //mảng để sắp xếp
+        // $sapxep = isset($inputs['sapxep']) ? $inputs['sapxep'] : '';
+        // if ($sapxep == 'stt') {
+        //     $sort = [[$sapxep, 'asc']];
+        // }
+        // if ($sapxep == 'pccv') {
+        //     $sort = [
+        //         ['pccv', 'desc'],
+        //         ['heso', 'asc']
+        //     ];
+        // }
         // dd($sort);
         // $model = $model->sortBy($sort);
         // dd($model);
