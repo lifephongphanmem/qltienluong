@@ -189,8 +189,15 @@
         </tr>
     </table>
     @if (isset($inputs['inchutongst']))
-        <p id='data_body1' style="text-align: left;font-size: 12px;font-weight:bold;">Tổng số tiền bằng chữ:
-            {{ Dbl2Str($model->sum('luongtn')) }}</p>
+    <table id="data_body1" class="header" width="96%" border="0" cellspacing="0" cellpadding="8"
+    style="margin:0 auto 25px; text-align: center;">
+    <tr>
+        <td colspan="15"><p style="text-align: left;font-size: 12px;font-weight:bold;">Tổng số tiền bằng chữ:
+            {{ Dbl2Str($model->sum('luongtn')) }}</p><td>
+    </tr>
+    </table>
+        {{-- <p id='data_body1' style="text-align: left;font-size: 12px;font-weight:bold;">Tổng số tiền bằng chữ:
+            {{ Dbl2Str($model->sum('luongtn')) }}</p> --}}
     @endif
     <table id="data_footer1" class="header" width="96%" border="0" cellspacing="0" cellpadding="8"
         style="margin:20px auto; text-align: center;">
