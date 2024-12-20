@@ -3328,7 +3328,9 @@ class bangluongController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
+           
             $model = $this->getBangLuong($inputs)->wherein('phanloai', ['CVCHINH', 'KHONGCT']);
+
             $mabl = $inputs['mabl'];
             $m_bl = bangluong::select('thang', 'nam', 'mabl', 'madv', 'ngaylap', 'phanloai', 'noidung')->where('mabl', $mabl)->first();
             $m_dv = dmdonvi::where('madv', $m_bl->madv)->first();
@@ -3366,6 +3368,7 @@ class bangluongController extends Controller
                 $col++;
             }
             //dd($thongtin);
+           
             return view('reports.bangluong.donvi.maubangluong')
                 ->with('model', $model)
                 ->with('model_pb', getPhongBan())
@@ -5700,7 +5703,8 @@ class bangluongController extends Controller
         $mabl = $inputs['mabl'];
         $m_bl = bangluong::select('madv', 'thang', 'mabl')->where('mabl', $mabl)->first();
         $model = (new data())->getBangluong_ct($m_bl->thang, $m_bl->mabl);
-        //dd($m_bl);
+        // dd($m_bl);
+       
         $m_hoso = hosocanbo::where('madv', $m_bl->madv)->get();
         $a_ht = array_column($m_hoso->toarray(), 'tencanbo', 'macanbo');
         $sunghiep = array_column($m_hoso->toarray(), 'sunghiep', 'macanbo');
@@ -5734,6 +5738,7 @@ class bangluongController extends Controller
         if (isset($inputs['manguonkp']) && $inputs['manguonkp'] != '') {
             $model = $model->where('manguonkp', $inputs['manguonkp']);
         }
+
         //sắp xếp 
         $sort = []; //mảng để sắp xếp
         $sapxep = isset($inputs['sapxep']) ? $inputs['sapxep'] : '';
@@ -5747,8 +5752,8 @@ class bangluongController extends Controller
             ];
         }
         // dd($sort);
-        $model = $model->sortBy($sort);
-        //dd($model);
+        // $model = $model->sortBy($sort);
+        // dd($model);
         return $model;
     }
 

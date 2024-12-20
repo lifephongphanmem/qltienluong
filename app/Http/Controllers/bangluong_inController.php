@@ -1245,6 +1245,7 @@ class bangluong_inController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
+
             //$inputs['mabl'] = $inputs['mabl'];
             //$model = $this->getBangLuong($inputs);
             $m_bl = bangluong::select('madv', 'thang', 'mabl', 'ngaylap', 'manguonkp', 'nam')->where('mabl', $inputs['mabl'])->first();
@@ -2516,20 +2517,22 @@ class bangluong_inController extends Controller
             $model = $model->where('mact', $inputs['mact']);
         }
         //sắp xếp 
-        $sort = []; //mảng để sắp xếp
-        $sapxep = isset($inputs['sapxep']) ? $inputs['sapxep'] : '';
-        if ($sapxep == 'stt') {
-            $sort = [[$sapxep, 'asc']];
-        }
-        if ($sapxep == 'pccv') {
-            $sort = [
-                ['pccv', 'desc'],
-                ['heso', 'asc']
-            ];
-        }
+        // $sort = []; //mảng để sắp xếp
+        // $sapxep = isset($inputs['sapxep']) ? $inputs['sapxep'] : '';
+        // if ($sapxep == 'stt') {
+        //     $sort = [[$sapxep, 'asc']];
+        // }
+        // if ($sapxep == 'pccv') {
+        //     $sort = [
+        //         ['pccv', 'desc'],
+        //         ['heso', 'asc']
+        //     ];
+        // }
+
         // dd($sort);
-        $model = $model->sortBy($sort);
-        //dd($model);
+        //Tạm bỏ do bị lỗi khi dùng sortby khi 2 trường pccv và heso có thể null
+        // $model = $model->sortBy($sort);
+        // dd($model);
         return $model;
     }
 }
