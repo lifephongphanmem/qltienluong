@@ -25,7 +25,7 @@ class dmphanloaidonvi_baocaoController extends Controller
             $model = dmphanloaidonvi_baocao::where('madvbc', session('admin')->madvbc)->get();
             // dd($model);
             $a_phanloai = array_column(dmphanloaidonvi::wherenotin('maphanloai', array_column($model->toarray(), 'maphanloai_nhom'))->get()->toArray(), 'tenphanloai', 'maphanloai');
-            $a_goc = array_column(dmphanloaidonvi_baocao::wherenotin('maphanloai_nhom', array_keys($a_phanloai))->get()->toArray(), 'tenphanloai_nhom', 'maphanloai_nhom');
+            $a_goc = array_column(dmphanloaidonvi_baocao::wherenotin('maphanloai_nhom', array_keys($a_phanloai))->where('madvbc', session('admin')->madvbc)->get()->toArray(), 'tenphanloai_nhom', 'maphanloai_nhom');
             // dd($a_phanloai);
             $a_goc[''] = 'Chọn mã phân loại gốc';
             return view('system.danhmuc.baocao.index')

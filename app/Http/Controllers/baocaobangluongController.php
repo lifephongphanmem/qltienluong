@@ -493,7 +493,13 @@ class baocaobangluongController extends Controller
             });
 
             // dd($model);
-            $m_dv = dmdonvi::where('madv', \session('admin')->madv)->first();
+            // dd($inputs);
+            if(isset($inputs['madv'])){
+                $m_dv = dmdonvi::where('madv', $inputs['madv'])->first();
+            }else{
+                $m_dv = dmdonvi::where('madv', \session('admin')->madv)->first();
+            }
+           
             $a_phucap = array();
             $col = 0;
             $m_pc = dmphucap_donvi::where('madv', \session('admin')->madv)->orderby('stt')->get()->toarray();
