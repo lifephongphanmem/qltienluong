@@ -836,6 +836,54 @@ class hosocanboController extends Controller
         die($model);
     }
 
+    public function nhanphucap_excel()
+    {
+        if (Session::has('admin')) {
+            //$model_pc = dmphucap_donvi::where('madv', session('admin')->madv)->orderBy('stt')->get();
+            return view('manage.hosocanbo.excel.nhanPhuCap')
+                //->with('model_pc', $model_pc)
+                ->with('url', '/nghiep_vu/ho_so/')
+                ->with('pageTitle', 'Thông tin nhận danh sách cán bộ từ file Excel');
+        } else
+            return view('errors.notlogin');
+    }
+
+    function phucap_excel(Request $request)
+    {
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $madv = session('admin')->madv;
+
+            $filename = $madv . date('YmdHis');
+            $request->file('fexcel')->move(public_path() . '/data/uploads/excels/', $filename . '.xls');
+            $path = public_path() . '/data/uploads/excels/' . $filename . '.xls';
+            $data = [];
+           
+            Excel::load($path, function ($reader) use (&$data) {
+                $obj = $reader->getExcel();
+                $sheet = $obj->getSheet(0);
+                $data = $sheet->toArray(null, true, true, true); // giữ lại tiêu đề A=>'val';
+            });
+            
+            dd($data);
+            for ($i = $inputs['tudong']; $i < ($inputs['tudong'] + $inputs['sodong']); $i++) {
+                //dd($data[$i]);
+                if (!isset($data[$i][$inputs['macanbo']]) || $data[$i][$inputs['macanbo']] == '') {
+                    continue; //Mã cán bộ rỗng => thoát
+                }
+                $model = hosocanbo::where('macanbo', $data[$i][$inputs['macanbo']])->first();
+                if($model != null){
+                    $model->pcudn = chkDbl($data[$i][$inputs['pcudn']]);
+                    $model->save();
+                }
+                
+            }
+            File::Delete($path);
+            return redirect('nghiep_vu/ho_so/danh_sach');
+        } else
+            return view('errors.notlogin');
+    }
+
     public function infor_excel()
     {
         if (Session::has('admin')) {
@@ -1300,7 +1348,7 @@ class hosocanboController extends Controller
                 }
             })->download('xls'); // Tải file Excel dưới định dạng .xls
 
-            
+
         } else
             return view('errors.notlogin');
     }

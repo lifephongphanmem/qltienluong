@@ -38,7 +38,8 @@
     <table id="data_body" class="money" cellspacing="0" cellpadding="0" border="1" style="margin: 20px auto; border-collapse: collapse;font:normal 11px Times, serif;">
         <tr style="padding-left: 2px;padding-right: 2px">
             <th style="width: 5%;">S</br>T</br>T</th>
-            <th style="width: 20%;">Họ và tên</th>
+            <th style="width: 10%;">Mã cán bộ</th>
+            <th style="width: 15%;">Họ và tên</th>
             <th>Chức vụ</th>
             <th>Phân loại</br>công tác</th>
             <th style="width: 8%;">Mã ngạch bậc</th>
@@ -57,6 +58,7 @@
         @foreach($model as $ct)
             <tr>
                 <td>{{$i++}}</td>
+                <td style="text-align: left">{{$ct->macanbo}}</td>
                 <td style="text-align: left">{{$ct->tencanbo}}</td>
                 <td style="text-align: left">{{$ct->tencv}}</td>
                 <td style="text-align: left">{{$ct->tenct}}</td>

@@ -16,6 +16,9 @@ Route::group(['prefix' => 'nghiep_vu'], function () {
 
         Route::get('nhan_excel', 'hosocanboController@infor_excel');
         Route::post('create_excel', 'hosocanboController@create_excel');
+        //2024.12.25 Nhận phụ cấp Ưu đãi ngành
+        Route::get('nhanphucap_excel', 'hosocanboController@nhanphucap_excel');
+        Route::post('phucap_excel', 'hosocanboController@phucap_excel');
         //ajax
         Route::get('get_congtac', 'hosocanboController@get_congtac');
         Route::get('get_chucvu_bh', 'hosocanboController@get_chucvu_bh');
