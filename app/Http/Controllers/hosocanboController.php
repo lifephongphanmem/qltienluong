@@ -32,6 +32,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\ColectionImport;
 
 class hosocanboController extends Controller
 {
@@ -852,33 +853,24 @@ class hosocanboController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
-            $madv = session('admin')->madv;
+            //$madv = session('admin')->madv;
 
-            $filename = $madv . date('YmdHis');
-            $request->file('fexcel')->move(public_path() . '/data/uploads/excels/', $filename . '.xls');
-            $path = public_path() . '/data/uploads/excels/' . $filename . '.xls';
-            $data = [];
-           
-            Excel::load($path, function ($reader) use (&$data) {
-                $obj = $reader->getExcel();
-                $sheet = $obj->getSheet(0);
-                $data = $sheet->toArray(null, true, true, true); // giữ lại tiêu đề A=>'val';
-            });
-            
-            dd($data);
+            $dataObj = new ColectionImport();
+            $theArray = Excel::toArray($dataObj, $inputs['fexcel']);
+            $data = $theArray[0];
+            //dd($data);ColExcel2Array
+            $a_col = ColExcel2Array();
             for ($i = $inputs['tudong']; $i < ($inputs['tudong'] + $inputs['sodong']); $i++) {
-                //dd($data[$i]);
-                if (!isset($data[$i][$inputs['macanbo']]) || $data[$i][$inputs['macanbo']] == '') {
+                if (!isset($data[$i][$a_col[$inputs['macanbo']]]) || $data[$i][$a_col[$inputs['macanbo']]] == '') {
                     continue; //Mã cán bộ rỗng => thoát
                 }
-                $model = hosocanbo::where('macanbo', $data[$i][$inputs['macanbo']])->first();
-                if($model != null){
-                    $model->pcudn = chkDbl($data[$i][$inputs['pcudn']]);
+                $model = hosocanbo::where('macanbo', $data[$i][$a_col[$inputs['macanbo']]])->first();
+                if ($model != null) {
+                    $model->pcudn = chkDbl($data[$i][$a_col[$inputs['pcudn']]]);
                     $model->save();
                 }
-                
             }
-            File::Delete($path);
+            //File::Delete($path);
             return redirect('nghiep_vu/ho_so/danh_sach');
         } else
             return view('errors.notlogin');
@@ -932,18 +924,20 @@ class hosocanboController extends Controller
 
             $macv_df = key($a_chucvu);  // do khi chạy các vòng for thì hàm key() trả lại ở vị trí đang dừng
             $mact_df = key($a_phanloaict);
-            $filename = $madv . date('YmdHis');
-            $request->file('fexcel')->move(public_path() . '/data/uploads/excels/', $filename . '.xls');
-            $path = public_path() . '/data/uploads/excels/' . $filename . '.xls';
+            // $filename = $madv . date('YmdHis');
+            // $request->file('fexcel')->move(public_path() . '/data/uploads/excels/', $filename . '.xls');
+            // $path = public_path() . '/data/uploads/excels/' . $filename . '.xls';
 
-            $data = [];
-            //dd();
-            Excel::load($path, function ($reader) use (&$data, $inputs) {
-                $obj = $reader->getExcel();
-                $sheet = $obj->getSheet(0);
-                $data = $sheet->toArray(null, true, true, true); // giữ lại tiêu đề A=>'val';
-            });
-
+            // $data = [];
+            // //dd();
+            // Excel::load($path, function ($reader) use (&$data, $inputs) {
+            //     $obj = $reader->getExcel();
+            //     $sheet = $obj->getSheet(0);
+            //     $data = $sheet->toArray(null, true, true, true); // giữ lại tiêu đề A=>'val';
+            // });
+            $dataObj = new ColectionImport();
+            $theArray = Excel::toArray($dataObj, $inputs['fexcel']);
+            $data = $theArray[0];
 
             //dd($data);
             $j = getDbl((hosocanbo::where('madv', session('admin')->madv)->get()->max('stt'))) + 1;
@@ -953,41 +947,42 @@ class hosocanboController extends Controller
             $a_cv_m = array();
             $a_pb_m = array();
             //dd( '-' . chuanhoachuoi(trim($a_pb_ex[5]['H'])) . '-');
-
+            $a_col = ColExcel2Array();
+            $inputs['tudong'] = $inputs['tudong'] - 1; //Do mảng bắt đầu từ dòng 0
             for ($i = $inputs['tudong']; $i < ($inputs['tudong'] + $inputs['sodong']); $i++) {
                 //dd($data[$i]);
-                if (!isset($data[$i][$inputs['tencanbo']]) || $data[$i][$inputs['tencanbo']] == '') {
+                if (!isset($data[$i][$a_col[$inputs['tencanbo']]]) || $data[$i][$a_col[$inputs['tencanbo']]] == '') {
                     continue; //Tên cán bộ rỗng => thoát
                 }
                 $model = new hosocanbo();
                 $model->stt = $j++;
                 $model->madv = $madv;
                 $model->macanbo = $madv . '_' . $maso++;
-                $model->tencanbo = $data[$i][$inputs['tencanbo']];
+                $model->tencanbo = $data[$i][$a_col[$inputs['tencanbo']]];
 
                 if ($inputs['ngaysinh'] != '') {
-                    $model->ngaysinh = getDateToDb($data[$i][$inputs['ngaysinh']]);
+                    $model->ngaysinh = getDateToDb($data[$i][$a_col[$inputs['ngaysinh']]]);
                 }
                 if ($inputs['gioitinh'] != '') {
-                    $model->gioitinh = $data[$i][$inputs['gioitinh']];
+                    $model->gioitinh = $data[$i][$a_col[$inputs['gioitinh']]];
                 }
                 if ($inputs['lvtd'] != '') {
-                    $model->lvtd = $data[$i][$inputs['lvtd']];
+                    $model->lvtd = $data[$i][$a_col[$inputs['lvtd']]];
                 }
                 if ($inputs['ngaytu'] != '') {
-                    $model->ngaytu = getDateToDb($data[$i][$inputs['ngaytu']]);
+                    $model->ngaytu = getDateToDb($data[$i][$a_col[$inputs['ngaytu']]]);
                 }
                 if ($inputs['ngayden'] != '') {
-                    $model->ngayden = getDateToDb($data[$i][$inputs['ngayden']]);
+                    $model->ngayden = getDateToDb($data[$i][$a_col[$inputs['ngayden']]]);
                 }
                 if ($inputs['tnntungay'] != '') {
-                    $model->tnntungay = getDateToDb($data[$i][$inputs['tnntungay']]);
+                    $model->tnntungay = getDateToDb($data[$i][$a_col[$inputs['tnntungay']]]);
                 }
                 if ($inputs['tnndenngay'] != '') {
-                    $model->tnndenngay = getDateToDb($data[$i][$inputs['tnndenngay']]);
+                    $model->tnndenngay = getDateToDb($data[$i][$a_col[$inputs['tnndenngay']]]);
                 }
                 if ($inputs['sotk'] != '') {
-                    $model->sotk = $data[$i][$inputs['sotk']];
+                    $model->sotk = $data[$i][$a_col[$inputs['sotk']]];
                 }
                 //dd($model);
                 /*
@@ -999,7 +994,7 @@ class hosocanboController extends Controller
                 */
                 $model->bac = 1;
                 if ($inputs['sunghiep'] != '') {
-                    $sunghiep = '-' . chuanhoachuoi(trim($data[$i][$inputs['sunghiep']])) . '-';
+                    $sunghiep = '-' . chuanhoachuoi(trim($data[$i][$a_col[$inputs['sunghiep']]])) . '-';
                     switch ($sunghiep) {
                         case '-cong-chuc-': {
                                 $model->sunghiep = 'Công chức';
@@ -1023,12 +1018,12 @@ class hosocanboController extends Controller
                     if ($col == '') {
                         continue;
                     }
-                    $model->$val = chkDbl($data[$i][$col]);
+                    $model->$val = chkDbl($data[$i][$a_col[$col]]);
                 }
 
                 //khối tổ công tác
                 if ($inputs['mapb'] != '') {
-                    $mapb = '-' . chuanhoachuoi(trim($data[$i][$inputs['mapb']])) . '-';
+                    $mapb = '-' . chuanhoachuoi(trim($data[$i][$a_col[$inputs['mapb']]])) . '-';
                     foreach ($a_pb as $key => $val) {
                         if ($val == $mapb) {
                             $model->mapb = $key;
@@ -1045,7 +1040,7 @@ class hosocanboController extends Controller
                             $mapb_m = $madv . '_' . ($maso++);
                             $model->mapb = $mapb_m;
                             //xóa ký tự đăc biệt, xuống dòng
-                            $tenpb = preg_replace('/([^\pL\.\ ]+)/u', ' ', strip_tags($data[$i][$inputs['mapb']]));
+                            $tenpb = preg_replace('/([^\pL\.\ ]+)/u', ' ', strip_tags($data[$i][$a_col[$inputs['mapb']]]));
                             $a_pb_m[$mapb] = array('mapb' => $mapb_m, 'tenpb' => $tenpb, 'madv' => $madv);
                         } else {
                             $model->mapb = $a_pb_m[$mapb]['mapb'];
@@ -1054,7 +1049,7 @@ class hosocanboController extends Controller
                 }
 
                 if ($inputs['mact'] != '') {
-                    $mact = '-' . chuanhoachuoi(trim($data[$i][$inputs['mact']])) . '-';
+                    $mact = '-' . chuanhoachuoi(trim($data[$i][$a_col[$inputs['mact']]])) . '-';
                     foreach ($a_phanloaict as $key => $val) {
                         if ($val == $mact) {
                             $model->mact = $key;
@@ -1073,7 +1068,7 @@ class hosocanboController extends Controller
                 }
 
                 if ($inputs['msngbac'] != '') {
-                    $msngbac = (string) $data[$i][$inputs['msngbac']];
+                    $msngbac = (string) $data[$i][$a_col[$inputs['msngbac']]];
                     //dd($msngbac);
                     if (isset($a_nb[$msngbac])) {
                         $model->msngbac = $msngbac;
@@ -1087,7 +1082,7 @@ class hosocanboController extends Controller
                 if ($inputs['macvcq'] != '') {
                     //xóa ký tự đăc biệt, xuống dòng
                     //$macv = preg_replace('/([^\pL\.\ ]+)/u', ' ', strip_tags($data[$i][$inputs['macvcq']]));
-                    $macv = '-' . chuanhoachuoi(trim($data[$i][$inputs['macvcq']])) . '-';
+                    $macv = '-' . chuanhoachuoi(trim($data[$i][$a_col[$inputs['macvcq']]])) . '-';
 
                     foreach ($a_chucvu as $key => $val) {
                         if ($val == $macv) {
@@ -1115,7 +1110,7 @@ class hosocanboController extends Controller
                             $macv_m = $madv . '_' . ($maso++);
                             $model->macvcq = $macv_m;
                             //xóa ký tự đăc biệt, xuống dòng
-                            $tencv = preg_replace('/([^\pL\.\ ]+)/u', ' ', strip_tags($data[$i][$inputs['macvcq']]));
+                            $tencv = preg_replace('/([^\pL\.\ ]+)/u', ' ', strip_tags($data[$i][$a_col[$inputs['macvcq']]]));
                             $a_cv_m[$macv] = array('macvcq' => $macv_m, 'tencv' => $tencv, 'madv' => $madv, 'maphanloai' => session('admin')->maphanloai);
                         } else {
                             $model->macvcq = $a_cv_m[$macv]['macvcq'];
@@ -1128,7 +1123,7 @@ class hosocanboController extends Controller
             dmchucvucq::insert($a_cv_m);
             dmphongban::insert($a_pb_m);
             //dd($a_cv_m);
-            File::Delete($path);
+            // File::Delete($path);
             return redirect('nghiep_vu/ho_so/danh_sach');
         } else
             return view('errors.notlogin');
@@ -1310,45 +1305,6 @@ class hosocanboController extends Controller
                 ->with('m_dv', $m_dv)
                 ->with('model_pc', $model_pc)
                 ->with('pageTitle', 'Thông tin cán bộ');
-        } else
-            return view('errors.notlogin');
-    }
-
-    public function TaoDanhSachExcel(Request $request)
-    {
-        if (Session::has('admin')) {
-            $model = hosocanbo::where('madv', session('admin')->madv)->where('theodoi', '<', '9')->orderby('stt')->get();
-            $model_pc = dmphucap_donvi::where('madv', session('admin')->madv)->where('phanloai', '<', '3')->get();
-            $a_phucap = array();
-            $col = 0;
-            $a_plpc = getPhanLoaiPhuCap();
-            foreach ($model_pc as $ct) {
-                if ($model->sum($ct->mapc) > 0) {
-                    $a_phucap[$ct->mapc] = $ct->report . '</br>(' . $a_plpc[$ct->phanloai] . ')';
-                    $col++;
-                }
-            }
-
-            // Tạo sheet trong Excel
-            return Excel::create('Danh sách cán bộ', function ($sheet) use ($model, $col, $a_phucap) {
-                // Đặt tiêu đề cho các cột
-                $sheet->row(1, ['ID', 'Mã đơn vị', 'Tên cán bộ', 'Trạng thái theo dõi', 'Số thứ tự']);
-
-                // Xuất dữ liệu
-                $row = 2;
-                foreach ($model as $item) {
-                    $sheet->row($row, [
-                        $item->id,
-                        $item->madv,
-                        $item->tencanbo,
-                        $item->theodoi,
-                        $item->stt
-                    ]);
-                    $row++;
-                }
-            })->download('xls'); // Tải file Excel dưới định dạng .xls
-
-
         } else
             return view('errors.notlogin');
     }
