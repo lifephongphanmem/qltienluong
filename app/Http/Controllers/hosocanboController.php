@@ -1265,4 +1265,43 @@ class hosocanboController extends Controller
         } else
             return view('errors.notlogin');
     }
+
+    public function TaoDanhSachExcel(Request $request)
+    {
+        if (Session::has('admin')) {
+            $model = hosocanbo::where('madv', session('admin')->madv)->where('theodoi', '<', '9')->orderby('stt')->get();
+            $model_pc = dmphucap_donvi::where('madv', session('admin')->madv)->where('phanloai', '<', '3')->get();
+            $a_phucap = array();
+            $col = 0;
+            $a_plpc = getPhanLoaiPhuCap();
+            foreach ($model_pc as $ct) {
+                if ($model->sum($ct->mapc) > 0) {
+                    $a_phucap[$ct->mapc] = $ct->report . '</br>(' . $a_plpc[$ct->phanloai] . ')';
+                    $col++;
+                }
+            }
+
+            // Tạo sheet trong Excel
+            return Excel::create('Danh sách cán bộ', function ($sheet) use ($model, $col, $a_phucap) {
+                // Đặt tiêu đề cho các cột
+                $sheet->row(1, ['ID', 'Mã đơn vị', 'Tên cán bộ', 'Trạng thái theo dõi', 'Số thứ tự']);
+
+                // Xuất dữ liệu
+                $row = 2;
+                foreach ($model as $item) {
+                    $sheet->row($row, [
+                        $item->id,
+                        $item->madv,
+                        $item->tencanbo,
+                        $item->theodoi,
+                        $item->stt
+                    ]);
+                    $row++;
+                }
+            })->download('xls'); // Tải file Excel dưới định dạng .xls
+
+            
+        } else
+            return view('errors.notlogin');
+    }
 }

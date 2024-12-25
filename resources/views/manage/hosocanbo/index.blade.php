@@ -49,6 +49,10 @@
                                 <li>
                                     <a href="{{url('/data/download/MAU DS CAN BO.xlsx')}}" class="btn btn-default btn-xs"><i class="fa fa-download"></i>Tải file Excel mẫu</a>
                                 </li>
+
+                                <li>
+                                    <a href="{{url($url.'indanhsach_excel')}}" class="btn btn-default btn-xs"><i class="fa fa-download"></i>Danh sách cán bộ</a>
+                                </li>
                             </ul>
                         </div>
 
