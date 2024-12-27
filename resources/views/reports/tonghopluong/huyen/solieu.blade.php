@@ -20,8 +20,26 @@
 
             </td>
         </tr>
+        <tr>
+            <td {{$col + 13}} style="text-align: center; font-weight: bold; font-size: 20px; text-transform: uppercase">
+                SỐ LIỆU TỔNG HỢP CHI TRẢ LƯƠNG TẠI ĐƠN VỊ
+                    CẤP DƯỚI
+            </td>
+        </tr>
+        <tr>
+            <td {{$col + 13}} style="text-align: center; font-style: italic; font-weight: bold; font-size: 12px;">
+                Tháng {{ $thongtin['thang'] }} năm
+                {{ $thongtin['nam'] }}
+            </td>
+        </tr>
+
+        <tr>
+            <td style="text-align: right" {{$col + 13}} style="font-weight:bold; font-size: 12px;">
+                Đơn vị tính: {{ getDonViTinh()[$inputs['donvitinh']] }}
+            </td>
+        </tr>
     </table>
-    <table id="data_body" class="header" width="96%" border="0" cellspacing="0" cellpadding="8"
+    {{-- <table id="data_body" class="header" width="96%" border="0" cellspacing="0" cellpadding="8"
         style="margin:0 auto 25px; text-align: center;">
         <tr>
             <td colspan="{{$col + 13}}">
@@ -42,7 +60,7 @@
                 <p style="text-align: right; font-style: italic">Đơn vị tính: đồng</p>
             </td>
         </tr>
-    </table>
+    </table> --}}
     {{-- <p id="data_body" style="text-align: center; font-weight: bold; font-size: 20px;">SỐ LIỆU TỔNG HỢP CHI TRẢ LƯƠNG TẠI ĐƠN VỊ CẤP DƯỚI</p>
     <p id="data_body1" style="text-align: center; font-style: italic">Tháng {{$thongtin['thang']}} năm {{$thongtin['nam']}}</p>
 
