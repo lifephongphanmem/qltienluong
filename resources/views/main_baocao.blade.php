@@ -303,7 +303,7 @@
 
                         const excelCell = worksheet.getCell(currentRow, excelCol);
                         let cellValue = cell.innerText.trim();
-                        if (maNgach.includes(cellValue)) {
+                        if (maNgach.includes(cellValue) || cellValue.includes('_')) {
                             excelCell.value = cellValue;
                         } else {
                             // Chuyển đổi giá trị nếu là chuỗi

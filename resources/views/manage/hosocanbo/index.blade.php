@@ -43,12 +43,16 @@
 
                             <ul class="dropdown-menu">
                                 <li>
-                                    <a href="{{url($url.'nhan_excel')}}" class="btn btn-default btn-xs mbs"><i class="fa fa-print"></i>Nhận từ file Excel</a>
+                                    <a href="{{url($url.'nhan_excel')}}" class="btn btn-default btn-xs mbs"><i class="fa fa-print"></i>Nhận cán bộ từ Excel</a>
+                                </li>
+
+                                <li>
+                                    <a href="{{url($url.'nhanphucap_excel')}}" class="btn btn-default btn-xs mbs"><i class="fa fa-print"></i>Nhận phụ cấp từ Excel</a>
                                 </li>
 
                                 <li>
                                     <a href="{{url('/data/download/MAU DS CAN BO.xlsx')}}" class="btn btn-default btn-xs"><i class="fa fa-download"></i>Tải file Excel mẫu</a>
-                                </li>
+                                </li>                               
                             </ul>
                         </div>
 
