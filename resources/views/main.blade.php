@@ -741,6 +741,8 @@
                                                     class="fa fa-caret-right"></i>Tham số hệ thống</a></li>
                                         <li><a href="{{ url('/danh_muc/tieu_muc/index') }}"><i
                                                     class="fa fa-caret-right"></i>Công thức mục-tiểu mục</a></li>
+                                                    <li><a href="{{ url('/he_thong/don_vi/stopdv') }}"><i
+                                                        class="fa fa-caret-right"></i>Dừng hoạt động đơn vị</a></li>
                                     </ul>
                                 </li>
                                 <li><a href="{{ url('danh_muc/tai_khoan/list_user?level=H') }}"><i

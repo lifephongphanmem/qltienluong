@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\dmphanloaidonvi_baocaoController;
 use App\Http\Controllers\dsdonviquanlyController;
+use App\Http\Controllers\quanlydonviController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'he_thong'], function () {
@@ -49,6 +50,7 @@ Route::group(['prefix' => 'he_thong'], function () {
         Route::get('he_thong', 'GeneralConfigsController@index');
         Route::get('he_thong/edit', 'GeneralConfigsController@edit');
         Route::post('he_thong/update', 'GeneralConfigsController@update');
+        Route::post('don_vi/nhat_ky',[quanlydonviController::class,'NhatKy']);
     });
 
     Route::group(['prefix' => 'phu_cap'], function () {
