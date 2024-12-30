@@ -1117,11 +1117,11 @@ class hosocanboController extends Controller
                         }
                     }
                 }
-                //dd($model);
-                $model->save();
+                dd($model);
+                // $model->save();
             }
-            dmchucvucq::insert($a_cv_m);
-            dmphongban::insert($a_pb_m);
+            // dmchucvucq::insert($a_cv_m);
+            // dmphongban::insert($a_pb_m);
             //dd($a_cv_m);
             // File::Delete($path);
             return redirect('nghiep_vu/ho_so/danh_sach');
