@@ -271,7 +271,8 @@ function getDateToDb($value)
         $ngay = $a_val[1];
         $thang = $a_val[0];
         $nam = isset($a_val[2]) ? $a_val[2] : date('Y');
-        $nam = $nam < 2000 ? $nam + 2000 : $nam;
+        // $nam = $nam < 2000 ? $nam + 2000 : $nam;
+        $nam = $nam < 100 ? ($nam < 50 ? $nam + 2000 : $nam + 1900) : $nam;
         return date('Y-m-d', strtotime($ngay . '-' . $thang . '-' . $nam));
     }
 
@@ -281,7 +282,9 @@ function getDateToDb($value)
         $ngay = $a_val[0];
         $thang = $a_val[1];
         $nam = isset($a_val[2]) ? $a_val[2] : date('Y');
-        $nam = $nam < 2000 ? $nam + 2000 : $nam;
+        // $nam = $nam < 2000 ? $nam + 2000 : $nam;//Lỗi nếu năm nhỏ hơn 2000 sẽ cộng thêm vào=> sai
+        $nam = $nam < 100 ? ($nam < 50 ? $nam + 2000 : $nam + 1900) : $nam;
+        // dd($nam);
         return date('Y-m-d', strtotime($ngay . '-' . $thang . '-' . $nam));
     }
     //$str = strtotime(str_replace('/', '-', $value));

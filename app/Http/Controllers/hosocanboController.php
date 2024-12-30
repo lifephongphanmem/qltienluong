@@ -1117,7 +1117,7 @@ class hosocanboController extends Controller
                         }
                     }
                 }
-                //dd($model);
+                // dd($model);
                 $model->save();
             }
             dmchucvucq::insert($a_cv_m);
