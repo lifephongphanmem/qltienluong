@@ -475,12 +475,13 @@ class baocaobangluongController extends Controller
 
             }else{
                 $m_tonghop = tonghopluong_donvi::whereBetween('thang', array($tuthang, $denthang))
+                // $m_tonghop = tonghopluong_donvi::whereBetween('thang', ['01','12'])
                 ->where('nam', $tunam)
                 ->where('madv', session('admin')->madv)
                 ->orderby('thang')->get();
             }
 
-
+            // dd($m_tonghop);
             $m_chitiet = tonghopluong_donvi_bangluong::wherein('mathdv', a_unique(array_column($m_tonghop->toarray(), 'mathdv')))
                 ->where(function($q) use ($inputs){
                     if($inputs['macanbo'] != ''){
@@ -492,7 +493,7 @@ class baocaobangluongController extends Controller
                 return $ct['macanbo'] . $ct['mact'];
             });
 
-            // dd($model);
+            // dd($model->where('macanbo','1511755986_1538570831'));
             // dd($inputs);
             if(isset($inputs['madv'])){
                 $m_dv = dmdonvi::where('madv', $inputs['madv'])->first();
@@ -510,7 +511,7 @@ class baocaobangluongController extends Controller
                     $col++;
                 }
             }
-
+            // dd($model->take(10));
             foreach ($model as $key => $ct) {
                 // if ($inputs['mact'] != '' && $ct->mact != $inputs['mact']) {
                 //     $model->forget($key);
@@ -522,6 +523,7 @@ class baocaobangluongController extends Controller
                 }
 
                 $bl = $m_chitiet->where('macanbo', $ct->macanbo)->where('mact', $ct->mact);
+                dd($bl);
                 foreach ($m_pc as $pc) {
                     $ma = $pc['mapc'];
                     $ma_st = 'st_' . $pc['mapc'];
