@@ -2517,11 +2517,11 @@ class bangluong_inController extends Controller
             $model = $model->where('mact', $inputs['mact']);
         }
         //sắp xếp 
-        // $sort = []; //mảng để sắp xếp
-        // $sapxep = isset($inputs['sapxep']) ? $inputs['sapxep'] : '';
-        // if ($sapxep == 'stt') {
-        //     $sort = [[$sapxep, 'asc']];
-        // }
+        $sort = []; //mảng để sắp xếp
+        $sapxep = isset($inputs['sapxep']) ? $inputs['sapxep'] : '';
+        if ($sapxep == 'stt') {
+            $sort = [[$sapxep, 'asc']];
+        }
         // if ($sapxep == 'pccv') {
         //     $sort = [
         //         ['pccv', 'desc'],
@@ -2531,7 +2531,7 @@ class bangluong_inController extends Controller
 
         // dd($sort);
         //Tạm bỏ do bị lỗi khi dùng sortby khi 2 trường pccv và heso có thể null
-        // $model = $model->sortBy($sort);
+        $model = $model->sortBy($sort);
         // dd($model);
         return $model;
     }
