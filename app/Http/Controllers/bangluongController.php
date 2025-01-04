@@ -5745,12 +5745,12 @@ class bangluongController extends Controller
         if ($sapxep == 'stt') {
             $sort = [[$sapxep, 'asc']];
         }
-        if ($sapxep == 'pccv') {
-            $sort = [
-                ['pccv', 'desc'],
-                ['heso', 'asc']
-            ];
-        }
+        // if ($sapxep == 'pccv') {
+        //     $sort = [
+        //         ['pccv', 'desc'],
+        //         ['heso', 'asc']
+        //     ];
+        // }
         // dd($sort);
         $model = $model->sortBy($sort);
         // dd($model);
