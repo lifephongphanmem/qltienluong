@@ -93,7 +93,7 @@
                                                         <!-- chưa phân trường hợp -->
                                                         @if ($value['maphanloai'] == 'KVXP')
                                                             <!--a href="{{ url($furl . 'detail_diaban/ma_so=' . $value['mathdv']) }}" class="btn btn-default btn-sm">
-                                                                    <i class="fa fa-list-alt"></i>&nbsp; Số liệu địa bàn</a-->
+                                                                        <i class="fa fa-list-alt"></i>&nbsp; Số liệu địa bàn</a-->
                                                         @endif
 
                                                         <button type="button"
@@ -126,7 +126,7 @@
                                                         <i class="fa fa-print"></i>&nbsp; In chi tiết</a>
                                                     @if ($value['maphanloai'] == 'KVXP')
                                                         <!--a href="{{ url($furl . 'printf_data_diaban/ma_so=' . $value['mathdv']) }}" class="btn btn-default btn-sm" TARGET="_blank">
-                                                                <i class="fa fa-print"></i>&nbsp; Số liệu địa bàn</a-->
+                                                                    <i class="fa fa-print"></i>&nbsp; Số liệu địa bàn</a-->
                                                     @endif
                                                 @else
                                                     <button type="button" id="btntonghop"
@@ -191,7 +191,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn default" data-dismiss="modal">Hủy</button>
-                    <button type="submit" class="btn blue">Đồng ý</button>
+                    <button type="submit" id="agree" class="btn blue" onclick="agreeconfirm()">Đồng ý</button>
 
                 </div>
                 {!! Form::close() !!}
@@ -269,7 +269,7 @@
             $('#frm_tonghop').find("[id^='thang']").val(thang);
             $('#frm_tonghop').find("[id^='nam']").val(nam);
             //$('#frm_tonghop').attr('action', url);
-            //$('#btntonghop').attr('disabled', true);
+            // $('#btntonghop').attr('disabled', true);
             //window.location.href = url;
         }
 
@@ -413,6 +413,11 @@
                 }
             });
             $('#chuquan-modal').modal('hide');
+        }
+
+        function agreeconfirm() {
+                $('#agree').prop('disabled', true);
+                $('#frm_tonghop').submit();
         }
     </script>
 

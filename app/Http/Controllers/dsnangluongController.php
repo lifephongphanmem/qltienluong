@@ -258,33 +258,39 @@ class dsnangluongController extends Controller
         if (Session::has('admin')) {
             $inputs = $request->all();
             $model_nangluong = dsnangluong::where('manl', $inputs['manl'])->first();
+            // dd($model_nangluong);
             $model_canbo = hosocanbo::select('macanbo', 'msngbac', 'bac', 'ngaytu', 'ngayden', 'msngbac', 'heso', 'vuotkhung', 'luonghd')
                 ->where('macanbo', $inputs['macanbo'])->first();
             $a_nb = ngachluong::where('msngbac', $model_canbo->msngbac)->first();
             if ($a_nb == null) {
                 //trả lại danh sách
                 // return redirect('chuc_nang/nang_luong/maso='.$inputs['manl']);
-                return view('thongbao.data_error')
-                    ->with('message', 'Cán bộ chưa chọn ngạch lương')
-                    ->with('furl', 'chuc_nang/nang_luong/maso=' . $inputs['manl']);
-            }
-
-            $ngayxet = new Carbon($model_nangluong->ngayxet);
-            $model_canbo->manl = $inputs['manl'];
-            $model_canbo->phanloai = 'TRUOCHAN';
-            $model_canbo->ngaytu = $ngayxet->toDateString('Y-m-d');
-            $model_canbo->ngayden = $ngayxet->addYear($a_nb['namnb'])->toDateString('Y-m-d');
-            $model_canbo->msngbac_cu = $model_canbo->msngbac;
-            $model_canbo->bac_cu = $model_canbo->bac;
-            $model_canbo->heso_cu = $model_canbo->heso;
-            $model_canbo->vuotkhung_cu = $model_canbo->vuotkhung;
-
-            if ($model_canbo->heso < $a_nb->hesolonnhat) { //nâng lương ngạch bậc
-                $model_canbo['heso'] += $a_nb['hesochenhlech'];
-                $model_canbo['bac'] = $model_canbo['bac'] < $a_nb['baclonnhat'] - 1 ? $model_canbo['bac'] + 1 : $a_nb['baclonnhat'];
-            } else { //vượt khung
-                $model_canbo['vuotkhung'] = $model_canbo['vuotkhung'] + ($model_canbo['vuotkhung'] == 0 ? $a_nb['vuotkhung'] : 1);
-                $model_canbo['bac'] = $a_nb['baclonnhat'];
+                // return view('thongbao.data_error')
+                //     ->with('message', 'Cán bộ chưa chọn ngạch lương')
+                //     ->with('furl', 'chuc_nang/nang_luong/maso=' . $inputs['manl']);
+                $model_canbo->manl = $inputs['manl'];
+                $model_canbo->phanloai = 'TRUOCHAN';
+                $model_canbo->bac_cu = $model_canbo->bac;
+                $model_canbo->heso_cu = $model_canbo->heso;
+                $model_canbo->vuotkhung_cu = $model_canbo->vuotkhung;
+            }else{               
+                $ngayxet = new Carbon($model_nangluong->ngayxet);
+                $model_canbo->manl = $inputs['manl'];
+                $model_canbo->phanloai = 'TRUOCHAN';
+                $model_canbo->ngaytu = $ngayxet->toDateString('Y-m-d');
+                $model_canbo->ngayden = $ngayxet->addYear($a_nb['namnb'])->toDateString('Y-m-d');
+                $model_canbo->msngbac_cu = $model_canbo->msngbac;
+                $model_canbo->bac_cu = $model_canbo->bac;
+                $model_canbo->heso_cu = $model_canbo->heso;
+                $model_canbo->vuotkhung_cu = $model_canbo->vuotkhung;
+                
+                if ($model_canbo->heso < $a_nb->hesolonnhat) { //nâng lương ngạch bậc
+                    $model_canbo['heso'] += $a_nb['hesochenhlech'];
+                    $model_canbo['bac'] = $model_canbo['bac'] < $a_nb['baclonnhat'] - 1 ? $model_canbo['bac'] + 1 : $a_nb['baclonnhat'];
+                } else { //vượt khung
+                    $model_canbo['vuotkhung'] = $model_canbo['vuotkhung'] + ($model_canbo['vuotkhung'] == 0 ? $a_nb['vuotkhung'] : 1);
+                    $model_canbo['bac'] = $a_nb['baclonnhat'];
+                }
             }
             /* Nâng trc hạn ko có truy lĩnh
             foreach($a_nguon_df as $k=>$v) {
