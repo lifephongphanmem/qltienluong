@@ -56,6 +56,7 @@
                                 <th class="text-center">Bậc</th>
                                 <th class="text-center">Hệ số</th>
                                 <th class="text-center">Vượt</br>khung</th>
+                                <th class="text-center">Lương HĐ</th>
                                 <th class="text-center">Hệ số</br>truy lĩnh</th>
                                 <th class="text-center">Thời gian</br>truy lĩnh</th>
                                 <th class="text-center">Thao tác</th>
@@ -75,6 +76,7 @@
                                         <td class="text-center">{{$value->bac}}</td>
                                         <td class="text-center">{{$value->heso}}</td>
                                         <td class="text-center">{{$value->vuotkhung}}</td>
+                                        <td class="text-center">{{dinhdangso($value->luonghd)}}</td>
                                         <td class="text-center">{{dinhdangsothapphan( $value->hesott,3)}}</td>
                                         <td class="text-center">{{isset($value->truylinhtungay)? 'Từ '.getDayVn($value->truylinhtungay):''}}</td>
                                         <td>

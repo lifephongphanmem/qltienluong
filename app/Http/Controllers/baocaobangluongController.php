@@ -475,7 +475,6 @@ class baocaobangluongController extends Controller
 
             }else{
                 $m_tonghop = tonghopluong_donvi::whereBetween('thang', array($tuthang, $denthang))
-                // $m_tonghop = tonghopluong_donvi::whereBetween('thang', ['01','12'])
                 ->where('nam', $tunam)
                 ->where('madv', session('admin')->madv)
                 ->orderby('thang')->get();
@@ -523,7 +522,7 @@ class baocaobangluongController extends Controller
                 }
 
                 $bl = $m_chitiet->where('macanbo', $ct->macanbo)->where('mact', $ct->mact);
-                dd($bl);
+                // dd($bl);
                 foreach ($m_pc as $pc) {
                     $ma = $pc['mapc'];
                     $ma_st = 'st_' . $pc['mapc'];
