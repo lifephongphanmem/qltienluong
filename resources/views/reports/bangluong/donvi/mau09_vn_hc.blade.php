@@ -56,19 +56,26 @@
             </td>
         </tr>
         <tr>
-            <td colspan="2" style="text-align: left">1. Đơn vị sử dụng ngân sách: {{ $m_dv['tendv'] }}</td>
+            {{-- <td colspan="2" style="text-align: left">1. Đơn vị sử dụng ngân sách: {{ $m_dv['tendv'] }}</td> --}}
+            <td colspan="2" style="text-align: left">Đơn vị sử dụng ngân sách: {{ $m_dv['tendv'] }}</td>
         </tr>
         <tr>
-            <td colspan="2" style="text-align: left">2. Mã đơn vị: {{ $m_dv->maqhns }}</td>
+            {{-- <td colspan="2" style="text-align: left">2. Mã đơn vị: {{ $m_dv->maqhns }}</td> --}}
+            <td colspan="2" style="text-align: left">Mã đơn vị: {{ $m_dv->maqhns }}</td>
         </tr>
         <tr>
-            <td colspan="2" style="text-align: left">3. Tài khoản thanh toán của đơn vị mở tại ngân hàng thương mại:
-                {{ $m_dv->sotk . '-' . $m_dv->tennganhang }}</td>
+            {{-- <td colspan="2" style="text-align: left">3. Tài khoản thanh toán của đơn vị mở tại ngân hàng thương mại:
+                {{ $m_dv->sotk . '-' . $m_dv->tennganhang }}</td> --}}
+                <td colspan="2" style="text-align: left">Tài khoản thanh toán của đơn vị mở tại ngân hàng thương mại:
+                    {{ $m_dv->sotk . '-' . $m_dv->tennganhang }}</td>
+        </tr>
+        <tr>
+            <td colspan="2" style="font-weight:bold;text-align: left">I. Nội dung đề nghị thanh toán</td>
         </tr>
     </table>
 
-    <p id="data_body" style="font-weight:bold">I. Nội dung đề nghị thanh toán</p>
-    <table id="data_body1" class="money" cellspacing="0" cellpadding="0" border="1"
+    {{-- <p id="data_body" style="font-weight:bold">I. Nội dung đề nghị thanh toán</p> --}}
+    <table id="data_body" class="money" cellspacing="0" cellpadding="0" border="1"
         style="margin: 20px auto; border-collapse: collapse;font:normal {{ $thongtin['cochu'] }}px Times, serif;">
         <thead>
             <tr style="padding-left: 2px;padding-right: 2px">
@@ -148,9 +155,22 @@
     </table>
     {{-- <p id='data_body2' style="text-align: left;font-size: 12px;font-weight:bold;">Tổng số tiền bằng chữ:
         {{ Dbl2Str($model->sum('tongso')) }}</p> --}}
-    <p id='data_body3' style="text-align: left; font-weight:bold; font-size: 12px;">II. Phần thuyết minh thay đổi so với
-        tháng trước:</p>
-    <table id='data_body4' width="96%" class="money" cellspacing="0" cellpadding="0" border="1"
+    {{-- <p id='data_body3' style="text-align: left; font-weight:bold; font-size: 12px;">II. Phần thuyết minh thay đổi so với
+        tháng trước:</p> --}}
+            <table id="data_body1" class="header" width="96%" border="0" cellspacing="0" cellpadding="8"
+        style="margin:0 auto 25px; text-align: center;">
+
+        {{-- <tr>
+            <td colspan="12" style="text-align: left;font-size: 12px;font-weight:bold;">Tổng số tiền bằng chữ:
+                {{ Dbl2Str($model->sum('tongso')) }}</td>
+        </tr> --}}
+        <tr>
+            <td colspan="12" style="text-align: left;font-weight:bold; font-size: 12px;">II. Phần thuyết minh thay đổi so
+                với
+                tháng trước:</td>
+        </tr>
+    </table>
+    <table id='data_body2' width="96%" class="money" cellspacing="0" cellpadding="0" border="1"
         style="margin: 20px auto; border-collapse: collapse;">
         <thead>
             <tr>

@@ -551,7 +551,7 @@ class baocaobangluongController extends Controller
                 }
             }
 
-            //dd($model);
+            // dd($model);
 
             return view('reports.mauchung.donvi.chitratheocb')
                 ->with('inputs', $inputs)
